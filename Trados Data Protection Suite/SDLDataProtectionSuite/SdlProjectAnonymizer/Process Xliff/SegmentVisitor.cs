@@ -57,74 +57,35 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 		{
 			var markUpCollection = new List<IAbstractMarkupData>();
 			var shouldAnonymize = ShouldAnonymize(text.Properties.Text);
-			var originalSegmentClone = text.Clone();
-			var count = 0;
-			if (shouldAnonymize)
-			{
-				try
-				{
-					var anonymizedData = GetAnonymizedData(text.Properties.Text);
-					if (anonymizedData.Count == 0)
-					{
-						return;
-					}
+            if (!shouldAnonymize) return;
 
-					GetSubsegmentPi(text, markUpCollection, anonymizedData);
+            try
+            {
+                var anonymizedData = GetAnonymizedData(text.Properties.Text);
+                if (anonymizedData.Count == 0) return;
 
-					var abstractMarkupData = text.Parent.AllSubItems.FirstOrDefault(n => n.Equals(originalSegmentClone));
-					if (abstractMarkupData == null)
-					{
-						abstractMarkupData = text.Parent.AllSubItems.FirstOrDefault(n => n.Equals(text));
-					}
-					if (abstractMarkupData != null)
-					{
-						var elementContainer = abstractMarkupData.Parent;
+                GetSubsegmentPi(text, markUpCollection, anonymizedData);
 
-						count = elementContainer.IndexOf(text);
-						elementContainer[count].RemoveFromParent();
+                var parentContainer = text.Parent;
+                var index = parentContainer.IndexOf(text);
+                parentContainer[index].RemoveFromParent();
 
-						foreach (var markupData in markUpCollection)
-						{
-							//that means is a text we don't need to add it
-							if (elementContainer.Contains(markupData))
-							{
-								count++;
-							}
-							else
-							{
-								//in the case we have only PI in the segment
-								//remove the text -> add the anonymized data in the same position
+                foreach (var markupData in markUpCollection)
+                {
+                    if (!parentContainer.Contains(markupData))
+                    {
+                        RandomizeTag(markupData);
+                        parentContainer.Insert(index, markupData);
+                    }
 
-								if (elementContainer.AllSubItems.ToList().Count.Equals(1))
-								{
-									if (elementContainer.AllSubItems.ToList().ElementAtOrDefault(count) == null)
-									{
-										RandomizeTag(markupData);
-										elementContainer.Insert(count, markupData);
-									}
-									else
-									{
-										elementContainer.AllSubItems.ToList()[0].RemoveFromParent();
-										RandomizeTag(markupData);
-										elementContainer.Insert(0, markupData);
-									}
-								}
-								else
-								{
-									RandomizeTag(markupData);
-									elementContainer.Insert(count, markupData);
-								}
-								count++;
-							}
-						}
-					}
-				}
-				catch
-				{
-					// catch all; ignored
-				}
-			}
-		}
+                    index++;
+                }
+            }
+            catch
+            {
+                // catch all; ignored
+            }
+        }
 
 		private static void RandomizeTag(IAbstractMarkupData markupData)
 		{
@@ -298,6 +259,8 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 
 			var tag = _documentItemFactory.CreatePlaceholderTag(
 				_propertiesFactory.CreatePlaceholderTagProperties(processedData));
+
+            tag.Properties.DisplayText = "";
 			tag.Properties.SetMetaData("Anonymizer", "Anonymizer");
 
 			segmentContent.Add(tag);
