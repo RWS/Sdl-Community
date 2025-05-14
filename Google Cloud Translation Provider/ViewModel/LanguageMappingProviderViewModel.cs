@@ -8,9 +8,7 @@ using System.Windows.Input;
 using GoogleCloudTranslationProvider.Commands;
 using GoogleCloudTranslationProvider.Extensions;
 using GoogleCloudTranslationProvider.Interfaces;
-using LanguageMappingProvider.Database;
-using LanguageMappingProvider.Database.Interface;
-using LanguageMappingProvider.Model;
+using LanguageMappingProvider;
 using static GoogleCloudTranslationProvider.ViewModels.MainWindowViewModel;
 using MessageBox = System.Windows.MessageBox;
 

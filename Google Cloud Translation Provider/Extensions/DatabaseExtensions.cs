@@ -6,8 +6,7 @@ using System.Text.RegularExpressions;
 using GoogleCloudTranslationProvider.GoogleAPI;
 using GoogleCloudTranslationProvider.Interfaces;
 using GoogleCloudTranslationProvider.Models;
-using LanguageMappingProvider.Database;
-using LanguageMappingProvider.Model;
+using LanguageMappingProvider;
 using Sdl.Core.Globalization.LanguageRegistry;
 
 namespace GoogleCloudTranslationProvider.Extensions
