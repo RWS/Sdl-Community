@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - Export to Excel/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - Export to Excel/*
@@ -26,7 +26,7 @@ variables:
 - name: solution
   value: '**/ExportToExcel.sln'
 - name: pathToPublish
-  value: 'Export to Excel\Export to Excel\bin\Release\Sdl.Community.ExportToExcel.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.ExportToExcel.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
