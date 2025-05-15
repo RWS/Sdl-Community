@@ -12,4 +12,4 @@ variables:
   value: '17.0'
 
 - name: PluginPath
-  value: '$(APPDATA)\Trados\Trados Studio\18\Plugins\Packages\'
+  value: '$(APPDATA)\Trados\Trados Studio\18\Plugins\Packages'
