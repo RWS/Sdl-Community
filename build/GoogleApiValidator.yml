@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - GoogleApiValidator/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - GoogleApiValidator/*
@@ -27,7 +27,7 @@ variables:
 - name: solution
   value: '**/Sdl.Community.GoogleApiValidator.sln'
 - name: pathToPublish
-  value: '$(Build.Repository.LocalPath)\GoogleApiValidator\GoogleApiValidator.Setup\bin\$(buildConfiguration)\GoogleApiValidator.Setup.msi'
+  value: '$(Build.Repository.LocalPath)\Google Api Validator\GoogleApiValidator.Setup\bin\$(buildConfiguration)\GoogleApiValidator.Setup.msi'
 
 steps:
 - task: NuGetToolInstaller@1
