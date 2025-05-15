@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - Export Analysis Reports/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - Export Analysis Reports/*
@@ -26,7 +26,7 @@ variables:
 - name: solution
   value: '**/ExportAnalysisReports.sln'
 - name: pathToPublish
-  value: 'Export Analysis Reports\Sdl.Community.ExportAnalysisReports\bin\Release\Sdl.Community.ExportAnalysisReports.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.ExportAnalysisReports.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
