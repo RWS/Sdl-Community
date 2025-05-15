@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - CopyTags/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - CopyTags/*
@@ -25,7 +25,8 @@ variables:
   value: 'Release'
 - name: solution
   value: '**/Sdl.Community.SDLCopyTags.sln'
-  pathToPublish: 'CopyTags\CopyTags\bin\Release\SDLCopyTags.sdlplugin'
+- name: pathToPublish
+  value: '$(PluginPath)\SDLCopyTags.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
