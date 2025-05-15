@@ -26,7 +26,7 @@ variables:
 - name: solution
   value: '**/Sdl.Community.AhkPlugin.sln'
 - name: pathToPublish
-  value: '$env:appdata\Trados\Trados Studio\18\Plugins\Packages\Sdl.Community.AhkPlugin.sdlplugin'
+  value: '$(APPDATA)\Trados\Trados Studio\18\Plugins\Packages\Sdl.Community.AhkPlugin.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
