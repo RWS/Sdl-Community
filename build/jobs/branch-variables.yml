@@ -6,7 +6,7 @@ variables:
   value: Studio18
 
 - name: StudioBranch
-  value: refs/heads/master
+  value: refs/heads/Release/18.0.2
 
 - name: VSVersion
   value: '17.0'
