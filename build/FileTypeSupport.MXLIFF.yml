@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - FileTypeSupport.MXLIFF/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - FileTypeSupport.MXLIFF/*
@@ -26,7 +26,7 @@ variables:
 - name: solution
   value: '**/FileTypeSupport.MXLIFF.sln'
 - name: pathToPublish
-  value: 'FileTypeSupport.MXLIFF\bin\Release\MXLIFFFileType.sdlplugin'
+  value: '$(PluginPath)\MXLIFFFileType.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
