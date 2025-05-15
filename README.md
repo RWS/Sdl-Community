@@ -61,7 +61,6 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [Microsoft Translator Provider](https://appstore.rws.com/Plugin/179) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Microsoft%20Translator%20Provider) | Translation Memory API |
 | [SDLTM Import Plus](https://appstore.rws.com/Plugin/89) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/SDLTM%20Import%20Plus) | Translation Memory API |
 | [SDLTM Repair](https://appstore.rws.com/Plugin/41) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/SDLTM%20Repair) | Translation Memory API |
-| [TermInjector](http://appstore.sdl.com/app/terminjector/97/) | [Source Code](https://github.com/sdl/Sdl-Community/tree/master/TermInjector) | Translation Memory API |
 | [Trados Translation Memory Management Utility](https://appstore.rws.com/Plugin/78) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20Translation%20Memory%20Management%20Utility) | Translation Memory API |
 | [TuToTm](https://appstore.rws.com/Plugin/79) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/TuToTm) | Translation Memory API |
 | memoQ Translation Memory Provider | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/memoQ%20Translation%20Memory%20Provider) | Translation Memory API |
