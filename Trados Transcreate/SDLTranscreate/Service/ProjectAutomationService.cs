@@ -13,6 +13,7 @@ using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
+using Sdl.ProjectAutomation.FileBased.Reports.Models;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.Versioning;
 using Trados.Transcreate.Common;
@@ -20,6 +21,7 @@ using Trados.Transcreate.Model;
 using Trados.Transcreate.Model.ProjectSettings;
 using AnalysisBand = Trados.Transcreate.Model.AnalysisBand;
 using ProjectFile = Trados.Transcreate.Model.ProjectFile;
+using Report = Reports.Viewer.Api.Model.Report;
 
 namespace Trados.Transcreate.Service
 {
