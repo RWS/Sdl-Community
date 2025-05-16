@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - Qualitivity/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - Qualitivity/*
@@ -26,7 +26,7 @@ variables:
 - name: solution 
   value: '**/Sdl.Community.Qualitivity.sln'
 - name: pathToPublish
-  value: 'Qualitivity\Sdl.Community.Qualitivity\bin\Release\Sdl.Community.Qualitivity.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.Qualitivity.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
