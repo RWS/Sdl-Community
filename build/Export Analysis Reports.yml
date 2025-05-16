@@ -4,7 +4,7 @@ trigger:
      - Studio_2024
   paths:
     include:
-     - Export Analysis Reports/*
+     - Trados Studio Export Analysis Reports/*
 
 pr:
   branches:
@@ -12,7 +12,7 @@ pr:
      - Studio_2024
   paths:
     include:
-     - Export Analysis Reports/*
+     - Trados Studio Export Analysis Reports/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
@@ -24,7 +24,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: solution
-  value: '**/ExportAnalysisReports.sln'
+  value: '**/Sdl.Community.ExportAnalysisReports.sln'
 - name: pathToPublish
   value: '$(PluginPath)\Sdl.Community.ExportAnalysisReports.sdlplugin'
 
