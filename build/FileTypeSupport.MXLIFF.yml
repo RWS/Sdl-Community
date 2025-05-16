@@ -4,7 +4,7 @@ trigger:
      - Studio_2024
   paths:
     include:
-     - FileTypeSupport.MXLIFF/*
+     - MXLIFF File Type/*
 
 pr:
   branches:
@@ -12,7 +12,7 @@ pr:
      - Studio_2024
   paths:
     include:
-     - FileTypeSupport.MXLIFF/*
+     - MXLIFF File Type/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
