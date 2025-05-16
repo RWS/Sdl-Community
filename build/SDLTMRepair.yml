@@ -4,7 +4,7 @@ trigger:
      - master
   paths:
     include:
-     - SDLTMRepair/*
+     - SDLTM Repair/*
 
 pr:
   branches:
@@ -12,7 +12,7 @@ pr:
      - master
   paths:
     include:
-     - SDLTMRepair/*
+     - SDLTM Repair/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
