@@ -4,7 +4,7 @@ trigger:
      - Studio_2024
   paths:
     include:
-     - SdlFreshstart/*
+     - Trados Freshstart/*
 
 pr:
   branches:
@@ -12,7 +12,7 @@ pr:
      - Studio_2024
   paths:
     include:
-     - SdlFreshstart/*
+     - Trados Freshstart/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
@@ -33,7 +33,7 @@ steps:
 
   - template: tasks/sign-artifacts/sign-single-artifact.yml
     parameters:
-       fileToSign: '$(Build.Repository.LocalPath)\SdlFreshstart\Sdl.Community.SdlFreshstart\bin\$(buildConfiguration)\Sdl.Community.SdlFreshstart.exe'
+       fileToSign: '$(Build.Repository.LocalPath)\Trados Freshstart\Sdl.Community.SdlFreshstart\bin\$(buildConfiguration)\Sdl.Community.SdlFreshstart.exe'
        description: 'TradosFreshstart'
   - task: VSBuild@1
     inputs:
@@ -45,11 +45,11 @@ steps:
   - template: tasks/sign-artifacts/prepare-signing.yml
   - template: tasks/sign-artifacts/sign-single-artifact.yml
     parameters:
-     fileToSign: '$(Build.Repository.LocalPath)\SdlFreshstart\Sdl.Community.SdlFreshstart.Installer\bin\$(buildConfiguration)\Sdl.Community.SdlFreshstart.Installer.msi'
+     fileToSign: '$(Build.Repository.LocalPath)\Trados Freshstart\Sdl.Community.SdlFreshstart.Installer\bin\$(buildConfiguration)\Sdl.Community.SdlFreshstart.Installer.msi'
      description: 'TradosFreshstart'
 
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifact'
     inputs:
       artifactName: SdlFreshstartInstaller
-      pathToPublish: '$(Build.Repository.LocalPath)\SdlFreshstart\Sdl.Community.SdlFreshstart.Installer\bin\$(buildConfiguration)'
+      pathToPublish: '$(Build.Repository.LocalPath)\Trados Freshstart\Sdl.Community.SdlFreshstart.Installer\bin\$(buildConfiguration)'
