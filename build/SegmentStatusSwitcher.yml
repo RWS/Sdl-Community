@@ -4,7 +4,7 @@ trigger:
      - Studio_2024
   paths:
     include:
-     - SegmentStatusSwitcher/*
+     - Segment Status Switcher/*
 
 pr:
   branches:
@@ -12,7 +12,7 @@ pr:
      - Studio_2024
   paths:
     include:
-     - SegmentStatusSwitcher/*
+     - Segment Status Switcher/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
