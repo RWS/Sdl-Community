@@ -1,18 +1,18 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - Legit/*
+     - Trados Legit!/*
 
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - Legit/*
+     - Trados Legit!/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
@@ -26,7 +26,7 @@ variables:
 - name: solution
   value : '**/Sdl.CommunityLegit.sln'
 - name: pathToPublish
-  value: 'Legit\Sdl.Community.Legit\bin\Release\Sdl.Community.LegIt.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.LegIt.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
