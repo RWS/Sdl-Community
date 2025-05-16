@@ -4,7 +4,7 @@ trigger:
      - master
   paths:
     include:
-     - ProjectTerms/*
+     - ProjectTermExtract/*
 
 pr:
   branches:
@@ -12,7 +12,7 @@ pr:
      - master
   paths:
     include:
-     - ProjectTerms/*
+     - ProjectTermExtract/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
@@ -26,7 +26,7 @@ variables:
 - name: solution 
   value: '**/Sdl.Community.ProjectTerms.sln'
 - name: pathToPublish
-  value: 'ProjectTerms\Sdl.Community.ProjectTerms.Plugin\bin\Release\Sdl.Community.projectTermExtract.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.projectTermExtract.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
