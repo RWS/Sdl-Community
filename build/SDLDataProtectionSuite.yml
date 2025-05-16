@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - SDLDataProtectionSuite/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - SDLDataProtectionSuite/*
@@ -26,7 +26,7 @@ variables:
 - name: solution 
   value: '**/SDLDataProtectionSuite.sln'
 - name: pathToPublish
-  value: 'SDLDataProtectionSuite\SDLDataProtectionSuite\bin\Release\Sdl.Community.SdlDataProtectionSuite.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.SdlDataProtectionSuite.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
