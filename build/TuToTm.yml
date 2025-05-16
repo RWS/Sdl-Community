@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - TuToTm/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - TuToTm/*
@@ -26,7 +26,7 @@ variables:
 - name: solution 
   value: '**/Sdl.Community.TuToTm.sln'
 - name: pathToPublish
-  value: 'TuToTm/TuToTm\bin\Release\Sdl.Community.TuToTm.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.TuToTm.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
