@@ -4,7 +4,7 @@ trigger:
      - Studio_2024
   paths:
     include:
-     - TranslationMemoryManagementUtility/*
+     - Trados Translation Memory Management Utility/*
 
 pr:
   branches:
@@ -12,7 +12,7 @@ pr:
      - Studio_2024
   paths:
     include:
-     - TranslationMemoryManagementUtility/*
+     - Trados Translation Memory Management Utility/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
