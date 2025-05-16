@@ -24,7 +24,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: solution
-  value: '**/ExportToExcel.sln'
+  value: '**/Sdl.Community.ExportToExcel.sln'
 - name: pathToPublish
   value: '$(PluginPath)\Sdl.Community.ExportToExcel.sdlplugin'
 
