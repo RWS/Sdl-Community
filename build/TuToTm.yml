@@ -26,7 +26,7 @@ variables:
 - name: solution 
   value: '**/Sdl.Community.TuToTm.sln'
 - name: pathToPublish
-  value: 'TuToTm/TuToTm\bin\Release\Sdl.Community.TuToTm.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.TuToTm.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
