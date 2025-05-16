@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - TranslationMemoryManagementUtility/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - TranslationMemoryManagementUtility/*
@@ -26,7 +26,7 @@ variables:
 - name: solution 
   value: '**/Sdl.Community.TranslationMemoryManagementUtility.sln'
 - name: pathToPublish
-  value: 'TranslationMemoryManagementUtility/Sdl.Community.TranslationMemoryManagementUtility\bin\Release\Sdl.Community.TranslationMemoryManagementUtility.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.TranslationMemoryManagementUtility.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
