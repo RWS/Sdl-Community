@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - TermExcelerator/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - TermExcelerator/*
@@ -26,7 +26,7 @@ variables:
 - name: solution 
   value:  '**/Sdl.Community.TermExcelerator.sln'
 - name: pathToPublish
-  value: 'TermExcelerator/Sdl.Community.TermExcelerator\bin\Release\Sdl.Community.TermExcelerator.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.TermExcelerator.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
