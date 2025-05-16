@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - TermInjector/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - TermInjector/*
@@ -26,7 +26,7 @@ variables:
 - name: solution 
   value:  '**/Sdl.Community.TermInjector.sln'
 - name: pathToPublish
-  value: 'TermInjector/Sdl.Community.TermInjector\bin\Release\Sdl.Community.TermInjector.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.TermInjector.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
