@@ -26,7 +26,7 @@ variables:
 - name: solution 
   value: '**/Sdl.Community.PostEdit.Versions.sln'
 - name: pathToPublish
-  value: 'Post Edit Compare\bin\Release\Sdl.Community.PostEdit.Versions.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.PostEdit.Versions.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
