@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - ProjectTerms/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - ProjectTerms/*
@@ -26,7 +26,7 @@ variables:
 - name: solution 
   value: '**/Sdl.Community.ProjectTerms.sln'
 - name: pathToPublish
-  value: 'ProjectTerms\Sdl.Community.ProjectTerms.Plugin\bin\Release\Sdl.Community.projectTermExtract.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.projectTermExtract.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
