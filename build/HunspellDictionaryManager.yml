@@ -4,7 +4,7 @@ trigger:
      - Studio_2024
   paths:
     include:
-     - HunspellDictionaryManager/*
+     - Hunspell Dictionary Manager/*
 
 pr:
   branches:
@@ -12,7 +12,7 @@ pr:
      - Studio_2024
   paths:
     include:
-     - HunspellDictionaryManager/*
+     - Hunspell Dictionary Manager/*
 
 variables:
 - group: 'SDLPLC Authenticode Credentials'
