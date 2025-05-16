@@ -25,7 +25,7 @@ variables:
 - name: solution 
   value: '**/Sdl.Community.xmlReader.sln'
 - name: pathToPublish
-  value: 'XML Reader/Sdl.Community.XmlReader\bin\Release\Sdl.Community.XmlReader.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.XmlReader.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
