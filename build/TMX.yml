@@ -4,7 +4,7 @@ trigger:
      - Studio_2024
   paths:
     include:
-     - TMX/*
+     - File type definition for TMX/*
 
 pr:
   branches:
@@ -12,7 +12,7 @@ pr:
      - Studio_2024
   paths:
     include:
-     - TMX/*
+     - File type definition for TMX/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
