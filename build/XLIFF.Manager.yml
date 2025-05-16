@@ -1,18 +1,18 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - XLIFF.Manager/*
+     - XLIFF Manager for Trados Studio/*
 
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - XLIFF.Manager/*
+     - XLIFF Manager for Trados Studio/*
  
 pool: 
   vmImage : '$(DefaultBuildVm)'
@@ -26,7 +26,7 @@ variables:
 - name: solution 
   value: '**/XLIFF.Manager.sln'
 - name: pathToPublish
-  value: 'XLIFF.Manager/XLIFF.Manager\bin\Release\Sdl.Community.XLIFF.Manager.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.XLIFF.Manager.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
