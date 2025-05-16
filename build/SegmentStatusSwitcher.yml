@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - SegmentStatusSwitcher/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - SegmentStatusSwitcher/*
@@ -26,7 +26,7 @@ variables:
 - name: solution 
   value: '**/Sdl.Community.SegmentStatusSwitcher.sln'
 - name: pathToPublish
-  value: 'SegmentStatusSwitcher\Sdl.Community.SegmentStatusSwitcher\bin\Release\Sdl.Community.SegmentStatusSwitcher.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.SegmentStatusSwitcher.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
