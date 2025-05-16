@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - StarTransit/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - StarTransit/*
@@ -26,7 +26,7 @@ variables:
 - name: solution 
   value: '**/Sdl.Community.StarTransit.sln'
 - name: pathToPublish
-  value: 'StarTransit\Sdl.Community.StarTransit\bin\Release\Sdl.Community.StarTransit.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.StarTransit.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
