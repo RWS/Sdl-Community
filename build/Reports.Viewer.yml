@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - Reports.Viewer/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - Reports.Viewer/*
@@ -27,7 +27,7 @@ variables:
 - name: solution
   value: '**/Reports.Viewer.sln'
 - name: pathToPublish
-  value: 'Reports.Viewer\Reports.Viewer\bin\$(buildConfiguration)\Reports.Viewer.Plus.sdlplugin'
+  value: '$(PluginPath)\Reports.Viewer.Plus.sdlplugin'
 - name: outputpath
   value: '$(Build.Repository.LocalPath)\Reports.Viewer\Reports.Viewer\bin\$(buildConfiguration)'
 steps:
@@ -68,6 +68,6 @@ steps:
 
 - template: tasks/sign-artifacts/sign-plugin.yml
   parameters:
-    fileToSign: 'Reports.Viewer\Reports.Viewer\bin\$(buildConfiguration)\Reports.Viewer.Plus.sdlplugin'
+    fileToSign: '$(pathToPublish)'
 
 - template: jobs/publish-build-artifact-task.yml
