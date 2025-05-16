@@ -25,7 +25,7 @@ variables:
 - name: solution 
   value: '**/Sdl.Community.YourProductivity.sln'
 - name: pathToPublish
-  value: 'YourProductivity/Sdl.Community.YourProductivity\bin\Release\Sdl.Community.YourProductivity.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.YourProductivity.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
