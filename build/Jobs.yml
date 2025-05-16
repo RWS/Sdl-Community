@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - Jobs/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - Jobs/*
@@ -26,7 +26,7 @@ variables:
 - name: solution
   value : '**/Sdl.Community.Jobs.sln'
 - name: pathToPublish
-  value: 'Jobs\Sdl.Community.Jobs\bin\Release\Sdl.Community.Jobs.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.Jobs.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
