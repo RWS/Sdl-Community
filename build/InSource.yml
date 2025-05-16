@@ -4,7 +4,7 @@ trigger:
      - master
   paths:
     include:
-     - InSource/*
+     - Trados InSource!/*
 
 pr:
   branches:
@@ -12,7 +12,7 @@ pr:
      - master
   paths:
     include:
-     - InSource/*
+     - Trados InSource!/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
@@ -26,7 +26,7 @@ variables:
 - name: solution
   value : '**/Sdl.Community.InSource!.sln'
 - name: pathToPublish
-  value: 'InSource\bin\Release\Sdl.Community.InSource.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.InSource.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

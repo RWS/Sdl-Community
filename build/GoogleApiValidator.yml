@@ -4,7 +4,7 @@ trigger:
      - master
   paths:
     include:
-     - GoogleApiValidator/*
+     - Google API Validator/*
 
 pr:
   branches:
@@ -12,7 +12,7 @@ pr:
      - master
   paths:
     include:
-     - GoogleApiValidator/*
+     - Google API Validator/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
@@ -27,7 +27,7 @@ variables:
 - name: solution
   value: '**/Sdl.Community.GoogleApiValidator.sln'
 - name: pathToPublish
-  value: '$(Build.Repository.LocalPath)\GoogleApiValidator\GoogleApiValidator.Setup\bin\$(buildConfiguration)\GoogleApiValidator.Setup.msi'
+  value: '$(Build.Repository.LocalPath)\Google API Validator\GoogleApiValidator.Setup\bin\$(buildConfiguration)\GoogleApiValidator.Setup.msi'
 
 steps:
 - task: NuGetToolInstaller@1
@@ -51,8 +51,8 @@ steps:
 
 - template: tasks/sign-artifacts/sign-single-artifact.yml
   parameters:
-     fileToSign: '$(Build.Repository.LocalPath)\GoogleApiValidator\GoogleApiValidator\bin\$(buildConfiguration)\Sdl.Community.GoogleApiValidator.exe'
-     description: 'GoogleApiValidator'
+     fileToSign: '$(Build.Repository.LocalPath)\Google API Validator\GoogleApiValidator\bin\$(buildConfiguration)\Sdl.Community.GoogleApiValidator.exe'
+     description: 'Google API Validator'
 
 - task: VSBuild@1
   inputs:
@@ -63,7 +63,7 @@ steps:
 
 - template: tasks/sign-artifacts/sign-single-artifact.yml
   parameters:
-     fileToSign: '$(Build.Repository.LocalPath)\GoogleApiValidator\GoogleApiValidator.Setup\bin\$(buildConfiguration)\GoogleApiValidator.Setup.msi'
-     description: 'GoogleApiValidator'
+     fileToSign: '$(Build.Repository.LocalPath)\Google API Validator\GoogleApiValidator.Setup\bin\$(buildConfiguration)\GoogleApiValidator.Setup.msi'
+     description: 'Google API Validator'
      
 - template: jobs/publish-build-artifact-task.yml

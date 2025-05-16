@@ -1,5 +1,4 @@
-﻿using LanguageMappingProvider.Database.Interface;
-using MicrosoftTranslatorProvider.Commands;
+﻿using MicrosoftTranslatorProvider.Commands;
 using MicrosoftTranslatorProvider.Interfaces;
 using MicrosoftTranslatorProvider.Model;
 using Sdl.LanguagePlatform.Core;
@@ -8,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using LanguageMappingProvider;
 
 namespace MicrosoftTranslatorProvider.ViewModel
 {

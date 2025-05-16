@@ -33,7 +33,7 @@ namespace LanguageWeaverProvider.Send_feedback
             return true;
         }
 
-        private static CloudFeedbackItem GetFeedbackRequest(ISegmentPair segmentPair)
+        private CloudFeedbackItem GetFeedbackRequest(ISegmentPair segmentPair)
         {
             var translationOrigin = segmentPair.Properties.TranslationOrigin;
 
@@ -54,7 +54,8 @@ namespace LanguageWeaverProvider.Send_feedback
                     TargetMTText = translationOrigin.GetMetaData(Constants.SegmentMetadata_Translation),
                     QualityEstimationMT = qualityEstimationMt
                 },
-                Improvement = new Improvement(segmentPair.Target.ToString())
+                Improvement = new Improvement(segmentPair.Target.ToString()),
+                Rating = Rating
             };
             return feedback;
         }

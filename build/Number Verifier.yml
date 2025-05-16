@@ -4,7 +4,7 @@ trigger:
      - master
   paths:
     include:
-     - Number Verifier/*
+     - Trados Number Verifier/*
 
 pr:
   branches:
@@ -12,7 +12,7 @@ pr:
      - master
   paths:
     include:
-     - Number Verifier/*
+     - Trados Number Verifier/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
@@ -25,6 +25,9 @@ variables:
   value: 'Release'
 - name: solution
   value : '**/Sdl.Community.NumberVerifier.sln'
+- name: pathToPublish
+  value: '$(PluginPath)\Sdl.Community.NumberVerifier.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml

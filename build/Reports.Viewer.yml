@@ -4,7 +4,7 @@ trigger:
      - master
   paths:
     include:
-     - Reports.Viewer/*
+     - Reports Viewer Plus/*
 
 pr:
   branches:
@@ -12,7 +12,7 @@ pr:
      - master
   paths:
     include:
-     - Reports.Viewer/*
+     - Reports Viewer Plus/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
@@ -27,9 +27,9 @@ variables:
 - name: solution
   value: '**/Reports.Viewer.sln'
 - name: pathToPublish
-  value: 'Reports.Viewer\Reports.Viewer\bin\$(buildConfiguration)\Reports.Viewer.Plus.sdlplugin'
+  value: '$(PluginPath)\Reports.Viewer.Plus.sdlplugin'
 - name: outputpath
-  value: '$(Build.Repository.LocalPath)\Reports.Viewer\Reports.Viewer\bin\$(buildConfiguration)'
+  value: '$(Build.Repository.LocalPath)\Reports Viewer Plus\Reports.Viewer\bin\$(buildConfiguration)'
 steps:
 - task: PowerShell@2
   displayName: 'set x86path'
@@ -68,6 +68,6 @@ steps:
 
 - template: tasks/sign-artifacts/sign-plugin.yml
   parameters:
-    fileToSign: 'Reports.Viewer\Reports.Viewer\bin\$(buildConfiguration)\Reports.Viewer.Plus.sdlplugin'
+    fileToSign: '$(pathToPublish)'
 
 - template: jobs/publish-build-artifact-task.yml

@@ -1,5 +1,4 @@
-﻿using LanguageMappingProvider.Database.Interface;
-using MicrosoftTranslatorProvider.Commands;
+﻿using MicrosoftTranslatorProvider.Commands;
 using MicrosoftTranslatorProvider.Interfaces;
 using MicrosoftTranslatorProvider.LanguageMappingProvider;
 using MicrosoftTranslatorProvider.LanguageMappingProvider.View;
@@ -9,6 +8,7 @@ using MicrosoftTranslatorProvider.View;
 using Sdl.LanguagePlatform.Core;
 using System;
 using System.Windows.Input;
+using LanguageMappingProvider;
 using TradosProxySettings.View;
 using TradosProxySettings.ViewModel;
 

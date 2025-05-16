@@ -1,12 +1,12 @@
-﻿	using Sdl.Community.FileType.TMX.Settings;
-	using Sdl.Core.Globalization;
-	using Sdl.Core.Settings;
-	using Sdl.FileTypeSupport.Framework;
+﻿using Sdl.Community.FileType.TMX.Settings;
+using Sdl.Core.Globalization;
+using Sdl.Core.Settings;
+using Sdl.FileTypeSupport.Framework;
 using Sdl.FileTypeSupport.Framework.Core.IntegrationApi;
 using Sdl.FileTypeSupport.Framework.Core.Settings;
-	using Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts;
-	using Sdl.FileTypeSupport.Framework.Core.Settings.Serialization;
-	using Sdl.FileTypeSupport.Framework.IntegrationApi;
+using Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts;
+using Sdl.FileTypeSupport.Framework.Core.Settings.Serialization;
+using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 
 namespace Sdl.Community.FileType.TMX
@@ -18,8 +18,8 @@ namespace Sdl.Community.FileType.TMX
                                        Name = "TMX_FilterComponentBuilderExtension_Name",
                                        Description = "TMX_FilterComponentBuilderExtension_Description")]
     public class TMXFilterComponentBuilder : IFileTypeComponentBuilder, IDefaultFileTypeSettingsProvider, IFileTypeSettingsConverterComponentBuilder
-	{
-	    /// <summary>
+    {
+        /// <summary>
         /// Gets or sets file type manager
         /// </summary>
         public IFileTypeManager FileTypeManager { get; set; }
@@ -51,7 +51,7 @@ namespace Sdl.Community.FileType.TMX
 
             info.WinFormSettingsPageIds = new[]
             {
-				Constants.WriterId,
+                Constants.WriterId,
             };
 
             return info;
@@ -188,20 +188,20 @@ namespace Sdl.Community.FileType.TMX
 
         public void PopulateDefaultSettingsBundle(ISettingsBundle settingsBundle, string fileTypeConfigurationId)
         {
-	        var settPages = new FileTypeSettingsBase[]
-	        {
-				new WriterSettings(),
-	        };
-			foreach (var settings in settPages)
-				settings.SaveDefaultsToSettingsBundle(settingsBundle, fileTypeConfigurationId);
+            var settPages = new FileTypeSettingsBase[]
+            {
+                new WriterSettings(),
+            };
+            foreach (var settings in settPages)
+                settings.SaveDefaultsToSettingsBundle(settingsBundle, fileTypeConfigurationId);
         }
 
         public IFileTypeSettingsConverter BuildFileTypeSettingsConverter(string name)
         {
-	        return new GenericFileTypeSettingsConverter(
-		        SettingsFormatConverter.ConvertSettings<WriterSettings>
-		        );
+            return new GenericFileTypeSettingsConverter(
+                SettingsFormatConverter.ConvertSettings<WriterSettings>
+                );
 
-		}
-	}
+        }
+    }
 }

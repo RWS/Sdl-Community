@@ -22,7 +22,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: pathToPublish
-  value: 'Language Weaver Provider\bin\Release\net48\LanguageWeaverProvider.sdlplugin'
+  value: '$(PluginPath)\LanguageWeaverProvider.sdlplugin'
 - name: solution
   value: '**/LanguageWeaverProvider.sln'
 - name : SonarID

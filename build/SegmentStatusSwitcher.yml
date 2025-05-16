@@ -4,7 +4,7 @@ trigger:
      - master
   paths:
     include:
-     - SegmentStatusSwitcher/*
+     - Segment Status Switcher/*
 
 pr:
   branches:
@@ -12,7 +12,7 @@ pr:
      - master
   paths:
     include:
-     - SegmentStatusSwitcher/*
+     - Segment Status Switcher/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
@@ -26,7 +26,7 @@ variables:
 - name: solution 
   value: '**/Sdl.Community.SegmentStatusSwitcher.sln'
 - name: pathToPublish
-  value: 'SegmentStatusSwitcher\Sdl.Community.SegmentStatusSwitcher\bin\Release\Sdl.Community.SegmentStatusSwitcher.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.SegmentStatusSwitcher.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

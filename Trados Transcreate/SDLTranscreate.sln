@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31702.278
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transcreate", "SDLTranscreate\Transcreate.csproj", "{AD8EE7B5-21DF-4AB0-9799-B13361B26E61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reports.Viewer.Api", "..\Reports.Viewer\Reports.Viewer.Api\Reports.Viewer.Api.csproj", "{B47446D5-9F94-4ADA-A8A1-ABD796EAA535}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reports.Viewer.Api", "..\Reports Viewer Plus\Reports.Viewer.Api\Reports.Viewer.Api.csproj", "{B47446D5-9F94-4ADA-A8A1-ABD796EAA535}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

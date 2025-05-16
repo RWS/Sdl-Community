@@ -24,9 +24,9 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: solution
-  value: '**/ExportToExcel.sln'
+  value: '**/Sdl.Community.ExportToExcel.sln'
 - name: pathToPublish
-  value: 'Export to Excel\Export to Excel\bin\Release\Sdl.Community.ExportToExcel.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.ExportToExcel.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

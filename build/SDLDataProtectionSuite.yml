@@ -4,7 +4,7 @@ trigger:
      - master
   paths:
     include:
-     - SDLDataProtectionSuite/*
+     - Trados Data Protection Suite/*
 
 pr:
   branches:
@@ -12,7 +12,7 @@ pr:
      - master
   paths:
     include:
-     - SDLDataProtectionSuite/*
+     - Trados Data Protection Suite/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
@@ -26,7 +26,7 @@ variables:
 - name: solution 
   value: '**/SDLDataProtectionSuite.sln'
 - name: pathToPublish
-  value: 'SDLDataProtectionSuite\SDLDataProtectionSuite\bin\Release\Sdl.Community.SdlDataProtectionSuite.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.SdlDataProtectionSuite.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

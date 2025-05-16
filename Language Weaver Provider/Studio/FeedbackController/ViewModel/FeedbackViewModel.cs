@@ -260,7 +260,7 @@ namespace LanguageWeaverProvider.Studio.FeedbackController.ViewModel
 
             GetSegmentMetadata(currentSegment.Properties);
 
-            var feedbackSent = await SendFeedback(false);
+            var feedbackSent = await SendFeedback(currentSegment, false);
 
             if (feedbackSent)
             {
@@ -356,7 +356,7 @@ namespace LanguageWeaverProvider.Studio.FeedbackController.ViewModel
             _activeSegment = _editController?.ActiveDocument?.ActiveSegmentPair;
             SetProviderState(_activeSegment.Properties);
 
-            var feedbackSent = await SendFeedback();
+            var feedbackSent = await SendFeedback(_activeSegment);
 
             if (!feedbackSent) return;
 
@@ -364,11 +364,11 @@ namespace LanguageWeaverProvider.Studio.FeedbackController.ViewModel
             ToggleSuccesfullNotification();
         }
 
-        private async Task<bool> SendFeedback(bool showErrors = true)
+        private async Task<bool> SendFeedback(ISegmentPair segmentPair, bool showErrors = true)
         {
             var feedbackSent = false;
 
-            var feedback = LanguageWeaverFeedbackFactory.Create(_activeSegment);
+            var feedback = LanguageWeaverFeedbackFactory.Create(segmentPair);
 
             switch (feedback)
             {

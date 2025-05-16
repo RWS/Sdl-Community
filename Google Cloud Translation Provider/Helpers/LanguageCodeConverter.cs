@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using LanguageMappingProvider.Database;
+﻿using LanguageMappingProvider;
+using System.Linq;
 using Sdl.Core.Globalization;
 
 namespace GoogleCloudTranslationProvider.Helpers
