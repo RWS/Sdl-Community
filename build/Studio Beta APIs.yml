@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - Studio Beta APIs/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - Studio Beta APIs/*
@@ -26,7 +26,7 @@ variables:
 - name: solution 
   value: '**/SDL.Community.BetaAPIs.sln'
 - name: pathToPublish
-  value: 'Studio Beta APIs\SDL.Community.BetaAPIs\Sdl.Community.BetaAPIs.UI\bin\Release\Sdl.Community.BetaAPIs.UI.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.BetaAPIs.UI.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
