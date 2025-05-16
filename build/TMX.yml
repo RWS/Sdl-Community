@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - TMX/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - TMX/*
@@ -26,7 +26,7 @@ variables:
 - name: solution 
   value: '**/Sdl.Community.FileTypeSupport.TMX.sln'
 - name: pathToPublish
-  value: 'TMX\bin\Release\Sdl.Community.FileType.TMX.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.FileType.TMX.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
