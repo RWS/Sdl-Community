@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - InSource/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - InSource/*
@@ -26,7 +26,7 @@ variables:
 - name: solution
   value : '**/Sdl.Community.InSource!.sln'
 - name: pathToPublish
-  value: 'InSource\bin\Release\Sdl.Community.InSource.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.InSource.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
