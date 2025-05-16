@@ -4,7 +4,7 @@ trigger:
      - Studio_2024
   paths:
     include:
-     - InvoiceAndQuotes/*
+     - Trados Studio InQuote/*
 
 pr:
   branches:
@@ -12,7 +12,7 @@ pr:
      - Studio_2024
   paths:
     include:
-     - InvoiceAndQuotes/*
+     - Trados Studio InQuote/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
