@@ -4,7 +4,7 @@ trigger:
      - Studio_2024
   paths:
     include:
-     - IATETerminologyProvider/*
+     - IATE Real-time Terminology/*
 
 pr:
   branches:
@@ -12,7 +12,7 @@ pr:
      - Studio_2024
   paths:
     include:
-     - IATETerminologyProvider/*
+     - IATE Real-time Terminology/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
