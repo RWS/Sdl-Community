@@ -44,8 +44,8 @@ pool:
 steps:
   - template: tasks/version-assemblies/version-assemblies.yml
     parameters:
-      PathToVersion: '$(Build.SourcesDirectory)\HunspellDictionaryManager\HunspellDictionaryManager\Properties'
-      InstallPathToVersion: '$(Build.SourcesDirectory)\HunspellDictionaryManager\Sdl.Community.HunspellDictionaryManager.Installer\defines.wxi'
+      PathToVersion: '$(Build.SourcesDirectory)\Hunspell Dictionary Manager\HunspellDictionaryManager\Properties'
+      InstallPathToVersion: '$(Build.SourcesDirectory)\Hunspell Dictionary Manager\Sdl.Community.HunspellDictionaryManager.Installer\defines.wxi'
  
   - template: jobs/build-sdlplugin.yml
 
@@ -53,7 +53,7 @@ steps:
 
   - template: tasks/sign-artifacts/sign-single-artifact.yml
     parameters:
-       fileToSign: '$(Build.Repository.LocalPath)\HunspellDictionaryManager\HunspellDictionaryManager\bin\$(buildConfiguration)\Sdl.Community.HunspellDictionaryManager.exe'
+       fileToSign: '$(Build.Repository.LocalPath)\Hunspell Dictionary Manager\HunspellDictionaryManager\bin\$(buildConfiguration)\Sdl.Community.HunspellDictionaryManager.exe'
        description: 'HunspellDictionaryManager'
   - task: VSBuild@1
     inputs:
@@ -66,11 +66,11 @@ steps:
 
   - template: tasks/sign-artifacts/sign-single-artifact.yml
     parameters:
-     fileToSign: '$(Build.Repository.LocalPath)\HunspellDictionaryManager\Sdl.Community.HunspellDictionaryManager.Installer\bin\$(buildConfiguration)\Sdl.Community.HunspellDictionaryManager.Installer.msi'
+     fileToSign: '$(Build.Repository.LocalPath)\Hunspell Dictionary Manager\Sdl.Community.HunspellDictionaryManager.Installer\bin\$(buildConfiguration)\Sdl.Community.HunspellDictionaryManager.Installer.msi'
      description: 'HunspellDictionaryManager '
 
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifact'
     inputs:
       artifactName: HunspellDictionaryManagerInstaller
-      pathToPublish: '$(Build.Repository.LocalPath)\\HunspellDictionaryManager\Sdl.Community.HunspellDictionaryManager.Installer\bin\$(buildConfiguration)'
+      pathToPublish: '$(Build.Repository.LocalPath)\\Hunspell Dictionary Manager\Sdl.Community.HunspellDictionaryManager.Installer\bin\$(buildConfiguration)'
