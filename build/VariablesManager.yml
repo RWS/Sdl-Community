@@ -4,7 +4,7 @@ trigger:
      - master
   paths:
     include:
-     - VariablesManager/*
+     - Variables Manager/*
 
 pr:
   branches:
@@ -12,7 +12,7 @@ pr:
      - master
   paths:
     include:
-     - VariablesManager/*
+     - Variables Manager/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
@@ -26,7 +26,7 @@ variables:
 - name: solution 
   value: '**/VariablesManager.sln'
 - name: pathToPublish
-  value: '$(appdata)/SDL/SDL Trados Studio/12/Plugins/Packages/VariablesManager.sdlplugin'
+  value: '$(PluginPath)\VariablesManager.sdlplugin'
 
 steps:
   - powershell: echo "##vso[task.setvariable variable=appdata]$env:appdata"
