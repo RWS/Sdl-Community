@@ -4,7 +4,7 @@ trigger:
      - master
   paths:
     include:
-     - DeepLMTProvider/*
+     - DeepL Translation Provider/*
 
 pr:
   branches:
@@ -12,29 +12,12 @@ pr:
      - master
   paths:
     include:
-     - DeepLMTProvider/*
+     - DeepL Translation Provider/*
 pool: 
   vmImage : '$(DefaultBuildVm)'
 
 variables:
-- name: DefaultBuildVm
-  value: 'windows-latest'
-#windows-latest
-#windows-2019
-#vs2017-win2016
-#vs2015-win2012r2
-
-- name: StudioProductIdentifier  
-  value: Studio17
-
-- name: StudioBranch
-  value: refs/heads/master
-#  value: refs/heads/Release/15.2
-
-- name: VSVersion
-  value: '17.0'
-
-
+- template: jobs/branch-variables.yml
 - name: buildPlatform
   value: 'Any CPU'
 - name: buildConfiguration
@@ -42,7 +25,7 @@ variables:
 - name: solution
   value : '**/Sdl.Community.DeepLMTProvider.sln'
 - name: pathToPublish
-  value: 'DeepLMTProvider\Sdl.Community.DeelLMTProvider\bin\Release\Sdl.Community.DeepLMTProvider.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.DeepLMTProvider.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
