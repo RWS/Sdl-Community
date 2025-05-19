@@ -22,7 +22,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: pathToPublish
-  value: 'File type definition for TMX\bin\Release\Sdl.Community.FileType.TMX.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.FileType.TMX.sdlplugin'
 - name: solution
   value: '**/Sdl.Community.FileTypeSupport.TMX.sln'
 - name : SonarID
