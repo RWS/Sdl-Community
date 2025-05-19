@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - Multilingual Excel FileType/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - Multilingual Excel FileType/*
@@ -22,7 +22,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: pathToPublish
-  value: 'Multilingual Excel FileType\Multilingual.Excel.FileType\bin\Release\Multilingual.Excel.FileType.sdlplugin'
+  value: '$(PluginPath)\Multilingual.Excel.FileType.sdlplugin'
 - name: solution
   value: '**/Multilingual.Excel.FileType.sln'
 - name : SonarID
