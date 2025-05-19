@@ -22,7 +22,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: pathToPublish
-  value: 'Multilingual XML FileType\Multilingual.XML.FileType\bin\Release\Multilingual.XML.FileType.sdlplugin'
+  value: '$(PluginPath)\Multilingual.XML.FileType.sdlplugin'
 - name: solution
   value: '**/Multilingual.XML.FileType.sln'
 - name : SonarID
