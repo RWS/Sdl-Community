@@ -860,11 +860,11 @@
                     Grid.Column="1"
                     VerticalAlignment="Bottom"
                     Height="30"
+                    Style="{StaticResource Sdl.Button.GeneralStyle}"
                     Padding="5"
                     Click="PerformActionButton_OnClick"
                     HorizontalAlignment="Right"
                     BorderThickness="1"
-                    Style="{StaticResource MenuButtonStyle}"
                     Content="Perform Action" />
             <Border Grid.Row="3"
                     x:Name="UpdatedSegmentsNotification"
