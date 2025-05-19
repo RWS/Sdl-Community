@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - SDLXLIFF Toolkit/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - SDLXLIFF Toolkit/*
@@ -22,7 +22,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: pathToPublish
-  value: 'SDLXLIFF Toolkit\\SdlXliffToolkit\bin\Release\net48\SdlXliffToolkit.sdlplugin'
+  value: '$(PluginPath)\SdlXliffToolkit.sdlplugin'
 - name: solution
   value: '**/SDLXLIFFSliceOrChange.sln'
 - name : SonarID
