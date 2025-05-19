@@ -22,7 +22,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: pathToPublish
-  value: 'StudioViews\StudioViews\bin\Release\net48\Sdl.Community.StudioViews.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.StudioViews.sdlplugin'
 - name: solution
   value: '**/StudioViews.sln'
 - name : SonarID
