@@ -22,7 +22,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: pathToPublish
-  value: 'Trados Batch Anonymizer\SDLBatchAnonymize\bin\Release\net48\Sdl.Community.SDLBatchAnonymize.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.SDLBatchAnonymize.sdlplugin'
 - name: solution
   value: '**/Sdl.Community.SDLBatchAnonymize.sln'
 - name : SonarID
