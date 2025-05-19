@@ -22,7 +22,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: pathToPublish
-  value: 'IATE Real-time Terminology\\IATETerminologyProvider\bin\Release\Sdl.Community.IATETerminologyProvider.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.IATETerminologyProvider.sdlplugin'
 - name: solution
   value: '**/Sdl.Community.IATETerminologyProvider.sln'
 - name : SonarID
