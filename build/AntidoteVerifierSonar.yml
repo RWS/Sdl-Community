@@ -22,7 +22,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: pathToPublish
-  value: 'Antidote Verifier\Sdl.Community.AntidoteVerifier\Sdl.Community.AntidoteVerifier\bin\Release\net48\Sdl.Community.AntidoteVerifier.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.AntidoteVerifier.sdlplugin'
 - name: solution
   value: '**/Sdl.Community.AntidoteVerifier.sln'
 - name : SonarID
