@@ -22,7 +22,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: pathToPublish
-  value: 'Trados Number Verifier\bin\Release\Sdl.Community.NumberVerifier.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.NumberVerifier.sdlplugin'
 - name: solution
   value: '**/Sdl.Community.NumberVerifier.sln'
 - name : SonarID
