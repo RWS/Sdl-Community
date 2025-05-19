@@ -22,7 +22,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: pathToPublish
-  value: 'ApplyTM Template\Sdl.Community.ApplyTMTemplate\bin\Release\net48\Sdl.Community.ApplyTMTemplate.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.ApplyTMTemplate.sdlplugin'
 - name: solution
   value: '**/Sdl.Community.ApplyTMTemplate.sln'
 - name : SonarID
