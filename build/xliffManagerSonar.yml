@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - XLIFF Manager for Trados Studio/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - XLIFF Manager for Trados Studio/*
@@ -22,7 +22,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: pathToPublish
-  value: 'XLIFF Manager for Trados Studio\XLIFF.Manager\bin\Release\Sdl.Community.XLIFF.Manager.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.XLIFF.Manager.sdlplugin'
 - name: solution
   value: '**/XLIFF.Manager.sln'
 - name : SonarID
