@@ -1,9 +1,9 @@
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 	<PlugInName>AutoHotKey Manager</PlugInName>
-	<Version>6.0.0.0</Version>
+	<Version>6.1.0.0</Version>
 	<Description>This plugin can be used to manage AutoHotKey scripts so they can be easily imported/exported and shared with others.</Description>
 	<Author>Trados AppStore Team</Author>
-	<RequiredProduct name="TradosStudio" minversion="18.0" maxversion="18.9" />
+	<RequiredProduct name="TradosStudio" minversion="18.1" maxversion="18.1.9" />
 	<Include>
 		<File>Sdl.Community.AhkPlugin.Model.dll</File>
 		<File>Sdl.Community.AhkPlugin.Repository.dll</File>
