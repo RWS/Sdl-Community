@@ -23,39 +23,44 @@ namespace Sdl.Community.TermExcelerator
 		public PersistenceService PersistenceService => _persistenceService ??= new PersistenceService();
 
 		public ITerminologyProvider[] Browse(IWin32Window owner, ITerminologyProviderCredentialStore credentialStore)
-		{
-			var result = new List<ITerminologyProvider>();
-			try
-			{
-				var settingsDialog = new Settings();
-				var dialogResult = settingsDialog.ShowDialog();
+        {
+            return Browse(owner);
+        }
 
-				if (dialogResult == DialogResult.OK ||
-					dialogResult == DialogResult.Yes)
-				{
-					var settings = settingsDialog.GetSettings();
+        public ITerminologyProvider[] Browse(IWin32Window owner)
+        {
+            var result = new List<ITerminologyProvider>();
+            try
+            {
+                var settingsDialog = new Settings();
+                var dialogResult = settingsDialog.ShowDialog();
 
-					var provider = new TerminologyProviderExcel(settings);
-					settings.Uri = provider.Uri;
-					PersistenceService.AddSettings(settings);
-					var providerSettings = PersistenceService.Load(provider.Uri);
-					var termSearchService = new NormalTermSeachService(providerSettings);
+                if (dialogResult == DialogResult.OK ||
+                    dialogResult == DialogResult.Yes)
+                {
+                    var settings = settingsDialog.GetSettings();
 
-					var excelProvider = new TerminologyProviderExcel(providerSettings, termSearchService);
+                    var provider = new TerminologyProviderExcel(settings);
+                    settings.Uri = provider.Uri;
+                    PersistenceService.AddSettings(settings);
+                    var providerSettings = PersistenceService.Load(provider.Uri);
+                    var termSearchService = new NormalTermSeachService(providerSettings);
 
-					
-					result.Add(excelProvider);
-				}
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"Browse method: {ex.Message}\n {ex.StackTrace}");
-				throw ex;
-			}
-			return result.ToArray();
-		}
+                    var excelProvider = new TerminologyProviderExcel(providerSettings, termSearchService);
 
-		public bool Edit(IWin32Window owner, ITerminologyProvider terminologyProvider)
+
+                    result.Add(excelProvider);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error($"Browse method: {ex.Message}\n {ex.StackTrace}");
+                throw ex;
+            }
+            return result.ToArray();
+        }
+
+        public bool Edit(IWin32Window owner, ITerminologyProvider terminologyProvider)
 		{
 			if (!(terminologyProvider is TerminologyProviderExcel provider))
 			{
