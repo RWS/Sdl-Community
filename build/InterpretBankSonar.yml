@@ -22,7 +22,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: pathToPublish
-  value: '$(PluginPath)\InterpretBank.Terminology.Provider.sdlplugin'
+  value: '$(PluginPath)\InterpretBank.sdlplugin'
 - name: solution
   value: '**/InterpretBank.sln'
 - name : SonarID
