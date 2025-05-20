@@ -31,7 +31,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
-    <TradosFolder>C:\Code\SDL\Trados\Bin\Mixed Platforms\Debug</TradosFolder>
+    <TradosFolder><TradosFolder>C:\Program Files (x86)\Trados\Trados Studio\Studio18</TradosFolder></TradosFolder>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\Debug</OutputPath>
