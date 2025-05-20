@@ -2,8 +2,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net48</TargetFramework>
-		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
-		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
+		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18Beta\Plugins</PluginDeploymentPath>
+		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18Beta</TradosFolder>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -135,7 +135,7 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="LiteDB" Version="5.0.20" />
+    <PackageReference Include="LiteDB" Version="5.0.21" />
     <PackageReference Include="Sdl.Core.PluginFramework">
       <Version>2.1.0</Version>
     </PackageReference>

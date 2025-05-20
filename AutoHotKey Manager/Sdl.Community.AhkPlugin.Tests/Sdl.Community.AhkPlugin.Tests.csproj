@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\Sdl.Community.AhkPlugin\packages\xunit.core.2.4.1\build\xunit.core.props" Condition="Exists('..\Sdl.Community.AhkPlugin\packages\xunit.core.2.4.1\build\xunit.core.props')" />
+  <Import Project="..\Sdl.Community.AhkPlugin\packages\xunit.core.2.9.3\build\xunit.core.props" Condition="Exists('..\Sdl.Community.AhkPlugin\packages\xunit.core.2.9.3\build\xunit.core.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -39,33 +39,33 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\Sdl.Community.AhkPlugin\packages\Castle.Core.4.4.1\lib\net45\Castle.Core.dll</HintPath>
+    <Reference Include="Castle.Core, Version=5.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\Sdl.Community.AhkPlugin\packages\Castle.Core.5.2.1\lib\net462\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="NSubstitute, Version=4.3.0.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
-      <HintPath>..\Sdl.Community.AhkPlugin\packages\NSubstitute.4.3.0\lib\net46\NSubstitute.dll</HintPath>
+    <Reference Include="NSubstitute, Version=5.3.0.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
+      <HintPath>..\Sdl.Community.AhkPlugin\packages\NSubstitute.5.3.0\lib\net462\NSubstitute.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\Sdl.Community.AhkPlugin\packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\Sdl.Community.AhkPlugin\packages\System.Runtime.CompilerServices.Unsafe.6.1.2\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
-    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\Sdl.Community.AhkPlugin\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.4.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\Sdl.Community.AhkPlugin\packages\System.Threading.Tasks.Extensions.4.6.3\lib\net462\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <HintPath>..\Sdl.Community.AhkPlugin\packages\xunit.abstractions.2.0.3\lib\net35\xunit.abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="xunit.assert, Version=2.4.1.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\Sdl.Community.AhkPlugin\packages\xunit.assert.2.4.1\lib\netstandard1.1\xunit.assert.dll</HintPath>
+    <Reference Include="xunit.assert, Version=2.9.3.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\Sdl.Community.AhkPlugin\packages\xunit.assert.2.9.3\lib\netstandard1.1\xunit.assert.dll</HintPath>
     </Reference>
-    <Reference Include="xunit.core, Version=2.4.1.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\Sdl.Community.AhkPlugin\packages\xunit.extensibility.core.2.4.1\lib\net452\xunit.core.dll</HintPath>
+    <Reference Include="xunit.core, Version=2.9.3.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\Sdl.Community.AhkPlugin\packages\xunit.extensibility.core.2.9.3\lib\net452\xunit.core.dll</HintPath>
     </Reference>
-    <Reference Include="xunit.execution.desktop, Version=2.4.1.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\Sdl.Community.AhkPlugin\packages\xunit.extensibility.execution.2.4.1\lib\net452\xunit.execution.desktop.dll</HintPath>
+    <Reference Include="xunit.execution.desktop, Version=2.9.3.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\Sdl.Community.AhkPlugin\packages\xunit.extensibility.execution.2.9.3\lib\net452\xunit.execution.desktop.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -101,7 +101,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\Sdl.Community.AhkPlugin\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
+    <Analyzer Include="..\Sdl.Community.AhkPlugin\packages\xunit.analyzers.1.21.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
+    <Analyzer Include="..\Sdl.Community.AhkPlugin\packages\xunit.analyzers.1.21.0\analyzers\dotnet\cs\xunit.analyzers.fixes.dll" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -109,8 +110,8 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\Sdl.Community.AhkPlugin\packages\xunit.core.2.4.1\build\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\Sdl.Community.AhkPlugin\packages\xunit.core.2.4.1\build\xunit.core.props'))" />
-    <Error Condition="!Exists('..\Sdl.Community.AhkPlugin\packages\xunit.core.2.4.1\build\xunit.core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\Sdl.Community.AhkPlugin\packages\xunit.core.2.4.1\build\xunit.core.targets'))" />
+    <Error Condition="!Exists('..\Sdl.Community.AhkPlugin\packages\xunit.core.2.9.3\build\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\Sdl.Community.AhkPlugin\packages\xunit.core.2.9.3\build\xunit.core.props'))" />
+    <Error Condition="!Exists('..\Sdl.Community.AhkPlugin\packages\xunit.core.2.9.3\build\xunit.core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\Sdl.Community.AhkPlugin\packages\xunit.core.2.9.3\build\xunit.core.targets'))" />
   </Target>
-  <Import Project="..\Sdl.Community.AhkPlugin\packages\xunit.core.2.4.1\build\xunit.core.targets" Condition="Exists('..\Sdl.Community.AhkPlugin\packages\xunit.core.2.4.1\build\xunit.core.targets')" />
+  <Import Project="..\Sdl.Community.AhkPlugin\packages\xunit.core.2.9.3\build\xunit.core.targets" Condition="Exists('..\Sdl.Community.AhkPlugin\packages\xunit.core.2.9.3\build\xunit.core.targets')" />
 </Project>
