@@ -1,46 +1,21 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4CC9920F-CDD9-425E-9DB1-59C139F8E809}</ProjectGuid>
+    <TargetFramework>net48</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Reports.Viewer.Plus</RootNamespace>
+    <PlatformTarget>x86</PlatformTarget>
     <AssemblyName>Reports.Viewer.Plus</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-    <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <TradosFolder>C:\Program Files (x86)\Trados\Trados Studio\Studio18</TradosFolder>
     <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
     <CefSharpAnyCpuSupport>true</CefSharpAnyCpuSupport>
     <CefSharpBuildAction>Content</CefSharpBuildAction>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <UseWindowsForms>true</UseWindowsForms>
+    <UseWPF>true</UseWPF>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.mshtml, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
+
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="Sdl.Core.Globalization.Async">
       <HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
@@ -51,104 +26,8 @@
     <Reference Include="Sdl.MultiSelectComboBox">
       <HintPath>$(TradosFolder)\Sdl.MultiSelectComboBox.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
-    <Reference Include="WindowsFormsIntegration" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Actions\BaseReportAction.cs" />
-    <Compile Include="Actions\PrintReportAction.cs" />
-    <Compile Include="Actions\AddReportAction.cs" />
-    <Compile Include="Actions\SaveAsReportAction.cs" />
-    <Compile Include="Actions\RemoveReportAction.cs" />
-    <Compile Include="Actions\EditReportAction.cs" />
-    <Compile Include="Actions\OpenSettingsAction.cs" />
-    <Compile Include="Actions\RefreshAction.cs" />
-    <Compile Include="ApplicationInstance.cs" />
-    <Compile Include="Behaviours\DragDropBehaviour.cs" />
-    <Compile Include="Behaviours\EventBehaviourFactory.cs" />
-    <Compile Include="Behaviours\MouseDoubleClickBehaviour.cs" />
-    <Compile Include="Behaviours\SelectedItemBehaviour.cs" />
-    <Compile Include="Commands\CommandHandler.cs" />
-    <Compile Include="Commands\RelayCommand.cs" />
-    <Compile Include="Commands\SelectedItemChangedCommand.cs" />
-    <Compile Include="Controls\BindingWebBrowserSource.cs" />
-    <Compile Include="Controls\FolderSelectDialog.cs" />
-    <Compile Include="Controls\Reflector.cs" />
-    <Compile Include="Controls\SelectedItemsAwareDataGrid.cs" />
-    <Compile Include="Controls\SortAwareDataGrid.cs" />
-    <Compile Include="Controls\TextBoxWithEllipsis.cs" />
-    <Compile Include="Controls\WebBrowserHelper.cs" />
-    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
-    <Compile Include="Converters\CultureInfoNameToDisplayNameConverter.cs" />
-    <Compile Include="Converters\CultureInfoNameToImageConverter.cs" />
-    <Compile Include="CustomEventArgs\ReportSelectionChangedEventArgs.cs" />
-    <Compile Include="Model\GroupType.cs" />
-    <Compile Include="Model\LanguageGroup.cs" />
-    <Compile Include="Model\LanguageItem.cs" />
-    <Compile Include="Model\ReportGroup.cs" />
-    <Compile Include="Model\GroupItem.cs" />
-    <Compile Include="Model\Settings.cs" />
-    <Compile Include="Model\ReportState.cs" />
-    <Compile Include="ReportsViewerController.cs" />
-    <Compile Include="PluginResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PluginResources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\PluginProperties.cs" />
-    <Compile Include="ReportsViewerGroups.cs" />
-    <Compile Include="Service\DialogService.cs" />
-    <Compile Include="Service\ImageService.cs" />
-    <Compile Include="TellMe\DocumentationAction.cs" />
-    <Compile Include="TellMe\AppStoreForumAction.cs" />
-    <Compile Include="TellMe\SettingsAction.cs" />
-    <Compile Include="TellMe\SourceCodeAction.cs" />
-    <Compile Include="TellMe\TellMeProvider.cs" />
-    <Compile Include="ViewModel\AppendTemplateViewModel.cs" />
-    <Compile Include="ViewModel\BrowserViewModel.cs" />
-    <Compile Include="ViewModel\DataViewModel.cs" />
-    <Compile Include="ViewModel\ReportsViewModelBase.cs" />
-    <Compile Include="ViewModel\ReportViewModel.cs" />
-    <Compile Include="ViewModel\ReportsNavigationViewModel.cs" />
-    <Compile Include="ViewModel\AppendReportViewModel.cs" />
-    <Compile Include="ViewModel\SaveMultipleReportsViewModel.cs" />
-    <Compile Include="ViewModel\SettingsViewModel.cs" />
-    <Compile Include="View\AppendTemplateWindow.xaml.cs">
-      <DependentUpon>AppendTemplateWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\DataView.xaml.cs">
-      <DependentUpon>DataView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\BrowserView.xaml.cs">
-      <DependentUpon>BrowserView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\ReportView.xaml.cs">
-      <DependentUpon>ReportView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\ReportsNavigationView.xaml.cs">
-      <DependentUpon>ReportsNavigationView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\AppendReportWindow.xaml.cs">
-      <DependentUpon>AppendReportWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\SaveMultipleReportsWindow.xaml.cs">
-      <DependentUpon>SaveMultipleReportsWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\SettingsWindow.xaml.cs">
-      <DependentUpon>SettingsWindow.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Sdl.ProjectAutomation.Core">
@@ -156,9 +35,6 @@
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.FileBased">
       <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.FileBased.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.ProjectAutomation.Settings">
-      <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <HintPath>$(TradosFolder)\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
@@ -168,9 +44,6 @@
     </Reference>
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Core.Settings">
-      <HintPath>$(TradosFolder)\Sdl.Core.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
       <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.dll</HintPath>
@@ -194,11 +67,6 @@
   <ItemGroup>
     <Content Include="pluginpackage.manifest.xml" />
     <Content Include="Resources\Download.ico" />
-    <None Include="Resources\TellmeDocumentation.ico" />
-    <None Include="Resources\TellmeDocumentation.png" />
-    <None Include="Resources\Settings.ico" />
-    <None Include="Resources\SourceCode.ico" />
-    <None Include="Resources\Forum.ico" />
     <Content Include="Resources\ForumIcon.ico" />
     <Resource Include="Resources\StudioReport.ico" />
     <Resource Include="Resources\Add.ico" />
@@ -265,129 +133,11 @@
     <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PluginResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="SdlCommunity.snk" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="Styles\Buttons.xaml">
+    <Page Update="View\SaveMultipleReportsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\ComboboStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\ButtonsStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\DataGridColumnStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\DataGridStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\ExpanderStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\General.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\GroupBox.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\ImageStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\MultiSelectComboBox.Custom.ControlTemplate.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\MultiSelectComboBox.Custom.DropdownItemTemplate.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\MultiSelectComboBox.Custom.Image.Resources.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\MultiSelectComboBox.Custom.SelectedItemTemplate.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\MultiSelectComboBox.Resources.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\RadioButton.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\TextBlockStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\TextBoxStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\TreeView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\WindowsBorder.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\AppendTemplateWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\DataView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\BrowserView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\ReportView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\ReportsNavigationView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\AppendReportWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\SaveMultipleReportsWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\SettingsWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Reports.Viewer.Api\Reports.Viewer.Api.csproj">
-      <Project>{b47446d5-9f94-4ada-a8a1-abd796eaa535}</Project>
-      <Name>Reports.Viewer.Api</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\Reports.Viewer.Api\Reports.Viewer.Api.csproj" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

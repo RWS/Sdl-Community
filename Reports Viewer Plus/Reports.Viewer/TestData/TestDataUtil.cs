@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Sdl.Reports.Viewer.API.Model;
+using Reports.Viewer.Api.Model;
 
 namespace Sdl.Community.Reports.Viewer.TestData
 {

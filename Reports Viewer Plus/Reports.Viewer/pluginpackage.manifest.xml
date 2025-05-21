@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 	<PlugInName>Reports Viewer Plus</PlugInName>
-	<Version>4.0.3.0</Version>
+	<Version>4.1.0.0</Version>
 	<Description>Reports Viewer Plus</Description>
 	<Author>Trados AppStore Team</Author>
-	<RequiredProduct name="TradosStudio" minversion="18.0" maxversion="18.9"/>
+	<RequiredProduct name="TradosStudio" minversion="18.1" maxversion="18.1.9"/>
 	<Include>
 
 		<File>Reports.Viewer.Api.dll</File>
@@ -13,22 +13,24 @@
 		<File>CefSharp.Wpf.dll</File>
 		<File>CefSharp.Core.dll</File>
 
-		<File>x86\CefSharp.dll</File>
-		<File>x86\CefSharp.Core.Runtime.dll</File>
-		<File>x86\CefSharp.BrowserSubprocess.Core.dll</File>
-		<File>x86\CefSharp.BrowserSubprocess.exe</File>
+		<File>CefSharp.Core.Runtime.dll</File>
+		<File>CefSharp.BrowserSubprocess.Core.dll</File>
+		<File>CefSharp.BrowserSubprocess.exe</File>
+		<File>CefSharp.dll</File>
+		<File>CefSharp.Wpf.ChromiumWebBrowser.dll</File>
+		<File>CefSettings.BrowserSubprocessPath.dll</File>
 
-		<File>x86\chrome_elf.dll</File>
-		<File>x86\libcef.dll</File>
-		<File>x86\icudtl.dat</File>
-		<File>x86\libEGL.dll</File>
-		<File>x86\libGLESv2.dll</File>
+		<File>chrome_elf.dll</File>
+		<File>libcef.dll</File>
+		<File>icudtl.dat</File>
+		<File>libEGL.dll</File>
+		<File>libGLESv2.dll</File>
 
-		<File>x86\chrome_100_percent.pak</File>
-		<File>x86\chrome_200_percent.pak</File>
-		<File>x86\resources.pak</File>
+		<File>chrome_100_percent.pak</File>
+		<File>chrome_200_percent.pak</File>
+		<File>resources.pak</File>
 
-		<File>x86\snapshot_blob.bin</File>
-		<File>x86\v8_context_snapshot.bin</File>
+		<File>snapshot_blob.bin</File>
+		<File>v8_context_snapshot.bin</File>
 	</Include>
 </PluginPackage>
