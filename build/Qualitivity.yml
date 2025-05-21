@@ -24,9 +24,9 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: solution 
-  value: '**/Qualitivity.sln'
+  value: '**/Sdl.Community.Qualitivity.sln'
 - name: pathToPublish
-  value: '$(PluginPath)\Sdl.Community.Qualitivity.sdlplugin'
+  value: '$(PluginPath)\Qualitivity.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
