@@ -1,8 +1,8 @@
 
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 	<PlugInName>SDLTM Repair</PlugInName>
-	<Version>5.0.0.2</Version>
+	<Version>5.1.0.0</Version>
 	<Description>This application attempts to repair a corrected translation memory,TM, by exporting the contents via SQL, creating a new container and reimporting the content.</Description>
 	<Author>Trados AppStore Team</Author>
-	<RequiredProduct name="TradosStudio" minversion="18.0" maxversion="18.9" />
+	<RequiredProduct name="TradosStudio" minversion="18.1" maxversion="18.1.9" />
 </PluginPackage>
