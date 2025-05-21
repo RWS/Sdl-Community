@@ -24,7 +24,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: solution 
-  value: '**/Sdl.Community.Qualitivity.sln'
+  value: '**/Qualitivity.sln'
 - name: pathToPublish
   value: '$(PluginPath)\Sdl.Community.Qualitivity.sdlplugin'
 
