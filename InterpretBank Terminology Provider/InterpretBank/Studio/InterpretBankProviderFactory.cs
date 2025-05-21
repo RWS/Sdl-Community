@@ -14,6 +14,11 @@ namespace InterpretBank.Studio
 
         public ITerminologyProvider CreateTerminologyProvider(Uri terminologyProviderUri, ITerminologyProviderCredentialStore credentials)
         {
+            return CreateTerminologyProvider(terminologyProviderUri);
+        }
+
+        public ITerminologyProvider CreateTerminologyProvider(Uri terminologyProviderUri)
+        {
             var settingsId = terminologyProviderUri.AbsolutePath.Split('.')[0].TrimStart('/');
             var settings = TerminologyProviderScope.Resolve<PersistenceService.PersistenceService>().GetSettings(settingsId);
 
