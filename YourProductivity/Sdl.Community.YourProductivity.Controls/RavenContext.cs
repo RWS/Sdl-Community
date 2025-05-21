@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.IO;
 using Raven.Client.Embedded;
 using Raven.Client;
+using Raven.Client.Document;
 using Sdl.Community.YourProductivity.Persistance.Model;
 using Raven.Database.Config;
 using Raven.Database.Server;
@@ -21,13 +22,15 @@ namespace Sdl.Community.YourProductivity.Persistance
         private EmbeddableDocumentStore store;
         private static readonly Lazy<RavenContext> ravenContext = new Lazy<RavenContext>(() => new RavenContext());
         private IDocumentSession session;
+
         private RavenContext()
         {
             
             store = new EmbeddableDocumentStore
             {
                 DataDirectory = "Data",
-                DefaultDatabase = CurrentDatabaseName
+                DefaultDatabase = CurrentDatabaseName,
+                Conventions = new DocumentConvention()
             };
             store.Configuration.Settings["Raven/WorkingDir"] = GetWorkingDirectory();
             store.Configuration.Initialize();
