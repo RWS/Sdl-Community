@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>TransitPackage Handler</PlugInName>
-  <Version>5.0.2.0</Version>
+  <Version>5.1.0.0</Version>
   <Description>This app supports opening a Star Transit package (PPF file) and the creation of a Star Transit return package (TPF file).</Description>
   <Author>Trados AppStore Team</Author>
-  <RequiredProduct name="TradosStudio" minversion="18.0" maxversion="18.9"/>
-	<Include>
-		<File>Sdl.Community.StarTransit.Shared.dll</File>
-		<File>System.Windows.Interactivity.dll</File>
-		<File>System.Reactive.dll</File>
-	</Include>
+  <RequiredProduct name="TradosStudio" minversion="18.1" maxversion="18.1.9"/>
+  <Include>
+    <File>Sdl.Community.StarTransit.Shared.dll</File>
+    <File>System.Windows.Interactivity.dll</File>
+    <File>System.Reactive.dll</File>
+  </Include>
 </PluginPackage>
