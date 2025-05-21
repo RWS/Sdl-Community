@@ -1,40 +1,14 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{DF51A3C1-4A82-4E08-9F78-7448ED33C271}</ProjectGuid>
+    <TargetFramework>net48</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sdl.Community.TranslationMemoryManagementUtility</RootNamespace>
-    <AssemblyName>Sdl.Community.TranslationMemoryManagementUtility</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <PropertyGroup>
     <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
-    <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
+    <TradosFolder>C:\Program Files (x86)\Trados\Trados Studio\Studio18</TradosFolder>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Sdl.Desktop.IntegrationApi">
@@ -55,99 +29,27 @@
     <Reference Include="Sdl.Versioning">
       <HintPath>$(TradosFolder)\Sdl.Versioning.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-    <Compile Include="TellMe\DocumentationAction.cs" />
-    <Compile Include="TellMe\CommunityAppStoreForumAction.cs" />
-    <Compile Include="TellMe\SettingsAction.cs" />
-    <Compile Include="TellMe\SourceCodeAction.cs" />
-    <Compile Include="TellMe\TellMeProvider.cs" />
-    <Compile Include="TranslationMemoryProviderRibbon.cs" />
-    <Compile Include="OptionsPanel.cs">
+    <Compile Update="OptionsPanel.cs">
       <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="OptionsPanel.Designer.cs">
-      <DependentUpon>OptionsPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PluginResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PluginResources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\PluginProperties.cs" />
-    <Compile Include="TasksManager\TasksManager.cs" />
-    <Compile Include="TMResultsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TMResultsForm.Designer.cs">
-      <DependentUpon>TMResultsForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="TMToolForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TMToolForm.Designer.cs">
-      <DependentUpon>TMToolForm.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\TellMe_SourceCode.ico" />
-    <None Include="Resources\TellMe_Settings.ico" />
-    <None Include="Resources\TellMe_Documentation.ico" />
     <Resource Include="Resources\Download.ico" />
     <Resource Include="Resources\ForumIcon.ico" />
     <Resource Include="Resources\Question.ico" />
-    <None Include="Resources\TM_icon.ico" />
-    <EmbeddedResource Include="OptionsPanel.resx">
-      <DependentUpon>OptionsPanel.cs</DependentUpon>
-    </EmbeddedResource>
     <Content Include="pluginpackage.manifest.xml" />
-    <EmbeddedResource Include="PluginResources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TMResultsForm.resx">
-      <DependentUpon>TMResultsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TMToolForm.resx">
-      <DependentUpon>TMToolForm.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="SdlCommunity.snk" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Sdl.Community.Utilities.TMTool.Lib\Sdl.Community.Utilities.TMTool.Lib.csproj">
-      <Project>{35068c4f-4167-4af1-b998-54b8f1754ce9}</Project>
-      <Name>Sdl.Community.Utilities.TMTool.Lib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Sdl.Community.Utilities.TMTool.Tasks.RemapTMX\Sdl.Community.Utilities.TMTool.Tasks.RemapTMX.csproj">
-      <Project>{b67bebdb-8243-48cb-b638-2f93b9921039}</Project>
-      <Name>Sdl.Community.Utilities.TMTool.Tasks.RemapTMX</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Sdl.Community.Utilities.TMTool.Tasks.RemoveDuplicates\Sdl.Community.Utilities.TMTool.Tasks.RemoveDuplicates.csproj">
-      <Project>{d930e738-c4ec-4806-978b-8f1d2002f5cb}</Project>
-      <Name>Sdl.Community.Utilities.TMTool.Tasks.RemoveDuplicates</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Sdl.Community.Utilities.TMTool.Tasks.RevertIndex\Sdl.Community.Utilities.TMTool.Tasks.RevertIndex.csproj">
-      <Project>{0d96aaa4-04e8-4466-a767-6bce19468e3a}</Project>
-      <Name>Sdl.Community.Utilities.TMTool.Tasks.RevertIndex</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Sdl.Community.Utilities.TMTool.Task\Sdl.Community.Utilities.TMTool.Task.csproj">
-      <Project>{6d8af615-6467-4cf4-a6d7-a0b88fb8d74b}</Project>
-      <Name>Sdl.Community.Utilities.TMTool.Task</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\Sdl.Community.Utilities.TMTool.Lib\Sdl.Community.Utilities.TMTool.Lib.csproj" />
+    <ProjectReference Include="..\Sdl.Community.Utilities.TMTool.Tasks.RemapTMX\Sdl.Community.Utilities.TMTool.Tasks.RemapTMX.csproj" />
+    <ProjectReference Include="..\Sdl.Community.Utilities.TMTool.Tasks.RemoveDuplicates\Sdl.Community.Utilities.TMTool.Tasks.RemoveDuplicates.csproj" />
+    <ProjectReference Include="..\Sdl.Community.Utilities.TMTool.Tasks.RevertIndex\Sdl.Community.Utilities.TMTool.Tasks.RevertIndex.csproj" />
+    <ProjectReference Include="..\Sdl.Community.Utilities.TMTool.Task\Sdl.Community.Utilities.TMTool.Task.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Sdl.Core.PluginFramework">
@@ -166,5 +68,4 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
