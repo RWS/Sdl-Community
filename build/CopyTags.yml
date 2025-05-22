@@ -24,7 +24,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: solution
-  value: '**/Sdl.Community.SDLCopyTags.sln'
+  value: '**/SDLCopyTags.sln'
 - name: pathToPublish
   value: '$(PluginPath)\SDLCopyTags.sdlplugin'
 
