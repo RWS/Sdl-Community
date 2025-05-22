@@ -29,7 +29,7 @@ variables:
 - name: pathToPublish
   value: '$(PluginPath)\Reports.Viewer.Plus.sdlplugin'
 - name: outputpath
-  value: '$(Build.Repository.LocalPath)\Reports Viewer Plus\Reports.Viewer\bin\$(buildConfiguration)'
+  value: '$(Build.Repository.LocalPath)\Reports Viewer Plus\Reports.Viewer\bin\$(buildConfiguration)\net48'
 steps:
 - task: PowerShell@2
   displayName: 'set x86path'
@@ -68,6 +68,6 @@ steps:
 
 - template: tasks/sign-artifacts/sign-plugin.yml
   parameters:
-    fileToSign: '$(pathToPublish)'
+    fileToSign: '$(outputpath)'
 
 - template: jobs/publish-build-artifact-task.yml
