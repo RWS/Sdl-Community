@@ -59,7 +59,7 @@
   <PropertyGroup>
     <ApplicationIcon>
     </ApplicationIcon>
-    <AssemblyOriginatorKeyFile>..\..\Sdl-Community\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <None Include="bil.ico" />
