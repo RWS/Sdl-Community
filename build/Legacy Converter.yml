@@ -26,7 +26,7 @@ variables:
 - name: solution
   value : '**/Sdl.Community.LegacyConverter.sln'
 - name: pathToPublish
-  value: '$(PluginPath)\Sdl.Community.LegacyConverter.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.XliffToLegacyConverter.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
