@@ -68,6 +68,6 @@ steps:
 
 - template: tasks/sign-artifacts/sign-plugin.yml
   parameters:
-    fileToSign: '$(outputpath)'
+    fileToSign: '$(pathToPublish)'
 
 - template: jobs/publish-build-artifact-task.yml
