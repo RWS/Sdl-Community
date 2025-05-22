@@ -24,9 +24,9 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: solution
-  value: '**/FileTypeSupport.MXLIFF.sln'
+  value: '**/Sdl.Community.FileTypeSupport.MXLIFF.sln'
 - name: pathToPublish
-  value: '$(PluginPath)\MXLIFFFileType.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.FileTypeSupport.MXLIFF.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
