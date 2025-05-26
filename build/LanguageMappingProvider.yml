@@ -18,6 +18,7 @@ pool:
   vmImage : 'windows-latest'
 
 variables:
+- template: jobs/branch-variables.yml
 - name: Version.MajorMinor
   value: 1.0
 - name: Version.Revision
@@ -40,7 +41,7 @@ steps:
   displayName: 'dotnet restore'
   inputs:
     command: 'restore'
-    projects: 'LanguageMappingProvider/LanguageMappingProvider/*.sln'
+    projects: 'Language Mapping Provider/LanguageMappingProvider/*.sln'
     feedsToUse: 'select'
     vstsFeed: 'af66e256-9c46-4fba-ad75-09bf110ec1cc'
     includeNuGetOrg: false
@@ -67,7 +68,7 @@ steps:
     artifactName: 'binaries'
     buildVersionToDownload: 'latestFromBranch'
     targetPath: '$(X86PATH)\Trados\Trados Studio\Studio18'
-    runBranch: 'refs/heads/master'
+    runBranch: '$(StudioBranch)'
     tags: 'Package'
 
 - task: VSBuild@1
