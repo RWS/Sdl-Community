@@ -4,7 +4,7 @@ trigger:
     - master
  paths:
   include:
-    - LanguageMappingProvider/*
+    - Language Mapping Provider/*
 
 pr:
   branches:
@@ -12,7 +12,7 @@ pr:
      - master
   paths:
     include:
-     - LanguageMappingProvider/*
+     - Language Mapping Provider/*
 
 pool: 
   vmImage : 'windows-latest'
@@ -73,7 +73,7 @@ steps:
 - task: VSBuild@1
   displayName: 'Build solution LanguageMappingProvider.sln'
   inputs:
-    solution: LanguageMappingProvider\LanguageMappingProvider\LanguageMappingProvider.sln
+    solution: Language Mapping Provider\LanguageMappingProvider\LanguageMappingProvider.sln
     platform: $(BuildPlatform)
     configuration: $(BuildConfiguration)
     msbuildArchitecture: x64
@@ -82,7 +82,7 @@ steps:
   displayName: 'PackNuGet'
   inputs:
     command: 'pack'
-    packagesToPack: 'LanguageMappingProvider/LanguageMappingProvider/LanguageMappingProvider.csproj'
+    packagesToPack: 'Language Mapping Provider/LanguageMappingProvider/LanguageMappingProvider.csproj'
     versioningScheme: 'byBuildNumber'
     
 - task: PublishBuildArtifacts@1
