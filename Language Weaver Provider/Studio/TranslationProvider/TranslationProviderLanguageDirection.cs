@@ -320,7 +320,7 @@ namespace LanguageWeaverProvider
             else SetSegmentMetadataWhenPossible(evaluatedSegment, pairMapping, index, translationOrigin);
         }
 
-        public Dictionary<string, TranslationData> EditorMetadata = new ();
+        public Dictionary<string, TranslationData> EditorMetadata = new();
 
         private void SetSegmentMetadataWhenPossible(EvaluatedSegment evaluatedSegment, PairMapping pairMapping, int index,
             ITranslationOrigin translationOrigin)
@@ -353,6 +353,7 @@ namespace LanguageWeaverProvider
 
         private void ActiveDocument_SegmentsConfirmationLevelChanged(object sender, EventArgs e)
         {
+
             var editorController = TryGetEditorController();
 
             var activeSegmentPair = editorController?.ActiveDocument?.ActiveSegmentPair;
@@ -364,6 +365,9 @@ namespace LanguageWeaverProvider
             activeSegmentPair.Properties.TranslationOrigin.SetMetaData(translationData);
             editorController.ActiveDocument.UpdateSegmentPairProperties(activeSegmentPair, activeSegmentPair.Properties);
             EditorMetadata.Remove(activeSegmentPairId);
+
+            editorController.ActiveDocument.SegmentsConfirmationLevelChanged -=
+                ActiveDocument_SegmentsConfirmationLevelChanged;
         }
 
         private void StoreSegmentMetadata(EvaluatedSegment evaluatedSegment, PairMapping pairMapping, string fileName)
