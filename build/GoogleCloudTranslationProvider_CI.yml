@@ -1,0 +1,32 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Google Cloud Translation Provider/*
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Google Cloud Translation Provider/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/GoogleCloudTranslationProvider.sln'
+- name: pathToPublish
+  value: '$(PluginPath)\GoogleCloudTranslationProvider.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml
