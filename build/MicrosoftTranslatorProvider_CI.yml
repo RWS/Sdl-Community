@@ -1,0 +1,32 @@
+trigger:
+  branches:
+    include:
+     - Studio_2024
+  paths:
+    include:
+     - Microsoft Translator Provider/*
+pr:
+  branches:
+    include:
+     - Studio_2024
+  paths:
+    include:
+     - Microsoft Translator Provider/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/MicrosoftTranslatorProvider.sln'
+- name: pathToPublish
+  value: '$(PluginPath)\MicrosoftTranslatorProvider.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml
