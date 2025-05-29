@@ -344,11 +344,11 @@ namespace LanguageWeaverProvider
 
             translationOrigin.SetMetaData(translationData);
 
-            if (activeSegmentPair?.Properties is null) return;
+            //if (activeSegmentPair?.Properties is null) return;
 
-            EditorMetadata[activeSegmentPair.Properties.Id.Id] = translationData;
-            editorController.ActiveDocument.SegmentsConfirmationLevelChanged +=
-                ActiveDocument_SegmentsConfirmationLevelChanged;
+            //EditorMetadata[activeSegmentPair.Properties.Id.Id] = translationData;
+            //editorController.ActiveDocument.SegmentsConfirmationLevelChanged +=
+            //    ActiveDocument_SegmentsConfirmationLevelChanged;
         }
 
         private void ActiveDocument_SegmentsConfirmationLevelChanged(object sender, EventArgs e)
