@@ -1,0 +1,57 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Export to Excel/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Export to Excel/*
+
+variables: 
+- group: 'Export to Excel Soanr Version'
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: pathToPublish
+  value: '$(PluginPath)\Sdl.Community.ExportToExcel.sdlplugin'
+- name: solution
+  value: '**/Sdl.Community.ExportToExcel.sln'
+- name : SonarID
+  value : Export_to_Excel
+- name : SonarName
+  value : 'Export to Excel'
+- name : ProjectVersion
+  value : $[counter(variables['Version.Patch'], 1)]
+
+pool:
+  vmImage: '$(DefaultBuildVm)'
+
+steps:
+  - task: SonarCloudPrepare@3
+    inputs:
+      SonarCloud: 'AppStorePlugins-ServiceConnection'
+      organization: 'sdl'
+      scannerMode: 'dotnet'
+      projectKey: $(SonarId)
+      projectName: $(SonarName)
+      projectVersion: $(ProjectVersion)
+
+  - template: jobs/build-sdlplugin.yml
+  - task: SonarCloudAnalyze@3
+    displayName: 'Run Code Analysis'
+
+  - task: SonarCloudPublish@3
+    inputs:
+      pollingTimeoutSec: '300'
+    displayName: 'Publish Quality Gate Result'
+
+  - template: jobs/publish-build-artifact-task.yml
