@@ -1,0 +1,53 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Google API Validator/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Google API Validator/*
+
+variables: 
+- group: 'Google API Validator Sonar Version'
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value: '**/Sdl.Community.GoogleApiValidator.sln'
+- name : SonarID
+  value : Google_API_Validator
+- name : SonarName
+  value : 'Google API Validator'
+- name : ProjectVersion
+  value : $[counter(variables['Version.Patch'], 1)]
+
+pool:
+  vmImage: '$(DefaultBuildVm)'
+
+steps:
+  - task: SonarCloudPrepare@3
+    inputs:
+      SonarCloud: 'AppStorePlugins-ServiceConnection'
+      organization: 'sdl'
+      scannerMode: 'dotnet'
+      projectKey: $(SonarId)
+      projectName: $(SonarName)
+      projectVersion: $(ProjectVersion)
+
+  - template: jobs/build-sdlplugin.yml
+  - task: SonarCloudAnalyze@3
+    displayName: 'Run Code Analysis'
+
+  - task: SonarCloudPublish@3
+    inputs:
+      pollingTimeoutSec: '300'
+    displayName: 'Publish Quality Gate Result'
