@@ -22,9 +22,9 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: pathToPublish
-  value: '$(PluginPath)\Sdl.Community.FileTypeSupport.TXML.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.FileType.TXML.sdlplugin'
 - name: solution
-  value: '**/Sdl.Community.FileType.TXML.sln'
+  value: '**/Sdl.Community.FileTypeSupport.TXML.sln'
 - name : SonarID
   value : Wordfast_TXML
 - name : SonarName
