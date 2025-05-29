@@ -1,0 +1,33 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - InterpretBank Terminology Provider/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - InterpretBank Terminology Provider/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value: '**/InterpretBank.sln'
+- name: pathToPublish
+  value: '$(PluginPath)\InterpretBank.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml
