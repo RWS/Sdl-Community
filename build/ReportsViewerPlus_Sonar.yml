@@ -22,7 +22,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: pathToPublish
-  value: '$(PluginPath)\Reports.Viewer.sdlplugin'
+  value: '$(PluginPath)\Reports.Viewer.Plus.sdlplugin'
 - name: solution
   value: '**/Reports.Viewer.sln'
 - name : SonarID
