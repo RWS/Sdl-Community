@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <OutputType>Library</OutputType>
+    <UseWPF>true</UseWPF>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core">
+      <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
+      <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
+      <HintPath>$(TradosFolder)\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="TestFiles\Xliff12\Polyglot\DefaultSample.sdlxliff.xliff">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestFiles\Xliff12\Sdl\DefaultSample.sdlxliff.xliff">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="TestFiles\Xliff12\Polyglot\LockedContentSample.sdlxliff.xliff" />
+    <Content Include="TestFiles\Xliff12\Polyglot\QuotesSample.docx.sdlxliff.xliff" />
+    <Content Include="TestFiles\Sdlxliff\QuotesSample.docx.sdlxliff" />
+    <Content Include="TestFiles\Xliff12\Sdl\LockedContentSample.sdlxliff.xliff" />
+    <Content Include="TestFiles\Xliff12\Sdl\QuotesSample.docx.sdlxliff.xliff" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\XLIFF.Manager\XLIFF.Manager.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="xunit.assert">
+      <Version>2.9.3</Version>
+    </PackageReference>
+    <PackageReference Include="xunit.core">
+      <Version>2.9.3</Version>
+    </PackageReference>
+  </ItemGroup>
+</Project>
