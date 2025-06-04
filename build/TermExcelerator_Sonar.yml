@@ -1,0 +1,57 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - TermExcelerator/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - TermExcelerator/*
+
+variables: 
+- group: 'TermExcelerator Sonar Version'
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: pathToPublish
+  value: '$(PluginPath)\Sdl.Community.TermExcelerator.sdlplugin'
+- name: solution
+  value: '**/Sdl.Community.TermExcelerator.sln'
+- name : SonarID
+  value : TermExcelerator
+- name : SonarName
+  value : 'TermExcelerator'
+- name : ProjectVersion
+  value : $[counter(variables['Version.Patch'], 1)]
+
+pool:
+  vmImage: '$(DefaultBuildVm)'
+
+steps:
+  - task: SonarCloudPrepare@3
+    inputs:
+      SonarCloud: 'AppStorePlugins-ServiceConnection'
+      organization: 'sdl'
+      scannerMode: 'dotnet'
+      projectKey: $(SonarId)
+      projectName: $(SonarName)
+      projectVersion: $(ProjectVersion)
+
+  - template: jobs/build-sdlplugin.yml
+  - task: SonarCloudAnalyze@3
+    displayName: 'Run Code Analysis'
+
+  - task: SonarCloudPublish@3
+    inputs:
+      pollingTimeoutSec: '300'
+    displayName: 'Publish Quality Gate Result'
+
+  - template: jobs/publish-build-artifact-task.yml
