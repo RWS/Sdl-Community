@@ -1,39 +1,14 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{666C678A-5637-40E1-BB6B-D1E1C8CBED70}</ProjectGuid>
+    <TargetFramework>net48</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sdl.Community.XLIFF.Manager</RootNamespace>
     <AssemblyName>Sdl.Community.XLIFF.Manager</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <UseWindowsForms>true</UseWindowsForms>
+    <UseWPF>true</UseWPF>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <PropertyGroup>
-    <TradosFolder>C:\Program Files (x86)\Trados\Trados Studio\Studio18</TradosFolder>
     <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
   </PropertyGroup>
   <ItemGroup>
@@ -46,8 +21,6 @@
     <Reference Include="NLog">
       <HintPath>$(TradosFolder)\NLog.dll</HintPath>
     </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="Rws.MultiSelectComboBox">
       <HintPath>ThirdParty\Rws.MultiSelectComboBox.dll</HintPath>
@@ -73,9 +46,6 @@
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Framework.Core.Settings">
-      <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.Settings.dll</HintPath>
-    </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
       <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
     </Reference>
@@ -91,9 +61,6 @@
     <Reference Include="Sdl.ProjectAutomation.FileBased">
       <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.FileBased.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.ProjectAutomation.Settings">
-      <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.Settings.dll</HintPath>
-    </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <HintPath>$(TradosFolder)\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
     </Reference>
@@ -106,460 +73,29 @@
     <Reference Include="Sdl.TellMe.ProviderApi">
       <HintPath>$(TradosFolder)\Sdl.TellMe.ProviderApi.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
-    <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-    <Reference Include="UIAutomationProvider" />
-    <Reference Include="WindowsBase" />
-    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Actions\Export\ProjectsContextMenu_ExportToXLIFFAction.cs" />
-    <Compile Include="Actions\Export\FilesContextMenu_ExportToXLIFFAction.cs" />
-    <Compile Include="Actions\Export\ExportToXLIFFAction.cs" />
-    <Compile Include="Actions\Import\ImportFromXLIFFAction.cs" />
-    <Compile Include="Actions\OpenLanguageMappingsAction.cs" />
-    <Compile Include="Actions\RefreshAction.cs" />
-    <Compile Include="Actions\OpenSettingsAction.cs" />
-    <Compile Include="ApplicationInstance.cs" />
-    <Compile Include="BatchTasks\ExportBatchTask.cs" />
-    <Compile Include="BatchTasks\ImportBatchTask.cs" />
-    <Compile Include="BatchTasks\ImportSettingsControl.cs">
+    <Compile Update="BatchTasks\ImportSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="BatchTasks\ImportSettingsControl.Designer.cs">
-      <DependentUpon>ImportSettingsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="BatchTasks\ImportSettingsPage.cs" />
-    <Compile Include="Controls\BindingDataProxy.cs" />
-    <Compile Include="Controls\BindingWebBrowserSource.cs" />
-    <Compile Include="Controls\WebBrowserHelper.cs" />
-    <Compile Include="Converters\TextEmptyToVisibilityConverter.cs" />
-    <Compile Include="FileTypeSupport\XLIFF\Model\Context.cs" />
-    <Compile Include="FileTypeSupport\XLIFF\Model\ElementGenericPlaceholder.cs" />
-    <Compile Include="LanguageMapping\Constants.cs" />
-    <Compile Include="LanguageMapping\Implementation\Common.cs" />
-    <Compile Include="LanguageMapping\Implementation\Reader.cs" />
-    <Compile Include="LanguageMapping\Implementation\Writer.cs" />
-    <Compile Include="LanguageMapping\Interfaces\ILanguageProvider.cs" />
-    <Compile Include="LanguageMapping\LanguageProvider.cs" />
-    <Compile Include="LanguageMapping\Model\ExcelCell.cs" />
-    <Compile Include="LanguageMapping\Model\ExcelColumn.cs" />
-    <Compile Include="LanguageMapping\Model\ExcelRow.cs" />
-    <Compile Include="LanguageMapping\Model\MappedLanguage.cs" />
-    <Compile Include="LanguageMapping\OpenXml\Excel.cs" />
-    <Compile Include="LanguageMapping\ViewModel\LanguageMappingViewModel.cs" />
-    <Compile Include="LanguageMapping\View\LanguageMappingWindow.xaml.cs">
-      <DependentUpon>LanguageMappingWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Model\AnalysisBand.cs" />
-    <Compile Include="Model\Settings.cs" />
-    <Compile Include="Model\TranslationOriginStatistics.cs" />
-    <Compile Include="Model\ConfirmationStatistics.cs" />
-    <Compile Include="Model\WordCount.cs" />
-    <Compile Include="Model\LanguageDirectionInfo.cs" />
-    <Compile Include="Model\ProjectSettings\XliffManagerImportSettings.cs" />
-    <Compile Include="Model\ProjectSettings\XliffManagerExportSettings.cs" />
-    <Compile Include="BatchTasks\ExportSettingsControl.cs">
+    <Compile Update="BatchTasks\ExportSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="BatchTasks\ExportSettingsControl.Designer.cs">
-      <DependentUpon>ExportSettingsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="BatchTasks\ExportSettingsPage.cs" />
-    <Compile Include="BatchTasks\ViewModel\ExportOptionsViewModel.cs" />
-    <Compile Include="BatchTasks\View\ExportOptionsView.xaml.cs">
-      <DependentUpon>ExportOptionsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Behaviours\EventBehaviourFactory.cs" />
-    <Compile Include="Behaviours\SelectedItemBehaviour.cs" />
-    <Compile Include="Commands\CommandHandler.cs" />
-    <Compile Include="Commands\RelayCommand.cs" />
-    <Compile Include="Commands\SelectedItemChangedCommand.cs" />
-    <Compile Include="Common\FolderSelectDialog.cs" />
-    <Compile Include="Common\Logger.cs" />
-    <Compile Include="Common\PathInfo.cs" />
-    <Compile Include="Common\Reflector.cs" />
-    <Compile Include="Controls\BindableParagraphBlock.cs" />
-    <Compile Include="Controls\PasswordHelper.cs" />
-    <Compile Include="Controls\ProjectFileActivityViewControl.cs">
+    <Compile Update="Controls\ProjectFileActivityViewControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\ProjectFileActivityViewControl.Designer.cs">
-      <DependentUpon>ProjectFileActivityViewControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ProjectFileActivityViewController.cs" />
-    <Compile Include="Controls\ProjectFilesViewControl.cs">
+    <Compile Update="Controls\ProjectFilesViewControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\ProjectFilesViewControl.Designer.cs">
-      <DependentUpon>ProjectFilesViewControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ProjectsNavigationViewControl.cs">
+    <Compile Update="Controls\ProjectsNavigationViewControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\ProjectsNavigationViewControl.Designer.cs">
-      <DependentUpon>ProjectsNavigationViewControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\SelectedItemsAwareDataGrid.cs" />
-    <Compile Include="Controls\SortAwareDataGrid.cs" />
-    <Compile Include="Controls\TextBoxWithEllipsis.cs" />
-    <Compile Include="Controls\ToolWindowsControl.xaml.cs">
-      <DependentUpon>ToolWindowsControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\WizardProgressHeader.xaml.cs">
-      <DependentUpon>WizardProgressHeader.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\WindowsControl.xaml.cs">
-      <DependentUpon>WindowsControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Converters\CultureInfoNameToDisplayNameConverter.cs" />
-    <Compile Include="Converters\CultureInfoNameToImageConverter.cs" />
-    <Compile Include="Converters\GteConverter.cs" />
-    <Compile Include="CustomEventArgs\ProjectSelectionChangedEventArgs.cs" />
-    <Compile Include="FileTypeSupport\SDLXLIFF\ContentWriter.cs" />
-    <Compile Include="FileTypeSupport\SDLXLIFF\ElementExtractor.cs" />
-    <Compile Include="FileTypeSupport\SDLXLIFF\SdlxliffWriter.cs" />
-    <Compile Include="FileTypeSupport\SDLXLIFF\SegmentBuilder.cs" />
-    <Compile Include="FileTypeSupport\XLIFF\Model\ElementSegment.cs" />
-    <Compile Include="FileTypeSupport\XLIFF\Readers\Xliff12SdlReader.cs" />
-    <Compile Include="FileTypeSupport\XLIFF\Readers\XliffSniffer.cs" />
-    <Compile Include="FileTypeSupport\XLIFF\Readers\XliffReader.cs" />
-    <Compile Include="FileTypeSupport\SDLXLIFF\ContentReader.cs" />
-    <Compile Include="FileTypeSupport\SDLXLIFF\SdlxliffReader.cs" />
-    <Compile Include="FileTypeSupport\XLIFF\Model\Body.cs" />
-    <Compile Include="FileTypeSupport\XLIFF\Model\DocInfo.cs" />
-    <Compile Include="FileTypeSupport\XLIFF\Model\Element.cs" />
-    <Compile Include="FileTypeSupport\XLIFF\Model\ElementComment.cs" />
-    <Compile Include="FileTypeSupport\XLIFF\Model\ElementLocked.cs" />
-    <Compile Include="FileTypeSupport\XLIFF\Model\ElementPlaceholder.cs" />
-    <Compile Include="FileTypeSupport\XLIFF\Model\ElementTagPair.cs" />
-    <Compile Include="FileTypeSupport\XLIFF\Model\ElementText.cs" />
-    <Compile Include="FileTypeSupport\XLIFF\Model\ExternalFile.cs" />
-    <Compile Include="FileTypeSupport\XLIFF\Model\File.cs" />
-    <Compile Include="FileTypeSupport\XLIFF\Model\Header.cs" />
-    <Compile Include="FileTypeSupport\XLIFF\Model\Phase.cs" />
-    <Compile Include="FileTypeSupport\XLIFF\Model\PhaseGroup.cs" />
-    <Compile Include="FileTypeSupport\XLIFF\Model\Segment.cs" />
-    <Compile Include="FileTypeSupport\XLIFF\Model\SegmentPair.cs" />
-    <Compile Include="FileTypeSupport\XLIFF\Model\Skl.cs" />
-    <Compile Include="FileTypeSupport\XLIFF\Model\Source.cs" />
-    <Compile Include="FileTypeSupport\XLIFF\Model\Target.cs" />
-    <Compile Include="FileTypeSupport\XLIFF\Model\TransUnit.cs" />
-    <Compile Include="FileTypeSupport\XLIFF\Model\Xliff.cs" />
-    <Compile Include="FileTypeSupport\XLIFF\Readers\Xliff12PolyglotReader.cs" />
-    <Compile Include="FileTypeSupport\SDLXLIFF\SegmentVisitor.cs" />
-    <Compile Include="FileTypeSupport\XLIFF\Writers\Xliff12SDLWriter.cs" />
-    <Compile Include="FileTypeSupport\XLIFF\Writers\Xliff12PolyglotWriter.cs" />
-    <Compile Include="FileTypeSupport\XLIFF\Writers\XliffWriter.cs" />
-    <Compile Include="Extensions\WindowsControlUtils.cs" />
-    <Compile Include="Interfaces\IDialogService.cs" />
-    <Compile Include="Interfaces\XLIFFReader.cs" />
-    <Compile Include="Interfaces\XLIFFWriter.cs" />
-    <Compile Include="Model\BaseModel.cs" />
-    <Compile Include="Common\Enumerators.cs" />
-    <Compile Include="Model\ConfirmationStatus.cs" />
-    <Compile Include="Model\Controllers.cs" />
-    <Compile Include="Model\Customer.cs" />
-    <Compile Include="Model\ExportOptions.cs" />
-    <Compile Include="Model\FilterItem.cs" />
-    <Compile Include="Model\FilterItemGroup.cs" />
-    <Compile Include="Model\ImportFile.cs" />
-    <Compile Include="Model\ImportOptions.cs" />
-    <Compile Include="Model\JobProcess.cs" />
-    <Compile Include="Model\LanguageInfo.cs" />
-    <Compile Include="Model\ProjectFile.cs" />
-    <Compile Include="Model\ProjectFileActivity.cs" />
-    <Compile Include="Model\Project.cs" />
-    <Compile Include="Model\ProjectSettings\XliffManagerProject.cs" />
-    <Compile Include="Model\ProjectSettings\XliffManagerProjectFile.cs" />
-    <Compile Include="Model\ProjectSettings\XliffManagerProjectFileActivity.cs" />
-    <Compile Include="Model\WordCounts.cs" />
-    <Compile Include="Model\TaskReport.cs" />
-    <Compile Include="Model\Tasks\AutomaticTask.cs" />
-    <Compile Include="Model\Tasks\OutputFile.cs" />
-    <Compile Include="Model\Tasks\Report.cs" />
-    <Compile Include="Model\Tasks\TaskFile.cs" />
-    <Compile Include="Model\Tasks\TemplateId.cs" />
-    <Compile Include="Model\WizardContext.cs" />
-    <Compile Include="Model\WizardException.cs" />
-    <Compile Include="Model\XLIFFSupportItem.cs" />
-    <Compile Include="PluginResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PluginResources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\PluginProperties.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service\CustomerProvider.cs" />
-    <Compile Include="Service\DialogService.cs" />
-    <Compile Include="Service\FilterService.cs" />
-    <Compile Include="Service\ImageService.cs" />
-    <Compile Include="Service\ProjectSettingsService.cs" />
-    <Compile Include="Service\ReportService.cs" />
-    <Compile Include="Service\WizardService.cs" />
-    <Compile Include="TellMe\AppStoreForumAction.cs" />
-    <Compile Include="TellMe\DocumentationAction.cs" />
-    <Compile Include="TellMe\SettingsAction.cs" />
-    <Compile Include="TellMe\SourceCodeAction.cs" />
-    <Compile Include="TellMe\TellMeProvider.cs" />
-    <Compile Include="ViewModel\SettingsViewModel.cs" />
-    <Compile Include="ViewModel\ReportViewModel.cs" />
-    <Compile Include="View\SettingsWindow.xaml.cs">
-      <DependentUpon>SettingsWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Wizard\ViewModel\ExceptionViewerViewModel.cs" />
-    <Compile Include="Wizard\ViewModel\Export\WizardPageExportFilesViewModel.cs" />
-    <Compile Include="Wizard\ViewModel\Export\WizardPageExportOptionsViewModel.cs" />
-    <Compile Include="Wizard\ViewModel\Export\WizardPageExportPreparationViewModel.cs" />
-    <Compile Include="Wizard\ViewModel\Export\WizardPageExportSummaryViewModel.cs" />
-    <Compile Include="Wizard\ViewModel\Import\WizardPageImportFilesViewModel.cs" />
-    <Compile Include="Wizard\ViewModel\Import\WizardPageImportOptionsViewModel.cs" />
-    <Compile Include="Wizard\ViewModel\Import\WizardPageImportPreparationViewModel.cs" />
-    <Compile Include="Wizard\ViewModel\Import\WizardPageImportSummaryViewModel.cs" />
-    <Compile Include="Wizard\ViewModel\WizardViewModel.cs" />
-    <Compile Include="Wizard\ViewModel\WizardPageViewModelBase.cs" />
-    <Compile Include="Wizard\View\Export\WizardPageExportOptionsView.xaml.cs">
-      <DependentUpon>WizardPageExportOptionsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Wizard\View\Export\WizardPageExportSummaryView.xaml.cs">
-      <DependentUpon>WizardPageExportSummaryView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Wizard\View\Export\WizardPageExportPreparationView.xaml.cs">
-      <DependentUpon>WizardPageExportPreparationView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Wizard\View\Export\WizardPageExportFilesView.xaml.cs">
-      <DependentUpon>WizardPageExportFilesView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Wizard\View\Import\WizardPageImportFilesView.xaml.cs">
-      <DependentUpon>WizardPageImportFilesView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Wizard\View\Import\WizardPageImportOptionsView.xaml.cs">
-      <DependentUpon>WizardPageImportOptionsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Wizard\View\Import\WizardPageImportPreparationView.xaml.cs">
-      <DependentUpon>WizardPageImportPreparationView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Wizard\View\Import\WizardPageImportSummaryView.xaml.cs">
-      <DependentUpon>WizardPageImportSummaryView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Wizard\View\ExceptionViewerView.xaml.cs">
-      <DependentUpon>ExceptionViewerView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\ReportWindow.xaml.cs">
-      <DependentUpon>ReportWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Wizard\View\WizardWindow.xaml.cs">
-      <DependentUpon>WizardWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="XLIFFManagerViewGroups.cs" />
-    <Compile Include="ViewModel\ProjectFileActivityViewModel.cs" />
-    <Compile Include="ViewModel\ProjectFilesViewModel.cs" />
-    <Compile Include="ViewModel\ProjectsNavigationViewModel.cs" />
-    <Compile Include="View\ProjectFileActivityView.xaml.cs">
-      <DependentUpon>ProjectFileActivityView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\ProjectFilesView.xaml.cs">
-      <DependentUpon>ProjectFilesView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\ProjectsNavigationView.xaml.cs">
-      <DependentUpon>ProjectsNavigationView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="XLIFFManagerViewController.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\DefaultLanguageMappings.xlsx" />
-    <None Include="SdlCommunity.snk" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="BatchTasks\View\ExportOptionsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\ToolWindowsControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\WizardProgressHeader.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\WindowsControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="LanguageMapping\View\LanguageMappingWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\MultiSelectComboBox.Custom.Image.Resources.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\MultiSelectComboBox.Custom.SelectedItemTemplate.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\MultiSelectComboBox.Custom.DropdownItemTemplate.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\MultiSelectComboBox.Resources.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\MultiSelectComboBox.Custom.ControlTemplate.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\ExpanderStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\TextBlockProjectInfoToolTipStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\ImageStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\TreeView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\Buttons.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\ButtonsStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\DataGridColumnStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\DataGridStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\General.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\GroupBox.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\RadioButton.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\TextBlockStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\TextBoxStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\WindowsBorder.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\ProjectFileActivityView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\ProjectFilesView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\ProjectsNavigationView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\SettingsWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Wizard\View\Export\WizardPageExportOptionsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Wizard\View\Export\WizardPageExportSummaryView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Wizard\View\Export\WizardPageExportPreparationView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Wizard\View\Export\WizardPageExportFilesView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Wizard\View\Import\WizardPageImportFilesView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Wizard\View\Import\WizardPageImportOptionsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Wizard\View\Import\WizardPageImportPreparationView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Wizard\View\Import\WizardPageImportSummaryView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Wizard\View\ExceptionViewerView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\ReportWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Wizard\View\WizardWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="BatchTasks\ExportSettingsControl.resx">
-      <DependentUpon>ExportSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="BatchTasks\ImportSettingsControl.resx">
-      <DependentUpon>ImportSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\ProjectFileActivityViewControl.resx">
-      <DependentUpon>ProjectFileActivityViewControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\ProjectFilesViewControl.resx">
-      <DependentUpon>ProjectFilesViewControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\ProjectsNavigationViewControl.resx">
-      <DependentUpon>ProjectsNavigationViewControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PluginResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Download.ico" />
@@ -611,13 +147,13 @@
       <Version>2.1.0</Version>
     </PackageReference>
     <PackageReference Include="Sdl.Core.PluginFramework.Build">
-      <Version>17.0.0</Version>
+      <Version>18.0.1</Version>
     </PackageReference>
     <PackageReference Include="Trados.Community.Toolkit.Core">
-      <Version>5.0.1</Version>
+      <Version>5.1.0</Version>
     </PackageReference>
     <PackageReference Include="Trados.Community.Toolkit.LanguagePlatform">
-      <Version>5.0.1</Version>
+      <Version>5.1.0</Version>
     </PackageReference>
   </ItemGroup>
   <PropertyGroup>
@@ -629,5 +165,4 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

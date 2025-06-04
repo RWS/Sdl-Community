@@ -1,0 +1,57 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - SDLTM Import Plus/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - SDLTM Import Plus/*
+
+variables: 
+- group: 'SDLTM Import Plus Sonar Version'
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: pathToPublish
+  value: '$(PluginPath)\SDLTM.Import.sdlplugin'
+- name: solution
+  value: '**/SDLTM.Import.sln'
+- name : SonarID
+  value : SDLTM_Import_Plus
+- name : SonarName
+  value : 'SDLTM Import Plus'
+- name : ProjectVersion
+  value : $[counter(variables['Version.Patch'], 1)]
+
+pool:
+  vmImage: '$(DefaultBuildVm)'
+
+steps:
+  - task: SonarCloudPrepare@3
+    inputs:
+      SonarCloud: 'AppStorePlugins-ServiceConnection'
+      organization: 'sdl'
+      scannerMode: 'dotnet'
+      projectKey: $(SonarId)
+      projectName: $(SonarName)
+      projectVersion: $(ProjectVersion)
+
+  - template: jobs/build-sdlplugin.yml
+  - task: SonarCloudAnalyze@3
+    displayName: 'Run Code Analysis'
+
+  - task: SonarCloudPublish@3
+    inputs:
+      pollingTimeoutSec: '300'
+    displayName: 'Publish Quality Gate Result'
+
+  - template: jobs/publish-build-artifact-task.yml
