@@ -9,7 +9,7 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
-    <TradosFolder>C:\Program Files (x86)\Trados\Trados Studio\Studio18</TradosFolder>
+    <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
     <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
   </PropertyGroup>
   <ItemGroup>
