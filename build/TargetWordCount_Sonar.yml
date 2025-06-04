@@ -22,7 +22,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: pathToPublish
-  value: '$(PluginPath)\Sdl.Community.TargetWordCount.sdlplugin'
+  value: '$(PluginPath)\TargetWordCount.sdlplugin'
 - name: solution
   value: '**/Sdl.Community.TargetWordCount.sln'
 - name : SonarID
