@@ -22,7 +22,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: pathToPublish
-  value: '$(PluginPath)\SDLDataProtectionSuite.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.SdlDataProtectionSuite.sdlplugin'
 - name: solution
   value: '**/SDLDataProtectionSuite.sln'
 - name : SonarID
