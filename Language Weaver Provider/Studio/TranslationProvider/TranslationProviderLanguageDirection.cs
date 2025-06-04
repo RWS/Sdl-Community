@@ -156,20 +156,47 @@ namespace LanguageWeaverProvider
                 var tuSearchResult = CreateTuSearchResult(currentSegment, translatedSegment);
 
                 var translationOrigin = tuSearchResult.DocumentSegmentPair.Properties.TranslationOrigin;
-                var lastTqeIndex = translationOrigin is not null ? translationOrigin.GetLastTqeIndex() + 1 : 1;
+                
+                // When returning a SearchResult, the current TQE data should always be on the first position.
+                // It makes no sense to put previous TQE data in a SearchResult. 
+                // Also (arguably) it makes little sense to put more than one TQE evaluation in a SearchResult. 
+                const int tqeIndex = 1; 
 
-                ManageSegmentMetadata(evaluatedSegment, mappedPair, fileName, lastTqeIndex, translationOrigin);
+                ManageSegmentMetadata(evaluatedSegment, mappedPair, fileName, tqeIndex, translationOrigin);
 
-                searchResults[i].Add(new SearchResult(tuSearchResult)
+                var sr = new SearchResult(tuSearchResult)
                 {
                     ScoringResult = new ScoringResult { BaseScore = 0 },
                     TranslationProposal = tuSearchResult.Duplicate()
-                });
+                };
+
+                if (!string.IsNullOrWhiteSpace(evaluatedSegment.QualityEstimation))
+                {
+                    var evaluationTime = DateTime.Now.ToUniversalTime();
+                    sr.MetaData[Constants.METADATA_EVALUATED_AT_PREFIX + tqeIndex] = evaluationTime.ToString(Constants.METADATA_EVALUATED_AT_FORMAT);
+                    sr.MetaData[Constants.METADATA_SYSTEM_PREFIX + tqeIndex] = Constants.METADATA_SYSTEM_NAME;
+                    sr.MetaData[Constants.METADATA_SCORE_PREFIX + tqeIndex] = GetScoreFromQE(evaluatedSegment.QualityEstimation);
+                    sr.MetaData[Constants.METADATA_MODEL_PREFIX + tqeIndex] = mappedPair.SelectedModel.Name;
+                    sr.MetaData[Constants.METADATA_DESCRIPTION_PREFIX + tqeIndex] = string.Format(Constants.METADATA_DESCRIPTION, Constants.METADATA_SYSTEM_NAME,
+                        mappedPair.SelectedModel.Name);
+
+                }
+
+                searchResults[i].Add(sr);
             }
 
             ManageBatchTaskWindow();
             return searchResults;
         }
+
+        private static string GetScoreFromQE(string qualityEstimation) => QESCoreMap[qualityEstimation.ToLower()];
+
+        private static readonly Dictionary<string, string> QESCoreMap = new()
+        {
+            ["poor"] = "33",
+            ["adequate"] = "66",
+            ["good"] = "80"
+        };
 
         private static EditorController TryGetEditorController()
         {
