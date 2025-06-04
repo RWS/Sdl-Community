@@ -22,7 +22,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: pathToPublish
-  value: '$(PluginPath)\Sdl.Community.InvoiceAndQuotes.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.InvoiceAndQuotes.Integration.sdlplugin'
 - name: solution
   value: '**/Sdl.Community.InvoiceAndQuotes.sln'
 - name : SonarID
