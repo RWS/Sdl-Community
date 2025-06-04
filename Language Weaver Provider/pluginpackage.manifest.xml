@@ -5,7 +5,7 @@
 	<PlugInName>Language Weaver Provider</PlugInName>
 	<Description>Language Weaver Provider</Description>
 	
-	<Version>2.1.0.1</Version>
+	<Version>2.1.0.3</Version>
 	<RequiredProduct name="TradosStudio" minversion="18.1" maxversion="18.1.9" />
 
 	<Include>
