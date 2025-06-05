@@ -26,7 +26,7 @@ variables:
 - name: solution
   value: '**/SDLTranscreate.sln'
 - name: pathToPublish
-  value: '$(PluginPath)\SDLTranscreate.sdlplugin'
+  value: '$(PluginPath)\Trados.Transcreate.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
