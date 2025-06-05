@@ -31,7 +31,7 @@ namespace Sdl.Community.CleanUpTasks
 
 		public void SaveSettings()
 		{
-			presenter.SaveSettings();
+			presenter?.SaveSettings();
 		}
 
 		public void SetPresenter(ISegmentLockerPresenter presenter)

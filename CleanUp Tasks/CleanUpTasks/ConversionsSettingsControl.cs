@@ -47,7 +47,7 @@ namespace Sdl.Community.CleanUpTasks
 
         public void SaveSettings()
         {
-            _presenter.SaveSettings();
+            _presenter?.SaveSettings();
         }
 
         public void SetPresenter(IConversionsSettingsPresenter presenter)
