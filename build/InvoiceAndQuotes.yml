@@ -1,18 +1,18 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - InvoiceAndQuotes/*
+     - Trados Studio InQuote/*
 
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - InvoiceAndQuotes/*
+     - Trados Studio InQuote/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
@@ -26,7 +26,7 @@ variables:
 - name: solution
   value : '**/Sdl.Community.InvoiceAndQuotes.sln'
 - name: pathToPublish
-  value: 'InvoiceAndQuotes\Sdl.Community.InvoiceAndQuotes.Integration\bin\Release\Sdl.Community.InvoiceAndQuotes.Integration.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.InvoiceAndQuotes.Integration.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - Record Source TU/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - Record Source TU/*
@@ -26,7 +26,7 @@ variables:
 - name: solution 
   value: '**/Sdl.Community.RecordSourceTU.sln'
 - name: pathToPublish
-  value: 'Record Source TU\Sdl.Community.RecordSourceTU\bin\Release\Sdl.Community.RecordSourceTU.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.RecordSourceTU.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

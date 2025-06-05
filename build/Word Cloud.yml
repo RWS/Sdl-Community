@@ -1,18 +1,18 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - Word Cloud/*
+     - Trados Word Cloud/*
 
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - Word Cloud/*
+     - Trados Word Cloud/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
@@ -26,7 +26,7 @@ variables:
 - name: solution 
   value: '**/Sdl.Community.WordCloud.sln'
 - name: pathToPublish
-  value: 'Word Cloud/Sdl.Community.WordCloud.Plugin\bin\Release\Sdl.Community.WordCloud.Plugin.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.WordCloud.Plugin.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

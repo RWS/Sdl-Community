@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - BringBackTheButton/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - BringBackTheButton/*
@@ -26,7 +26,7 @@ variables:
 - name: solution
   value: '**/Sdl.Community.BringBackTheButton.sln'
 - name: pathToPublish
-  value: 'BringBackTheButton\BringBackTheButton\bin\Release\Sdl.Community.BringBackTheButton.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.BringBackTheButton.sdlplugin'
 
 steps:
   - task: SonarCloudPrepare@1

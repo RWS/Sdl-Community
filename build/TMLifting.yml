@@ -1,18 +1,18 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - TMLifting/*
+     - TM Lifting/*
 
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - TMLifting/*
+     - TM Lifting/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
@@ -26,7 +26,7 @@ variables:
 - name: solution 
   value: '**/Sdl.Community.TMLifting.sln'
 - name: pathToPublish
-  value: 'TMLifting/Sdl.Community.TMLifting\bin\Release\Sdl.Community.TMLifting.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.TMLifting.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

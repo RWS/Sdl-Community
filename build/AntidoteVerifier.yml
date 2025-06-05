@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - Antidote Verifier/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - Antidote Verifier/*
@@ -26,7 +26,7 @@ variables:
 - name: solution
   value: '**/Sdl.Community.AntidoteVerifier.sln'
 - name: pathToPublish
-  value: '$(PluginPath)Sdl.Community.AntidoteVerifier.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.AntidoteVerifier.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

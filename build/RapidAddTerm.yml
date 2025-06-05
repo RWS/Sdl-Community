@@ -1,18 +1,18 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - RapidAddTerm/*
+     - Rapid Add Term/*
 
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - RapidAddTerm/*
+     - Rapid Add Term/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
@@ -26,7 +26,7 @@ variables:
 - name: solution 
   value: '**/Sdl.Community.RapidAddTerm.sln'
 - name: pathToPublish
-  value: 'RapidAddTerm\RapidAddTerm\bin\Release\Sdl.Community.RapidAddTerm.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.RapidAddTerm.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

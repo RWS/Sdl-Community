@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - Post-Edit Compare/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - Post-Edit Compare/*
@@ -22,7 +22,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: pathToPublish
-  value: 'Post-Edit Compare\Sdl.Community.PostEdit.Compare.Versions\bin\Release\net48\Sdl.Community.PostEdit.Versions.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.PostEdit.Versions.sdlplugin'
 - name: solution
   value: '**/Sdl.Community.PostEdit.Versions.sln'
 - name : SonarID

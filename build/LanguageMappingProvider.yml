@@ -1,23 +1,24 @@
 trigger:
  branches:
   include:
-    - master
+    - Studio_2024
  paths:
   include:
-    - LanguageMappingProvider/*
+    - Language Mapping Provider/*
 
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - LanguageMappingProvider/*
+     - Language Mapping Provider/*
 
 pool: 
   vmImage : 'windows-latest'
 
 variables:
+- template: jobs/branch-variables.yml
 - name: Version.MajorMinor
   value: 1.0
 - name: Version.Revision
@@ -40,7 +41,7 @@ steps:
   displayName: 'dotnet restore'
   inputs:
     command: 'restore'
-    projects: 'LanguageMappingProvider/LanguageMappingProvider/*.sln'
+    projects: 'Language Mapping Provider/LanguageMappingProvider/*.sln'
     feedsToUse: 'select'
     vstsFeed: 'af66e256-9c46-4fba-ad75-09bf110ec1cc'
     includeNuGetOrg: false
@@ -67,13 +68,13 @@ steps:
     artifactName: 'binaries'
     buildVersionToDownload: 'latestFromBranch'
     targetPath: '$(X86PATH)\Trados\Trados Studio\Studio18'
-    runBranch: 'refs/heads/master'
+    runBranch: '$(StudioBranch)'
     tags: 'Package'
 
 - task: VSBuild@1
   displayName: 'Build solution LanguageMappingProvider.sln'
   inputs:
-    solution: LanguageMappingProvider\LanguageMappingProvider\LanguageMappingProvider.sln
+    solution: Language Mapping Provider\LanguageMappingProvider\LanguageMappingProvider.sln
     platform: $(BuildPlatform)
     configuration: $(BuildConfiguration)
     msbuildArchitecture: x64
@@ -82,7 +83,7 @@ steps:
   displayName: 'PackNuGet'
   inputs:
     command: 'pack'
-    packagesToPack: 'LanguageMappingProvider/LanguageMappingProvider/LanguageMappingProvider.csproj'
+    packagesToPack: 'Language Mapping Provider/LanguageMappingProvider/LanguageMappingProvider.csproj'
     versioningScheme: 'byBuildNumber'
     
 - task: PublishBuildArtifacts@1

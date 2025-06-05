@@ -1,18 +1,18 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - ApplyStudioProjectTemplate/*
+     - Apply Studio Project Template/*
 
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - ApplyStudioProjectTemplate/*
+     - Apply Studio Project Template/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
@@ -26,7 +26,7 @@ variables:
 - name: solution
   value: '**/Sdl.Community.ApplyStudioProjectTemplate.sln'
 - name: pathToPublish
-  value: '$(PluginPath)Sdl.Community.ApplyStudioProjectTemplate.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.ApplyStudioProjectTemplate.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

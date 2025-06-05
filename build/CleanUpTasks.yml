@@ -1,18 +1,18 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - CleanUpTasks/*
+     - CleanUp Tasks/*
 
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - CleanUpTasks/*
+     - CleanUp Tasks/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
@@ -26,7 +26,7 @@ variables:
 - name: solution
   value: '**/Sdl.Community.CleanUpTasks.sln'
 - name: pathToPublish
-  value: 'CleanUpTasks/CleanUpTasks\bin\Release\SDLCommunityCleanUpTasks.sdlplugin'
+  value: '$(PluginPath)\SDLCommunityCleanUpTasks.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

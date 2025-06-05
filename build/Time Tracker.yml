@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - Time Tracker/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - Time Tracker/*
@@ -26,7 +26,7 @@ variables:
 - name: solution 
   value: '**/Sdl.Community.Studio.Time.Tracker.sln'
 - name: pathToPublish
-  value: 'Time Tracker\bin\Release\Sdl.Community.Studio.Time.Tracker.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.Studio.Time.Tracker.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

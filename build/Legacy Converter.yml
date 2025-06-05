@@ -1,18 +1,18 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - Legacy Converter/*
+     - SDLXLIFF to Legacy Converter/*
 
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - Legacy Converter/*
+     - SDLXLIFF to Legacy Converter/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
@@ -25,6 +25,9 @@ variables:
   value: 'Release'
 - name: solution
   value : '**/Sdl.Community.LegacyConverter.sln'
+- name: pathToPublish
+  value: '$(PluginPath)\Sdl.Community.XliffToLegacyConverter.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml

@@ -1,18 +1,18 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - IATETerminologyProvider/*
+     - IATE Real-time Terminology/*
 
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - IATETerminologyProvider/*
+     - IATE Real-time Terminology/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
@@ -26,7 +26,7 @@ variables:
 - name: solution
   value: '**/Sdl.Community.IATETerminologyProvider.sln'
 - name: pathToPublish
-  value: 'IATETerminologyProvider\IATETerminologyProvider\bin\Release\Sdl.Community.IATETerminologyProvider.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.IATETerminologyProvider.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - Apply Studio Project Template/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - Apply Studio Project Template/*
@@ -22,7 +22,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: pathToPublish
-  value: 'Apply Studio Project Template\Sdl.Community.ApplyStudioProjectTemplate\bin\debug\net48\Sdl.Community.ApplyStudioProjectTemplate.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.ApplyStudioProjectTemplate.sdlplugin'
 - name: solution
   value: '**/Sdl.Community.ApplyStudioProjectTemplate.sln'
 - name : SonarID

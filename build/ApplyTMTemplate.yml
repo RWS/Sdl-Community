@@ -1,18 +1,18 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - ApplyTMTemplate/*
+     - ApplyTM Template/*
 
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - ApplyTMTemplate/*
+     - ApplyTM Template/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'

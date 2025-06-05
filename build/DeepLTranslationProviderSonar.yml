@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - DeepL Translation Provider/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - DeepL Translation Provider/*
@@ -22,7 +22,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: pathToPublish
-  value: 'DeepL Translation Provider\Sdl.Community.DeelLMTProvider\bin\Release\net48\Sdl.Community.DeepLMTProvider.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.DeepLMTProvider.sdlplugin'
 - name: solution
   value: '**/Sdl.Community.DeepLMTProvider.sln'
 - name : SonarID

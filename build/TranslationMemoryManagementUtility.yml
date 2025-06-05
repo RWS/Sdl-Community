@@ -1,18 +1,18 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - TranslationMemoryManagementUtility/*
+     - Trados Translation Memory Management Utility/*
 
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - TranslationMemoryManagementUtility/*
+     - Trados Translation Memory Management Utility/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
@@ -26,7 +26,7 @@ variables:
 - name: solution 
   value: '**/Sdl.Community.TranslationMemoryManagementUtility.sln'
 - name: pathToPublish
-  value: 'TranslationMemoryManagementUtility/Sdl.Community.TranslationMemoryManagementUtility\bin\Release\Sdl.Community.TranslationMemoryManagementUtility.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.TranslationMemoryManagementUtility.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

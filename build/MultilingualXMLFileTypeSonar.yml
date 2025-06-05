@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - Multilingual XML FileType/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - Multilingual XML FileType/*
@@ -22,7 +22,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: pathToPublish
-  value: 'Multilingual XML FileType\Multilingual.XML.FileType\bin\Release\Multilingual.XML.FileType.sdlplugin'
+  value: '$(PluginPath)\Multilingual.XML.FileType.sdlplugin'
 - name: solution
   value: '**/Multilingual.XML.FileType.sln'
 - name : SonarID

@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - InterpretBank Terminology Provider/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
      - InterpretBank Terminology Provider/*
@@ -22,7 +22,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: pathToPublish
-  value: 'InterpretBank Terminology Provider\\InterpretBank\bin\Release\InterpretBank.Terminology.Provider.sdlplugin'
+  value: '$(PluginPath)\InterpretBank.sdlplugin'
 - name: solution
   value: '**/InterpretBank.sln'
 - name : SonarID

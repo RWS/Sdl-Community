@@ -4,7 +4,7 @@ trigger:
      - Studio_2024
   paths:
     include:
-     - Qualitivity/*
+     - Trados Studio Target Renamer/*
 
 pr:
   branches:
@@ -12,21 +12,21 @@ pr:
      - Studio_2024
   paths:
     include:
-     - Qualitivity/*
+     - Trados Studio Target Renamer/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
 
 variables:
 - template: jobs/branch-variables.yml
-- name: buildPlatform
+- name: buildPlatform 
   value: 'Any CPU'
 - name: buildConfiguration
   value: 'Release'
-- name: solution 
-  value: '**/Sdl.Community.Qualitivity.sln'
+- name: solution
+  value: '**/Trados.TargetRenamer.sln'
 - name: pathToPublish
-  value: '$(PluginPath)\Qualitivity.sdlplugin'
+  value: '$(PluginPath)\Trados.TargetRenamer.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

@@ -1,18 +1,18 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - AHK plugin/*
+     - AutoHotKey Manager/*
 
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - AHK plugin/*
+     - AutoHotKey Manager/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
@@ -26,7 +26,7 @@ variables:
 - name: solution
   value: '**/Sdl.Community.AhkPlugin.sln'
 - name: pathToPublish
-  value: '$(PluginPath)Sdl.Community.AhkPlugin.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.AhkPlugin.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

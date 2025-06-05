@@ -1,18 +1,18 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - Export Analysis Reports/*
+     - Trados Studio Export Analysis Reports/*
 
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - Export Analysis Reports/*
+     - Trados Studio Export Analysis Reports/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
@@ -24,9 +24,9 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: solution
-  value: '**/ExportAnalysisReports.sln'
+  value: '**/Sdl.Community.ExportAnalysisReports.sln'
 - name: pathToPublish
-  value: 'Export Analysis Reports\Sdl.Community.ExportAnalysisReports\bin\Release\Sdl.Community.ExportAnalysisReports.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.ExportAnalysisReports.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

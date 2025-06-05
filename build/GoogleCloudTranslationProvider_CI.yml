@@ -4,15 +4,14 @@ trigger:
      - Studio_2024
   paths:
     include:
-     - Qualitivity/*
-
+     - Google Cloud Translation Provider/*
 pr:
   branches:
     include:
      - Studio_2024
   paths:
     include:
-     - Qualitivity/*
+     - Google Cloud Translation Provider/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
@@ -24,9 +23,9 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: solution 
-  value: '**/Sdl.Community.Qualitivity.sln'
+  value: '**/GoogleCloudTranslationProvider.sln'
 - name: pathToPublish
-  value: '$(PluginPath)\Qualitivity.sdlplugin'
+  value: '$(PluginPath)\GoogleCloudTranslationProvider.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

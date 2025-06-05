@@ -1,18 +1,18 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - CopyTags/*
+     - Trados Copy Tags/*
 
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - CopyTags/*
+     - Trados Copy Tags/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
@@ -24,8 +24,9 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: solution
-  value: '**/Sdl.Community.SDLCopyTags.sln'
-  pathToPublish: 'CopyTags\CopyTags\bin\Release\SDLCopyTags.sdlplugin'
+  value: '**/SDLCopyTags.sln'
+- name: pathToPublish
+  value: '$(PluginPath)\SDLCopyTags.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

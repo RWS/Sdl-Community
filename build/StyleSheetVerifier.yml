@@ -1,18 +1,18 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - StyleSheetVerifier/*
+     - Stylesheet Verifier/*
 
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - StyleSheetVerifier/*
+     - Stylesheet Verifier/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
@@ -26,7 +26,7 @@ variables:
 - name: solution 
   value: '**/Sdl.Community.StyleSheetVerifier.sln'
 - name: pathToPublish
-  value: 'StyleSheetVerifier\StyleSheetVerifier\bin\Release\Sdl.Community.StyleSheetVerifier.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.StyleSheetVerifier.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

@@ -1,18 +1,18 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - FileTypeSupport.MXLIFF/*
+     - MXLIFF File Type/*
 
 pr:
   branches:
     include:
-     - master
+     - Studio_2024
   paths:
     include:
-     - FileTypeSupport.MXLIFF/*
+     - MXLIFF File Type/*
 
 pool: 
   vmImage : '$(DefaultBuildVm)'
@@ -24,9 +24,9 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: solution
-  value: '**/FileTypeSupport.MXLIFF.sln'
+  value: '**/Sdl.Community.FileTypeSupport.MXLIFF.sln'
 - name: pathToPublish
-  value: 'FileTypeSupport.MXLIFF\bin\Release\MXLIFFFileType.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.FileTypeSupport.MXLIFF.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
