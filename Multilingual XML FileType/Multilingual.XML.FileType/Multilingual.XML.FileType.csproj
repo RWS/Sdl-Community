@@ -1,492 +1,133 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <TradosFolder>C:\Program Files (x86)\Trados\Trados Studio\Studio18</TradosFolder>
-    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
-  </PropertyGroup>
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B1AEFEAA-FA07-40FD-8707-105CBE0933D4}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Multilingual.XML.FileType</RootNamespace>
-    <AssemblyName>Multilingual.XML.FileType</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="Autofac">
-      <HintPath>$(TradosFolder)\Autofac.dll</HintPath>
-    </Reference>
-    <Reference Include="DocumentFormat.OpenXml">
-      <HintPath>$(TradosFolder)\DocumentFormat.OpenXml.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>$(TradosFolder)\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="PresentationFramework.Aero" />
-    <Reference Include="Rws.MultiSelectComboBox">
-      <HintPath>ThirdParty\Rws.MultiSelectComboBox.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Core.Globalization">
-      <HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Core.Globalization.Async">
-      <HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Core.Settings">
-      <HintPath>$(TradosFolder)\Sdl.Core.Settings.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Desktop.IntegrationApi">
-      <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
-      <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Desktop.Platform.Styles">
-      <HintPath>$(TradosFolder)\Sdl.Desktop.Platform.Styles.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Framework.Core">
-      <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Framework.Core.Settings">
-      <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.Settings.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
-      <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Framework.PreviewControls">
-      <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.PreviewControls.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.ProjectAutomation.AutomaticTasks">
-      <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.AutomaticTasks.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.ProjectAutomation.Core">
-      <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.ProjectAutomation.FileBased">
-      <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.FileBased.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
-      <HintPath>$(TradosFolder)\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Versioning">
-      <HintPath>$(TradosFolder)\Sdl.Versioning.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.TellMe.ProviderApi">
-      <HintPath>$(TradosFolder)\Sdl.TellMe.ProviderApi.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="ApplicationInstance.cs" />
-    <Compile Include="BatchTasks\ExportBatchTask.cs" />
-    <Compile Include="BatchTasks\Pages\ExportSettingsPage.cs" />
-    <Compile Include="BatchTasks\Settings\MultilingualXmlExportSettings.cs" />
-    <Compile Include="BatchTasks\Settings\MultilingualXmlImportSettings.cs" />
-    <Compile Include="BatchTasks\ImportBatchTask.cs" />
-    <Compile Include="BatchTasks\Pages\ImportSettingsPage.cs" />
-    <Compile Include="BatchTasks\ViewModels\ExportSettingsViewModel.cs" />
-    <Compile Include="BatchTasks\ViewModels\ImportSettingsViewModel.cs" />
-    <Compile Include="BatchTasks\Views\ExportSettingsView.xaml.cs">
-      <DependentUpon>ExportSettingsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="BatchTasks\Views\ImportSettingsView.xaml.cs">
-      <DependentUpon>ImportSettingsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Behaviours\DragDropBehaviour.cs" />
-    <Compile Include="Behaviours\EventBehaviourFactory.cs" />
-    <Compile Include="Behaviours\MouseDoubleClickBehaviour.cs" />
-    <Compile Include="Behaviours\SelectedItemBehaviour.cs" />
-    <Compile Include="Converters\CommentNameToNameAndDescriptionConverter.cs" />
-    <Compile Include="EntityConstants.cs" />
-    <Compile Include="FileType\Pages\CommentMappingsPage.cs" />
-    <Compile Include="FileType\Preview\InternalPreviewControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FileType\Preview\InternalPreviewControl.Designer.cs">
-      <DependentUpon>InternalPreviewControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FileType\Preview\InternalPreviewController.cs" />
-    <Compile Include="FileType\Preview\InternalPreviewFileTweaker.cs" />
-    <Compile Include="FileType\Preview\StringExtensions.cs" />
-    <Compile Include="FileType\Processors\CopySourceToEmptyTargetProcessor.cs" />
-    <Compile Include="FileType\Processors\EmptyTargetProcessor.cs" />
-    <Compile Include="FileType\Processors\EntitiesProcessor.cs" />
-    <Compile Include="FileType\Processors\NormalizeEmbeddedContentContextProcessor.cs" />
-    <Compile Include="FileType\Processors\ParagraphToSegmentProcessor.cs" />
-    <Compile Include="FileType\Processors\CommentsProcessor.cs" />
-    <Compile Include="FileType\Processors\SegmentRenumberingBilingualProcessor.cs" />
-    <Compile Include="FileType\Processors\SegmentRenumberingTrigger.cs" />
-    <Compile Include="FileType\Settings\Entities\EntityMapping.cs" />
-    <Compile Include="FileType\Settings\Entities\EntitySet.cs" />
-    <Compile Include="FileType\Settings\Entities\EntitySetBuilder.cs" />
-    <Compile Include="FileType\Settings\Entities\EntitySettings.cs" />
-    <Compile Include="FileType\Settings\Entities\UniqueEntitySetBuilder.cs" />
-    <Compile Include="FileType\Settings\Entities\UniqueEntitySettings.cs" />
-    <Compile Include="FileType\Settings\CommentMappingSettings.cs" />
-    <Compile Include="FileType\ViewModels\AppendCommentMappingViewModel.cs" />
-    <Compile Include="FileType\ViewModels\CommentMappingViewModel.cs" />
-    <Compile Include="FileType\Views\AppendCommentMappingWindow.xaml.cs">
-      <DependentUpon>AppendCommentMappingWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="FileType\Views\CommentMappingView.xaml.cs">
-      <DependentUpon>CommentMappingView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Models\AbstractMetaDataContainer.cs" />
-    <Compile Include="Models\Attribute.cs" />
-    <Compile Include="Models\Comment.cs" />
-    <Compile Include="Models\CommentPropertyMapping.cs" />
-    <Compile Include="Models\CommentProperty.cs" />
-    <Compile Include="Models\ElementTags.cs" />
-    <Compile Include="Models\MultilingualComment.cs" />
-    <Compile Include="Models\MultilingualParagraphUnit.cs" />
-    <Compile Include="Models\SegmentationHintItem.cs" />
-    <Compile Include="Common\Enumerators.cs" />
-    <Compile Include="EmbeddedContent\IPublishSubContent.cs" />
-    <Compile Include="Extensions\MemoryStreamExtensions.cs" />
-    <Compile Include="Extensions\ParagraphUnitExtensions.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="FileType\Pages\PlaceholderPatternsPage.cs" />
-    <Compile Include="FileType\Processors\PlaceholdersProcessor.cs" />
-    <Compile Include="FileType\Settings\PlaceholderPatternSettings.cs" />
-    <Compile Include="FileType\Settings\EmbeddedContentSettings.cs" />
-    <Compile Include="FileType\Pages\EmbeddedContentPage.cs" />
-    <Compile Include="FileType\ViewModels\AppendPlaceablePatternViewModel.cs" />
-    <Compile Include="FileType\ViewModels\EmbeddedContentViewModel.cs" />
-    <Compile Include="FileType\ViewModels\PlaceholderPatternsViewModel.cs" />
-    <Compile Include="FileType\Views\AppendPlaceablePatternWindow.xaml.cs">
-      <DependentUpon>AppendPlaceablePatternWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="FileType\Views\EmbeddedContentView.xaml.cs">
-      <DependentUpon>EmbeddedContentView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="FileType\Views\PlaceholderPatternsView.xaml.cs">
-      <DependentUpon>PlaceholderPatternsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Models\AlignmentInfo.cs" />
-    <Compile Include="Models\AnalysisBand.cs" />
-    <Compile Include="Models\ConfirmationStatus.cs" />
-    <Compile Include="Models\ContextInfo.cs" />
-    <Compile Include="Models\Element.cs" />
-    <Compile Include="Models\ElementComment.cs" />
-    <Compile Include="Models\ElementGenericPlaceholder.cs" />
-    <Compile Include="Models\ElementLocked.cs" />
-    <Compile Include="Models\ElementPlaceholder.cs" />
-    <Compile Include="Models\ElementSegment.cs" />
-    <Compile Include="Models\ElementTagPair.cs" />
-    <Compile Include="Models\ElementText.cs" />
-    <Compile Include="Models\FilterItem.cs" />
-    <Compile Include="Models\FilterItemGroup.cs" />
-    <Compile Include="Models\ImportResult.cs" />
-    <Compile Include="Models\MultilingualFileInfo.cs" />
-    <Compile Include="Models\ParagraphUnitContext.cs" />
-    <Compile Include="Models\ParagraphUnitResult.cs" />
-    <Compile Include="Models\PlaceholderPattern.cs" />
-    <Compile Include="Models\SegmentPairInfo.cs" />
-    <Compile Include="Models\XmlNamespace.cs" />
-    <Compile Include="Providers\Excel\Constants.cs" />
-    <Compile Include="Providers\Excel\Implementation\Common.cs" />
-    <Compile Include="Providers\Excel\Implementation\Reader.cs" />
-    <Compile Include="Providers\Excel\Implementation\Writer.cs" />
-    <Compile Include="Providers\Excel\Interfaces\IPlaceholderPatternsProvider.cs" />
-    <Compile Include="Providers\Excel\PlaceholderPatternsProvider.cs" />
-    <Compile Include="Providers\Excel\Model\ExcelCell.cs" />
-    <Compile Include="Providers\Excel\Model\ExcelColumn.cs" />
-    <Compile Include="Providers\Excel\Model\ExcelRow.cs" />
-    <Compile Include="Providers\Excel\OpenXml\Excel.cs" />
-    <Compile Include="Providers\StudioCommentPropertyProvider.cs" />
-    <Compile Include="Services\BilingualParser.cs" />
-    <Compile Include="Commands\CommandHandler.cs" />
-    <Compile Include="Commands\RelayCommand.cs" />
-    <Compile Include="Commands\SelectedItemChangedCommand.cs" />
-    <Compile Include="FileType\ComponentBuilder.cs" />
-    <Compile Include="Constants.cs" />
-    <Compile Include="Controls\SelectedItemsAwareDataGrid.cs" />
-    <Compile Include="Controls\SortAwareDataGrid.cs" />
-    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
-    <Compile Include="Converters\CultureInfoNameToDisplayNameConverter.cs" />
-    <Compile Include="Converters\CultureInfoNameToImageConverter.cs" />
-    <Compile Include="Models\BaseModel.cs" />
-    <Compile Include="Models\LanguageItem.cs" />
-    <Compile Include="Models\LanguageMapping.cs" />
-    <Compile Include="Services\BilingualWriter.cs" />
-    <Compile Include="Services\ClearTranslationsContentProcessor.cs" />
-    <Compile Include="Services\ContentImporter.cs" />
-    <Compile Include="Services\ContentReader.cs" />
-    <Compile Include="Services\ElementExtractor.cs" />
-    <Compile Include="Services\Entities\AlternativeInputFileGenerator.cs" />
-    <Compile Include="Services\Entities\EntityContext.cs" />
-    <Compile Include="Services\Entities\EntityMarkerConversionService.cs" />
-    <Compile Include="Services\Entities\EntityRule.cs" />
-    <Compile Include="Services\Entities\EntityService.cs" />
-    <Compile Include="Services\FileSystemService.cs" />
-    <Compile Include="Services\FilterItemService.cs" />
-    <Compile Include="Models\ParagraphUnitInfo.cs" />
-    <Compile Include="Services\ParagraphUnitProvider.cs" />
-    <Compile Include="Services\QuickInsertWriter.cs" />
-    <Compile Include="Services\SdlFrameworkService.cs" />
-    <Compile Include="Services\SdlxliffUpdater.cs" />
-    <Compile Include="Services\SdlxliffImporter.cs" />
-    <Compile Include="Services\SdlxliffReader.cs" />
-    <Compile Include="Services\SegmentBuilder.cs" />
-    <Compile Include="Services\SegmentTagAligner.cs" />
-    <Compile Include="Services\SegmentVisitor.cs" />
-    <Compile Include="FileType\Settings\LanguageMappingSettings.cs" />
-    <Compile Include="Models\TagMap.cs" />
-    <Compile Include="Models\TagPair.cs" />
-    <Compile Include="Models\TimeSpanInfo.cs" />
-    <Compile Include="PluginResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PluginResources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\PluginProperties.cs" />
-    <Compile Include="Services\QuickTagBuilder.cs" />
-    <Compile Include="Services\LanguageFilterService.cs" />
-    <Compile Include="Services\ImageService.cs" />
-    <Compile Include="Services\SniffInfoWithNativePath.cs" />
-    <Compile Include="Services\DefaultNamespaceHelper.cs" />
-    <Compile Include="Services\TagType.cs" />
-    <Compile Include="Services\XmlFileSniffer.cs" />
-    <Compile Include="FileType\Pages\LanguageMappingPage.cs" />
-    <Compile Include="FileType\ViewModels\AppendLanguageViewModel.cs" />
-    <Compile Include="FileType\Views\AppendLanguageWindow.xaml.cs">
-      <DependentUpon>AppendLanguageWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="FileType\Views\LanguageMappingView.xaml.cs">
-      <DependentUpon>LanguageMappingView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="FileType\ViewModels\LanguageMappingViewModel.cs" />
-    <Compile Include="Services\XmlNameSpace.cs" />
-    <Compile Include="Services\XmlNodeService.cs" />
-    <Compile Include="Services\XmlReaderFactory.cs" />
-    <Compile Include="TellMe\CommunityAppStoreForumAction.cs" />
-    <Compile Include="TellMe\CommunityWikiAction.cs" />
-    <Compile Include="TellMe\SettingsAction.cs" />
-    <Compile Include="TellMe\SourceCodeAction.cs" />
-    <Compile Include="TellMe\TellMeProvider.cs" />
-    <Compile Include="TellMe\WarningWindow\SettingsActionWarning.xaml.cs">
-      <DependentUpon>SettingsActionWarning.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="XmlConstants.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="FileType\Preview\InternalPreviewControl.resx">
-      <DependentUpon>InternalPreviewControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PluginResources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <SubType>Designer</SubType>
-      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <PropertyGroup>
-    <CreatePluginPackage>true</CreatePluginPackage>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>Bilingual.XML.FileType.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
-  <ItemGroup>
-    <Content Include="pluginpackage.manifest.xml" />
-    <Resource Include="Resources\information-48.png" />
-    <Content Include="Resources\Settings.ico" />
-    <Content Include="Resources\SourceCode.ico" />
-    <Content Include="Resources\TellmeDocumentation.ico" />
-    <Resource Include="Resources\TellMe\TellMeAppStoreForum.ico" />
-    <Resource Include="Resources\TellMe\TellMeDocumentation.ico" />
-    <Resource Include="Resources\TellMe\TellMeDocumentation.png" />
-    <Resource Include="Resources\TellMe\TellMeForum.ico" />
-    <Resource Include="Resources\TellMe\TellMeSettings.ico" />
-    <Resource Include="Resources\TellMe\TellMeSourceCode.ico" />
-    <Resource Include="Resources\Warning.png" />
-    <Resource Include="Resources\Download.ico" />
-    <Resource Include="Resources\ForumIcon.ico" />
-    <Resource Include="Resources\Question.ico" />
-    <EmbeddedResource Include="Resources\defaults.xsl" />
-    <Resource Include="Resources\ExportTo.ico" />
-    <Resource Include="Resources\ImportFrom.ico" />
-    <Resource Include="Resources\Down.ico" />
-    <Resource Include="Resources\Up.ico" />
-    <Resource Include="Resources\Information.png" />
-    <Resource Include="Resources\Add.ico" />
-    <Resource Include="Resources\Close.png" />
-    <Resource Include="Resources\Delete.ico" />
-    <Resource Include="Resources\Edit.ico" />
-    <Resource Include="Resources\mlXML.ico" />
-    <Resource Include="Resources\mlXML.png" />
-    <Resource Include="ThirdParty\Rws.MultiSelectComboBox.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Sdl.Core.PluginFramework">
-      <Version>2.1.0</Version>
-    </PackageReference>
-    <PackageReference Include="Sdl.Core.PluginFramework.Build">
-      <Version>18.0.1</Version>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Bilingual.XML.FileType.snk" />
-    <None Include="Resources\DefaultPlaceHolders.xlsx" />
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <Page Include="BatchTasks\Views\ExportSettingsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>XamlIntelliSenseFileGenerator</Generator>
-    </Page>
-    <Page Include="BatchTasks\Views\ImportSettingsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="FileType\Views\AppendCommentMappingWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="FileType\Views\AppendPlaceablePatternWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="FileType\Views\AppendLanguageWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="FileType\Views\EmbeddedContentView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="FileType\Views\CommentMappingView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="FileType\Views\PlaceholderPatternsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="FileType\Views\LanguageMappingView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\Buttons.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\ButtonsStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\ComboboStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\DataGridColumnStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\DataGridStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\ExpanderStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\General.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\GroupBox.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\ImageStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\MultiSelectComboBox.Custom.ControlTemplate.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\MultiSelectComboBox.Custom.DropdownItemTemplate.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\MultiSelectComboBox.Custom.Image.Resources.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\MultiSelectComboBox.Custom.SelectedItemTemplate.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\MultiSelectComboBox.Resources.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\RadioButton.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\TextBlockStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\TextBoxStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\TreeView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\WindowsBorder.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="TellMe\WarningWindow\SettingsActionWarning.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net48</TargetFramework>
+		<TradosFolder>C:\Program Files (x86)\Trados\Trados Studio\Studio18beta</TradosFolder>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
+		<UseWindowsForms>true</UseWindowsForms>
+		<UseWPF>true</UseWPF>
+		<ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+	</PropertyGroup>
+	<PropertyGroup>
+		<OutputType>Library</OutputType>
+	</PropertyGroup>
+	<ItemGroup>
+		<Reference Include="Autofac">
+			<HintPath>$(TradosFolder)\Autofac.dll</HintPath>
+		</Reference>
+		<Reference Include="DocumentFormat.OpenXml">
+			<HintPath>$(TradosFolder)\DocumentFormat.OpenXml.dll</HintPath>
+		</Reference>
+		<Reference Include="Newtonsoft.Json">
+			<HintPath>$(TradosFolder)\Newtonsoft.Json.dll</HintPath>
+		</Reference>
+		<Reference Include="PresentationFramework.Aero" />
+		<Reference Include="Rws.MultiSelectComboBox">
+			<HintPath>ThirdParty\Rws.MultiSelectComboBox.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Core.Globalization">
+			<HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Core.Globalization.Async">
+			<HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Core.Settings">
+			<HintPath>$(TradosFolder)\Sdl.Core.Settings.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Desktop.IntegrationApi">
+			<HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
+			<HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Desktop.Platform.Styles">
+			<HintPath>$(TradosFolder)\Sdl.Desktop.Platform.Styles.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.FileTypeSupport.Framework.Core">
+			<HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.FileTypeSupport.Framework.Core.Settings">
+			<HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.Settings.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
+			<HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.FileTypeSupport.Framework.PreviewControls">
+			<HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.PreviewControls.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.ProjectAutomation.AutomaticTasks">
+			<HintPath>$(TradosFolder)\Sdl.ProjectAutomation.AutomaticTasks.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.ProjectAutomation.Core">
+			<HintPath>$(TradosFolder)\Sdl.ProjectAutomation.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.ProjectAutomation.FileBased">
+			<HintPath>$(TradosFolder)\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
+			<HintPath>$(TradosFolder)\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Versioning">
+			<HintPath>$(TradosFolder)\Sdl.Versioning.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.TellMe.ProviderApi">
+			<HintPath>$(TradosFolder)\Sdl.TellMe.ProviderApi.dll</HintPath>
+		</Reference>
+		<Reference Include="System.Configuration" />
+		<Reference Include="System.Web" />
+		<Reference Include="System.Data.DataSetExtensions" />
+		<Reference Include="Microsoft.CSharp" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Update="FileType\Preview\InternalPreviewControl.cs">
+			<SubType>UserControl</SubType>
+		</Compile>
+	</ItemGroup>
+	<PropertyGroup>
+		<CreatePluginPackage>true</CreatePluginPackage>
+	</PropertyGroup>
+	<PropertyGroup>
+		<SignAssembly>true</SignAssembly>
+	</PropertyGroup>
+	<PropertyGroup>
+		<AssemblyOriginatorKeyFile>Bilingual.XML.FileType.snk</AssemblyOriginatorKeyFile>
+	</PropertyGroup>
+	<ItemGroup>
+		<Content Include="pluginpackage.manifest.xml" />
+		<Resource Include="Resources\information-48.png" />
+		<Content Include="Resources\Settings.ico" />
+		<Content Include="Resources\SourceCode.ico" />
+		<Content Include="Resources\TellmeDocumentation.ico" />
+		<Resource Include="Resources\TellMe\TellMeAppStoreForum.ico" />
+		<Resource Include="Resources\TellMe\TellMeDocumentation.ico" />
+		<Resource Include="Resources\TellMe\TellMeDocumentation.png" />
+		<Resource Include="Resources\TellMe\TellMeForum.ico" />
+		<Resource Include="Resources\TellMe\TellMeSettings.ico" />
+		<Resource Include="Resources\TellMe\TellMeSourceCode.ico" />
+		<Resource Include="Resources\Warning.png" />
+		<Resource Include="Resources\Download.ico" />
+		<Resource Include="Resources\ForumIcon.ico" />
+		<Resource Include="Resources\Question.ico" />
+		<EmbeddedResource Include="Resources\defaults.xsl" />
+		<Resource Include="Resources\ExportTo.ico" />
+		<Resource Include="Resources\ImportFrom.ico" />
+		<Resource Include="Resources\Down.ico" />
+		<Resource Include="Resources\Up.ico" />
+		<Resource Include="Resources\Information.png" />
+		<Resource Include="Resources\Add.ico" />
+		<Resource Include="Resources\Close.png" />
+		<Resource Include="Resources\Delete.ico" />
+		<Resource Include="Resources\Edit.ico" />
+		<Resource Include="Resources\mlXML.ico" />
+		<Resource Include="Resources\mlXML.png" />
+		<Resource Include="ThirdParty\Rws.MultiSelectComboBox.dll" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Sdl.Core.PluginFramework">
+			<Version>2.1.0</Version>
+		</PackageReference>
+		<PackageReference Include="Sdl.Core.PluginFramework.Build">
+			<Version>18.0.1</Version>
+		</PackageReference>
+	</ItemGroup>
 </Project>
