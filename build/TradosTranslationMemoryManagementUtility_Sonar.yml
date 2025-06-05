@@ -1,0 +1,57 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Trados Translation Memory Management Utility/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Trados Translation Memory Management Utility/*
+
+variables: 
+- group: 'Trados Translation Memory Management Utility Sonar Version'
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: pathToPublish
+  value: '$(PluginPath)\Sdl.Community.TranslationMemoryManagementUtility.sdlplugin'
+- name: solution
+  value: '**/Sdl.Community.TranslationMemoryManagementUtility.sln'
+- name : SonarID
+  value : Trados_Translation_Memory_Management_Utility
+- name : SonarName
+  value : 'Trados Translation Memory Management Utility'
+- name : ProjectVersion
+  value : $[counter(variables['Version.Patch'], 1)]
+
+pool:
+  vmImage: '$(DefaultBuildVm)'
+
+steps:
+  - task: SonarCloudPrepare@3
+    inputs:
+      SonarCloud: 'AppStorePlugins-ServiceConnection'
+      organization: 'sdl'
+      scannerMode: 'dotnet'
+      projectKey: $(SonarId)
+      projectName: $(SonarName)
+      projectVersion: $(ProjectVersion)
+
+  - template: jobs/build-sdlplugin.yml
+  - task: SonarCloudAnalyze@3
+    displayName: 'Run Code Analysis'
+
+  - task: SonarCloudPublish@3
+    inputs:
+      pollingTimeoutSec: '300'
+    displayName: 'Publish Quality Gate Result'
+
+  - template: jobs/publish-build-artifact-task.yml
