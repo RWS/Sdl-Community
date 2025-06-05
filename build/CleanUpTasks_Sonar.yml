@@ -22,7 +22,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: pathToPublish
-  value: '$(PluginPath)\Sdl.Community.CleanUpTasks.sdlplugin'
+  value: '$(PluginPath)\SDLCommunityCleanUpTasks.sdlplugin'
 - name: solution
   value: '**/Sdl.Community.CleanUpTasks.sln'
 - name : SonarID
