@@ -1,0 +1,34 @@
+
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Amazon Translate MT provider/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Amazon Translate MT provider/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value: '**/AmazonTranslateTradosPlugin.sln'
+- name: pathToPublish
+  value: '$(PluginPath)\AmazonTranslateTradosPlugin.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml
