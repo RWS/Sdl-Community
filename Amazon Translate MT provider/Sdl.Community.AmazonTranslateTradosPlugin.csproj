@@ -6,7 +6,7 @@
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<LangVersion>latest</LangVersion>
 		<UseWPF>true</UseWPF>
-		<TradosFolder>C:\Things\Code\SDL\Trados\Bin\Mixed Platforms\Debug</TradosFolder>
+		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
 		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
 	</PropertyGroup>
 
