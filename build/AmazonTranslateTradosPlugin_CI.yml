@@ -27,7 +27,7 @@ variables:
 - name: solution
   value: '**/AmazonTranslateTradosPlugin.sln'
 - name: pathToPublish
-  value: '$(PluginPath)\AmazonTranslateTradosPlugin.sdlplugin'
+  value: '$(PluginPath)\Sdl.Community.AmazonTranslateTradosPlugin.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
