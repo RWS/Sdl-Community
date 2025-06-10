@@ -46,6 +46,14 @@
                     <x:Type TypeName="model:TagFormat" />
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
+            
+            <ObjectDataProvider MethodName="GetValues"
+                                ObjectType="{x:Type model:ModelType}"
+                                x:Key="ModelTypeProvider">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="model:ModelType" />
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
 
             <ObjectDataProvider MethodName="GetValues"
                                 ObjectType="{x:Type model:SplitSentences}"
@@ -74,6 +82,9 @@
                 <Setter Property="RenderOptions.BitmapScalingMode"
                         Value="HighQuality" />
             </Style>
+            <converters:ModelTypeToFriendlyNameConverter x:Key="ModelTypeToFriendlyNameConverter" />
+            <converters:FormalityToFriendlyNameConverter x:Key="FormalityToFriendlyNameConverter" />
+            <converters:ModelTypeToDescriptionConverter x:Key="ModelTypeToDescriptionConverter" />
 
         </ResourceDictionary>
     </Window.Resources>
@@ -165,6 +176,21 @@
                                       Content="Resend Draft" />
 
                             <StackPanel Orientation="Horizontal">
+                                <Label Content="Model type"
+                                       Margin="12 0 0 5" />
+                                <ComboBox Margin="5 0 0 0"
+                                          Height="20"
+                                          SelectedItem="{Binding ModelType}"
+                                          ItemsSource="{Binding Source={StaticResource ModelTypeProvider}}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock ToolTip="{Binding Converter={StaticResource ModelTypeToDescriptionConverter }}" Text="{Binding Converter={StaticResource ModelTypeToFriendlyNameConverter}}" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
                                 <Label Content="Tag handling"
                                        Margin="12 0 0 5" />
                                 <ComboBox Margin="5 0 0 0"
@@ -172,6 +198,8 @@
                                           SelectedItem="{Binding TagType}"
                                           ItemsSource="{Binding Source={StaticResource TagTypeProvider}}" />
                             </StackPanel>
+                            
+                           
 
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Newline Handling" Margin="12 0 0 5" />
@@ -257,7 +285,13 @@
                             <ComboBox ItemsSource="{Binding Source={x:Static model:FormalityEnumHelper.Values}}"
                                       SelectedItem="{Binding Formality, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                       DisplayMemberPath="."
-                                      Cursor="Hand" />
+                                      Cursor="Hand" >
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Converter={StaticResource FormalityToFriendlyNameConverter}}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
