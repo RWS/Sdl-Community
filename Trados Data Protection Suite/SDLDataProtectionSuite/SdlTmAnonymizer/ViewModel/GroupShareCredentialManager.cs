@@ -1,109 +1,148 @@
 ﻿using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Model;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Reflection;
+using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.View;
 
 namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 {
     public class GroupshareCredentialManager
     {
         private readonly MethodInfo _getUserCredentialsMethod;
-        private readonly Type _identityInfoCacheHelpers;
-        private readonly dynamic _serverLogon;
+        private readonly object _identityInfoCache;
+        private readonly MethodInfo _getServersMethod;
 
         public GroupshareCredentialManager()
         {
             var assembly = Assembly.LoadFrom(Path.Combine(ExecutingStudioLocation(), "Sdl.Desktop.Platform.ServerConnectionPlugin.dll"));
-            var serverLogonType = assembly.GetType("Sdl.Desktop.Platform.ServerConnectionPlugin.ServerLogon");
-            _identityInfoCacheHelpers = assembly.GetType("Sdl.Desktop.Platform.ServerConnectionPlugin.Implementation.IdentityInfoCacheHelpers");
-            _getUserCredentialsMethod = _identityInfoCacheHelpers.GetMethod("GetUserCredentials");
-            _serverLogon = Activator.CreateInstance(serverLogonType);
+            var identityInfoCacheAssembly = assembly.GetType("Sdl.Desktop.Platform.ServerConnectionPlugin.Client.IdentityModel.IdentityInfoCache");
+            _identityInfoCache = identityInfoCacheAssembly?.GetProperty("Default", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)?.GetValue(null);
+            _getUserCredentialsMethod = _identityInfoCache?.GetType().GetMethod(
+                "GetUserCredentials",
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
+                null,
+                [typeof(Uri)],
+                null
+            );
+            _getServersMethod = _identityInfoCache?.GetType().GetMethod(
+                "GetServers",
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
+                null,
+                Type.EmptyTypes,
+                null
+            );
+
         }
 
-        public CredentialKind GetCredentialTypeFromServerLogon()
+        private CredentialKind GetCredentialType(dynamic credentialData)
         {
-            if (_serverLogon.IsWindowsUser && string.IsNullOrEmpty(_serverLogon.Password) && string.IsNullOrEmpty(_serverLogon.UserName))
+            if (string.IsNullOrEmpty(credentialData.Password) && string.IsNullOrEmpty(credentialData.UserName))
                 return CredentialKind.WindowsSSO;
 
-            if (!_serverLogon.IsWindowsUser && string.IsNullOrEmpty(_serverLogon.Password) && !string.IsNullOrEmpty(_serverLogon.UserName))
+            if (string.IsNullOrEmpty(credentialData.Password) && !string.IsNullOrEmpty(credentialData.UserName))
                 return CredentialKind.SSO;
 
             return CredentialKind.Normal;
         }
 
-        public TranslationProviderServer GetProvider(Credentials credentials)
+        public List<TranslationProviderServerWithCredentials> GetProvider()
         {
-            _serverLogon.ServerUrl = credentials.Url;
+            var servers = _getServersMethod?.Invoke(_identityInfoCache, null) as List<Uri>;
 
-            var dialogResult = _serverLogon.ShowLogonDialog(null);
+            var serverUi = new ChooseServerWindow(servers);
+            var result = serverUi.ShowDialog();
 
-            if (!dialogResult) return null;
+            if (result is not true)
+                return [];
 
-            var credentialTypeFromServerLogon = GetCredentialTypeFromServerLogon();
-
-            credentials.Url = _serverLogon.ServerUrl;
-            credentials.UserName = _serverLogon.UserName;
-            credentials.Password = _serverLogon.Password;
-            credentials.CredentialType = credentialTypeFromServerLogon;
-
-            var serviceUri = new Uri(_serverLogon.ServerUrl);
-            switch (credentialTypeFromServerLogon)
+            var tpServers = new List<TranslationProviderServerWithCredentials>();
+            foreach (var server in serverUi.Servers.Where(s => s.IsSelected))
             {
-                case CredentialKind.Normal:
-                    return new TranslationProviderServer(serviceUri, _serverLogon.IsWindowsUser, _serverLogon.UserName, _serverLogon.Password);
+                var serverUri = new Uri(server.Uri);
+                var credentialData = GetDataFromCache(serverUri);
 
-                case CredentialKind.WindowsSSO:
-                    var windowsSso = new WindowsSsoData(_serverLogon.ServerUrl);
-                    if (windowsSso.StatusCode != HttpStatusCode.OK) return null;
+                var credentials = new Credentials
+                {
+                    CredentialType = GetCredentialType(credentialData),
+                    UserName = credentialData.UserName,
+                    Password = credentialData.Password,
+                    Url = server.Uri
+                };
 
-                    credentials.UserName = windowsSso.UserName;
-                    credentials.Token = windowsSso.Token;
+                switch (credentials.CredentialType)
+                {
+                    case CredentialKind.Normal:
+                        tpServers.Add(new TranslationProviderServerWithCredentials
+                        {
+                            Server = new TranslationProviderServer(serverUri, credentialData.IsWindowsUser,
+                                credentialData.UserName, credentialData.Password),
+                        });
+                        break;
 
-                    return new TranslationProviderServer(serviceUri, windowsSso.UserName,
-                        windowsSso.Token, DateTime.MaxValue);
+                    case CredentialKind.WindowsSSO:
+                        var windowsSso = new WindowsSsoData(server.Uri);
+                        if (windowsSso.StatusCode != HttpStatusCode.OK)
+                            break;
 
-                case CredentialKind.SSO:
-                    var cachedCredentials = GetDataFromCache(serviceUri);
-                    credentials.UserName = cachedCredentials.UserName;
-                    credentials.Token = cachedCredentials.AuthToken;
+                        tpServers.Add(new TranslationProviderServerWithCredentials
+                        {
+                            Server = new TranslationProviderServer(serverUri, windowsSso.UserName,
+                                windowsSso.Token, DateTime.MaxValue),
+                        });
+                        break;
 
-                    return new TranslationProviderServer(serviceUri, cachedCredentials.UserName, cachedCredentials.AuthToken, cachedCredentials.ExpirationDate);
+                    case CredentialKind.SSO:
 
-                default:
-                    throw new Exception(PluginResources.GroupShareCredentialManager_TryGetCredentialsWithoutUserInput_Credentials_invalid_);
+                        tpServers.Add(new TranslationProviderServerWithCredentials
+                        {
+                            Server = new TranslationProviderServer(serverUri, credentialData.UserName,
+                                credentialData.AuthToken, credentialData.ExpirationDate)
+                        });
+                        break;
+
+                    default:
+                        throw new Exception(PluginResources.GroupShareCredentialManager_TryGetCredentialsWithoutUserInput_Credentials_invalid_);
+                }
+
+                tpServers[tpServers.Count - 1].Credentials = credentials;
             }
+
+            return tpServers;
         }
 
         public TranslationProviderServer TryGetProviderWithoutUserInput(Credentials credentials)
-        {
-            var cachedCredentials = GetDataFromCache(new Uri(credentials.Url));
+        {   
+            var credentialData = GetDataFromCache(new Uri(credentials.Url));
 
             switch (credentials.CredentialType)
             {
                 case CredentialKind.Normal:
 
-                    credentials.UserName = cachedCredentials.UserName;
-                    credentials.Password = cachedCredentials.Password;
+                    credentials.UserName = credentialData.UserName;
+                    credentials.Password = credentialData.Password;
 
                     return new TranslationProviderServer((new Uri(credentials.Url)),
-                        cachedCredentials.UserType.ToString() == "WindowsUser",
-                        cachedCredentials.UserName, cachedCredentials.Password);
+                        credentialData.UserType.ToString() == "WindowsUser",
+                        credentialData.UserName, credentialData.Password);
 
                 case CredentialKind.SSO:
 
-                    credentials.UserName = cachedCredentials.UserName;
-                    credentials.Token = cachedCredentials.AuthToken;
+                    credentials.UserName = credentialData.UserName;
+                    credentials.Token = credentialData.AuthToken;
 
-                    return new TranslationProviderServer(new Uri(credentials.Url), cachedCredentials.UserName,
-                        cachedCredentials.AuthToken, cachedCredentials.ExpirationDate);
+                    return new TranslationProviderServer(new Uri(credentials.Url), credentialData.UserName,
+                        credentialData.AuthToken, credentialData.ExpirationDate);
 
                 case CredentialKind.WindowsSSO:
 
                     var windowsSso = new WindowsSsoData(credentials.Url);
 
-                    if (windowsSso.StatusCode != HttpStatusCode.OK) return null;
+                    if (windowsSso.StatusCode != HttpStatusCode.OK)
+                        return null;
 
                     credentials.UserName = windowsSso.UserName;
                     credentials.Token = string.IsNullOrWhiteSpace(credentials.Token) ? windowsSso.Token : credentials.Token;
@@ -125,11 +164,11 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
             return location;
         }
 
-        private dynamic GetDataFromCache(Uri serviceUri)
+        private dynamic GetDataFromCache(Uri serverUri)
         {
-            dynamic cachedCredentials =
-                _getUserCredentialsMethod.Invoke(_identityInfoCacheHelpers, new object[] { serviceUri });
-            return cachedCredentials;
+            dynamic credentialData =
+                _getUserCredentialsMethod.Invoke(_identityInfoCache, new object[] { serverUri });
+            return credentialData;
         }
     }
 }
