@@ -29,5 +29,8 @@ namespace Sdl.Community.DeepLMTProvider.Model
 
         [JsonProperty("ignore_tags")]
         public List<string> IgnoreTags { get; set; }
+        
+        [JsonProperty("model_type")]
+        public string ModelType { get; set; }
     }
 }

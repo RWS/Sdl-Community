@@ -32,6 +32,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         private TagFormat _tagType;
         private SplitSentences _splitSentencesType;
         private string _validationMessages;
+        private ModelType _modelType;
 
         public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, IDeepLGlossaryClient glossaryClient, IMessageService messageService)
         {
@@ -50,6 +51,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             PreserveFormatting = deepLTranslationOptions.PreserveFormatting;
             ApiVersion = deepLTranslationOptions.ApiVersion;
             IgnoreTags = deepLTranslationOptions.IgnoreTagsParameter;
+            ModelType = deepLTranslationOptions.ModelType;
 
             Options = deepLTranslationOptions;
 
@@ -73,6 +75,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             SplitSentencesType = deepLTranslationOptions.SplitSentencesHandling;
             ApiVersion = deepLTranslationOptions.ApiVersion;
             IgnoreTags = deepLTranslationOptions.IgnoreTagsParameter;
+            ModelType = deepLTranslationOptions.ModelType;
 
             PasswordChangedTimer.Elapsed += OnPasswordChanged;
 
@@ -163,6 +166,12 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                 SetField(ref _tagType, value);
                 SplitSentencesType = GetDefaultSplitSentences(value);
             }
+        }
+        
+        public ModelType ModelType
+        {
+            get => _modelType;
+            set => SetField(ref _modelType, value);
         }
 
         public SplitSentences SplitSentencesType 

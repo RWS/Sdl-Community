@@ -41,11 +41,20 @@ namespace Sdl.Community.DeepLMTProvider.Model
 
         public string ResendDraftParameter { get; set; }
 
+        public string ModelTypeParameter { get; set; }
+
         [JsonIgnore]
         public TagFormat TagHandling
         {
             get => Enum.TryParse<TagFormat>(TagHandlingParameter, out var tagHandling) ? tagHandling : TagFormat.None;
             set => TagHandlingParameter = value.ToString();
+        }
+        
+        [JsonIgnore]
+        public ModelType ModelType
+        {
+            get => Enum.TryParse<ModelType>(ModelTypeParameter, out var modelType) ? modelType : ModelType.Latency_Optimized;
+            set => ModelTypeParameter = value.ToString();
         }
 
         [JsonIgnore]
