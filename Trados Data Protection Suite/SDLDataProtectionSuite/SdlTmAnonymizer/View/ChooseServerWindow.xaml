@@ -1,0 +1,85 @@
+﻿<Window x:Class="Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.View.ChooseServerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        mc:Ignorable="d"
+        Title="Select the TM Servers you want to use"
+        Background="#f0f0f0"
+        Height="450"
+        Width="800">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/datagridresources.xaml" />
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/buttonresources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition MinHeight="50" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Choose servers:" />
+        <Border Grid.Row="1"
+                Margin="3"
+                BorderThickness="1"
+                BorderBrush="LightGray"
+                Background="White">
+            <DataGrid CanUserAddRows="False"
+                      IsReadOnly="True"
+                      Style="{StaticResource Sdl.DataGrid.GenericStyle}"
+                      ItemsSource="{Binding Servers}">
+
+
+                <DataGrid.Columns>
+
+                    <DataGridTemplateColumn Header="Use"
+                                            Width="Auto">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Center" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTextColumn Header="Server URI"
+                                        Width="*"
+                                        Binding="{Binding Uri}">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader"
+                                   BasedOn="{StaticResource Sdl.DataGridColumnHeader.GenericStyle}">
+                                <Setter Property="HorizontalContentAlignment"
+                                        Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment"
+                                        Value="Center" />
+                            </Style>
+
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+        <Button Content="OK"
+                Click="OkButton_Click"
+                Style="{StaticResource Sdl.Button.GeneralStyle}"
+                IsDefault="True"
+                Grid.Row="2"
+                Height="23"
+                Width="80"
+                Cursor="Hand"
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Right"
+                Margin="0,10,5,10" />
+    </Grid>
+</Window>

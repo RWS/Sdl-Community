@@ -163,28 +163,25 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
                 UserName = settings.LastUsedServerUserName
             };
 
-            var translationProviderServer = GroupShareCredentialManager.GetProvider(credentials);
+            var translationProviderServers = GroupShareCredentialManager.GetProvider();
+
+            if (translationProviderServers == null || !translationProviderServers.Any())
+                return;
 
             settings.LastUsedServerUri = credentials.Url;
             settings.LastUsedServerUserName = credentials.UserName;
             SettingsService.SaveSettings(settings);
 
-            if (translationProviderServer == null)
-                return;
 
             var selectServers = new SelectServersView();
-            var model = new SelectServersViewModel(selectServers, SettingsService, translationProviderServer);
+            var model = new SelectServersViewModel(selectServers, SettingsService, translationProviderServers);
 
             selectServers.DataContext = model;
             selectServers.ShowDialog();
 
             if (!selectServers.DialogResult.HasValue || !selectServers.DialogResult.Value) return;
 
-            foreach (var tmFile in model.TranslationMemories.Where(tmFile => tmFile.IsSelected))
-            {
-                tmFile.Credentials = credentials;
-                AddTm(tmFile);
-            }
+            foreach (var tmFile in model.TranslationMemories.Where(tmFile => tmFile.IsSelected)) AddTm(tmFile);
         }
 
         public void AddFileBasedTm()
@@ -351,17 +348,10 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
             {
                 var settings = SettingsService.GetSettings();
 
-                tmFile.Credentials ??= new Credentials
-                {
-                    Url = settings.LastUsedServerUri,
-                    UserName = settings.LastUsedServerUserName
-                };
-
                 var translationProviderServer = GroupShareCredentialManager.TryGetProviderWithoutUserInput(tmFile.Credentials);
 
                 if (translationProviderServer != null)
                 {
-                    tmFile.Credentials = tmFile.Credentials;
                     SettingsService.SaveSettings(settings);
                 }
                 else

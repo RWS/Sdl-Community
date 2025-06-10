@@ -12,140 +12,146 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 {
-	public class SelectServersViewModel : ViewModelBase, IDisposable
-	{
-		private List<TmFile> _translationMemories;
-		private readonly SettingsService _settingsService;
-		private readonly TranslationProviderServer _translationProviderServer;
-		private readonly BackgroundWorker _backgroundWorker;
-		private readonly Window _controlWindow;
+    public class SelectServersViewModel : ViewModelBase, IDisposable
+    {
+        private List<TmFile> _translationMemories;
+        private readonly SettingsService _settingsService;
+        private readonly List<TranslationProviderServerWithCredentials> _translationProviderServers;
+        private readonly BackgroundWorker _backgroundWorker;
+        private readonly Window _controlWindow;
 
-		public SelectServersViewModel(Window controlWindow, SettingsService settingsService, TranslationProviderServer translationProviderServer)
-		{
-			_controlWindow = controlWindow;
+        public SelectServersViewModel(Window controlWindow, SettingsService settingsService, List<TranslationProviderServerWithCredentials> translationProviderServers)
+        {
+            _controlWindow = controlWindow;
 
-			_settingsService = settingsService;
-			_translationProviderServer = translationProviderServer;
+            _settingsService = settingsService;
+            _translationProviderServers = translationProviderServers;
 
-			_backgroundWorker = new BackgroundWorker();
-			_backgroundWorker.DoWork += BackgroundWorker_DoWork;
-			_backgroundWorker.RunWorkerAsync();
-		}
+            _backgroundWorker = new BackgroundWorker();
+            _backgroundWorker.DoWork += BackgroundWorker_DoWork;
+            _backgroundWorker.RunWorkerAsync();
+        }
 
-		public List<TmFile> TranslationMemories
-		{
-			get => _translationMemories ?? (_translationMemories = new List<TmFile>());
-			set
-			{
-				if (_translationMemories == value)
-				{
-					return;
-				}
+        public List<TmFile> TranslationMemories
+        {
+            get => _translationMemories ?? (_translationMemories = new List<TmFile>());
+            set
+            {
+                if (_translationMemories == value)
+                {
+                    return;
+                }
 
-				_translationMemories = value;
+                _translationMemories = value;
 
-				OnPropertyChanged(nameof(TranslationMemories));
-			}
-		}
+                OnPropertyChanged(nameof(TranslationMemories));
+            }
+        }
 
-		private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             ProgressDialogSettings settings = null;
-			Application.Current.Dispatcher.Invoke(() =>
-			{
-				settings = new ProgressDialogSettings(_controlWindow, true, true, true);
-				var result = ProgressDialog.Execute(StringResources.Loading_data, () =>
-				{
-					GetServerTms(ProgressDialog.Current);
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                settings = new ProgressDialogSettings(_controlWindow, true, true, true);
+                var result = ProgressDialog.Execute(StringResources.Loading_data, () =>
+                {
+                    GetServerTms(ProgressDialog.Current);
 
-				}, settings);
+                }, settings);
 
-				RefreshView();
+                RefreshView();
 
-				if (result.Cancelled)
-				{
-					throw new Exception(StringResources.Process_cancelled_by_user);
-				}
+                if (result.Cancelled)
+                {
+                    throw new Exception(StringResources.Process_cancelled_by_user);
+                }
 
-				if (result.OperationFailed)
-				{
-					throw new Exception(StringResources.Process_failed + Environment.NewLine + Environment.NewLine + result.Error.Message);
-				}
-			});
-		}
+                if (result.OperationFailed)
+                {
+                    throw new Exception(StringResources.Process_failed + Environment.NewLine + Environment.NewLine + result.Error.Message);
+                }
+            });
+        }
 
-		private void GetServerTms(ProgressDialogContext context)
-		{
-			ReadOnlyCollection<ServerBasedTranslationMemory> translationMemories;
+        private void GetServerTms(ProgressDialogContext context)
+        {
+            foreach (var translationProviderServer in _translationProviderServers)
+            {
+                List<ServerBasedTranslationMemory> tms = [];
+                try
+                {
+                    tms = translationProviderServer.Server.GetTranslationMemories().ToList();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.InnerException.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
 
-			try
-			{
-				translationMemories = _translationProviderServer.GetTranslationMemories();
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.InnerException.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-				return;
-			}
+                foreach (var serverBasedTranslationMemory in tms)
+                {
+                    if (context.CheckCancellationPending())
+                    {
+                        break;
+                    }
 
-			foreach (var tm in translationMemories)
-			{
-				if (context.CheckCancellationPending())
-				{
-					break;
-				}
+                    var tmPath = serverBasedTranslationMemory.ParentResourceGroupPath == "/" ? "" : serverBasedTranslationMemory.ParentResourceGroupPath;
+                    var path = tmPath + "/" + serverBasedTranslationMemory.Name;
+                    var tmAlreadyExist = TranslationMemories.Any(t => t.Path.Equals(path));
 
-				var tmPath = tm.ParentResourceGroupPath == "/" ? "" : tm.ParentResourceGroupPath;
-				var path = tmPath + "/" + tm.Name;
-				var tmAlreadyExist = TranslationMemories.Any(t => t.Path.Equals(path));
+                    context.Report(path);
 
-				context.Report(path);
+                    if (!tmAlreadyExist)
+                    {
+                        var serverTm = new TmFile
+                        {
+                            Path = path,
+                            Name = serverBasedTranslationMemory.Name,
+                            Description = serverBasedTranslationMemory.Description,
+                            TranslationUnits = serverBasedTranslationMemory.GetTranslationUnitCount(),
+                            IsServerTm = true,
+                            TmLanguageDirections = new List<TmLanguageDirection>(),
+                            Credentials = translationProviderServer.Credentials
+                        };
 
-				if (!tmAlreadyExist)
-				{
-					var serverTm = new TmFile
-					{
-						Path = path,
-						Name = tm.Name,
-						Description = tm.Description,
-						TranslationUnits = tm.GetTranslationUnitCount(),
-						IsServerTm = true,
-						TmLanguageDirections = new List<TmLanguageDirection>(),
-					};
+                        foreach (var languageDirection in serverBasedTranslationMemory.LanguageDirections)
+                        {
+                            serverTm.TmLanguageDirections.Add(
 
-					foreach (var languageDirection in tm.LanguageDirections)
-					{
-						serverTm.TmLanguageDirections.Add(
-							new TmLanguageDirection
-							{
-								Source = languageDirection.SourceLanguage.Name,
-								Target = languageDirection.TargetLanguage.Name,
-								TranslationUnitsCount = languageDirection.GetTranslationUnitCount()
-							});
-					}
+                                new TmLanguageDirection
+                                {
+                                    Source = languageDirection.SourceLanguage.Name,
+                                    Target = languageDirection.TargetLanguage.Name,
+                                    TranslationUnitsCount = languageDirection.GetTranslationUnitCount()
+                                });
+                        }
 
-					Application.Current.Dispatcher.Invoke(() =>
-					{
-						TranslationMemories.Add(serverTm);
-						RefreshView();
-					});
-				}
-			}
-		}
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            TranslationMemories.Add(serverTm);
+                            RefreshView();
+                        });
+                    }
 
-		private void RefreshView()
-		{
-			OnPropertyChanged(nameof(TranslationMemories));
-			((SelectServersView)_controlWindow).Refresh();
-		}
+                }
+            }
 
-		public void Dispose()
-		{
-			if (_backgroundWorker != null)
-			{
-				_backgroundWorker.DoWork -= BackgroundWorker_DoWork;
-				_backgroundWorker.Dispose();
-			}
-		}
-	}
+
+        }
+
+        private void RefreshView()
+        {
+            OnPropertyChanged(nameof(TranslationMemories));
+            ((SelectServersView)_controlWindow).Refresh();
+        }
+
+        public void Dispose()
+        {
+            if (_backgroundWorker != null)
+            {
+                _backgroundWorker.DoWork -= BackgroundWorker_DoWork;
+                _backgroundWorker.Dispose();
+            }
+        }
+    }
 }
