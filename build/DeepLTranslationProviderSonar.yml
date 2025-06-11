@@ -26,9 +26,9 @@ variables:
 - name: solution
   value: '**/Sdl.Community.DeepLMTProvider.sln'
 - name : SonarID
-  value : DeepL_Translation_Provider
+  value : DeepL_Translation_Provider_2024_CU2
 - name : SonarName
-  value : 'DeepL Translation Provider'
+  value : 'DeepL Translation Provider ( 2024 CU2 )'
 - name : ProjectVersion
   value : $[counter(variables['Version.Patch'], 1)]
 
