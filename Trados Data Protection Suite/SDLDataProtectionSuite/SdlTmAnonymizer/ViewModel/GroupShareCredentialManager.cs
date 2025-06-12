@@ -78,7 +78,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
                     case CredentialKind.Normal:
                         tpServers.Add(new TranslationProviderServerWithCredentials
                         {
-                            Server = new TranslationProviderServer(serverUri, credentialData.IsWindowsUser,
+                            Server = new TranslationProviderServer(serverUri, credentialData.UserType.ToString() == "WindowsUser",
                                 credentialData.UserName, credentialData.Password),
                         });
                         break;
