@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net48</TargetFramework>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
+		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
+		<UseWindowsForms>true</UseWindowsForms>
+		<UseWPF>true</UseWPF>
+		<ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+		<LangVersion>latest</LangVersion>
+	</PropertyGroup>
+	<ItemGroup>
+		<Reference Include="Sdl.FileTypeSupport.Framework.Core">
+			<HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.FileTypeSupport.Framework.Implementation">
+			<HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Implementation.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.FileTypeSupport.Framework.Core">
+			<HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.ProjectAutomation.Core">
+			<HintPath>$(TradosFolder)\Sdl.ProjectAutomation.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.ProjectAutomation.FileBased">
+			<HintPath>$(TradosFolder)\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.ProjectAutomation.Settings">
+			<HintPath>$(TradosFolder)\Sdl.ProjectAutomation.Settings.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Terminology.TerminologyProvider.Core">
+			<HintPath>$(TradosFolder)\Sdl.Terminology.TerminologyProvider.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Core.Globalization">
+			<HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Core.Globalization.Async">
+			<HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
+		</Reference>
+		<Reference Include="System" />
+		<Reference Include="System.Core" />
+		<Reference Include="System.Drawing" />
+		<Reference Include="System.Windows.Forms" />
+		<Reference Include="System" />
+		<Reference Include="System.Core" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="MyTerminologyProviderWinFormsUI.cs" />
+		<None Include="MyTerminologyProviderViewerWinFormsUI.cs" />
+		<None Include="MyTerminologyProvider.cs" />
+		<None Include="MyTerminologyProviderFactory.cs" />
+		<None Include="Properties\AssemblyInfo.cs" />
+		<None Include="Properties\PluginProperties.cs" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="PluginResources.resx">
+		  <Generator>PublicResXFileCodeGenerator</Generator>
+		  <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+		</None>
+		<None Include="pluginpackage.manifest.xml" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Sdl.Core.PluginFramework">
+			<Version>2.1.0</Version>
+		</PackageReference>
+		<PackageReference Include="Sdl.Core.PluginFramework.Build">
+			<Version>17.0.0</Version>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup>
+	  <Compile Update="PluginResources.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>PluginResources.resx</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+	<PropertyGroup>
+		<CreatePluginPackage>true</CreatePluginPackage>
+		<SignAssembly>True</SignAssembly>
+		<AssemblyOriginatorKeyFile>..\..\..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+	</PropertyGroup>
+</Project>
