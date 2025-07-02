@@ -379,7 +379,9 @@ namespace Multilingual.XML.FileType.Services
 		private string GetTargetSubContent(Stream subContentStream)
 		{
 			string subContent;
-			using (var reader = new StreamReader(subContentStream, _nativeFileProperties.Encoding.Encoding))
+			using (var reader = new StreamReader(subContentStream, _nativeFileProperties.Encoding.Encoding ?? Encoding.UTF8 )) 
+
+
 			{
 				subContent = reader.ReadToEnd();
 			}
