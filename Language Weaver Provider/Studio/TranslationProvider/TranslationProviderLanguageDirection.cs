@@ -156,30 +156,44 @@ namespace LanguageWeaverProvider
                 var tuSearchResult = CreateTuSearchResult(currentSegment, translatedSegment);
 
                 var translationOrigin = tuSearchResult.DocumentSegmentPair.Properties.TranslationOrigin;
-                var lastTqeIndex = translationOrigin is not null ? translationOrigin.GetLastTqeIndex() + 1 : 1;
+             
+                const int tqeIndex = 1; 
 
-                ManageSegmentMetadata(evaluatedSegment, mappedPair, fileName, lastTqeIndex, translationOrigin);
+                ManageSegmentMetadata(evaluatedSegment, mappedPair, fileName, tqeIndex, translationOrigin);
 
-                searchResults[i].Add(new SearchResult(tuSearchResult)
+                var sr = new SearchResult(tuSearchResult)
                 {
                     ScoringResult = new ScoringResult { BaseScore = 0 },
                     TranslationProposal = tuSearchResult.Duplicate()
-                });
+                };
+
+                if (!string.IsNullOrWhiteSpace(evaluatedSegment.QualityEstimation))
+                {
+                    var evaluationTime = DateTime.Now.ToUniversalTime();
+                    sr.MetaData[Constants.METADATA_EVALUATED_AT_PREFIX + tqeIndex] = evaluationTime.ToString(Constants.METADATA_EVALUATED_AT_FORMAT);
+                    sr.MetaData[Constants.METADATA_SYSTEM_PREFIX + tqeIndex] = Constants.METADATA_SYSTEM_NAME;
+                    sr.MetaData[Constants.METADATA_SCORE_PREFIX + tqeIndex] = GetScoreFromQE(evaluatedSegment.QualityEstimation);
+                    sr.MetaData[Constants.METADATA_MODEL_PREFIX + tqeIndex] = mappedPair.SelectedModel.Name;
+                    sr.MetaData[Constants.METADATA_DESCRIPTION_PREFIX + tqeIndex] = string.Format(Constants.METADATA_DESCRIPTION, Constants.METADATA_SYSTEM_NAME,
+                        mappedPair.SelectedModel.Name);
+
+                }
+
+                searchResults[i].Add(sr);
             }
 
             ManageBatchTaskWindow();
             return searchResults;
         }
 
-        private static EditorController TryGetEditorController()
+        private static string GetScoreFromQE(string qualityEstimation) => QESCoreMap[qualityEstimation.ToLower()];
+
+        private static readonly Dictionary<string, string> QESCoreMap = new()
         {
-            try
-            {
-                var editorController = SdlTradosStudio.Application.GetController<EditorController>();
-                return editorController;
-            }
-            catch { return null; }
-        }
+            ["poor"] = "33",
+            ["adequate"] = "66",
+            ["good"] = "80"
+        };
 
         private string GetFilePath(IEnumerable<TranslationUnit> translationUnits)
         {
@@ -216,23 +230,8 @@ namespace LanguageWeaverProvider
                    _currentTranslationUnit?.ConfirmationLevel != ConfirmationLevel.Unspecified;
         }
 
-        private SearchResults CreateDraftNotResentSearchResults(Segment segment)
-        {
-            var targetSegment = new Segment(_languagePair.TargetCulture);
-
-            var searchResults = new SearchResults { SourceSegment = segment.Duplicate() };
-            return searchResults;
-            //targetSegment.Add(PluginResources.TranslationDraftNotResent);
-            //         var tuSearchResult = CreateTuSearchResult(segment, targetSegment);
-
-            //         searchResults.Add(new SearchResult(tuSearchResult)
-            //         {
-            //             ScoringResult = new ScoringResult { BaseScore = 0 },
-            //             TranslationProposal = new TranslationUnit(tuSearchResult)
-            //         });
-
-            //return searchResults;
-        }
+        private SearchResults CreateDraftNotResentSearchResults(Segment segment) =>
+            new() { SourceSegment = segment.Duplicate() };
 
         private Segment GetSourceSegment(Segment segment)
         {
@@ -317,58 +316,8 @@ namespace LanguageWeaverProvider
                                      _currentTranslationUnit.ConfirmationLevel == ConfirmationLevel.Draft;
 
             if (isBatchTaskOrDraft) StoreSegmentMetadata(evaluatedSegment, pairMapping, fileName);
-            else SetSegmentMetadataWhenPossible(evaluatedSegment, pairMapping, index, translationOrigin);
         }
 
-        public Dictionary<string, TranslationData> EditorMetadata = new();
-
-        private void SetSegmentMetadataWhenPossible(EvaluatedSegment evaluatedSegment, PairMapping pairMapping, int index,
-            ITranslationOrigin translationOrigin)
-        {
-            var editorController = TryGetEditorController();
-            var activeSegmentPair = editorController?.ActiveDocument?.ActiveSegmentPair;
-
-            if (activeSegmentPair is not null &&
-                _currentTranslationUnit.DocumentSegmentPair.Properties.Id !=
-                activeSegmentPair.Properties.Id) return;
-
-            var translationData = new TranslationData
-            {
-                QualityEstimation = evaluatedSegment.QualityEstimation,
-                Translation = evaluatedSegment.Translation.ToString(),
-                ModelName = pairMapping.SelectedModel.Name,
-                Model = pairMapping.SelectedModel.Model,
-                AutoSendFeedback = _translationOptions.ProviderSettings.AutosendFeedback,
-                Index = index
-            };
-
-            translationOrigin.SetMetaData(translationData);
-
-            if (activeSegmentPair?.Properties is null) return;
-
-            EditorMetadata[activeSegmentPair.Properties.Id.Id] = translationData;
-            editorController.ActiveDocument.SegmentsConfirmationLevelChanged +=
-                ActiveDocument_SegmentsConfirmationLevelChanged;
-        }
-
-        private void ActiveDocument_SegmentsConfirmationLevelChanged(object sender, EventArgs e)
-        {
-
-            var editorController = TryGetEditorController();
-
-            var activeSegmentPair = editorController?.ActiveDocument?.ActiveSegmentPair;
-            if (activeSegmentPair is null) return;
-
-            var activeSegmentPairId = activeSegmentPair.Properties.Id.Id;
-            if (!EditorMetadata.TryGetValue(activeSegmentPairId, out var translationData)) return;
-
-            activeSegmentPair.Properties.TranslationOrigin.SetMetaData(translationData);
-            editorController.ActiveDocument.UpdateSegmentPairProperties(activeSegmentPair, activeSegmentPair.Properties);
-            EditorMetadata.Remove(activeSegmentPairId);
-
-            editorController.ActiveDocument.SegmentsConfirmationLevelChanged -=
-                ActiveDocument_SegmentsConfirmationLevelChanged;
-        }
 
         private void StoreSegmentMetadata(EvaluatedSegment evaluatedSegment, PairMapping pairMapping, string fileName)
         {
