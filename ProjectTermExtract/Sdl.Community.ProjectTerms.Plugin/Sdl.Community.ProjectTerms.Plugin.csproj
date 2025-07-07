@@ -4,6 +4,7 @@
 		<TargetFramework>net48</TargetFramework>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
+		<MultiTermFolder>$(MSBuildProgramFiles32)\Trados\MultiTerm\MultiTerm18</MultiTermFolder>
 		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
 		<CreatePluginPackage>true</CreatePluginPackage>
 	</PropertyGroup>
@@ -40,9 +41,9 @@
       <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Implementation.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.MultiTerm.TMO.Interop">
-      <HintPath>$(TradosFolder)\Sdl.MultiTerm.TMO.Interop.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>$(MultiTermFolder)\Sdl.MultiTerm.TMO.Interop.dll</HintPath>
     </Reference>
+    
     <Reference Include="Sdl.ProjectApi">
       <HintPath>$(TradosFolder)\Sdl.ProjectApi.dll</HintPath>
     </Reference>
