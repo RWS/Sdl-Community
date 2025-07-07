@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LanguageMappingProvider;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -6,8 +7,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using LanguageMappingProvider.Database.Interface;
-using LanguageMappingProvider.Model;
 using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.ViewModel;
 using static LanguageWeaverProvider.ViewModel.PairMappingViewModel;

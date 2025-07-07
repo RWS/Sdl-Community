@@ -1,11 +1,11 @@
-﻿using System;
+﻿using LanguageMappingProvider;
+using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
-using LanguageMappingProvider.Database.Interface;
 using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.LanguageMappingProvider;
 using LanguageWeaverProvider.LanguageMappingProvider.View;
