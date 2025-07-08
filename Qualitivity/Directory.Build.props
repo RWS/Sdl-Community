@@ -1,6 +1,6 @@
 <Project>
 	<PropertyGroup>
-		<TradosFolder>C:\Program Files (x86)\Trados\Trados Studio\Studio18beta</TradosFolder>
+		<TradosFolder>C:\Program Files (x86)\Trados\Trados Studio\Studio18</TradosFolder>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	</PropertyGroup>
 </Project>
