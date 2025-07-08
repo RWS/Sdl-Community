@@ -307,6 +307,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             Options.SplitSentencesHandling = SplitSentencesType;
             Options.ApiVersion = ApiVersion;
             Options.IgnoreTagsParameter = IgnoreTags;
+            Options.ModelType = ModelType;
 
             var glossaryIds = Options.LanguagePairOptions.ToDictionary(
                 lpo => (lpo.LanguagePair.SourceCulture.Name, lpo.LanguagePair.TargetCulture.Name),
