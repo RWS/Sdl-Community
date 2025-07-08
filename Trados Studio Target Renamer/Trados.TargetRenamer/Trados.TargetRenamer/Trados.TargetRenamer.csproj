@@ -80,6 +80,7 @@
 		<Reference Include="Sdl.TellMe.ProviderApi">
 			<HintPath>$(TradosFolder)\Sdl.TellMe.ProviderApi.dll</HintPath>
 		</Reference>
+		<Reference Include="System.Windows.Forms" />
 	</ItemGroup>
 	
   <ItemGroup>
