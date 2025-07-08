@@ -10,7 +10,9 @@
         public static readonly string TellMe_Documentation_Name = $"{TellMe_Name} Documentation";
         public static readonly string TellMe_Documentation_Url = "https://appstore.rws.com/Plugin/39?tab=documentation";
         public static readonly string TellMe_SourceCode_Name = $"{TellMe_Name} Source Code";
-        public static readonly string TellMe_SourceCode_Url = "https://github.com/RWS/Sdl-Community/tree/master/SDLDataProtectionSuite";
-        public static readonly string TellMe_Settings_Name = $"{TellMe_Name} Settings";
+        public static readonly string TellMe_SourceCode_Url = "https://github.com/RWS/Sdl-Community/tree/master/Trados%20Data%20Protection%20Suite";
+        public static readonly string TellMe_Settings_Name = $"{TellMe_Name} TM Anonymizer Settings";
+        public static readonly string TellMe_Dps_Settings_Name = $"{TellMe_Name} Settings";
+        public static readonly string TmAnonymizerView = $"{TellMe_Name} TM Anonymizer View";
     }
 }
