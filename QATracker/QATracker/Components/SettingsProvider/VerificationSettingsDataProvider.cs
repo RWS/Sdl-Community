@@ -13,22 +13,24 @@ public class VerificationSettingsDataProvider
 {
     public VerificationProviderSettings GetVerificationSettings(IProject project)
     {
-        return new VerificationProviderSettings
+        var verificationSettings = new VerificationProviderSettings
         {
             ProjectVerificationProviders = GetVerificationSettings(project, null),
             LanguageVerificationProviders = GetLanguageVerificationSettings(project)
         };
+
+        return verificationSettings;
     }
 
-    private Dictionary<string, List<dynamic>> GetLanguageVerificationSettings(IProject project)
+    private Dictionary<string, VerificationSettingsTreeNode> GetLanguageVerificationSettings(IProject project)
     {
-        var languageVerificationSettings = new Dictionary<string, List<dynamic>>();
+        var languageVerificationSettings = new Dictionary<string, VerificationSettingsTreeNode>();
         foreach (var language in project.GetProjectInfo().TargetLanguages)
             languageVerificationSettings.Add(language.DisplayName, GetVerificationSettings(project, language));
         return languageVerificationSettings;
     }
 
-    private List<dynamic> GetVerificationSettings(IProject project, Language language)
+    private VerificationSettingsTreeNode GetVerificationSettings(IProject project, Language language)
     {
         var projectInfo = project.GetProjectInfo();
         var settingsReader =
@@ -38,7 +40,10 @@ public class VerificationSettingsDataProvider
             ? settingsReader.ReadProjectVerificationSettings()
             : settingsReader.ReadProjectVerificationSettings(language);
 
-        var settingsXml = new VerificationSettingsTreeNode();
+        var settingsXml = new VerificationSettingsTreeNode
+        {
+            Name = "Verification Settings"
+        };
         foreach (var settings in verifiers)
         {
 //            var category = CategoryMap.GetCategoryName(settings.Key);
@@ -49,15 +54,15 @@ public class VerificationSettingsDataProvider
             {
                 foreach (var settingsCategory in verifiers[settings.Key])
                 {
-                    
+                    //verifierSettings add settings from project
                 }
             }
 
-            
+            settingsXml.Children.Add(verifierSettings);
 
         }
 
-        return null;
+        return settingsXml;
         //var projectSettings = language is null ? project.GetSettings() : project.GetSettings(language);
         //var verificationSettingsGroups = projectSettings.GetSettingsGroupIds().Where(id => id.ToLower().Contains("verif")).Select(id => projectSettings.GetSettingsGroup(id));
         //return verificationSettingsGroups.Select(settingsGroup => VerificationSettingsBuilder.Create(settingsGroup)).ToList();

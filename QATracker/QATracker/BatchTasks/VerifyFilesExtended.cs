@@ -27,9 +27,11 @@ public class VerifyFilesExtended : AbstractFileContentProcessingAutomaticTask
         var extendedReport = ReportExtender.CreateReport(xmlString);
 
         var activeQaProvidersXmlString = VerificationSettingsDataProvider.GetVerificationSettings(Project);
-        //extendedReport.AddActiveQaProviders(activeQaProvidersXmlString);
+        extendedReport.AddActiveQaProviders(activeQaProvidersXmlString);
 
-        CreateReport(extendedReport.GetExtendedReportXmlString());
+        var extendedReportXmlString = extendedReport.GetExtendedReportXmlString();
+
+        CreateReport(extendedReportXmlString);
     }
 
     public VerificationSettingsDataProvider VerificationSettingsDataProvider { get; set; } = new();

@@ -30,7 +30,7 @@ public class DefaultSettingsTests
     {
         var defaultSettings = DefaultSettingsProvider.GetDefaultSettingsForVerifier(Constants.QaVerificationSettings);
 
-        var serializer = new XmlSerializer(typeof(VerificationSettingsTreeNode), "");
+        var serializer = new XmlSerializer(typeof(VerificationSettingsTreeNode));
         using var stringWriter = new StringWriter();
 
         serializer.Serialize(stringWriter, defaultSettings);

@@ -3,6 +3,24 @@
 	<xsl:template match="/task">
 		<head>
 			<link rel="stylesheet" href="C:/Things/Code/SDL/Trados/Bin/Mixed Platforms/Debug/ReportResources/css/reports.css" />
+			<style>
+				<!-- Add styles for the QA Providers tree view -->
+				.qa-providers-container { margin: 20px 0; }
+				.qa-providers-container ul { list-style: none; margin: 0; padding: 0; }
+				.qa-providers-container li { margin: 4px 0; }
+				.qa-providers-container .toggle {
+				cursor: pointer;
+				font-weight: bold;
+				display: inline-block;
+				width: 12px;
+				text-align: center;
+				user-select: none;
+				}
+				.qa-providers-container .invisible { visibility: hidden; }
+				.qa-providers-container .children { display: none; margin-left: 20px; margin-top: 4px; }
+				.qa-providers-container .expanded .children { display: block; }
+				.qa-providers-container .value { color: red; }
+			</style>
 			<script>
 				<![CDATA[
 					
@@ -41,6 +59,17 @@
 						else
 						{
 							document.getElementById(guid).click();
+						}
+					}
+					
+					function toggleCategory(toggle) {
+						var li = toggle.parentElement;
+						if (li.classList.contains('expanded')) {
+							li.classList.remove('expanded');
+							toggle.textContent = '+';
+						} else {
+							li.classList.add('expanded');
+							toggle.textContent = '–';
 						}
 					}
 					
@@ -145,6 +174,16 @@
 					</tr>
 				</table>
 
+				<!-- Add QA Providers section if it exists -->
+				<xsl:if test="//activeQaProviders">
+					<h2>
+						Active QA Providers
+					</h2>
+					<div class="qa-providers-container">
+						<xsl:apply-templates select="//activeQaProviders/*/*" mode="qa-tree"/>
+					</div>
+				</xsl:if>
+
 				<h2>
 					Statistics
 				</h2>
@@ -170,6 +209,30 @@
 				</table>
 			</body>
 		</html>
+	</xsl:template>
+
+	<!-- Templates for QA Providers tree view -->
+	<xsl:template match="*[*]" mode="qa-tree">
+		<ul>
+			<li>
+				<span class="toggle" onclick="toggleCategory(this)">+</span>
+				<xsl:text> </xsl:text>
+				<xsl:value-of select="@Name"/>
+				<ul class="children">
+					<xsl:apply-templates select="*" mode="qa-tree"/>
+				</ul>
+			</li>
+		</ul>
+	</xsl:template>
+
+	<xsl:template match="*[not(*)]" mode="qa-tree">
+		<li>
+			<span class="toggle invisible">&#160;</span>
+			<xsl:text> </xsl:text>
+			<xsl:value-of select="@Name"/>: <span class="value">
+				<xsl:value-of select="."/>
+			</span>
+		</li>
 	</xsl:template>
 
 	<xsl:template match="plugin">
@@ -327,7 +390,7 @@
 						<td valign="top" style="font-weight:bold;color:gray">
 							Message
 						</td>
-						
+
 						<td valign="top" style="font-weight:bold;color:gray">
 							More Specific
 						</td>
@@ -339,7 +402,7 @@
 								Target
 							</td>
 						</xsl:if>
-						
+
 						<td valign="top" style="font-weight:bold;color:gray">
 							Verifier
 						</td>
@@ -426,7 +489,7 @@
 						<xsl:value-of select = "Target" />
 					</td>
 				</xsl:if>
-				
+
 				<td valign="top" style="white-space:nowrap; {$GrayStyle}">
 					<xsl:value-of select="Origin"/>
 				</td>
