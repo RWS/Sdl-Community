@@ -48,7 +48,7 @@ public class ExtendedReport(string originalXmlString) : IExtendedReport
         var beforeClosing = OriginalXmlString.Substring(0, afterClosingTagIndex);
         var afterClosing = OriginalXmlString.Substring(closingTagIndex);
 
-        return $"{beforeClosing}<activeQaProviders>{ActiveQaProvidersXml}</activeQaProviders>{afterClosing}";
+        return $"{beforeClosing}{ActiveQaProvidersXml}{afterClosing}";
 
     }
 }

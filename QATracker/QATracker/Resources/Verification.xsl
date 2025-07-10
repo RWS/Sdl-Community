@@ -1,28 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:XmlReporting="urn:XmlReporting">
 	<xsl:template match="/task">
-		<head>
-			<link rel="stylesheet" href="C:/Things/Code/SDL/Trados/Bin/Mixed Platforms/Debug/ReportResources/css/reports.css" />
-			<style>
-				<!-- Add styles for the QA Providers tree view -->
-				.qa-providers-container { margin: 20px 0; }
-				.qa-providers-container ul { list-style: none; margin: 0; padding: 0; }
-				.qa-providers-container li { margin: 4px 0; }
-				.qa-providers-container .toggle {
-				cursor: pointer;
-				font-weight: bold;
-				display: inline-block;
-				width: 12px;
-				text-align: center;
-				user-select: none;
-				}
-				.qa-providers-container .invisible { visibility: hidden; }
-				.qa-providers-container .children { display: none; margin-left: 20px; margin-top: 4px; }
-				.qa-providers-container .expanded .children { display: block; }
-				.qa-providers-container .value { color: red; }
-			</style>
-			<script>
-				<![CDATA[
+		<html>
+			<head>
+				<link rel="stylesheet" href="C:/Things/Code/SDL/Trados/Bin/Mixed Platforms/Debug/ReportResources/css/reports.css" />
+				<style>
+					<!-- Add styles for the QA Providers tree view -->
+					.qa-providers-container { margin: 20px 0; }
+					.qa-providers-container ul { list-style: none; margin: 0; padding: 0; }
+					.qa-providers-container li { margin: 4px 0; }
+					.qa-providers-container .toggle {
+					cursor: pointer;
+					font-weight: bold;
+					display: inline-block;
+					width: 12px;
+					text-align: center;
+					user-select: none;
+					}
+					.qa-providers-container .invisible { visibility: hidden; }
+					.qa-providers-container .children { display: none; margin-left: 20px; margin-top: 4px; }
+					.qa-providers-container li.expanded > .children { display: block; }
+					.qa-providers-container .value { color: red; }
+					.qa-providers-container .enabled {color: green; }
+				</style>
+				<script>
+					<![CDATA[
 					
 					function OpenFileAndRunVerification(guid)
 					{
@@ -63,7 +65,9 @@
 					}
 					
 					function toggleCategory(toggle) {
+						console.log("toggle");
 						var li = toggle.parentElement;
+						
 						if (li.classList.contains('expanded')) {
 							li.classList.remove('expanded');
 							toggle.textContent = '+';
@@ -71,6 +75,9 @@
 							li.classList.add('expanded');
 							toggle.textContent = '–';
 						}
+						
+						
+						
 					}
 					
 				window.addEventListener('DOMContentLoaded', function() {
@@ -98,9 +105,8 @@
 				}
 
            ]]>
-			</script>
-		</head>
-		<html>
+				</script>
+			</head>
 			<body>
 
 				<table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -175,12 +181,12 @@
 				</table>
 
 				<!-- Add QA Providers section if it exists -->
-				<xsl:if test="//activeQaProviders">
+				<xsl:if test="VerificationSettings">
 					<h2>
 						Active QA Providers
 					</h2>
 					<div class="qa-providers-container">
-						<xsl:apply-templates select="//activeQaProviders/*/*" mode="qa-tree"/>
+						<xsl:apply-templates select="VerificationSettings" mode="qa-tree"/>
 					</div>
 				</xsl:if>
 
@@ -211,6 +217,8 @@
 		</html>
 	</xsl:template>
 
+
+
 	<!-- Templates for QA Providers tree view -->
 	<xsl:template match="*[*]" mode="qa-tree">
 		<ul>
@@ -218,6 +226,7 @@
 				<span class="toggle" onclick="toggleCategory(this)">+</span>
 				<xsl:text> </xsl:text>
 				<xsl:value-of select="@Name"/>
+
 				<ul class="children">
 					<xsl:apply-templates select="*" mode="qa-tree"/>
 				</ul>
@@ -229,9 +238,20 @@
 		<li>
 			<span class="toggle invisible">&#160;</span>
 			<xsl:text> </xsl:text>
-			<xsl:value-of select="@Name"/>: <span class="value">
-				<xsl:value-of select="."/>
-			</span>
+			<xsl:value-of select="@Name"/>
+			<xsl:choose>
+				<xsl:when test=". = 'True'">
+					: <span class="enabled">
+						<xsl:value-of select="."/>
+					</span>
+				</xsl:when>
+
+				<xsl:otherwise>
+					: <span class="value">
+						<xsl:value-of select="."/>
+					</span>
+				</xsl:otherwise>
+			</xsl:choose>
 		</li>
 	</xsl:template>
 
