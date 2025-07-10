@@ -1,48 +1,36 @@
 ﻿using Sdl.Core.Globalization;
 using Sdl.ProjectAutomation.Core;
-using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace QATracker.Components.SettingsProvider.Components
 {
-    public class SettingsReader
+    public class ProjectSettingsReader
     {
-        private readonly XDocument _doc;
-
-        private static List<string> DefaultVerifiers { get; } =
-        [
-            Constants.SettingsTagVerifier,
-            Constants.SettingsTermVerifier,
-            Constants.QaVerificationSettings
-        ];
-
-        public SettingsReader(string sdlprojFilePath)
-        {
-            _doc = XDocument.Load(sdlprojFilePath);
-        }
-
         /// <summary>
         /// Reads all verification-related settings for the project (project-level SettingsBundle).
         /// </summary>
-        public Dictionary<string, Dictionary<string, string>> ReadProjectVerificationSettings(Language language = null)
+        public Dictionary<string, Dictionary<string, string>> ReadProjectVerificationSettings(IProject project, Language language = null)
         {
-            var result = new Dictionary<string, Dictionary<string, string>>();
-            string settingsBundleGuid = null;
+            var projectInfo = project.GetProjectInfo();
+            var sdlprojFilePath = Path.Combine(projectInfo.LocalProjectFolder, $"{projectInfo.Name}.sdlproj");
 
+            var doc = XDocument.Load(sdlprojFilePath);
+
+            var result = new Dictionary<string, Dictionary<string, string>>();
+            string settingsBundleGuid;
             if (language == null)
             {
                 // Project-level
-                var projectElement = _doc.Root;
+                var projectElement = doc.Root;
                 settingsBundleGuid = projectElement?.Attribute("SettingsBundleGuid")?.Value;
             }
             else
             {
                 // Language-specific
-                var langFile = _doc.Descendants("LanguageDirection")
+                var langFile = doc.Descendants("LanguageDirection")
                     .FirstOrDefault(lf => (string)lf.Attribute("TargetLanguageCode") == language.ToString());
                 settingsBundleGuid = langFile?.Attribute("SettingsBundleGuid")?.Value;
             }
@@ -50,7 +38,7 @@ namespace QATracker.Components.SettingsProvider.Components
             if (string.IsNullOrEmpty(settingsBundleGuid))
                 return result;
 
-            var settingsBundle = _doc
+            var settingsBundle = doc
                 .Descendants("SettingsBundle")
                 .FirstOrDefault(sb => (string)sb.Attribute("Guid") == settingsBundleGuid);
 
@@ -77,7 +65,6 @@ namespace QATracker.Components.SettingsProvider.Components
 
             return result;
         }
-
 
         private static void AddMissingCategories(Dictionary<string, Dictionary<string, string>> result)
         {

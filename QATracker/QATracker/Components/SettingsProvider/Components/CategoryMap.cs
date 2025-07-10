@@ -1,16 +1,13 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 
 namespace QATracker.Components.SettingsProvider.Components
 {
     public static class CategoryMap
     {
-       
         public static readonly Dictionary<string, object> DefaultSubcategoryValuesMap = new()
         {
             // Forgotten and empty translation
             ["CheckUntranslatedSegments"] = true,
-
 
             // Compare source and target segments
             ["CheckIdenticalSegments"] = false,
@@ -25,8 +22,6 @@ namespace QATracker.Components.SettingsProvider.Components
 
             // Ignore segments with fewer than # words
             ["MinimalWordCountValue"] = 2, // Default value in the UI
-
-
 
             // Check target segments for forbidden characters
             ["CheckForbiddenChar"] = false,
@@ -118,147 +113,6 @@ namespace QATracker.Components.SettingsProvider.Components
             ["ExcludeFuzzyMatch"] = false,
             ["IgnoreLockedContent"] = false,
             ["EnableTwoLetterTermRecognition"] = false,
-
-        };
-
-        public static readonly Dictionary<string, Dictionary<string, string>> UiStringToSdlprojStringMap = new()
-        {
-            // Segments Verification
-            [Constants.SegmentsVerification] = new()
-            {
-                ["Check for forgotten and empty translations"] = "CheckUntranslatedSegments",
-                ["Source and target are identical"] = "CheckIdenticalSegments",
-                ["Ignore tags"] = "IdenticalSegmentsIgnoreTags",
-                ["Ignore case"] = "IdenticalSegmentsIgnoreCase",
-                ["Shorter by (%)"] = "CheckTargetShorter",
-                ["Longer by (%)"] = "CheckTargetLonger",
-                ["Based on words"] = "DiffUnitWord",
-                ["Based on characters"] = "DiffUnitWord",
-                ["Ignore segments with fewer than # words"] = "MinimalWordCountValue",
-                ["Check for forbidden characters"] = "CheckForbiddenChar"
-            },
-            [Constants.SegmentsToExclude] = new()
-            {
-                ["Exclude PerfectMatch and Context Match units"] = "ExcludePerfectMatchSegments",
-                ["Exclude exact matches"] = "ExcludeExactMatches",
-                ["Exclude fuzzy matches down to"] = "ExcludeFuzzyMatches",
-                ["Exclude new translations"] = "ExcludeNewTrans",
-                ["Exclude repetitions"] = "ExcludeRepetition",
-                ["Exclude confirmed translations"] = "ExcludeConfirmed",
-                ["Exclude locked segments"] = "ExcludeLocked",
-                ["Exclude target segment identical to source"] = "ExcludeIdentical",
-                ["Check only segments which are in following contexts"] = "ElementContextExclusion",
-                ["Apply exclusion list to search for not translated segments"] = "ExclusionStringUntranslated",
-                ["Apply exclusion list to search for target segments identical to source"] = "ExclusionStringIdentical",
-                ["Ignore case"] = "ExclusionStringIgnoreCase",
-                ["Exclusions use regular expressions"] = "ExclusionStringRegEx",
-                ["Report all non-excluded segments"] = "ReportAllNonExcluded"
-            },
-
-            [Constants.Inconsistencies] = new()
-            {
-                ["Check for inconsistent translations"] = "CheckInconsistencies",
-                ["Ignore tags"] = "InconsistenciesIgnoreTags",
-                ["Ignore case inconsistencies"] = "InconsistenciesIgnoreCase",
-                ["Check for repeated words in target"] = "CheckRepeatedWords",
-                ["Ignore numbers"] = "RepeatedWordsNumbers",
-                ["Ignore case repeated words"] = "RepeatedWordsIgnoreCase",
-                ["Check for unedited fuzzy matches"] = "UneditedSegments",
-                ["Confirmed segments only"] = "UneditedSegmentsSelectedFuzzyOnly",
-                ["All segments"] = "UneditedNotConfirmed",
-                ["Only check if match scores below"] = "OnlyCheckIfMatchScoresBelow"
-            },
-
-
-            [Constants.Punctuation] = new()
-            {
-                ["Check source and target end in same punctuation"] = "CheckPunctuationDifferences",
-                ["Check spanish punctuation"] = "CheckSpanishPunctuation",
-                ["Check unintentional spaces before"] = "CheckPunctuationSpace",
-                ["French compliant check"] = "PunctuationSpacesFrench",
-                ["Check for multiple spaces"] = "CheckMultipleSpaces",
-                ["Check for multiple dots"] = "CheckMultipleDots",
-                ["Ignore ellipsis dots"] = "Ignore3Dots",
-                ["Check for extra space at end of target segment"] = "ExtraEndSpace",
-                ["Check capitalization of initial letters"] = "CheckInitialCaps",
-                ["Check consistency of global capitalization"] = "CheckGlobalCaps",
-                ["Check brackets"] = "CheckBrackets"
-            },
-
-            [Constants.Numbers] = new()
-            {
-                ["Check numbers"] = "CheckNumbers",
-                ["Check dates"] = "CheckDates",
-                ["Check times"] = "CheckTimes",
-                ["Check measurements and currencies"] = "CheckMeasurements"
-            },
-
-
-            // Word List
-            [Constants.WordList] = new()
-            {
-                ["Check word list"] = "CheckWordList",
-                ["Ignore case"] = "WordListIgnoreCase",
-                ["Search whole words only"] = "WordListWholeWord"
-            },
-
-            // Regular Expressions
-            [Constants.RegularExpressions] = new()
-            {
-                ["Search regular expressions"] = "CheckRegEx",
-                ["Ignore case"] = "RegExRule.IgnoreCase"
-            },
-
-            // Trademark Check
-            [Constants.TrademarkCheck] = new()
-            {
-                ["Check trademark characters"] = "CheckTrademarks"
-            },
-
-            // Length Verification
-            [Constants.LengthVerification] = new()
-            {
-                ["Check length limitation"] = "CheckAbsoluteLength",
-                ["Check if target segments are within file specific limits"] = "CheckFilterLengthLimit",
-                ["Check if target segments are longer than character count"] = "AbsoluteCharCountValue",
-                ["Check all segment contexts"] = "CheckAllContexts",
-                ["Check the following contexts only"] = "AbsoluteLengthElements"
-            },
-
-
-            // Tag Verifier (Common)
-            [Constants.Common] = new()
-            {
-                ["Tags added"] = "AddedTagsErrorLevel",
-                ["Tags deleted"] = "DeletedTagsErrorLevel",
-                ["Tag order change"] = "TagOrderChangedErrorLevel",
-                ["Ghost tags"] = "GhostTagErrorLevel",
-                ["Spacing around tags"] = "SpaceAroundTagsErrorLevel",
-                ["Ignore formatting tags"] = "IgnoreFormattingTags",
-                ["Ignore locked segments"] = "IgnoreLockedSegments",
-                ["Ignore difference between normal and non-breaking space"] = "TreatNonBreakingSpaceAsSpace",
-                ["Check for tag id mismatch"] = "CheckForIncludeTagId"
-            },
-
-            // Term Verifier (SettingsTermVerifier)
-            [Constants.VerificationSettings] = new()
-            {
-                ["Check for possible non-usage of the target terms"] = "CheckNonUsage",
-                ["Check for terms which may have been set as forbidden"] = "CheckForbidden",
-                ["Check for terms without the target term equivalent"] = "CheckWithoutTarget",
-                ["Exclude PerfectMatch units"] = "ExcludePerfectMatch",
-                ["Exclude exact matches"] = "ExcludeExactMatch",
-                ["Exclude fuzzy matches down to"] = "ExcludeFuzzyMatch",
-                ["Ignore locked segments"] = "IgnoreLockedContent",
-                ["Enable recognition of two-letter terms"] = "EnableTwoLetterTermRecognition",
-                ["Forbidden term definitions"] = "ForbiddenDefValues",
-                ["Forbidden term definition 0"] = "ForbiddenDefValues0",
-                ["Forbidden term definition 1"] = "ForbiddenDefValues1",
-                ["Forbidden term definition 2"] = "ForbiddenDefValues2",
-                ["Forbidden term definition 3"] = "ForbiddenDefValues3",
-                ["Forbidden term definition 4"] = "ForbiddenDefValues4",
-                ["Forbidden term definition 5"] = "ForbiddenDefValues5",
-            }
         };
 
         public static readonly Dictionary<string, string> SdlprojStringToUiStringMap = new()
@@ -340,7 +194,7 @@ namespace QATracker.Components.SettingsProvider.Components
             ["AbsoluteCharCountValue"] = "Check if target segments are longer than character count",
             ["CheckAllContexts"] = "Check all segment contexts",
             ["AbsoluteLengthElements"] =
-                "Check the following contexts only", 
+                "Check the following contexts only",
 
             // Tag Verifier (Common)
             ["AddedTagsErrorLevel"] = "Tags added",
@@ -371,6 +225,142 @@ namespace QATracker.Components.SettingsProvider.Components
             ["ForbiddenDefValues5"] = "Forbidden term definition 5",
         };
 
+        public static readonly Dictionary<string, Dictionary<string, string>> UiStringToSdlprojStringMap = new()
+        {
+            // Segments Verification
+            [Constants.SegmentsVerification] = new()
+            {
+                ["Check for forgotten and empty translations"] = "CheckUntranslatedSegments",
+                ["Source and target are identical"] = "CheckIdenticalSegments",
+                ["Ignore tags"] = "IdenticalSegmentsIgnoreTags",
+                ["Ignore case"] = "IdenticalSegmentsIgnoreCase",
+                ["Shorter by (%)"] = "CheckTargetShorter",
+                ["Longer by (%)"] = "CheckTargetLonger",
+                ["Based on words"] = "DiffUnitWord",
+                ["Based on characters"] = "DiffUnitWord",
+                ["Ignore segments with fewer than # words"] = "MinimalWordCountValue",
+                ["Check for forbidden characters"] = "CheckForbiddenChar"
+            },
+            [Constants.SegmentsToExclude] = new()
+            {
+                ["Exclude PerfectMatch and Context Match units"] = "ExcludePerfectMatchSegments",
+                ["Exclude exact matches"] = "ExcludeExactMatches",
+                ["Exclude fuzzy matches down to"] = "ExcludeFuzzyMatches",
+                ["Exclude new translations"] = "ExcludeNewTrans",
+                ["Exclude repetitions"] = "ExcludeRepetition",
+                ["Exclude confirmed translations"] = "ExcludeConfirmed",
+                ["Exclude locked segments"] = "ExcludeLocked",
+                ["Exclude target segment identical to source"] = "ExcludeIdentical",
+                ["Check only segments which are in following contexts"] = "ElementContextExclusion",
+                ["Apply exclusion list to search for not translated segments"] = "ExclusionStringUntranslated",
+                ["Apply exclusion list to search for target segments identical to source"] = "ExclusionStringIdentical",
+                ["Ignore case"] = "ExclusionStringIgnoreCase",
+                ["Exclusions use regular expressions"] = "ExclusionStringRegEx",
+                ["Report all non-excluded segments"] = "ReportAllNonExcluded"
+            },
+
+            [Constants.Inconsistencies] = new()
+            {
+                ["Check for inconsistent translations"] = "CheckInconsistencies",
+                ["Ignore tags"] = "InconsistenciesIgnoreTags",
+                ["Ignore case inconsistencies"] = "InconsistenciesIgnoreCase",
+                ["Check for repeated words in target"] = "CheckRepeatedWords",
+                ["Ignore numbers"] = "RepeatedWordsNumbers",
+                ["Ignore case repeated words"] = "RepeatedWordsIgnoreCase",
+                ["Check for unedited fuzzy matches"] = "UneditedSegments",
+                ["Confirmed segments only"] = "UneditedSegmentsSelectedFuzzyOnly",
+                ["All segments"] = "UneditedNotConfirmed",
+                ["Only check if match scores below"] = "OnlyCheckIfMatchScoresBelow"
+            },
+
+            [Constants.Punctuation] = new()
+            {
+                ["Check source and target end in same punctuation"] = "CheckPunctuationDifferences",
+                ["Check spanish punctuation"] = "CheckSpanishPunctuation",
+                ["Check unintentional spaces before"] = "CheckPunctuationSpace",
+                ["French compliant check"] = "PunctuationSpacesFrench",
+                ["Check for multiple spaces"] = "CheckMultipleSpaces",
+                ["Check for multiple dots"] = "CheckMultipleDots",
+                ["Ignore ellipsis dots"] = "Ignore3Dots",
+                ["Check for extra space at end of target segment"] = "ExtraEndSpace",
+                ["Check capitalization of initial letters"] = "CheckInitialCaps",
+                ["Check consistency of global capitalization"] = "CheckGlobalCaps",
+                ["Check brackets"] = "CheckBrackets"
+            },
+
+            [Constants.Numbers] = new()
+            {
+                ["Check numbers"] = "CheckNumbers",
+                ["Check dates"] = "CheckDates",
+                ["Check times"] = "CheckTimes",
+                ["Check measurements and currencies"] = "CheckMeasurements"
+            },
+
+            // Word List
+            [Constants.WordList] = new()
+            {
+                ["Check word list"] = "CheckWordList",
+                ["Ignore case"] = "WordListIgnoreCase",
+                ["Search whole words only"] = "WordListWholeWord"
+            },
+
+            // Regular Expressions
+            [Constants.RegularExpressions] = new()
+            {
+                ["Search regular expressions"] = "CheckRegEx",
+                ["Ignore case"] = "RegExRule.IgnoreCase"
+            },
+
+            // Trademark Check
+            [Constants.TrademarkCheck] = new()
+            {
+                ["Check trademark characters"] = "CheckTrademarks"
+            },
+
+            // Length Verification
+            [Constants.LengthVerification] = new()
+            {
+                ["Check length limitation"] = "CheckAbsoluteLength",
+                ["Check if target segments are within file specific limits"] = "CheckFilterLengthLimit",
+                ["Check if target segments are longer than character count"] = "AbsoluteCharCountValue",
+                ["Check all segment contexts"] = "CheckAllContexts",
+                ["Check the following contexts only"] = "AbsoluteLengthElements"
+            },
+
+            // Tag Verifier (Common)
+            [Constants.Common] = new()
+            {
+                ["Tags added"] = "AddedTagsErrorLevel",
+                ["Tags deleted"] = "DeletedTagsErrorLevel",
+                ["Tag order change"] = "TagOrderChangedErrorLevel",
+                ["Ghost tags"] = "GhostTagErrorLevel",
+                ["Spacing around tags"] = "SpaceAroundTagsErrorLevel",
+                ["Ignore formatting tags"] = "IgnoreFormattingTags",
+                ["Ignore locked segments"] = "IgnoreLockedSegments",
+                ["Ignore difference between normal and non-breaking space"] = "TreatNonBreakingSpaceAsSpace",
+                ["Check for tag id mismatch"] = "CheckForIncludeTagId"
+            },
+
+            // Term Verifier (SettingsTermVerifier)
+            [Constants.VerificationSettings] = new()
+            {
+                ["Check for possible non-usage of the target terms"] = "CheckNonUsage",
+                ["Check for terms which may have been set as forbidden"] = "CheckForbidden",
+                ["Check for terms without the target term equivalent"] = "CheckWithoutTarget",
+                ["Exclude PerfectMatch units"] = "ExcludePerfectMatch",
+                ["Exclude exact matches"] = "ExcludeExactMatch",
+                ["Exclude fuzzy matches down to"] = "ExcludeFuzzyMatch",
+                ["Ignore locked segments"] = "IgnoreLockedContent",
+                ["Enable recognition of two-letter terms"] = "EnableTwoLetterTermRecognition",
+                ["Forbidden term definitions"] = "ForbiddenDefValues",
+                ["Forbidden term definition 0"] = "ForbiddenDefValues0",
+                ["Forbidden term definition 1"] = "ForbiddenDefValues1",
+                ["Forbidden term definition 2"] = "ForbiddenDefValues2",
+                ["Forbidden term definition 3"] = "ForbiddenDefValues3",
+                ["Forbidden term definition 4"] = "ForbiddenDefValues4",
+                ["Forbidden term definition 5"] = "ForbiddenDefValues5",
+            }
+        };
 
         public static Dictionary<string, List<string>> SubcategoriesMap { get; set; } = new()
         {

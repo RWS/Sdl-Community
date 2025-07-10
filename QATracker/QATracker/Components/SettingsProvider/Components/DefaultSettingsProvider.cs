@@ -1,19 +1,18 @@
 ﻿using QATracker.Components.SettingsProvider.Model;
-using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace QATracker.Components.SettingsProvider.Components;
 
 public static class DefaultSettingsProvider
 {
-    
+    private static List<string> DefaultVerifiers { get; } =
+    [
+        Constants.QaVerificationSettings,
+        Constants.SettingsTagVerifier,
+        Constants.SettingsTermVerifier
+    ];
 
-    private static VerificationSettingsTreeNode GetNumberVerifierSettings()
-    {
-        return null;
-    }
-
-   
     public static VerificationSettingsTreeNode GetDefaultSettingsForVerifier(string verifier)
     {
         var categories = new List<VerificationSettingsTreeNode>();
@@ -46,13 +45,8 @@ public static class DefaultSettingsProvider
         return checkerSettings;
     }
 
-    private static VerificationSettingsTreeNode GetTagVerifierSettings()
-    {
-        return null;
-    }
+    public static List<string> GetVerifiersList() => DefaultVerifiers.Concat(GetVerifierPlugins()).ToList();
 
-    private static VerificationSettingsTreeNode GetTermVerifierSettings()
-    {
-        return null;
-    }
+    //TODO: Implement
+    private static List<string> GetVerifierPlugins() => [];
 }

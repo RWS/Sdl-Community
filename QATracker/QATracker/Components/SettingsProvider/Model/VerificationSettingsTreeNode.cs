@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace QATracker.Components.SettingsProvider.Model;
@@ -14,4 +15,6 @@ public class VerificationSettingsTreeNode
 
     [XmlElement("Settings")] 
     public List<VerificationSettingsTreeNode> Children { get; set; } = [];
+
+    
 }
