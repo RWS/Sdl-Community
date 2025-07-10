@@ -1,18 +1,4 @@
-trigger:
-  branches:
-    include:
-     - Studio_2024
-  paths:
-    include:
-     - DeepL Translation Provider/*
-
-pr:
-  branches:
-    include:
-     - Studio_2024
-  paths:
-    include:
-     - DeepL Translation Provider/*
+trigger: none
 
 variables: 
 - group: 'DeepLTranslationProviderSonarVersion'
