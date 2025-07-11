@@ -182,7 +182,7 @@
   <data name="Lock" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        DQAACw0B7QfALAAACBBJREFUeF7tnd+LJNUVx9eXxEQjIkHXHzEoChJiFI0YUJKAmJj3XU3czc4w091V
+        DAAACwwBP0AiyAAACBBJREFUeF7tnd+LJNUVx9eXxEQjIkHXHzEoChJiFI0YUJKAmJj3XU3czc4w091V
         997qrqqJRhL9E/JDTQjBp+D6i/gUVMzPlySCCSiYVyFkEX+AKKKoyegm3jP7rY7sfut2T03P1r295wMf
         GGbq3D7nVHdV3eqaqj2KoiiKoiiKoiiKoiiKoiiKoijLgLX2TGvrW3Jb3mNM+aB11d+MLY+4cf2mG29s
         HrN+U3639Te/jHHl3XlefvPgwYNnYBglJYbD4fm2qL/nV+gzfsV+4Ffy/zq6aVz1F1tU9fr6+nkYXomU
@@ -243,9 +243,6 @@ were ignored by the parser because they were not in the correct format (.sdlxlif
   </data>
   <data name="Download" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\download.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ForumIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\forumicon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="TellMe_Provider" xml:space="preserve">
     <value>{0} TellMe provider</value>
