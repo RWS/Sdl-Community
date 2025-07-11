@@ -50,7 +50,7 @@ public class VerificationSettingsDataProvider
                             break;
                         }
 
-                        verifierSettings.Set(settingsCategory.Key, settingsCategory.Value);
+                        verifierSettings.Set(verifier, settingsCategory.Key, settingsCategory.Value);
                     }
                 }
             }

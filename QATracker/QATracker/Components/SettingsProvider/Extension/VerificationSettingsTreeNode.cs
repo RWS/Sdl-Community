@@ -7,14 +7,16 @@ namespace QATracker.Components.SettingsProvider.Extension
 {
     public static class VerificationSettingsTreeNodeExtension
     {
-        public static void Set(this VerificationSettingsTreeNode settings, string settingId, string value)
+        public static void Set(this VerificationSettingsTreeNode settings, string verifier, string settingId, string value)
         {
-            var settingUi = CategoryMap.SdlprojStringToUiStringMap[settingId];
+            var verificationSettings = CategoryMap.CreateVerificationSettings(verifier);
+
+            var settingUi = verificationSettings.SdlprojStringToUiStringMap[settingId];
             if (settingUi is null)
                 throw new Exception($"Unknown settingId found in project: {settingId}");
 
             var category =
-                CategoryMap.SubcategoriesMap.FirstOrDefault(settingsList => settingsList.Value.Contains(settingUi)).Key;
+                verificationSettings.SubcategoriesMap.FirstOrDefault(settingsList => settingsList.Value.Contains(settingUi)).Key;
 
             if (category == null) throw new Exception($"Setting not mapped to category {settingId}({settingUi})");
 

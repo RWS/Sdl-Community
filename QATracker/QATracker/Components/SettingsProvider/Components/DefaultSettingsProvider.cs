@@ -15,14 +15,16 @@ public static class DefaultSettingsProvider
 
     public static VerificationSettingsTreeNode GetDefaultSettingsForVerifier(string verifier)
     {
+        var verificationSettings = CategoryMap.CreateVerificationSettings(verifier);
+
         var categories = new List<VerificationSettingsTreeNode>();
         var checkerSettings = new VerificationSettingsTreeNode
         {
-            Name = CategoryMap.VerifierNamesMap[verifier],
+            Name = verificationSettings.Name,
             Children = categories
         };
 
-        foreach (var category in CategoryMap.VerifierCategoriesMap[verifier])
+        foreach (var category in verificationSettings.CategoriesList)
         {
             var subcategories = new List<VerificationSettingValue>();
             categories.Add(new VerificationSettingsTreeNode
@@ -30,15 +32,15 @@ public static class DefaultSettingsProvider
                 Name = category,
                 Values = subcategories
             });
-            var subcategoryNameList = CategoryMap.SubcategoriesMap[category];
+            var subcategoryNameList = verificationSettings.SubcategoriesMap[category];
             foreach (var subcategory in subcategoryNameList)
             {
                 var sdlprojSettingString =
-                    CategoryMap.UiStringToSdlprojStringMap[category][subcategory];
+                    verificationSettings.UiStringToSdlprojStringMap[category][subcategory];
                 subcategories.Add(new VerificationSettingValue
                 {
                     Name = subcategory,
-                    Value = CategoryMap.DefaultSubcategoryValuesMap[sdlprojSettingString].ToString()
+                    Value = verificationSettings.DefaultSubcategoryValuesMap[sdlprojSettingString].ToString()
                 });
             }
         }
