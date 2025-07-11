@@ -1,8 +1,11 @@
 
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Rapid Add Term</PlugInName>
-  <Version>4.1.0.0</Version>
+  <Version>4.1.0.1</Version>
   <Description>Rapid Add Term</Description>
   <Author>Trados AppStore Team</Author>
+	<Include>
+		<File>Sdl.MultiTerm.TMO.Interop.dll</File>
+	</Include>
   <RequiredProduct name="TradosStudio" minversion="18.1" maxversion="18.1.9" />
 </PluginPackage>
