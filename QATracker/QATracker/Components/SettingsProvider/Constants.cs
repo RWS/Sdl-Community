@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QATracker.Components.SettingsProvider.Components
+namespace QATracker.Components.SettingsProvider
 {
     public class Constants
     {
@@ -12,7 +12,7 @@ namespace QATracker.Components.SettingsProvider.Components
         public const string SettingsTagVerifier = "SettingsTagVerifier";
         public const string SettingsTermVerifier = "SettingsTermVerifier";
         public const string QaVerificationSettings = "QAVerificationSettings";
-        public const string NumberVerifierSettings = "NumberVerifierSettings";
+        public const string NumberVerifierSettings = "Number Verifier";
 
         //Categories
 
@@ -36,5 +36,19 @@ namespace QATracker.Components.SettingsProvider.Components
         //TermVerifier categories
         public const string VerificationSettings = "Verification Settings";
 
+        //Internal verifier names
+        public const string QaCheckerVerifierName = "QA Verification Settings";
+        public const string TagVerifierName = "Tag Verifier";
+        public const string TermVerifierName = "Term Verifier";
+
+
+        //3rd party verifier names
+        public const string NumberVerifierName = "Trados Number Verifier";
+
+
+        //3rd party verifier categories
+
+        //Trados Number Verifier
+        public const string NumberVerifierSettingsCategory = "NumberVerifierSettings";
     }
 }

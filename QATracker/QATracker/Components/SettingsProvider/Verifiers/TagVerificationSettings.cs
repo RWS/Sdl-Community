@@ -1,5 +1,4 @@
-﻿using QATracker.Components.SettingsProvider.Components;
-using QATracker.Components.SettingsProvider.Verifiers.Interface;
+﻿using QATracker.Components.SettingsProvider.Verifiers.Interface;
 using System.Collections.Generic;
 
 namespace QATracker.Components.SettingsProvider.Verifiers
@@ -23,9 +22,9 @@ namespace QATracker.Components.SettingsProvider.Verifiers
 
         public string Id { get; set; } = Constants.SettingsTagVerifier;
 
-        public string Name { get; set; } = "Tag Verifier";
+        public string Name { get; set; } = Constants.TagVerifierName;
 
-        public Dictionary<string, string> SdlprojStringToUiStringMap { get; set; } = new()
+        public Dictionary<string, string> SettingIdToUiStringMap { get; set; } = new()
         {
             ["AddedTagsErrorLevel"] = "Tags added",
             ["DeletedTagsErrorLevel"] = "Tags deleted",

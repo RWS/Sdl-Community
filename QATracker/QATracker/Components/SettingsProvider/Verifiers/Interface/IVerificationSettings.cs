@@ -8,7 +8,7 @@ namespace QATracker.Components.SettingsProvider.Verifiers.Interface
         Dictionary<string, object> DefaultSubcategoryValuesMap { get; set; }
         string Id { get; set; }
         string Name { get; set; }
-        Dictionary<string, string> SdlprojStringToUiStringMap { get; set; }
+        Dictionary<string, string> SettingIdToUiStringMap { get; set; }
         Dictionary<string, List<string>> SubcategoriesMap { get; set; }
         Dictionary<string, Dictionary<string, string>> UiStringToSdlprojStringMap { get; set; }
     }

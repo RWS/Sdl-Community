@@ -1,5 +1,4 @@
-﻿using QATracker.Components.SettingsProvider.Components;
-using QATracker.Components.SettingsProvider.Verifiers.Interface;
+﻿using QATracker.Components.SettingsProvider.Verifiers.Interface;
 using System.Collections.Generic;
 
 namespace QATracker.Components.SettingsProvider.Verifiers
@@ -111,9 +110,9 @@ namespace QATracker.Components.SettingsProvider.Verifiers
 
         public string Id { get; set; } = Constants.QaVerificationSettings;
 
-        public string Name { get; set; } = "QA Verification Settings";
+        public string Name { get; set; } = Constants.QaCheckerVerifierName;
 
-        public Dictionary<string, string> SdlprojStringToUiStringMap { get; set; } = new()
+        public Dictionary<string, string> SettingIdToUiStringMap { get; set; } = new()
         {
             // Segments Verification
             ["CheckIdenticalSegments"] = "Source and target are identical",

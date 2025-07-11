@@ -11,7 +11,7 @@ namespace QATracker.Components.SettingsProvider.Extension
         {
             var verificationSettings = CategoryMap.CreateVerificationSettings(verifier);
 
-            var settingUi = verificationSettings.SdlprojStringToUiStringMap[settingId];
+            var settingUi = verificationSettings.SettingIdToUiStringMap[settingId];
             if (settingUi is null)
                 throw new Exception($"Unknown settingId found in project: {settingId}");
 

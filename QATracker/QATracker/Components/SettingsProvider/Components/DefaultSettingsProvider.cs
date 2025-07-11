@@ -47,8 +47,6 @@ public static class DefaultSettingsProvider
         return checkerSettings;
     }
 
-    public static List<string> GetVerifiersList() => DefaultVerifiers.Concat(GetVerifierPlugins()).ToList();
-
-    //TODO: Implement
-    private static List<string> GetVerifierPlugins() => [];
+    public static List<string> GetVerifiersList() =>
+        DefaultVerifiers.Concat(PluginManagerWrapper.GetInstalledThirdPartyVerifiers()).ToList();
 }

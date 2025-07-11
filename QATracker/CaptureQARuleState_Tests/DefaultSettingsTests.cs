@@ -1,3 +1,4 @@
+using QATracker.Components.SettingsProvider;
 using QATracker.Components.SettingsProvider.Components;
 using QATracker.Components.SettingsProvider.Model;
 using System.Text;

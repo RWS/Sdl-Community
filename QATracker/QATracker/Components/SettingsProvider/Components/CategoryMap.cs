@@ -15,7 +15,10 @@ namespace QATracker.Components.SettingsProvider.Components
         {
             [Constants.QaVerificationSettings] = new QaVerificationSettings(),
             [Constants.SettingsTagVerifier] = new TagVerificationSettings(),
-            [Constants.SettingsTermVerifier] = new TermVerificationSettings()
+            [Constants.SettingsTermVerifier] = new TermVerificationSettings(),
+
+            //3rd party verifiers
+            [Constants.NumberVerifierSettings] = new NumberVerificationSettings(),
         };
 
         public static IVerificationSettings CreateVerificationSettings(string verifierId) => Verifiers[verifierId];
