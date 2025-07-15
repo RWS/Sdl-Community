@@ -1,118 +1,156 @@
-﻿using QATracker.Components.SettingsProvider.Verifiers.Interface;
+﻿using QATracker.Components.SettingsProvider.Verifiers.BaseClass;
+using QATracker.Components.SettingsProvider.Verifiers.Interface;
 using System.Collections.Generic;
 
 namespace QATracker.Components.SettingsProvider.Verifiers
 {
-    public class QaVerificationSettings : IVerificationSettings
+    public class QaVerificationSettings : VerificationSettings, IVerificationSettings
     {
-        
-        public List<string> CategoriesList { get; set; } =
-        [
-            Constants.SegmentsVerification,
-            Constants.SegmentsToExclude,
-            Constants.Inconsistencies,
-            Constants.Punctuation,
-            Constants.Numbers,
-            Constants.WordList,
-            Constants.RegularExpressions,
-            Constants.TrademarkCheck,
-            Constants.LengthVerification
-        ];
+        public QaVerificationSettings()
+        {
+            Name = Constants.QaCheckerVerifierName;
+            Children =
+            [
+                new()
+                {
+                    Name = Constants.SegmentsVerification,
+                    Values =
+                    [
+                        new() { Name = "Check for forgotten and empty translations", Value = "True" },
+                        new() { Name = "Source and target are identical", Value = "False" },
+                        new() { Name = "Ignore tags", Value = "False" },
+                        new() { Name = "Ignore case", Value = "False" },
+                        new() { Name = "Shorter by (%)", Value = "False" },
+                        new() { Name = "Longer by (%)", Value = "False" },
+                        new() { Name = "Ignore segments with fewer than # words", Value = "2" },
+                        new() { Name = "Based on words", Value = "True" },
+                        new() { Name = "Based on characters", Value = "" },
+                        new() { Name = "Check for forbidden characters", Value = "False" }
+                    ],
+                    Children = null
+                },
+                new()
+                {
+                    Name = Constants.SegmentsToExclude,
+                    Values =
+                    [
+                        new() { Name = "Exclude PerfectMatch and Context Match units", Value = "True" },
+                        new() { Name = "Exclude exact matches", Value = "False" },
+                        new() { Name = "Exclude fuzzy matches down to", Value = "False" },
+                        new() { Name = "Exclude new translations", Value = "False" },
+                        new() { Name = "Exclude repetitions", Value = "False" },
+                        new() { Name = "Exclude confirmed translations", Value = "False" },
+                        new() { Name = "Exclude locked segments", Value = "True" },
+                        new() { Name = "Exclude target segment identical to source", Value = "False" },
+                        new() { Name = "Check only segments which are in following contexts", Value = "False" },
+                        new() { Name = "Apply exclusion list to search for not translated segments", Value = "False" },
+                        new()
+                        {
+                            Name = "Apply exclusion list to search for target segments identical to source",
+                            Value = "False"
+                        },
+                        new() { Name = "Ignore case", Value = "False" },
+                        new() { Name = "Exclusions use regular expressions", Value = "False" },
+                        new() { Name = "Report all non-excluded segments", Value = "False" }
+                    ],
+                    Children = null
+                },
+                new()
+                {
+                    Name = Constants.Inconsistencies,
+                    Values =
+                    [
+                        new() { Name = "Check for inconsistent translations", Value = "False" },
+                        new() { Name = "Ignore tags", Value = "False" },
+                        new() { Name = "Ignore case inconsistencies", Value = "False" },
+                        new() { Name = "Check for repeated words in target", Value = "False" },
+                        new() { Name = "Ignore numbers", Value = "False" },
+                        new() { Name = "Ignore case repeated words", Value = "False" },
+                        new() { Name = "Check for unedited fuzzy matches", Value = "False" },
+                        new() { Name = "Confirmed segments only", Value = "True" },
+                        new() { Name = "All segments", Value = "False" },
+                        new() { Name = "Only check if match scores below", Value = "False" }
+                    ],
+                    Children = null
+                },
+                new()
+                {
+                    Name = Constants.Punctuation,
+                    Values =
+                    [
+                        new() { Name = "Check source and target end in same punctuation", Value = "False" },
+                        new() { Name = "Check spanish punctuation", Value = "False" },
+                        new() { Name = "Check unintentional spaces before", Value = "False" },
+                        new() { Name = "French compliant check", Value = "False" },
+                        new() { Name = "Check for multiple spaces", Value = "False" },
+                        new() { Name = "Check for multiple dots", Value = "False" },
+                        new() { Name = "Ignore ellipsis dots", Value = "False" },
+                        new() { Name = "Check for extra space at end of target segment", Value = "False" },
+                        new() { Name = "Check capitalization of initial letters", Value = "False" },
+                        new() { Name = "Check consistency of global capitalization", Value = "False" },
+                        new() { Name = "Check brackets", Value = "False" }
+                    ],
+                    Children = null
+                },
+                new()
+                {
+                    Name = Constants.Numbers,
+                    Values =
+                    [
+                        new() { Name = "Check numbers", Value = "False" },
+                        new() { Name = "Check dates", Value = "False" },
+                        new() { Name = "Check times", Value = "False" },
+                        new() { Name = "Check measurements and currencies", Value = "False" }
+                    ],
+                    Children = null
+                },
+                new()
+                {
+                    Name = Constants.WordList,
+                    Values =
+                    [
+                        new() { Name = "Check word list", Value = "False" },
+                        new() { Name = "Ignore case", Value = "False" },
+                        new() { Name = "Search whole words only", Value = "False" }
+                    ],
+                    Children = null
+                },
+                new()
+                {
+                    Name = Constants.RegularExpressions,
+                    Values =
+                    [
+                        new() { Name = "Search regular expressions", Value = "False" },
+                        new() { Name = "Ignore case", Value = "False" }
+                    ],
+                    Children = null
+                },
+                new()
+                {
+                    Name = Constants.TrademarkCheck,
+                    Values =
+                    [
+                        new() { Name = "Check trademark characters", Value = "False" }
+                    ],
+                    Children = null
+                },
+                new()
+                {
+                    Name = Constants.LengthVerification,
+                    Values =
+                    [
+                        new() { Name = "Check length limitation", Value = "True" },
+                        new() { Name = "Check if target segments are within file specific limits", Value = "True" },
+                        new() { Name = "Check if target segments are longer than character count", Value = "50" },
+                        new() { Name = "Check all segment contexts", Value = "True" },
+                        new() { Name = "Check the following contexts only", Value = "" }
+                    ],
+                    Children = null
+                }
+            ];
+        }
 
-        public Dictionary<string, object> DefaultSubcategoryValuesMap { get; set; } = new()
-        { // Forgotten and empty translation
-            ["CheckUntranslatedSegments"] = true,
-
-            // Compare source and target segments
-            ["CheckIdenticalSegments"] = false,
-            ["IdenticalSegmentsIgnoreTags"] = false,
-            ["IdenticalSegmentsIgnoreCase"] = false,
-
-            // Shorter/Longer by (%)
-            ["CheckTargetShorter"] = false,
-            ["CheckTargetLonger"] = false,
-
-            ["DiffUnitWord"] = true,
-
-            // Ignore segments with fewer than # words
-            ["MinimalWordCountValue"] = 2, // Default value in the UI
-
-            // Check target segments for forbidden characters
-            ["CheckForbiddenChar"] = false,
-
-            // Segment exclusion
-            ["ExcludePerfectMatchSegments"] = true,
-            ["ExcludeExactMatches"] = false,
-            ["ExcludeFuzzyMatches"] = false,
-            ["ExcludeNewTrans"] = false,
-            ["ExcludeRepetition"] = false,
-            ["ExcludeConfirmed"] = false,
-            ["ExcludeLocked"] = true,
-            ["ExcludeIdentical"] = false,
-            ["ElementContextExclusion"] = false,
-            ["ExclusionStringUntranslated"] = false,
-            ["ExclusionStringIdentical"] = false,
-            ["ExclusionStringIgnoreCase"] = false,
-            ["ExclusionStringRegEx"] = false,
-            ["ReportAllNonExcluded"] = false,
-
-            // Inconsistencies
-            ["CheckInconsistencies"] = false,
-            ["InconsistenciesIgnoreTags"] = false,
-            ["InconsistenciesIgnoreCase"] = false,
-            ["CheckRepeatedWords"] = false,
-            ["RepeatedWordsNumbers"] = false,
-            ["RepeatedWordsIgnoreCase"] = false,
-            ["UneditedSegments"] = false,
-            ["UneditedSegmentsSelectedFuzzyOnly"] = true,   // "Confirmed segments only" is selected by default
-            ["UneditedNotConfirmed"] = false,               // "All segments" is not selected
-            ["OnlyCheckIfMatchScoresBelow"] = false,
-
-            // Punctuation (all default to false)
-            ["CheckPunctuationDifferences"] = false,
-            ["CheckSpanishPunctuation"] = false,
-            ["CheckPunctuationSpace"] = false,
-            ["PunctuationSpacesFrench"] = false,
-            ["CheckMultipleSpaces"] = false,
-            ["CheckMultipleDots"] = false,
-            ["Ignore3Dots"] = false,
-            ["ExtraEndSpace"] = false,
-            ["CheckInitialCaps"] = false,
-            ["CheckGlobalCaps"] = false,
-            ["CheckBrackets"] = false,
-
-            // Numbers
-            ["CheckNumbers"] = false,
-            ["CheckDates"] = false,
-            ["CheckTimes"] = false,
-            ["CheckMeasurements"] = false,
-
-            // Word List (all default to false)
-            ["CheckWordList"] = false,
-            ["WordListIgnoreCase"] = false,
-            ["WordListWholeWord"] = false,
-
-            // Regular Expressions
-            ["CheckRegEx"] = false,
-            ["RegExRules"] = "", // Default to empty string
-            ["RegExRule.IgnoreCase"] = false, // Only if present in XML
-
-            // Trademark Check
-            ["CheckTrademarks"] = false,
-
-            // Length Verification
-            ["CheckAbsoluteLength"] = true,
-            ["AbsoluteCharCountValue"] = 50,
-            ["CheckAllContexts"] = true,
-            ["AbsoluteLengthElements"] = "",
-            ["CheckFilterLengthLimit"] = true,
-        };
-
-        public string Id { get; set; } = Constants.QaVerificationSettings;
-
-        public string Name { get; set; } = Constants.QaCheckerVerifierName;
-
-        public Dictionary<string, string> SettingIdToUiStringMap { get; set; } = new()
+        public override Dictionary<string, string> SettingIdToUiStringMap { get; set; } = new()
         {
             // Segments Verification
             ["CheckIdenticalSegments"] = "Source and target are identical",
@@ -192,197 +230,7 @@ namespace QATracker.Components.SettingsProvider.Verifiers
             ["CheckAllContexts"] = "Check all segment contexts",
             ["AbsoluteLengthElements"] =
                 "Check the following contexts only",
-        };
-
-        public Dictionary<string, List<string>> SubcategoriesMap { get; set; } = new()
-        {
-            ["Segments Verification"] =
-            [
-                "Check for forgotten and empty translations",
-                "Source and target are identical",
-                "Ignore tags",
-                "Ignore case",
-                "Shorter by (%)",
-                "Longer by (%)",
-                "Ignore segments with fewer than # words",
-                "Based on words",
-                "Based on characters",
-                "Check for forbidden characters"
-            ],
-            ["Segments to Exclude"] =
-            [
-                "Exclude PerfectMatch and Context Match units",
-                "Exclude exact matches",
-                "Exclude fuzzy matches down to",
-                "Exclude new translations",
-                "Exclude repetitions",
-                "Exclude confirmed translations",
-                "Exclude locked segments",
-                "Exclude target segment identical to source",
-                "Check only segments which are in following contexts",
-                "Apply exclusion list to search for not translated segments",
-                "Apply exclusion list to search for target segments identical to source",
-                "Ignore case",
-                "Exclusions use regular expressions",
-                "Report all non-excluded segments"
-            ],
-            ["Inconsistencies"] =
-            [
-                "Check for inconsistent translations",
-                "Ignore tags",
-                "Ignore case inconsistencies",
-                "Check for repeated words in target",
-                "Ignore numbers",
-                "Ignore case repeated words",
-                "Check for unedited fuzzy matches",
-                "Confirmed segments only",
-                "All segments",
-                "Only check if match scores below"
-            ],
-            ["Punctuation"] =
-            [
-                "Check source and target end in same punctuation",
-                "Check spanish punctuation",
-                "Check unintentional spaces before",
-                "French compliant check",
-                "Check for multiple spaces",
-                "Check for multiple dots",
-                "Ignore ellipsis dots",
-                "Check for extra space at end of target segment",
-                "Check capitalization of initial letters",
-                "Check consistency of global capitalization",
-                "Check brackets"
-            ],
-            ["Numbers"] =
-            [
-                "Check numbers",
-                "Check dates",
-                "Check times",
-                "Check measurements and currencies"
-            ],
-            ["Regular Expressions"] =
-            [
-                "Search regular expressions",
-                "Ignore case"
-            ],
-            ["Word List"] =
-            [
-                "Check word list",
-                "Ignore case",
-                "Search whole words only"
-            ],
-            ["Trademark Check"] = ["Check trademark characters"],
-            ["Length Verification"] =
-            [
-                "Check length limitation",
-                "Check if target segments are within file specific limits",
-                "Check if target segments are longer than character count",
-                "Check all segment contexts",
-                "Check the following contexts only"
-            ],
-        };
-
-        public Dictionary<string, Dictionary<string, string>> UiStringToSdlprojStringMap { get; set; } = new()
-        {
-            // Segments Verification
-            [Constants.SegmentsVerification] = new()
-            {
-                ["Check for forgotten and empty translations"] = "CheckUntranslatedSegments",
-                ["Source and target are identical"] = "CheckIdenticalSegments",
-                ["Ignore tags"] = "IdenticalSegmentsIgnoreTags",
-                ["Ignore case"] = "IdenticalSegmentsIgnoreCase",
-                ["Shorter by (%)"] = "CheckTargetShorter",
-                ["Longer by (%)"] = "CheckTargetLonger",
-                ["Based on words"] = "DiffUnitWord",
-                ["Based on characters"] = "DiffUnitWord",
-                ["Ignore segments with fewer than # words"] = "MinimalWordCountValue",
-                ["Check for forbidden characters"] = "CheckForbiddenChar"
-            },
-            [Constants.SegmentsToExclude] = new()
-            {
-                ["Exclude PerfectMatch and Context Match units"] = "ExcludePerfectMatchSegments",
-                ["Exclude exact matches"] = "ExcludeExactMatches",
-                ["Exclude fuzzy matches down to"] = "ExcludeFuzzyMatches",
-                ["Exclude new translations"] = "ExcludeNewTrans",
-                ["Exclude repetitions"] = "ExcludeRepetition",
-                ["Exclude confirmed translations"] = "ExcludeConfirmed",
-                ["Exclude locked segments"] = "ExcludeLocked",
-                ["Exclude target segment identical to source"] = "ExcludeIdentical",
-                ["Check only segments which are in following contexts"] = "ElementContextExclusion",
-                ["Apply exclusion list to search for not translated segments"] = "ExclusionStringUntranslated",
-                ["Apply exclusion list to search for target segments identical to source"] = "ExclusionStringIdentical",
-                ["Ignore case"] = "ExclusionStringIgnoreCase",
-                ["Exclusions use regular expressions"] = "ExclusionStringRegEx",
-                ["Report all non-excluded segments"] = "ReportAllNonExcluded"
-            },
-
-            [Constants.Inconsistencies] = new()
-            {
-                ["Check for inconsistent translations"] = "CheckInconsistencies",
-                ["Ignore tags"] = "InconsistenciesIgnoreTags",
-                ["Ignore case inconsistencies"] = "InconsistenciesIgnoreCase",
-                ["Check for repeated words in target"] = "CheckRepeatedWords",
-                ["Ignore numbers"] = "RepeatedWordsNumbers",
-                ["Ignore case repeated words"] = "RepeatedWordsIgnoreCase",
-                ["Check for unedited fuzzy matches"] = "UneditedSegments",
-                ["Confirmed segments only"] = "UneditedSegmentsSelectedFuzzyOnly",
-                ["All segments"] = "UneditedNotConfirmed",
-                ["Only check if match scores below"] = "OnlyCheckIfMatchScoresBelow"
-            },
-
-            [Constants.Punctuation] = new()
-            {
-                ["Check source and target end in same punctuation"] = "CheckPunctuationDifferences",
-                ["Check spanish punctuation"] = "CheckSpanishPunctuation",
-                ["Check unintentional spaces before"] = "CheckPunctuationSpace",
-                ["French compliant check"] = "PunctuationSpacesFrench",
-                ["Check for multiple spaces"] = "CheckMultipleSpaces",
-                ["Check for multiple dots"] = "CheckMultipleDots",
-                ["Ignore ellipsis dots"] = "Ignore3Dots",
-                ["Check for extra space at end of target segment"] = "ExtraEndSpace",
-                ["Check capitalization of initial letters"] = "CheckInitialCaps",
-                ["Check consistency of global capitalization"] = "CheckGlobalCaps",
-                ["Check brackets"] = "CheckBrackets"
-            },
-
-            [Constants.Numbers] = new()
-            {
-                ["Check numbers"] = "CheckNumbers",
-                ["Check dates"] = "CheckDates",
-                ["Check times"] = "CheckTimes",
-                ["Check measurements and currencies"] = "CheckMeasurements"
-            },
-
-            // Word List
-            [Constants.WordList] = new()
-            {
-                ["Check word list"] = "CheckWordList",
-                ["Ignore case"] = "WordListIgnoreCase",
-                ["Search whole words only"] = "WordListWholeWord"
-            },
-
-            // Regular Expressions
-            [Constants.RegularExpressions] = new()
-            {
-                ["Search regular expressions"] = "CheckRegEx",
-                ["Ignore case"] = "RegExRule.IgnoreCase"
-            },
-
-            // Trademark Check
-            [Constants.TrademarkCheck] = new()
-            {
-                ["Check trademark characters"] = "CheckTrademarks"
-            },
-
-            // Length Verification
-            [Constants.LengthVerification] = new()
-            {
-                ["Check length limitation"] = "CheckAbsoluteLength",
-                ["Check if target segments are within file specific limits"] = "CheckFilterLengthLimit",
-                ["Check if target segments are longer than character count"] = "AbsoluteCharCountValue",
-                ["Check all segment contexts"] = "CheckAllContexts",
-                ["Check the following contexts only"] = "AbsoluteLengthElements"
-            }
+            ["CheckFilterLengthLimit"] = "Check if target segments are within file specific limits",
         };
     }
 }

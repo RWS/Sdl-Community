@@ -6,10 +6,7 @@ namespace QATracker.Components.SettingsProvider.Components
 {
     public static class CategoryMap
     {
-        private static Dictionary<string, string> VerifierNamesMap { get; set; } = new()
-        {
-            { Constants.NumberVerifierSettings, "Trados Number Verifier" }
-        };
+      
 
         private static Dictionary<string, IVerificationSettings> Verifiers { get; } = new()
         {

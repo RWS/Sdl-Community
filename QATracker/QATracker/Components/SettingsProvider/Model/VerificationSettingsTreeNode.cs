@@ -16,5 +16,17 @@ public class VerificationSettingsTreeNode
     [XmlElement("Settings")] 
     public List<VerificationSettingsTreeNode> Children { get; set; } = [];
 
-    
+
+    // Recursively searches the tree for a VerificationSettingValue with the given name
+    public VerificationSettingValue FindSettingValueRecursive(string valueName, VerificationSettingsTreeNode node = null)
+    {
+        node ??= this;
+
+        var found = node.Values?.FirstOrDefault(v => v.Name == valueName);
+        if (found != null)
+            return found;
+
+        return node.Children?.Select(child => FindSettingValueRecursive(valueName, child))
+            .FirstOrDefault(foundInChild => foundInChild != null);
+    }
 }

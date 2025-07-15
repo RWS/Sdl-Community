@@ -1,30 +1,37 @@
-﻿using QATracker.Components.SettingsProvider.Verifiers.Interface;
+﻿using QATracker.Components.SettingsProvider.Model;
+using QATracker.Components.SettingsProvider.Verifiers.BaseClass;
+using QATracker.Components.SettingsProvider.Verifiers.Interface;
 using System.Collections.Generic;
 
 namespace QATracker.Components.SettingsProvider.Verifiers
 {
-    public class TagVerificationSettings : IVerificationSettings
+    public class TagVerificationSettings : VerificationSettings, IVerificationSettings
     {
-        public List<string> CategoriesList { get; set; } = [Constants.Common];
-
-        public Dictionary<string, object> DefaultSubcategoryValuesMap { get; set; } = new()
+        public TagVerificationSettings()
         {
-            ["AddedTagsErrorLevel"] = true,
-            ["DeletedTagsErrorLevel"] = true,
-            ["TagOrderChangedErrorLevel"] = true,
-            ["GhostTagErrorLevel"] = true,
-            ["SpaceAroundTagsErrorLevel"] = true,
-            ["CheckForIncludeTagId"] = false,
-            ["IgnoreFormattingTags"] = true,
-            ["IgnoreLockedSegments"] = false,
-            ["TreatNonBreakingSpaceAsSpace"] = false
-        };
+            Name = Constants.TagVerifierName;
+            Children =
+            [
+                new VerificationSettingsTreeNode
+                {
+                    Name = Constants.Common,
+                    Values =
+                    [
+                        new() { Name = "Tags added", Value = "True" },
+                        new() { Name = "Tags deleted", Value = "True" },
+                        new() { Name = "Tag order change", Value = "True" },
+                        new() { Name = "Ghost tags", Value = "True" },
+                        new() { Name = "Spacing around tags", Value = "True" },
+                        new() { Name = "Check for tag id mismatch", Value = "False" },
+                        new() { Name = "Ignore formatting tags", Value = "True" },
+                        new() { Name = "Ignore locked segments", Value = "False" },
+                        new() { Name = "Ignore difference between normal and non-breaking space", Value = "False" }
+                    ]
+                }
+            ];
+        }
 
-        public string Id { get; set; } = Constants.SettingsTagVerifier;
-
-        public string Name { get; set; } = Constants.TagVerifierName;
-
-        public Dictionary<string, string> SettingIdToUiStringMap { get; set; } = new()
+        public override Dictionary<string, string> SettingIdToUiStringMap { get; set; } = new()
         {
             ["AddedTagsErrorLevel"] = "Tags added",
             ["DeletedTagsErrorLevel"] = "Tags deleted",
@@ -35,38 +42,6 @@ namespace QATracker.Components.SettingsProvider.Verifiers
             ["IgnoreLockedSegments"] = "Ignore locked segments",
             ["TreatNonBreakingSpaceAsSpace"] = "Ignore difference between normal and non-breaking space",
             ["CheckForIncludeTagId"] = "Check for tag id mismatch"
-        };
-
-        public Dictionary<string, List<string>> SubcategoriesMap { get; set; } = new()
-        {
-            ["Common"] =
-            [
-                "Tags added",
-                "Tags deleted",
-                "Tag order change",
-                "Ghost tags",
-                "Spacing around tags",
-                "Check for tag id mismatch",
-                "Ignore formatting tags",
-                "Ignore locked segments",
-                "Ignore difference between normal and non-breaking space"
-            ]
-        };
-
-        public Dictionary<string, Dictionary<string, string>> UiStringToSdlprojStringMap { get; set; } = new()
-        {
-            [Constants.Common] = new()
-            {
-                ["Tags added"] = "AddedTagsErrorLevel",
-                ["Tags deleted"] = "DeletedTagsErrorLevel",
-                ["Tag order change"] = "TagOrderChangedErrorLevel",
-                ["Ghost tags"] = "GhostTagErrorLevel",
-                ["Spacing around tags"] = "SpaceAroundTagsErrorLevel",
-                ["Ignore formatting tags"] = "IgnoreFormattingTags",
-                ["Ignore locked segments"] = "IgnoreLockedSegments",
-                ["Ignore difference between normal and non-breaking space"] = "TreatNonBreakingSpaceAsSpace",
-                ["Check for tag id mismatch"] = "CheckForIncludeTagId"
-            }
         };
     }
 }

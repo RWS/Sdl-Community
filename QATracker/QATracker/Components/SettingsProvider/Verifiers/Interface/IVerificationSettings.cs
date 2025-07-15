@@ -1,15 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using QATracker.Components.SettingsProvider.Model;
+using System.Collections.Generic;
 
 namespace QATracker.Components.SettingsProvider.Verifiers.Interface
 {
     public interface IVerificationSettings
     {
-        List<string> CategoriesList { get; set; }
-        Dictionary<string, object> DefaultSubcategoryValuesMap { get; set; }
-        string Id { get; set; }
         string Name { get; set; }
         Dictionary<string, string> SettingIdToUiStringMap { get; set; }
-        Dictionary<string, List<string>> SubcategoriesMap { get; set; }
-        Dictionary<string, Dictionary<string, string>> UiStringToSdlprojStringMap { get; set; }
+
+        void LoadSettings(Dictionary<string, string> projectVerificationSetting);
+
+        VerificationSettingsTreeNode ToSettingsTreeNode();
     }
 }

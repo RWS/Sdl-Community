@@ -1,32 +1,57 @@
-﻿using QATracker.Components.SettingsProvider.Verifiers.Interface;
+﻿using QATracker.Components.SettingsProvider.Verifiers.BaseClass;
+using QATracker.Components.SettingsProvider.Verifiers.Interface;
 using System.Collections.Generic;
 
 namespace QATracker.Components.SettingsProvider.Verifiers
 {
-    public class TermVerificationSettings : IVerificationSettings
+    public class TermVerificationSettings : VerificationSettings, IVerificationSettings
     {
-        public List<string> CategoriesList { get; set; } = [Constants.VerificationSettings];
-
-        public Dictionary<string, object> DefaultSubcategoryValuesMap { get; set; } = new()
+        public TermVerificationSettings()
         {
-            ["CheckNonUsage"] = false,
-            ["CheckForbidden"] = false,
-            ["CheckWithoutTarget"] = false,
-            ["ExcludePerfectMatch"] = false,
-            ["ExcludeExactMatch"] = false,
-            ["ExcludeFuzzyMatch"] = false,
-            ["IgnoreLockedContent"] = false,
-            ["EnableTwoLetterTermRecognition"] = false
-        };
+            Name = Constants.TermVerifierName;
+            Children =
+            [
+                new()
+                {
+                    Name = "Verification Settings",
+                    Values =
+                    [
+                        new() { Name = "Check for possible non-usage of the target terms", Value = "False" },
+                        new() { Name = "Check for terms which may have been set as forbidden", Value = "False" },
+                        new() { Name = "Check for terms without the target term equivalent", Value = "False" },
+                        new() { Name = "Exclude PerfectMatch units", Value = "False" },
+                        new() { Name = "Exclude exact matches", Value = "False" },
+                        new() { Name = "Exclude fuzzy matches down to", Value = "False" },
+                        new() { Name = "Ignore locked segments", Value = "False" },
+                        new() { Name = "Enable recognition of two-letter terms", Value = "False" },
+                        new() { Name = "Forbidden term definitions", Value = "False" },
 
-        public string Id { get; set; } = Constants.SettingsTermVerifier;
+                    ],
+                    Children =
+                    [
+                        new()
+                        {
+                            Name = "Forbidden term definitions",
+                            Values =
+                            [
+                                new() { Name = "Forbidden term definition 0", Value = null },
+                                new() { Name = "Forbidden term definition 1", Value = null },
+                                new() { Name = "Forbidden term definition 2", Value = null },
+                                new() { Name = "Forbidden term definition 3", Value = null },
+                                new() { Name = "Forbidden term definition 4", Value = null },
+                                new() { Name = "Forbidden term definition 5", Value = null }
+                            ],
+                            Children = null
+                        }
+                    ]
+                }
+            ];
+        }
 
-        public string Name { get; set; } = Constants.TermVerifierName;
-
-        public Dictionary<string, string> SettingIdToUiStringMap { get; set; } = new()
+        public override Dictionary<string, string> SettingIdToUiStringMap { get; set; } = new()
         {
             ["CheckNonUsage"] = "Check for possible non-usage of the target terms",
-            ["CheckForbidden"] = "Check for forbidden terms",
+            ["CheckForbidden"] = "Check for terms which may have been set as forbidden",
             ["CheckWithoutTarget"] = "Check for terms without the target term equivalent",
             ["ExcludePerfectMatch"] = "Exclude PerfectMatch units",
             ["ExcludeExactMatch"] = "Exclude exact matches",
@@ -40,43 +65,6 @@ namespace QATracker.Components.SettingsProvider.Verifiers
             ["ForbiddenDefValues3"] = "Forbidden term definition 3",
             ["ForbiddenDefValues4"] = "Forbidden term definition 4",
             ["ForbiddenDefValues5"] = "Forbidden term definition 5"
-        };
-
-        public Dictionary<string, List<string>> SubcategoriesMap { get; set; } = new()
-        {
-            ["Verification Settings"] =
-            [
-                "Check for possible non-usage of the target terms",
-                "Check for terms which may have been set as forbidden",
-                "Check for terms without the target term equivalent",
-                "Exclude PerfectMatch units",
-                "Exclude exact matches",
-                "Exclude fuzzy matches down to",
-                "Ignore locked segments",
-                "Enable recognition of two-letter terms"
-            ]
-        };
-
-        public Dictionary<string, Dictionary<string, string>> UiStringToSdlprojStringMap { get; set; } = new()
-        {
-            [Constants.VerificationSettings] = new()
-            {
-                ["Check for possible non-usage of the target terms"] = "CheckNonUsage",
-                ["Check for terms which may have been set as forbidden"] = "CheckForbidden",
-                ["Check for terms without the target term equivalent"] = "CheckWithoutTarget",
-                ["Exclude PerfectMatch units"] = "ExcludePerfectMatch",
-                ["Exclude exact matches"] = "ExcludeExactMatch",
-                ["Exclude fuzzy matches down to"] = "ExcludeFuzzyMatch",
-                ["Ignore locked segments"] = "IgnoreLockedContent",
-                ["Enable recognition of two-letter terms"] = "EnableTwoLetterTermRecognition",
-                ["Forbidden term definitions"] = "ForbiddenDefValues",
-                ["Forbidden term definition 0"] = "ForbiddenDefValues0",
-                ["Forbidden term definition 1"] = "ForbiddenDefValues1",
-                ["Forbidden term definition 2"] = "ForbiddenDefValues2",
-                ["Forbidden term definition 3"] = "ForbiddenDefValues3",
-                ["Forbidden term definition 4"] = "ForbiddenDefValues4",
-                ["Forbidden term definition 5"] = "ForbiddenDefValues5",
-            }
         };
     }
 }

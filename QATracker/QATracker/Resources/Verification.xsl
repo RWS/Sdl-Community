@@ -411,9 +411,6 @@
 							Message
 						</td>
 
-						<td valign="top" style="font-weight:bold;color:gray">
-							More Specific
-						</td>
 						<xsl:if test="//taskInfo/@version">
 							<td id="newSourceSegment" valign="top" style="font-weight:bold;color:gray">
 								Source
@@ -499,7 +496,6 @@
 					</xsl:choose>
 					<xsl:value-of select="Text"/>
 				</td>
-				<td>More Specific</td>
 
 				<xsl:if test="//taskInfo/@version">
 					<td valign="top" align="left" width ="30%" style="white-space:normal; {$GrayStyle}">

@@ -4,13 +4,22 @@ using Sdl.Core.Globalization;
 using Sdl.ProjectAutomation.Core;
 using System.Collections.Generic;
 using System.Linq;
-using QATracker.Components.SettingsProvider.Extension;
 
 namespace QATracker.Components.SettingsProvider;
 
 public class VerificationSettingsDataProvider
 {
+    private static List<string> DefaultVerifiers { get; } =
+    [
+        Constants.QaVerificationSettings,
+        Constants.SettingsTagVerifier,
+        Constants.SettingsTermVerifier
+    ];
+
     private ProjectSettingsReader ProjectSettingsReader { get; } = new();
+
+    public static List<string> GetVerifiersList() =>
+            DefaultVerifiers.Concat(PluginManagerWrapper.GetInstalledThirdPartyVerifiers()).ToList();
 
     public VerificationProviderSettings GetVerificationSettings(IProject project) =>
         new()
@@ -25,37 +34,14 @@ public class VerificationSettingsDataProvider
 
     private VerificationSettingsTreeNode GetVerificationSettings(IProject project, Language language)
     {
-        var projectVerificationSettings = ProjectSettingsReader.ReadProjectVerificationSettings(project, language);
-
-        var verifiersList = DefaultSettingsProvider.GetVerifiersList();
-
-
         var settingsXml = new VerificationSettingsTreeNode();
+        var projectVerificationSettings = ProjectSettingsReader.ReadProjectVerificationSettings(project, language);
+        var verifiersList = GetVerifiersList();
         foreach (var verifier in verifiersList)
         {
-            var verifierSettings = DefaultSettingsProvider.GetDefaultSettingsForVerifier(verifier);
-
-            if (projectVerificationSettings.ContainsKey(verifier))
-            {
-                if (projectVerificationSettings[verifier].Keys.Count > 0)
-                {
-                    foreach (var settingsCategory in projectVerificationSettings[verifier])
-                    {
-                        if (settingsCategory.Key == "Enabled")
-                        {
-                            if (bool.Parse(settingsCategory.Value)) continue;
-
-                            verifierSettings.Children = null;
-                            verifierSettings.Values = [new() { Name = "Enabled", Value = "False" }];
-                            break;
-                        }
-
-                        verifierSettings.Set(verifier, settingsCategory.Key, settingsCategory.Value);
-                    }
-                }
-            }
-
-            settingsXml.Children.Add(verifierSettings);
+            var verifierSettingsObject = CategoryMap.CreateVerificationSettings(verifier);
+            verifierSettingsObject.LoadSettings(projectVerificationSettings?[verifier]);
+            settingsXml.Children.Add(verifierSettingsObject.ToSettingsTreeNode());
         }
 
         settingsXml.Name = "Verification Settings";
