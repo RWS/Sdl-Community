@@ -1,4 +1,7 @@
-﻿using Sdl.FileTypeSupport.Framework.IntegrationApi;
+﻿using QATracker.Components.Report_Extender;
+using QATracker.Components.SegmentMetadata_Provider;
+using QATracker.Components.SettingsProvider;
+using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
@@ -6,8 +9,6 @@ using Sdl.ProjectAutomation.FileBased.Reports.Operations;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System.IO;
 using System.Linq;
-using QATracker.Components.Report_Extender;
-using QATracker.Components.SettingsProvider;
 
 namespace QATracker.BatchTasks;
 
@@ -18,26 +19,41 @@ namespace QATracker.BatchTasks;
 [AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]
 public class VerifyFilesExtended : AbstractFileContentProcessingAutomaticTask
 {
+    public SegmentMetadataProvider SegmentMetadataProvider { get; set; } = new();
+    public VerificationSettingsDataProvider VerificationSettingsDataProvider { get; set; } = new();
     private ReportExtender ReportExtender { get; } = new();
 
     public override void TaskComplete()
     {
         var xmlString = GetOriginalVerificationReport();
-
         var extendedReport = ReportExtender.CreateReport(xmlString);
 
-        var activeQaProvidersXmlString = VerificationSettingsDataProvider.GetVerificationSettings(Project);
-        extendedReport.AddActiveQaProviders(activeQaProvidersXmlString);
+        AddActiveQaProviders(extendedReport);
+        AddMetadataToSegments(extendedReport);
 
         var extendedReportXmlString = extendedReport.GetExtendedReportXmlString();
-
         CreateReport(extendedReportXmlString);
     }
 
-    public VerificationSettingsDataProvider VerificationSettingsDataProvider { get; set; } = new();
-
     protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
     { }
+
+    private void AddActiveQaProviders(IExtendedReport extendedReport)
+    {
+        var activeQaProvidersXmlString = VerificationSettingsDataProvider.GetVerificationSettings(Project);
+        extendedReport.AddActiveQaProviders(activeQaProvidersXmlString);
+    }
+
+    private void AddMetadataToSegments(IExtendedReport extendedReport)
+    {
+        var languageFiles = Project.GetTargetLanguageFiles();
+
+        foreach (var languageFile in languageFiles)
+        {
+            var statuses = SegmentMetadataProvider.GetAllSegmentStatuses(Project, languageFile.Id);
+            extendedReport.AddStatuses(statuses, languageFile.Id);
+        }
+    }
 
     private void CreateReport(string extendedReportString)
     {

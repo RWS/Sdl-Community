@@ -448,6 +448,9 @@
 			</xsl:variable>
 
 			<tr>
+				<xsl:attribute name="data-status">
+					<xsl:value-of select="Status"/>
+				</xsl:attribute>
 				<td valign="top">&#160;</td>
 
 				<td valign="top" align="left" style="{$GrayStyle}">
