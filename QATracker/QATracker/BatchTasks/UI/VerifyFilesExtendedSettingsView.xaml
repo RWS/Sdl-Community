@@ -15,6 +15,7 @@
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml" />
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/checkboxresources.xaml" />
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/groupboxresources.xaml" />
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/buttonresources.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <Style TargetType="CheckBox"
@@ -23,15 +24,101 @@
                         Value="3" />
             </Style>
 
+            <Style TargetType="Button"
+                   BasedOn="{StaticResource {x:Type Button}}">
+                <Setter Property="Margin"
+                        Value="3" />
+                <Setter Property="Width"
+                        Value="120" />
+                <Setter Property="Height"
+                        Value="25" />
+                <Setter Property="HorizontalAlignment"
+                        Value="Right" />
+                <Setter Property="VerticalAlignment"
+                        Value="Bottom" />
+                <Setter Property="BorderBrush"
+                        Value="#adadad" />
+
+            </Style>
+
             <Style TargetType="StackPanel">
                 <Setter Property="Margin"
                         Value="10" />
             </Style>
-            
-            <Style TargetType="GroupBox" BasedOn="{StaticResource Sdl.GroupBox.SingleLineStyle}">
+
+            <Style TargetType="GroupBox"
+                   BasedOn="{StaticResource Sdl.GroupBox.SingleLineStyle}">
                 <Setter Property="Margin"
                         Value="0" />
             </Style>
+            <SolidColorBrush x:Key="Button.MouseOver.Background"
+                             Color="#e5f1fb" />
+            <SolidColorBrush x:Key="Button.MouseOver.Border"
+                             Color="#0078d7" />
+            <SolidColorBrush x:Key="Button.Pressed.Background"
+                             Color="#cce4f7" />
+            <SolidColorBrush x:Key="Button.Pressed.Border"
+                             Color="#005499" />
+            <SolidColorBrush x:Key="Button.Disabled.Background"
+                             Color="#FFF4F4F4" />
+            <SolidColorBrush x:Key="Button.Disabled.Border"
+                             Color="#FFADB2B5" />
+            <SolidColorBrush x:Key="Button.Disabled.Foreground"
+                             Color="#FF838383" />
+            <ControlTemplate x:Key="ButtonTemplate1"
+                             TargetType="{x:Type ButtonBase}">
+                <Border x:Name="border"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        SnapsToDevicePixels="true">
+                    <ContentPresenter x:Name="contentPresenter"
+                                      Focusable="False"
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      Margin="{TemplateBinding Padding}"
+                                      RecognizesAccessKey="True"
+                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                </Border>
+                <ControlTemplate.Triggers>
+                    <Trigger Property="Button.IsDefaulted"
+                             Value="true">
+                        <Setter Property="BorderBrush"
+                                TargetName="border"
+                                Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                    </Trigger>
+                    <Trigger Property="IsMouseOver"
+                             Value="true">
+                        <Setter Property="Background"
+                                TargetName="border"
+                                Value="{StaticResource Button.MouseOver.Background}" />
+                        <Setter Property="BorderBrush"
+                                TargetName="border"
+                                Value="{StaticResource Button.MouseOver.Border}" />
+                    </Trigger>
+                    <Trigger Property="IsPressed"
+                             Value="true">
+                        <Setter Property="Background"
+                                TargetName="border"
+                                Value="{StaticResource Button.Pressed.Background}" />
+                        <Setter Property="BorderBrush"
+                                TargetName="border"
+                                Value="{StaticResource Button.Pressed.Border}" />
+                    </Trigger>
+                    <Trigger Property="IsEnabled"
+                             Value="false">
+                        <Setter Property="Background"
+                                TargetName="border"
+                                Value="{StaticResource Button.Disabled.Background}" />
+                        <Setter Property="BorderBrush"
+                                TargetName="border"
+                                Value="{StaticResource Button.Disabled.Border}" />
+                        <Setter Property="TextElement.Foreground"
+                                TargetName="contentPresenter"
+                                Value="{StaticResource Button.Disabled.Foreground}" />
+                    </Trigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
 
         </ResourceDictionary>
     </UserControl.Resources>
@@ -52,22 +139,28 @@
         </GroupBox>
         <GroupBox Grid.Row="2"
                   Header="Report segments with the following statuses">
-            <ItemsControl Name="Statuses"
-                          Margin="10"
-                          ItemsSource="{Binding AllStatuses}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <CheckBox Content="{Binding }"
-                                  Checked="CheckBox_Checked"
-                                  Unchecked="CheckBox_Unchecked" />
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+            <DockPanel>
+                <ItemsControl Name="Statuses"
+                              Margin="10"
+                              ItemsSource="{Binding AllStatuses}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox Content="{Binding }"
+                                      Checked="StatusChecked"
+                                      Unchecked="StatusUnchecked" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <Button Template="{DynamicResource ButtonTemplate1}"
+                        Name="AllStatusesButton"
+                        Content="Check/uncheck all"
+                        Click="AllStatusesButton_OnClick" />
+            </DockPanel>
         </GroupBox>
     </Grid>
 </UserControl>

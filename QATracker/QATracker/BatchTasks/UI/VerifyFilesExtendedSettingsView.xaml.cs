@@ -1,11 +1,10 @@
-﻿using Sdl.Desktop.IntegrationApi;
+﻿using QATracker.BatchTasks.Extension;
+using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace QATracker.BatchTasks.UI
@@ -15,30 +14,25 @@ namespace QATracker.BatchTasks.UI
     /// </summary>
     public partial class VerifyFilesExtendedSettingsView : ISettingsAware<VerifyFilesExtendedSettings>, IUISettingsControl
     {
+        private readonly List<string> _allStatuses = [];
         private VerifyFilesExtendedSettings _settings;
-
-        public static readonly DependencyProperty SelectedStatusesProperty =
-            DependencyProperty.Register(nameof(SelectedStatuses), typeof(ObservableCollection<string>),
-                typeof(VerifyFilesExtendedSettingsView), new PropertyMetadata(new ObservableCollection<string>()));
 
         public VerifyFilesExtendedSettingsView()
         {
             InitializeComponent();
         }
 
-        public ObservableCollection<string> AllStatuses { get; set; } =
-        [
-            "Not Translated",
-            "Draft",
-            "Translated",
-            "Translation Approved",
-            "Translation Rejected",
-            "Signed Off",
-            "Sign-off Rejected",
-            "Locked Segments"
-        ];
+        public List<string> AllStatuses
+        {
+            get => _allStatuses;
+            set
+            {
+                foreach (var status in value)
+                    _allStatuses.AddIfNotPresent(status);
+            }
+        }
 
-        public ObservableCollection<string> SelectedStatuses { get; set; } = new();
+        public List<string> SelectedStatuses { get; set; } = new();
 
         public VerifyFilesExtendedSettings Settings
         {
@@ -47,33 +41,16 @@ namespace QATracker.BatchTasks.UI
             {
                 _settings = value;
                 foreach (var settingsReportStatus in _settings.ReportStatuses)
-                {
                     SelectedStatuses.Add(settingsReportStatus);
-                    CheckStatuses();
-                }
+                CheckStatuses();
             }
         }
 
-        private void CheckStatuses()
-        {
-            Statuses.Dispatcher.InvokeAsync(() =>
-            {
-                for (int i = 0; i < Statuses.Items.Count; i++)
-                {
-                    var container = (ContentPresenter)Statuses.ItemContainerGenerator.ContainerFromIndex(i);
-                    if (container != null)
-                    {
-                        var checkBox = UiHelper.FindVisualChild<CheckBox>(container);
-                        if (SelectedStatuses.Contains(checkBox?.Content?.ToString()))
-                            checkBox.IsChecked = true;
-                    }
-                }
-            }, DispatcherPriority.Loaded);
-        }
+        private bool AllStatusesChecked { get; set; }
 
         public void Dispose()
         { }
-        
+
         public VerifyFilesExtendedSettings GetSettings()
         {
             _settings.ReportStatuses = SelectedStatuses.ToList();
@@ -82,18 +59,51 @@ namespace QATracker.BatchTasks.UI
 
         public bool ValidateChildren() => true;
 
-        private void CheckBox_Checked(object sender, System.Windows.RoutedEventArgs e)
+        private void AllStatusesButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            AllStatusesChecked = !AllStatusesChecked;
+
+            if (AllStatusesChecked)
+            {
+                foreach (var status in AllStatuses)
+                    if (!SelectedStatuses.Contains(status))
+                        SelectedStatuses.Add(status);
+            }
+            else
+                SelectedStatuses.Clear();
+            CheckStatuses();
+        }
+
+        private void CheckStatuses()
+        {
+            Statuses.Dispatcher.InvokeAsync(() =>
+            {
+                for (var i = 0; i < Statuses.Items.Count; i++)
+                {
+                    var container = (ContentPresenter)Statuses.ItemContainerGenerator.ContainerFromIndex(i);
+                    if (container == null)
+                        continue;
+
+                    var checkBox = UiHelper.FindVisualChild<CheckBox>(container);
+                    checkBox.IsChecked = SelectedStatuses.Contains(checkBox.Content?.ToString());
+                }
+            }, DispatcherPriority.Loaded);
+        }
+
+        private void StatusChecked(object sender, RoutedEventArgs e)
         {
             var cb = sender as CheckBox;
             if (cb?.Content is string status && !SelectedStatuses.Contains(status))
                 SelectedStatuses.Add(status);
         }
 
-        private void CheckBox_Unchecked(object sender, System.Windows.RoutedEventArgs e)
+        private void StatusUnchecked(object sender, RoutedEventArgs e)
         {
             var cb = sender as CheckBox;
-            if (cb?.Content is string status && SelectedStatuses.Contains(status))
-                SelectedStatuses.Remove(status);
+            if (cb?.Content is not string status || !SelectedStatuses.Contains(status))
+                return;
+
+            SelectedStatuses.Remove(status);
         }
     }
 }

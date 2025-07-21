@@ -30,10 +30,17 @@ public class VerifyFilesExtended : AbstractFileContentProcessingAutomaticTask
         var extendedReport = ReportExtender.CreateReport(xmlString);
 
         AddActiveQaProviders(extendedReport);
-        //AddMetadataToSegments(extendedReport);
+        AddMetadataToSegments(extendedReport);
+        ApplySettings(extendedReport);
 
         var extendedReportXmlString = extendedReport.GetExtendedReportXmlString();
         CreateReport(extendedReportXmlString);
+    }
+
+    private void ApplySettings(IExtendedReport extendedReport)
+    {
+        var statuses = Settings.ReportStatuses;
+        extendedReport.FilterMessages(statuses);
     }
 
     protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
@@ -50,16 +57,16 @@ public class VerifyFilesExtended : AbstractFileContentProcessingAutomaticTask
         extendedReport.AddActiveQaProviders(activeQaProvidersXmlString);
     }
 
-    //private void AddMetadataToSegments(IExtendedReport extendedReport)
-    //{
-    //    var languageFiles = Project.GetTargetLanguageFiles();
+    private void AddMetadataToSegments(IExtendedReport extendedReport)
+    {
+        var languageFiles = Project.GetTargetLanguageFiles();
 
-    //    foreach (var languageFile in languageFiles)
-    //    {
-    //        var statuses = SegmentMetadataProvider.GetAllSegmentStatuses(Project, languageFile.Id);
-    //        extendedReport.AddStatuses(statuses, languageFile.Id);
-    //    }
-    //}
+        foreach (var languageFile in languageFiles)
+        {
+            var statuses = SegmentMetadataProvider.GetAllSegmentStatuses(Project, languageFile.Id);
+            extendedReport.AddStatuses(statuses, languageFile.Id);
+        }
+    }
 
     private void CreateReport(string extendedReportString)
     {

@@ -12,8 +12,8 @@ namespace QATracker.Components.Report_Extender;
 public class ExtendedReport(string originalXmlString) : IExtendedReport
 {
     private string ActiveQaProvidersXml { get; set; }
-    private string MetadataUpdatedXmlString { get; set; }
     private string OriginalXmlString { get; } = originalXmlString;
+    private string UpdatedXmlString { get; set; }
 
     public void AddActiveQaProviders(VerificationProviderSettings qaProvidersXmlString)
     {
@@ -69,12 +69,38 @@ public class ExtendedReport(string originalXmlString) : IExtendedReport
             statusNode.InnerText = status ?? string.Empty;
         }
 
-        MetadataUpdatedXmlString = xmlDoc.OuterXml;
+        UpdatedXmlString = xmlDoc.OuterXml;
+    }
+
+    public void FilterMessages(List<string> statuses)
+    {
+        if (statuses == null || !statuses.Any() || statuses.Count == 8)
+            return;
+
+        var xmlDoc = new XmlDocument();
+        xmlDoc.LoadXml(UpdatedXmlString ?? OriginalXmlString);
+
+        var messageNodes = xmlDoc.SelectNodes("//Message");
+        if (messageNodes == null)
+            return;
+
+        var statusesSet = new HashSet<string>(statuses, StringComparer.OrdinalIgnoreCase);
+        foreach (XmlNode messageNode in messageNodes)
+        {
+            var statusNode = messageNode.SelectSingleNode("Status");
+            if (statusNode != null && statusesSet.Contains(statusNode.InnerText))
+                continue;
+
+            // Remove the message node if it does not match the statuses
+            var parent = messageNode.ParentNode;
+            parent?.RemoveChild(messageNode);
+        }
+        UpdatedXmlString = xmlDoc.OuterXml;
     }
 
     public string GetExtendedReportXmlString()
     {
-        var xmlString = MetadataUpdatedXmlString ?? OriginalXmlString;
+        var xmlString = UpdatedXmlString ?? OriginalXmlString;
 
         if (string.IsNullOrEmpty(ActiveQaProvidersXml))
             return xmlString;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using QATracker.BatchTasks;
 using QATracker.Components.SegmentMetadata_Provider.Model;
 using Sdl.ProjectAutomation.Core;
 
@@ -25,12 +26,18 @@ public class SegmentMetadataProvider
                 .Select(seg => new Segment
                 {
                     Id = (string)seg.Attribute("id"),
-                    Status = (string)seg.Attribute("conf") ?? (string)seg.Attribute("state") ?? "Not Translated"
+                    Status = GetUiStatusString(seg)
                 })
             )
             .ToList();
-
+        
         return segments;
+    }
+
+    private static string GetUiStatusString(XElement seg)
+    {
+        var status = (string)seg.Attribute("conf") ?? (string)seg.Attribute("state") ?? "Not Translated";
+        return Constants.Statuses[status];
     }
 
     public static string GetSdlxliffPath(IProject project, Guid languageFileGuid)
