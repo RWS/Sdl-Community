@@ -1,4 +1,4 @@
-﻿using LanguageMappingProvider.Database.Interface;
+﻿using LanguageMappingProvider;
 using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.LanguageMappingProvider;
 using LanguageWeaverProvider.LanguageMappingProvider.View;
