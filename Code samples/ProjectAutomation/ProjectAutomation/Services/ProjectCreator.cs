@@ -57,7 +57,9 @@ namespace ProjectAutomation.Services
 
             var analyzeTask = project.RunAutomaticTask(
                 targetFiles.GetIds(),
-                AutomaticTaskTemplateIds.AnalyzeFiles);
+                AutomaticTaskTemplateIds.AnalyzeFiles,
+                (sender, taskStatusArgs) => taskStatusEventArgsList.Add(taskStatusArgs),
+                (sender, messageArgs) => messageEventArgsList.Add(messageArgs));
             CheckEvents(taskStatusEventArgsList, messageEventArgsList);
             Console.WriteLine("RunAnalyzeTaskFiles: " + analyzeTask.Status);
 
@@ -67,13 +69,17 @@ namespace ProjectAutomation.Services
             
             var translateTask = project.RunAutomaticTask(
                 targetFiles.GetIds(),
-                AutomaticTaskTemplateIds.PreTranslateFiles);
+                AutomaticTaskTemplateIds.PreTranslateFiles,
+                (sender, taskStatusArgs) => taskStatusEventArgsList.Add(taskStatusArgs),
+                (sender, messageArgs) => messageEventArgsList.Add(messageArgs));
             CheckEvents(taskStatusEventArgsList, messageEventArgsList);
 			Console.WriteLine("RunPreTranslateFiles: " + translateTask.Status);
 
             var projectTmTask = project.RunAutomaticTask(
                 targetFiles.GetIds(),
-                AutomaticTaskTemplateIds.PopulateProjectTranslationMemories);
+                AutomaticTaskTemplateIds.PopulateProjectTranslationMemories,
+                (sender, taskStatusArgs) => taskStatusEventArgsList.Add(taskStatusArgs),
+                (sender, messageArgs) => messageEventArgsList.Add(messageArgs));
             CheckEvents(taskStatusEventArgsList, messageEventArgsList);
             Console.WriteLine("RunPopulateProjectTranslationMemories: " + projectTmTask.Status);
         }
