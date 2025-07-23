@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Dapper;
+using LanguageMappingProvider.Extensions;
+using Sdl.Core.Globalization;
+using Sdl.Core.Globalization.LanguageRegistry;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
@@ -7,10 +11,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using Dapper;
-using LanguageMappingProvider.Extensions;
-using Sdl.Core.Globalization;
-using Sdl.Core.Globalization.LanguageRegistry;
 
 namespace LanguageMappingProvider;
 
@@ -272,25 +272,47 @@ public class LanguageMappingDatabase : ILanguageMappingDatabase, IDisposable
 				continue;
 			}
 
-			var regex = new Regex(@"^(.*?)\s*(?:\((.*?)\))?$");
-			var match = regex.Match(language.DisplayName);
+			var LanguageMapping = TryCreateLanguageMapping(language);
+            mappedLanguages.Add(LanguageMapping);
+        }
 
-			var languageName = match.Groups[1].Value;
-			var languageRegion = match.Groups[2].Success ? match.Groups[2].Value : new RegionInfo(language.CultureInfo.Name).DisplayName;
-			var tradosCode = language.CultureInfo.Name;
-
-			mappedLanguages.Add(new LanguageMapping
-			{
-				Name = languageName,
-				Region = languageRegion,
-				TradosCode = tradosCode
-			});
-		}
-
-		return mappedLanguages.OrderBy(x => x.Name).ThenBy(x => x.Region).ToList();
+		var output = mappedLanguages.OrderBy(x => x.Name).ThenBy(x => x.Region).ToList();
+        return output;
 	}
 
-	private void UpdateMappingCodes(IEnumerable<LanguageMapping> mappingList)
+	private LanguageMapping TryCreateLanguageMapping(Language language)
+	{
+		var regex = new Regex(@"^(.*?)\s*(?:\((.*?)\))?$");
+		var match = regex.Match(language.DisplayName);
+
+		var languageName = match.Groups[1].Value;
+		var tradosCode = language.CultureInfo.Name;
+		var languageMapping = new LanguageMapping
+		{
+			Name = languageName,
+			TradosCode = tradosCode
+        };
+
+		if (match.Groups[2].Success)
+		{
+            languageMapping.Region = match.Groups[2].Value;
+		}
+		else
+		{
+			try
+			{
+                languageMapping.Region = new RegionInfo(language.CultureInfo.Name).DisplayName;
+			}
+			catch (CultureNotFoundException)
+			{
+                languageMapping.Region = "Unknown";
+			}
+		}
+
+        return languageMapping;
+    }
+
+    private void UpdateMappingCodes(IEnumerable<LanguageMapping> mappingList)
 	{
 		var mappingDictionary = _pluginSupportedLanguages?.ToDictionary(l => (l?.Name, l?.Region), l => l?.LanguageCode);
 		foreach (var mappedLanguage in mappingList)
