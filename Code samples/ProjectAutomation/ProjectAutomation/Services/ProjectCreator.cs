@@ -1,10 +1,11 @@
-﻿using System;
-using System.Globalization;
-using System.IO;
-using Sdl.Core.Globalization;
+﻿using Sdl.Core.Globalization;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.ProjectAutomation.Settings;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 
 namespace ProjectAutomation.Services
 {
@@ -31,11 +32,11 @@ namespace ProjectAutomation.Services
 
 				ConvertFiles(project);
 
-				
-				RunAnalyzeTaskFiles(project, targetLanguage);
-				RunPreTranslateFiles(project, targetLanguage);
+                ProcessTargetLanguageFilesExtended(project, targetLanguage);
+                //RunAnalyzeTaskFiles(project, targetLanguage);
+                //RunPreTranslateFiles(project, targetLanguage);
 
-				project.Save();
+                project.Save();
 
 				return true;
 			}
@@ -47,9 +48,74 @@ namespace ProjectAutomation.Services
 			return false;
 		}
 
+        public void ProcessTargetLanguageFilesExtended(FileBasedProject project, string locale)
+        {
+            var taskStatusEventArgsList = new List<TaskStatusEventArgs>();
+            var messageEventArgsList = new List<MessageEventArgs>();
+
+            var targetFiles = project.GetTargetLanguageFiles(new Language(CultureInfo.GetCultureInfo(locale)));
+
+            var analyzeTask = project.RunAutomaticTask(
+                targetFiles.GetIds(),
+                AutomaticTaskTemplateIds.AnalyzeFiles);
+            CheckEvents(taskStatusEventArgsList, messageEventArgsList);
+            Console.WriteLine("RunAnalyzeTaskFiles: " + analyzeTask.Status);
+
+            var reportId = analyzeTask.Reports[0].Id;
+            var projectFolder = Path.GetDirectoryName(project.FilePath);
+            project.SaveTaskReportAs(reportId, Path.Combine(projectFolder, "Reports", "Analysis_report.xls"), ReportFormat.Excel);
+            
+            var translateTask = project.RunAutomaticTask(
+                targetFiles.GetIds(),
+                AutomaticTaskTemplateIds.PreTranslateFiles);
+            CheckEvents(taskStatusEventArgsList, messageEventArgsList);
+			Console.WriteLine("RunPreTranslateFiles: " + translateTask.Status);
+
+            var projectTmTask = project.RunAutomaticTask(
+                targetFiles.GetIds(),
+                AutomaticTaskTemplateIds.PopulateProjectTranslationMemories);
+            CheckEvents(taskStatusEventArgsList, messageEventArgsList);
+            Console.WriteLine("RunPopulateProjectTranslationMemories: " + projectTmTask.Status);
+        }
+
+        private void CheckEvents(List<TaskStatusEventArgs> taskStatusEventArgsList, List<MessageEventArgs> messageEventArgsList)
+        {
+            // loop through the available statuses and messages
+            foreach (var item in taskStatusEventArgsList)
+            {
+                switch (item.Status)
+                {
+                    case Sdl.ProjectAutomation.Core.TaskStatus.Assigned:
+                        break;
+                    case Sdl.ProjectAutomation.Core.TaskStatus.Cancelled:
+                        break;
+                    case Sdl.ProjectAutomation.Core.TaskStatus.Cancelling:
+                        break;
+                    case Sdl.ProjectAutomation.Core.TaskStatus.Completed:
+                        break;
+                    case Sdl.ProjectAutomation.Core.TaskStatus.Created:
+                        break;
+                    case Sdl.ProjectAutomation.Core.TaskStatus.Invalid:
+                        break;
+                    case Sdl.ProjectAutomation.Core.TaskStatus.Rejected:
+                        break;
+                    case Sdl.ProjectAutomation.Core.TaskStatus.Started:
+                        break;
+                    case Sdl.ProjectAutomation.Core.TaskStatus.Failed:
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            // at the end clear task statuses and messages
+            taskStatusEventArgsList.Clear();
+            messageEventArgsList.Clear();
+        }
+
+
         private static void AddTranslationProvider(FileBasedProject project, MemoryResource memory)
         {
-
             var provider = GetTranslationProviderReference(memory);
             if (provider == null)
             {

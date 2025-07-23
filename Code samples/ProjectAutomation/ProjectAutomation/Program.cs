@@ -20,15 +20,18 @@ namespace ProjectAutomation
 
 			// TODO: Set the source and target language combination
 			var sourceLanguage = "en-US"; // Change this to match the source language
-			var targetLanguage = "it-IT"; // Change this to match the target language
+			var targetLanguage = "de-DE"; // Change this to match the target language
 
 			// TODO: Set the memory resource
 			var memory = new MemoryResource
 			{
+				// Example - FileBased TM 
+                Path = @"C:\Users\phartnett\Documents\Studio 2024\Projects\Samples\SampleProject\TMs\English-German.sdltm",
+
                 //Example to connect to deepL provider (https://appstore.rws.com/Plugin/24)
-                Uri = new Uri("deepltranslationprovider:///"),
-                UserNameOrClientId = "[your DeepL account e-mail]",
-                Credential = "[your DeepL account API key]"
+                //Uri = new Uri("deepltranslationprovider:///"),
+                //UserNameOrClientId = "[your DeepL account e-mail]",
+                //Credential = "[your DeepL account API key]"
             };
 
 			CreateProject(sourceFilesDirectory, projectsDirectory, sourceLanguage, targetLanguage, memory);
