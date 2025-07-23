@@ -8,6 +8,7 @@ using Sdl.ProjectAutomation.FileBased;
 using Sdl.ProjectAutomation.FileBased.Reports.Operations;
 using System.IO;
 using System.Linq;
+using Sdl.Core.Settings;
 
 namespace QATracker.BatchTasks;
 
@@ -29,7 +30,7 @@ public class VerifyFilesExtended : AbstractFileContentProcessingAutomaticTask
         var xmlString = GetOriginalVerificationReport();
         var extendedReport = ReportExtender.CreateReport(xmlString);
 
-        AddActiveQaProviders(extendedReport);
+        if (Settings.IncludeVerificationDetails) AddActiveQaProviders(extendedReport);
         AddMetadataToSegments(extendedReport);
         ApplySettings(extendedReport);
 
@@ -49,6 +50,13 @@ public class VerifyFilesExtended : AbstractFileContentProcessingAutomaticTask
     protected override void OnInitializeTask()
     {
         Settings = GetSetting<VerifyFilesExtendedSettings>();
+
+        var settingsBundle = Project.GetSettings();
+        var verificationSettings = settingsBundle.GetSettingsGroup("VerificationSettings");
+        verificationSettings.GetSetting<bool>("IncludeIgnoredMessages").Value = Settings.IncludeIgnoredMessages;
+
+        Project.UpdateSettings(settingsBundle);
+        Project.Save();
     }
 
     private void AddActiveQaProviders(IExtendedReport extendedReport)
@@ -79,6 +87,8 @@ public class VerifyFilesExtended : AbstractFileContentProcessingAutomaticTask
 
     private string GetOriginalVerificationReport()
     {
+
+
         var result = Project.RunAutomaticTask(TaskFiles.GetIds(), AutomaticTaskTemplateIds.VerifyFiles);
         var reportId = result.Reports.First().Id;
 

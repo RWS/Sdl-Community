@@ -32,6 +32,8 @@ namespace QATracker.BatchTasks.UI
             }
         }
 
+        public bool IncludeIgnoredMessages { get; set; }
+        public bool IncludeVerificationDetails { get; set; }
         public List<string> SelectedStatuses { get; set; } = new();
 
         public VerifyFilesExtendedSettings Settings
@@ -42,6 +44,10 @@ namespace QATracker.BatchTasks.UI
                 _settings = value;
                 foreach (var settingsReportStatus in _settings.ReportStatuses)
                     SelectedStatuses.Add(settingsReportStatus);
+
+                IncludeIgnoredMessages = _settings.IncludeIgnoredMessages;
+                IncludeVerificationDetails = _settings.IncludeVerificationDetails;
+
                 CheckStatuses();
             }
         }
@@ -54,6 +60,8 @@ namespace QATracker.BatchTasks.UI
         public VerifyFilesExtendedSettings GetSettings()
         {
             _settings.ReportStatuses = SelectedStatuses.ToList();
+            _settings.IncludeIgnoredMessages = IncludeIgnoredMessages;
+            _settings.IncludeVerificationDetails = IncludeVerificationDetails;
             return _settings;
         }
 
@@ -64,13 +72,11 @@ namespace QATracker.BatchTasks.UI
             AllStatusesChecked = !AllStatusesChecked;
 
             if (AllStatusesChecked)
-            {
-                foreach (var status in AllStatuses)
-                    if (!SelectedStatuses.Contains(status))
-                        SelectedStatuses.Add(status);
-            }
+                foreach (var status in AllStatuses.Where(status => !SelectedStatuses.Contains(status)))
+                    SelectedStatuses.Add(status);
             else
                 SelectedStatuses.Clear();
+
             CheckStatuses();
         }
 
@@ -87,6 +93,9 @@ namespace QATracker.BatchTasks.UI
                     var checkBox = UiHelper.FindVisualChild<CheckBox>(container);
                     checkBox.IsChecked = SelectedStatuses.Contains(checkBox.Content?.ToString());
                 }
+
+                IncludeIgnoredMessagesButton.IsChecked = _settings.IncludeIgnoredMessages;
+                IncludeVerificationDetailsButton.IsChecked = _settings.IncludeVerificationDetails;
             }, DispatcherPriority.Loaded);
         }
 

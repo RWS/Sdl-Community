@@ -1,11 +1,22 @@
 ﻿using Sdl.Core.Settings;
 using System.Collections.Generic;
-using System.ComponentModel;
 
 namespace QATracker.BatchTasks
 {
     public class VerifyFilesExtendedSettings : SettingsGroup
     {
+        public bool IncludeIgnoredMessages
+        {
+            get => GetSetting<bool>(nameof(IncludeIgnoredMessages));
+            set => GetSetting<bool>(nameof(IncludeIgnoredMessages)).Value = value;
+        }
+
+        public bool IncludeVerificationDetails
+        {
+            get => GetSetting<bool>(nameof(IncludeVerificationDetails));
+            set => GetSetting<bool>(nameof(IncludeVerificationDetails)).Value = value;
+        }
+
         public List<string> ReportStatuses
         {
             get => GetSetting<List<string>>(nameof(ReportStatuses));
