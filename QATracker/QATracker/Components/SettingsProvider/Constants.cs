@@ -16,7 +16,7 @@
         public const string NumberVerifierSettings = "Number Verifier";
 
         //Trados Number Verifier
-        public const string NumberVerifierSettingsCategory = "NumberVerifierSettings";
+        public const string NumberVerifierSettingsCategory = "Number Verifier Settings";
 
         public const string Punctuation = "Punctuation";
 

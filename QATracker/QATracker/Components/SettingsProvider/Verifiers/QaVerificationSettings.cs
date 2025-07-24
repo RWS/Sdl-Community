@@ -1,6 +1,7 @@
 ﻿using QATracker.Components.SettingsProvider.Verifiers.BaseClass;
 using QATracker.Components.SettingsProvider.Verifiers.Interface;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using QATracker.Components.SettingsProvider.Model;
 
 namespace QATracker.Components.SettingsProvider.Verifiers
@@ -23,7 +24,7 @@ namespace QATracker.Components.SettingsProvider.Verifiers
                         new() { Name = "IdenticalSegmentsIgnoreCase", Value = "False" },
                         new()
                         {
-                            Name = "CheckTargetShorter", Enabled = "False",
+                            Name = "CheckTargetShorter", Value = "False",
                             Values =
                             [
                                 new() { Name = "ShorterByValue", Value = "50" }
@@ -31,7 +32,7 @@ namespace QATracker.Components.SettingsProvider.Verifiers
                         },
                         new()
                         {
-                            Name = "CheckTargetLonger", Enabled = "False",
+                            Name = "CheckTargetLonger", Value = "False",
                             Values =
                             [
                                 new() { Name = "LongerByValue", Value = "50" }
@@ -42,12 +43,12 @@ namespace QATracker.Components.SettingsProvider.Verifiers
                             Name = "MinimalWordCountValue", Value = "2",
                             Values =
                             [
-                                new(){Name = "DiffUnitWord", Value = "True"}
+                                new() { Name = "DiffUnitWord", Value = "True" }
                             ]
                         },
                         new()
                         {
-                            Name = "CheckForbiddenChar", Enabled = "False",
+                            Name = "CheckForbiddenChar", Value = "False",
                             Values =
                             [
                                 new() { Name = "ForbiddenCharsValue", Value = "" }
@@ -62,15 +63,27 @@ namespace QATracker.Components.SettingsProvider.Verifiers
                     [
                         new() { Name = "ExcludePerfectMatchSegments", Value = "True" },
                         new() { Name = "ExcludeExactMatches", Value = "False" },
-                        new() { Name = "ExcludeFuzzyMatches", Value = "False" },
-                        new() { Name = "ExcludeFuzzyMatchValue", Value = "99" },
-                        new() { Name = "ElementContextExclusionValue", Value = "True" },
+                        new()
+                        {
+                            Name = "ExcludeFuzzyMatches", Value = "False",
+                            Values =
+                            [
+                                new() { Name = "ExcludeFuzzyMatchValue", Value = "99" }
+                            ]
+                        },
+                        new()
+                        {
+                            Name = "ElementContextExclusion", Value = "False",
+                            Values =
+                            [
+                                new() { Name = "ElementContextExclusionValue", Value = "True" }
+                            ]
+                        },
                         new() { Name = "ExcludeNewTrans", Value = "False" },
                         new() { Name = "ExcludeRepetition", Value = "False" },
                         new() { Name = "ExcludeConfirmed", Value = "False" },
                         new() { Name = "ExcludeLocked", Value = "True" },
                         new() { Name = "ExcludeIdentical", Value = "False" },
-                        new() { Name = "ElementContextExclusion", Value = "False" },
                         new() { Name = "ExclusionStringValue", Value = "True" },
                         new() { Name = "ExclusionStringUntranslated", Value = "False" },
                         new()
@@ -176,9 +189,33 @@ namespace QATracker.Components.SettingsProvider.Verifiers
 
         private void MakeSpecificChanges()
         {
+            EnhanceSegmentSizeCheckUi();
+            EnhanceElementContextExclusionValueUi();
+        }
+
+        private void EnhanceElementContextExclusionValueUi()
+        {
+            var elementExclusion = this["ElementContextExclusion"];
+            elementExclusion.Values = elementExclusion.Values[0].Values;
+        }
+
+        private void EnhanceSegmentSizeCheckUi()
+        {
             var diffUnitWord = this["DiffUnitWord"];
             var wordsOrChars = diffUnitWord.Value == "True" ? "words" : "characters";
-            diffUnitWord.Value = wordsOrChars;
+
+            var shorterBy = this["CheckTargetShorter"];
+            var longerBy = this["CheckTargetLonger"];
+
+            var minimalWordCountValue = this["MinimalWordCountValue"];
+
+            var minimalWordCountName = Regex.Replace(SettingIdToUiStringMap["MinimalWordCountValue"], "#", minimalWordCountValue.Value);
+            minimalWordCountName = Regex.Replace(minimalWordCountName, "words", wordsOrChars);
+
+            minimalWordCountValue.Name = minimalWordCountName;
+            minimalWordCountValue.Value = shorterBy.Value == "True" || longerBy.Value == "True" ? "True" : "False";
+
+            minimalWordCountValue.Values = null;
         }
 
         public override VerificationSettingsTreeNode ToSettingsValue()

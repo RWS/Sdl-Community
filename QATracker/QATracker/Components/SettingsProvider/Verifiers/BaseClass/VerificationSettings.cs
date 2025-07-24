@@ -1,5 +1,6 @@
 ﻿using QATracker.Components.SettingsProvider.Model;
 using System.Collections.Generic;
+using QATracker.Extension;
 
 namespace QATracker.Components.SettingsProvider.Verifiers.BaseClass
 {
@@ -7,7 +8,26 @@ namespace QATracker.Components.SettingsProvider.Verifiers.BaseClass
     {
         public virtual Dictionary<string, string> SettingIdToUiStringMap { get; set; }
 
-        public VerificationSettingsTreeNode this[string settingId] => FindSettingValueRecursive(settingId);
+        public VerificationSettingsTreeNode this[string settingId] =>
+            !settingId.ContainsDigit()
+                ? FindSettingValueRecursive(settingId)
+                : CreateAndReturnNestedValue(settingId);
+
+        //For settings with unlimited number of values
+        private VerificationSettingsTreeNode CreateAndReturnNestedValue(string settingId)
+        {
+            var parentSettingId = settingId.TrimEndingDigits();
+
+            var settingParent = FindSettingValueRecursive(parentSettingId);
+            if (settingParent == null) return null;
+
+            var settingsTreeNode = new VerificationSettingsTreeNode
+            {
+                Name = $"{settingParent.Name}{settingId.GetEndingDigits()}",
+            };
+            settingParent.Values.Add(settingsTreeNode);
+            return settingsTreeNode;
+        }
 
         public void LoadSettings(Dictionary<string, string> projectVerificationSettings)
         {
@@ -16,7 +36,9 @@ namespace QATracker.Components.SettingsProvider.Verifiers.BaseClass
 
             foreach (var settingsCategory in projectVerificationSettings)
             {
-                if (settingsCategory.Key == "Enabled")
+                var settingsCategoryKey = settingsCategory.Key;
+
+                if (settingsCategoryKey == "Enabled")
                 {
                     if (bool.Parse(settingsCategory.Value))
                         continue;
@@ -25,29 +47,7 @@ namespace QATracker.Components.SettingsProvider.Verifiers.BaseClass
                     break;
                 }
 
-                var verificationSettingValue = this[settingsCategory.Key];
-
-                if (verificationSettingValue.Values is null || verificationSettingValue.Values.Count == 0)
-                    verificationSettingValue.Value = settingsCategory.Value;
-                else
-                    verificationSettingValue.Enabled = settingsCategory.Value;
-            }
-        }
-
-        private void ReplaceNamesWithUiStringsRecursive(List<VerificationSettingsTreeNode> nodes)
-        {
-            if (nodes == null)
-                return;
-
-            foreach (var node in nodes)
-            {
-                if (node.Name == "Enabled")
-                    continue;
-
-                if (SettingIdToUiStringMap.TryGetValue(node.Name, out var uiString))
-                    node.Name = uiString;
-
-                ReplaceNamesWithUiStringsRecursive(node.Values);
+                this[settingsCategoryKey].Value = settingsCategory.Value;
             }
         }
 
@@ -59,6 +59,34 @@ namespace QATracker.Components.SettingsProvider.Verifiers.BaseClass
                 Name = Name,
                 Values = Values
             };
+        }
+
+
+
+        private void ReplaceNamesWithUiStringsRecursive(List<VerificationSettingsTreeNode> nodes)
+        {
+            if (nodes == null)
+                return;
+
+            foreach (var node in nodes)
+            {
+                var nodeName = node.Name;
+
+                if (nodeName == "Enabled")
+                    continue;
+
+                if (!nodeName.ContainsDigit())
+                {
+                    if (SettingIdToUiStringMap.TryGetValue(nodeName, out var uiString))
+                        node.Name = uiString;
+                }
+                else
+                {
+                    if (SettingIdToUiStringMap.TryGetValue(nodeName.TrimEndingDigits(), out var uiString))
+                        node.Name = $"{uiString} {nodeName.GetEndingDigits()}";
+                }
+                ReplaceNamesWithUiStringsRecursive(node.Values);
+            }
         }
     }
 }

@@ -260,9 +260,9 @@
 			<xsl:text> </xsl:text>
 			<xsl:value-of select="@Name"/>
 			<xsl:choose>
-				<xsl:when test=". = 'False'">
+				<xsl:when test="@Value = 'False'">
 					: <span class="value">
-						<xsl:value-of select="."/>
+						<xsl:value-of select="@Value"/>
 					</span>
 				</xsl:when>
 				<xsl:otherwise>
@@ -271,7 +271,7 @@
 							<xsl:text>enabled</xsl:text>
 							<xsl:if test="$isDisabled"> disabled</xsl:if>
 						</xsl:attribute>
-						<xsl:value-of select="."/>
+						<xsl:value-of select="@Value"/>
 					</span>
 				</xsl:otherwise>
 			</xsl:choose>

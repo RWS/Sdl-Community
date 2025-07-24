@@ -6,14 +6,14 @@ namespace QATracker.Components.SettingsProvider.Model;
 [XmlRoot("VerificationSettings")]
 public class VerificationSettingsTreeNode
 {
-    [XmlAttribute("Value")]
-    public string Enabled { get; set; }
+    [XmlAttribute]
+    public string Value { get; set; }
 
     [XmlAttribute]
     public string Name { get; set; }
 
-    [XmlText]
-    public string Value { get; set; }
+    //[XmlText]
+    //public string Value { get; set; }
 
     [XmlElement("Setting")]
     public List<VerificationSettingsTreeNode> Values { get; set; } = [];
