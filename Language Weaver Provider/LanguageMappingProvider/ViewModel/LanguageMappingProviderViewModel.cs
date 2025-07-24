@@ -1,4 +1,6 @@
 ﻿using LanguageMappingProvider;
+using LanguageWeaverProvider.Command;
+using LanguageWeaverProvider.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,8 +9,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using LanguageWeaverProvider.Command;
-using LanguageWeaverProvider.ViewModel;
 using static LanguageWeaverProvider.ViewModel.PairMappingViewModel;
 
 namespace LanguageWeaverProvider.LanguageMappingProvider.ViewModel

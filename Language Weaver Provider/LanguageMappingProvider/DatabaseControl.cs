@@ -1,7 +1,7 @@
 ﻿using LanguageMappingProvider;
+using Sdl.Core.Globalization;
 using System.Collections.Generic;
 using System.Linq;
-using Sdl.Core.Globalization;
 
 namespace LanguageWeaverProvider.LanguageMappingProvider
 {
