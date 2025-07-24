@@ -6,7 +6,7 @@ namespace QATracker.Components.SettingsProvider.Model;
 [XmlRoot("VerificationSettings")]
 public class VerificationSettingsTreeNode
 {
-    [XmlAttribute]
+    [XmlAttribute("Value")]
     public string Enabled { get; set; }
 
     [XmlAttribute]

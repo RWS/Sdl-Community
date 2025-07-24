@@ -16,31 +16,29 @@ namespace QATracker.Components.SettingsProvider.Verifiers
                     Name = "Verification Settings",
                     Values =
                     [
-                        new() { Name = "Check for possible non-usage of the target terms", Value = "False" },
-                        new() { Name = "Check for terms which may have been set as forbidden", Value = "False" },
-                        new() { Name = "Check for terms without the target term equivalent", Value = "False" },
-                        new() { Name = "Exclude PerfectMatch units", Value = "False" },
-                        new() { Name = "Exclude exact matches", Value = "False" },
-                        new() { Name = "Exclude fuzzy matches down to", Value = "False" },
-                        new() { Name = "Ignore locked segments", Value = "False" },
-                        new() { Name = "Enable recognition of two-letter terms", Value = "False" },
-                        new() { Name = "Forbidden term definitions", Value = "False" },
+                        new() { Name = "CheckNonUsage", Value = "False" },
+                        new() { Name = "CheckForbidden", Value = "False" },
+                        new() { Name = "CheckWithoutTarget", Value = "False" },
+                        new() { Name = "ExcludePerfectMatch", Value = "False" },
+                        new() { Name = "ExcludeExactMatch", Value = "False" },
+                        new() { Name = "ExcludeFuzzyMatch", Value = "False" },
+                        new() { Name = "IgnoreLockedContent", Value = "False" },
+                        new() { Name = "EnableTwoLetterTermRecognition", Value = "False" },
+                        new() { Name = "ForbiddenDefValues", Value = "False" },
                         new()
                         {
-                            Name = "Forbidden term definitions",
+                            Name = "ForbiddenDefValues",
                             Values =
                             [
-                                new() { Name = "Forbidden term definition 0", Value = null },
-                                new() { Name = "Forbidden term definition 1", Value = null },
-                                new() { Name = "Forbidden term definition 2", Value = null },
-                                new() { Name = "Forbidden term definition 3", Value = null },
-                                new() { Name = "Forbidden term definition 4", Value = null },
-                                new() { Name = "Forbidden term definition 5", Value = null }
+                                new() { Name = "ForbiddenDefValues0", Value = null },
+                                new() { Name = "ForbiddenDefValues1", Value = null },
+                                new() { Name = "ForbiddenDefValues2", Value = null },
+                                new() { Name = "ForbiddenDefValues3", Value = null },
+                                new() { Name = "ForbiddenDefValues4", Value = null },
+                                new() { Name = "ForbiddenDefValues5", Value = null }
                             ],
-                            
                         }
                     ]
-                    
                 }
             ];
         }

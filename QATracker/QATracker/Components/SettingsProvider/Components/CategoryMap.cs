@@ -1,23 +1,19 @@
 ﻿using QATracker.Components.SettingsProvider.Verifiers;
 using QATracker.Components.SettingsProvider.Verifiers.Interface;
-using System.Collections.Generic;
 
 namespace QATracker.Components.SettingsProvider.Components
 {
     public static class CategoryMap
     {
-      
+        public static IVerificationSettings CreateVerificationSettings(string verifierId) =>
+            verifierId switch
+            {
+                Constants.QaVerificationSettings => new QaVerificationSettings(),
+                Constants.SettingsTagVerifier => new TagVerificationSettings(),
+                Constants.SettingsTermVerifier => new TermVerificationSettings(),
 
-        private static Dictionary<string, IVerificationSettings> Verifiers { get; } = new()
-        {
-            [Constants.QaVerificationSettings] = new QaVerificationSettings(),
-            [Constants.SettingsTagVerifier] = new TagVerificationSettings(),
-            [Constants.SettingsTermVerifier] = new TermVerificationSettings(),
-
-            //3rd party verifiers
-            [Constants.NumberVerifierSettings] = new NumberVerificationSettings(),
-        };
-
-        public static IVerificationSettings CreateVerificationSettings(string verifierId) => Verifiers[verifierId];
+                //3rd party verifiers
+                Constants.NumberVerifierSettings => new NumberVerificationSettings(),
+            };
     }
 }

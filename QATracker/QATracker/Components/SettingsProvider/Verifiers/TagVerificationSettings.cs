@@ -17,15 +17,15 @@ namespace QATracker.Components.SettingsProvider.Verifiers
                     Name = Constants.Common,
                     Values =
                     [
-                        new() { Name = "Tags added", Value = "True" },
-                        new() { Name = "Tags deleted", Value = "True" },
-                        new() { Name = "Tag order change", Value = "True" },
-                        new() { Name = "Ghost tags", Value = "True" },
-                        new() { Name = "Spacing around tags", Value = "True" },
-                        new() { Name = "Check for tag id mismatch", Value = "False" },
-                        new() { Name = "Ignore formatting tags", Value = "True" },
-                        new() { Name = "Ignore locked segments", Value = "False" },
-                        new() { Name = "Ignore difference between normal and non-breaking space", Value = "False" }
+                        new() { Name = "AddedTagsErrorLevel", Value = "True" },
+                        new() { Name = "DeletedTagsErrorLevel", Value = "True" },
+                        new() { Name = "TagOrderChangedErrorLevel", Value = "True" },
+                        new() { Name = "GhostTagErrorLevel", Value = "True" },
+                        new() { Name = "SpaceAroundTagsErrorLevel", Value = "True" },
+                        new() { Name = "CheckForIncludeTagId", Value = "False" },
+                        new() { Name = "IgnoreFormattingTags", Value = "True" },
+                        new() { Name = "IgnoreLockedSegments", Value = "False" },
+                        new() { Name = "TreatNonBreakingSpaceAsSpace", Value = "False" }
                     ]
                 }
             ];

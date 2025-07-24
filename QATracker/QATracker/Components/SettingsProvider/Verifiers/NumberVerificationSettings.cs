@@ -11,51 +11,50 @@ internal class NumberVerificationSettings : VerificationSettings, IVerificationS
     {
         Name = Constants.NumberVerifierName;
         Values =
-    [
-        new()
-        {
-            Name = Constants.NumberVerifierSettingsCategory,
-            Values =
-            [
-                new() { Name = "Report added numbers", Value = "True" },
-                new() { Name = "Report removed numbers", Value = "True" },
-                new() { Name = "Report modified numbers", Value = "True" },
-                new() { Name = "Report modified alphanumerics", Value = "True" },
-                new() { Name = "Report number format errors", Value = "True" },
-                new() { Name = "Consider the order of the numbers in the segment pair", Value = "True" },
-                new() { Name = "Alphanumeric custom separators", Value = "False" },
-                new() { Name = "Exclude locked segments", Value = "False" },
-                new() { Name = "Exclude 100% matches", Value = "False" },
-                new() { Name = "Exclude tag text", Value = "False" },
-                new() { Name = "Exclude untranslated segments", Value = "False" },
-                new() { Name = "Exclude draft segments", Value = "False" },
-                new() { Name = "Brief", Value = "True" },
-                new() { Name = "Extended", Value = "False" },
-                new() { Name = "Require localizations", Value = "False" },
-                new() { Name = "Allow localizations", Value = "True" },
-                new() { Name = "Prevent localizations", Value = "False" },
-                new() { Name = "Space", Value = "True" },
-                new() { Name = "No‑break space", Value = "True" },
-                new() { Name = "Thin space", Value = "True" },
-                new() { Name = "Narrow no‑break space", Value = "True" },
-                new() { Name = "Comma", Value = "True" },
-                new() { Name = "Period", Value = "True" },
-                new() { Name = "No Separator", Value = "True" },
-                new() { Name = "Custom separator", Value = "True" },
-                new() { Name = "Target Space", Value = "True" },
-                new() { Name = "Target No‑break space", Value = "True" },
-                new() { Name = "Target Thin space", Value = "True" },
-                new() { Name = "Target Narrow no‑break space", Value = "True" },
-                new() { Name = "Target Comma", Value = "True" },
-                new() { Name = "Target Period", Value = "True" },
-                new() { Name = "Target No Separator", Value = "True" },
-                new() { Name = "Target Custom separator", Value = "True" },
-                new() { Name = "Source omit leading zero", Value = "False" },
-                new() { Name = "Target omit leading zero", Value = "False" }
-            ],
-            
-        }
-    ];
+        [
+            new()
+            {
+                Name = Constants.NumberVerifierSettingsCategory,
+                Values =
+                [
+                    new() { Name = "ReportAddedNumbers", Value = "True" },
+                    new() { Name = "ReportRemovedNumbers", Value = "True" },
+                    new() { Name = "ReportModifiedNumbers", Value = "True" },
+                    new() { Name = "ReportModifiedAlphanumerics", Value = "True" },
+                    new() { Name = "ReportNumberFormatErrors", Value = "True" },
+                    new() { Name = "CheckInOrder", Value = "True" },
+                    new() { Name = "AlphanumericsCustomSeparator", Value = "False" },
+                    new() { Name = "ExcludeLockedSegments", Value = "False" },
+                    new() { Name = "Exclude100Percents", Value = "False" },
+                    new() { Name = "ExcludeTagText", Value = "False" },
+                    new() { Name = "ExcludeUntranslatedSegments", Value = "False" },
+                    new() { Name = "ExcludeDraftSegments", Value = "False" },
+                    new() { Name = "Brief", Value = "True" },
+                    new() { Name = "Extended", Value = "False" },
+                    new() { Name = "RequireLocalizations", Value = "False" },
+                    new() { Name = "AllowLocalizations", Value = "True" },
+                    new() { Name = "PreventLocalizations", Value = "False" },
+                    new() { Name = "SourceThousandsSpace", Value = "True" },
+                    new() { Name = "SourceThousandsNobreakSpace", Value = "True" },
+                    new() { Name = "SourceThousandsThinSpace", Value = "True" },
+                    new() { Name = "SourceThousandsNobreakThinSpace", Value = "True" },
+                    new() { Name = "SourceThousandsComma", Value = "True" },
+                    new() { Name = "SourceThousandsPeriod", Value = "True" },
+                    new() { Name = "SourceNoSeparator", Value = "True" },
+                    new() { Name = "SourceThousandsCustom", Value = "True" },
+                    new() { Name = "TargetThousandsSpace", Value = "True" },
+                    new() { Name = "TargetThousandsNobreakSpace", Value = "True" },
+                    new() { Name = "TargetThousandsThinSpace", Value = "True" },
+                    new() { Name = "TargetThousandsNobreakThinSpace", Value = "True" },
+                    new() { Name = "TargetThousandsComma", Value = "True" },
+                    new() { Name = "TargetThousandsPeriod", Value = "True" },
+                    new() { Name = "TargetNoSeparator", Value = "True" },
+                    new() { Name = "TargetThousandsCustom", Value = "True" },
+                    new() { Name = "SourceOmitLeadingZero", Value = "False" },
+                    new() { Name = "TargetOmitLeadingZero", Value = "False" }
+                ],
+            }
+        ];
     }
 
     public override Dictionary<string, string> SettingIdToUiStringMap { get; set; } = new()

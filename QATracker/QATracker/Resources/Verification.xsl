@@ -6,6 +6,7 @@
 				<link rel="stylesheet" href="C:/Things/Code/SDL/Trados/Bin/Mixed Platforms/Debug/ReportResources/css/reports.css" />
 				<style>
 					<!-- Add styles for the QA Providers tree view -->
+					.qa-providers-container .enabled.disabled { color: gray !important; }
 					.qa-providers-container { margin: 20px 0; }
 					.qa-providers-container ul { list-style: none; margin: 0; padding: 0; }
 					.qa-providers-container li { margin: 4px 0; }
@@ -219,35 +220,57 @@
 
 
 
-	<!-- Templates for QA Providers tree view -->
+	<!-- Non-leaf node template -->
 	<xsl:template match="*[*]" mode="qa-tree">
+		<xsl:param name="isDisabled" select="false()" />
 		<ul>
 			<li>
 				<span class="toggle" onclick="toggleCategory(this)">+</span>
 				<xsl:text> </xsl:text>
 				<xsl:value-of select="@Name"/>
-
+				<xsl:if test="@Value">
+					:
+					<xsl:choose>
+						<xsl:when test="@Value = 'False'">
+							<span class="value">
+								<xsl:value-of select="@Value"/>
+							</span>
+						</xsl:when>
+						<xsl:otherwise>
+							<span class="enabled">
+								<xsl:value-of select="@Value"/>
+							</span>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:if>
 				<ul class="children">
-					<xsl:apply-templates select="*" mode="qa-tree"/>
+					<xsl:apply-templates select="*" mode="qa-tree">
+						<xsl:with-param name="isDisabled" select="$isDisabled or @Value = 'False'" />
+					</xsl:apply-templates>
 				</ul>
 			</li>
 		</ul>
 	</xsl:template>
 
+	<!-- Leaf node template -->
 	<xsl:template match="*[not(*)]" mode="qa-tree">
+		<xsl:param name="isDisabled" select="false()" />
 		<li>
 			<span class="toggle invisible">&#160;</span>
 			<xsl:text> </xsl:text>
 			<xsl:value-of select="@Name"/>
 			<xsl:choose>
-				<xsl:when test=". = 'True'">
-					: <span class="enabled">
+				<xsl:when test=". = 'False'">
+					: <span class="value">
 						<xsl:value-of select="."/>
 					</span>
 				</xsl:when>
-
 				<xsl:otherwise>
-					: <span class="value">
+					: <span>
+						<xsl:attribute name="class">
+							<xsl:text>enabled</xsl:text>
+							<xsl:if test="$isDisabled"> disabled</xsl:if>
+						</xsl:attribute>
 						<xsl:value-of select="."/>
 					</span>
 				</xsl:otherwise>

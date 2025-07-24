@@ -7,17 +7,7 @@ namespace QATracker.Components.SettingsProvider.Verifiers.BaseClass
     {
         public virtual Dictionary<string, string> SettingIdToUiStringMap { get; set; }
 
-        private VerificationSettingsTreeNode this[string settingId]
-        {
-            get
-            {
-                var x = !SettingIdToUiStringMap.TryGetValue(settingId, out var uiString)
-                    ? null
-                    : FindSettingValueRecursive(uiString);
-
-                return x;
-            }
-        }
+        public VerificationSettingsTreeNode this[string settingId] => FindSettingValueRecursive(settingId);
 
         public void LoadSettings(Dictionary<string, string> projectVerificationSettings)
         {
@@ -44,10 +34,31 @@ namespace QATracker.Components.SettingsProvider.Verifiers.BaseClass
             }
         }
 
-        public VerificationSettingsTreeNode ToSettingsValue() => new()
+        private void ReplaceNamesWithUiStringsRecursive(List<VerificationSettingsTreeNode> nodes)
         {
-            Name = Name,
-            Values = Values
-        };
+            if (nodes == null)
+                return;
+
+            foreach (var node in nodes)
+            {
+                if (node.Name == "Enabled")
+                    continue;
+
+                if (SettingIdToUiStringMap.TryGetValue(node.Name, out var uiString))
+                    node.Name = uiString;
+
+                ReplaceNamesWithUiStringsRecursive(node.Values);
+            }
+        }
+
+        public virtual VerificationSettingsTreeNode ToSettingsValue()
+        {
+            ReplaceNamesWithUiStringsRecursive(Values);
+            return new VerificationSettingsTreeNode
+            {
+                Name = Name,
+                Values = Values
+            };
+        }
     }
 }
