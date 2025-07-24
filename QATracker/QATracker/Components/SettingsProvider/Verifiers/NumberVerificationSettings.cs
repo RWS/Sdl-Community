@@ -10,7 +10,7 @@ internal class NumberVerificationSettings : VerificationSettings, IVerificationS
     public NumberVerificationSettings()
     {
         Name = Constants.NumberVerifierName;
-        Children =
+        Values =
     [
         new()
         {
@@ -53,7 +53,7 @@ internal class NumberVerificationSettings : VerificationSettings, IVerificationS
                 new() { Name = "Source omit leading zero", Value = "False" },
                 new() { Name = "Target omit leading zero", Value = "False" }
             ],
-            Children = null
+            
         }
     ];
     }

@@ -41,7 +41,7 @@ public class VerificationSettingsDataProvider
         {
             var verifierSettingsObject = CategoryMap.CreateVerificationSettings(verifier);
             verifierSettingsObject.LoadSettings(projectVerificationSettings?[verifier]);
-            settingsXml.Children.Add(verifierSettingsObject.ToSettingsTreeNode());
+            settingsXml.Values.Add(verifierSettingsObject.ToSettingsValue());
         }
 
         settingsXml.Name = "Verification Settings";

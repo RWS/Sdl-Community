@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Xml.Serialization;
 
 namespace QATracker.Components.SettingsProvider.Model;
@@ -7,26 +6,55 @@ namespace QATracker.Components.SettingsProvider.Model;
 [XmlRoot("VerificationSettings")]
 public class VerificationSettingsTreeNode
 {
-    [XmlAttribute] 
+    [XmlAttribute]
+    public string Enabled { get; set; }
+
+    [XmlAttribute]
     public string Name { get; set; }
 
-    [XmlElement("Setting")] 
-    public List<VerificationSettingValue> Values { get; set; } = [];
+    [XmlText]
+    public string Value { get; set; }
 
-    [XmlElement("Settings")] 
-    public List<VerificationSettingsTreeNode> Children { get; set; } = [];
+    [XmlElement("Setting")]
+    public List<VerificationSettingsTreeNode> Values { get; set; } = [];
 
-
-    // Recursively searches the tree for a VerificationSettingValue with the given name
-    public VerificationSettingValue FindSettingValueRecursive(string valueName, VerificationSettingsTreeNode node = null)
+    public VerificationSettingsTreeNode FindSettingValueRecursive(string valueName, VerificationSettingsTreeNode node = null)
     {
         node ??= this;
 
-        var found = node.Values?.FirstOrDefault(v => v.Name == valueName);
-        if (found != null)
-            return found;
+        if (node.Values != null)
+        {
+            foreach (var value in node.Values)
+            {
+                if (value.Name == valueName)
+                    return value;
 
-        return node.Children?.Select(child => FindSettingValueRecursive(valueName, child))
-            .FirstOrDefault(foundInChild => foundInChild != null);
+                if (value.Values != null)
+                {
+                    var foundInValue = FindSettingValueInValueRecursive(valueName, value);
+                    if (foundInValue != null)
+                        return foundInValue;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private VerificationSettingsTreeNode FindSettingValueInValueRecursive(string valueName, VerificationSettingsTreeNode value)
+    {
+        if (value.Values != null)
+        {
+            foreach (var nestedValue in value.Values)
+            {
+                if (nestedValue.Name == valueName)
+                    return nestedValue;
+
+                var found = FindSettingValueInValueRecursive(valueName, nestedValue);
+                if (found != null)
+                    return found;
+            }
+        }
+        return null;
     }
 }

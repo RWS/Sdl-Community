@@ -9,7 +9,7 @@ namespace QATracker.Components.SettingsProvider.Verifiers
         public TermVerificationSettings()
         {
             Name = Constants.TermVerifierName;
-            Children =
+            Values =
             [
                 new()
                 {
@@ -25,10 +25,6 @@ namespace QATracker.Components.SettingsProvider.Verifiers
                         new() { Name = "Ignore locked segments", Value = "False" },
                         new() { Name = "Enable recognition of two-letter terms", Value = "False" },
                         new() { Name = "Forbidden term definitions", Value = "False" },
-
-                    ],
-                    Children =
-                    [
                         new()
                         {
                             Name = "Forbidden term definitions",
@@ -41,9 +37,10 @@ namespace QATracker.Components.SettingsProvider.Verifiers
                                 new() { Name = "Forbidden term definition 4", Value = null },
                                 new() { Name = "Forbidden term definition 5", Value = null }
                             ],
-                            Children = null
+                            
                         }
                     ]
+                    
                 }
             ];
         }

@@ -10,9 +10,9 @@ namespace QATracker.Components.SettingsProvider.Verifiers
         public TagVerificationSettings()
         {
             Name = Constants.TagVerifierName;
-            Children =
+            Values =
             [
-                new VerificationSettingsTreeNode
+                new()
                 {
                     Name = Constants.Common,
                     Values =

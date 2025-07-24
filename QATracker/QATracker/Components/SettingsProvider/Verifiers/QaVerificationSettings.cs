@@ -9,7 +9,7 @@ namespace QATracker.Components.SettingsProvider.Verifiers
         public QaVerificationSettings()
         {
             Name = Constants.QaCheckerVerifierName;
-            Children =
+            Values =
             [
                 new()
                 {
@@ -20,14 +20,36 @@ namespace QATracker.Components.SettingsProvider.Verifiers
                         new() { Name = "Source and target are identical", Value = "False" },
                         new() { Name = "Ignore tags", Value = "False" },
                         new() { Name = "Ignore case", Value = "False" },
-                        new() { Name = "Shorter by (%)", Value = "False" },
-                        new() { Name = "Longer by (%)", Value = "False" },
+                        new()
+                        {
+                            Name = "Shorter by (%)", Enabled = "False",
+                            Values =
+                             [
+                                 new() { Name = "Shorter by value", Value = "50" }
+                             ]
+                        },
+                        new()
+                        {
+                            Name = "Longer by (%)", Enabled = "False",
+                            Values =
+                            [
+                                new() { Name = "Longer by value", Value = "50" }
+                            ]
+                        },
                         new() { Name = "Ignore segments with fewer than # words", Value = "2" },
                         new() { Name = "Based on words", Value = "True" },
                         new() { Name = "Based on characters", Value = "" },
-                        new() { Name = "Check for forbidden characters", Value = "False" }
+                        new()
+                        { 
+                            Name = "Check for forbidden characters", Enabled = "False" ,
+                            Values = 
+                            [
+                                new() { Name = "Forbidden chars: ", Value = "" }
+                            ]
+                        },
+                        
                     ],
-                    Children = null
+                    
                 },
                 new()
                 {
@@ -37,12 +59,16 @@ namespace QATracker.Components.SettingsProvider.Verifiers
                         new() { Name = "Exclude PerfectMatch and Context Match units", Value = "True" },
                         new() { Name = "Exclude exact matches", Value = "False" },
                         new() { Name = "Exclude fuzzy matches down to", Value = "False" },
+                        new() { Name = "Exclude fuzzy match value", Value = "99" },
+                        new() { Name = "Element context exclusion value", Value = "True" },
                         new() { Name = "Exclude new translations", Value = "False" },
                         new() { Name = "Exclude repetitions", Value = "False" },
                         new() { Name = "Exclude confirmed translations", Value = "False" },
                         new() { Name = "Exclude locked segments", Value = "True" },
                         new() { Name = "Exclude target segment identical to source", Value = "False" },
                         new() { Name = "Check only segments which are in following contexts", Value = "False" },
+                        new() { Name = "Exclusion string value", Value = "True" },
+
                         new() { Name = "Apply exclusion list to search for not translated segments", Value = "False" },
                         new()
                         {
@@ -52,8 +78,8 @@ namespace QATracker.Components.SettingsProvider.Verifiers
                         new() { Name = "Ignore case", Value = "False" },
                         new() { Name = "Exclusions use regular expressions", Value = "False" },
                         new() { Name = "Report all non-excluded segments", Value = "False" }
-                    ],
-                    Children = null
+                    ]
+                    
                 },
                 new()
                 {
@@ -71,7 +97,7 @@ namespace QATracker.Components.SettingsProvider.Verifiers
                         new() { Name = "All segments", Value = "False" },
                         new() { Name = "Only check if match scores below", Value = "False" }
                     ],
-                    Children = null
+                    
                 },
                 new()
                 {
@@ -90,7 +116,7 @@ namespace QATracker.Components.SettingsProvider.Verifiers
                         new() { Name = "Check consistency of global capitalization", Value = "False" },
                         new() { Name = "Check brackets", Value = "False" }
                     ],
-                    Children = null
+                    
                 },
                 new()
                 {
@@ -102,7 +128,7 @@ namespace QATracker.Components.SettingsProvider.Verifiers
                         new() { Name = "Check times", Value = "False" },
                         new() { Name = "Check measurements and currencies", Value = "False" }
                     ],
-                    Children = null
+                    
                 },
                 new()
                 {
@@ -113,7 +139,7 @@ namespace QATracker.Components.SettingsProvider.Verifiers
                         new() { Name = "Ignore case", Value = "False" },
                         new() { Name = "Search whole words only", Value = "False" }
                     ],
-                    Children = null
+                    
                 },
                 new()
                 {
@@ -123,7 +149,7 @@ namespace QATracker.Components.SettingsProvider.Verifiers
                         new() { Name = "Search regular expressions", Value = "False" },
                         new() { Name = "Ignore case", Value = "False" }
                     ],
-                    Children = null
+                    
                 },
                 new()
                 {
@@ -132,7 +158,7 @@ namespace QATracker.Components.SettingsProvider.Verifiers
                     [
                         new() { Name = "Check trademark characters", Value = "False" }
                     ],
-                    Children = null
+                    
                 },
                 new()
                 {
@@ -145,9 +171,10 @@ namespace QATracker.Components.SettingsProvider.Verifiers
                         new() { Name = "Check all segment contexts", Value = "True" },
                         new() { Name = "Check the following contexts only", Value = "" }
                     ],
-                    Children = null
+                    
                 }
             ];
+            
         }
 
         public override Dictionary<string, string> SettingIdToUiStringMap { get; set; } = new()
@@ -162,6 +189,10 @@ namespace QATracker.Components.SettingsProvider.Verifiers
             ["MinimalWordCountValue"] = "Ignore segments with fewer than # words",
             ["CheckUntranslatedSegments"] = "Check for forgotten and empty translations",
             ["CheckForbiddenChar"] = "Check for forbidden characters",
+            ["ShorterByValue"] = "Shorter by value",
+            ["LongerByValue"] = "Longer by value",
+            ["ForbiddenCharsValue"] = "Forbidden chars: ",
+
 
             // Segment exclusion
             ["ExcludePerfectMatchSegments"] = "Exclude PerfectMatch and Context Match units",
@@ -169,10 +200,13 @@ namespace QATracker.Components.SettingsProvider.Verifiers
 
             ["ExcludeExactMatches"] = "Exclude exact matches",
             ["ExcludeFuzzyMatches"] = "Exclude fuzzy matches down to",
+            ["ExcludeFuzzyMatchValue"] = "Exclude fuzzy match value",
+            ["ElementContextExclusionValue"] = "Element context exclusion value",
             ["ExcludeNewTrans"] = "Exclude new translations",
             ["ExcludeRepetition"] = "Exclude repetitions",
             ["ExcludeConfirmed"] = "Exclude confirmed translations",
             ["ExcludeIdentical"] = "Exclude target segment identical to source",
+            ["ExclusionStringValue"] = "Exclusion string value",
             ["ElementContextExclusion"] = "Check only segments which are in following contexts",
             ["ExclusionStringUntranslated"] = "Apply exclusion list to search for not translated segments",
             ["ExclusionStringIdentical"] = "Apply exclusion list to search for target segments identical to source",

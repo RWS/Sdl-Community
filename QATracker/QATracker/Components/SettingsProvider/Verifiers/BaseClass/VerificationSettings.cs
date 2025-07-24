@@ -7,19 +7,15 @@ namespace QATracker.Components.SettingsProvider.Verifiers.BaseClass
     {
         public virtual Dictionary<string, string> SettingIdToUiStringMap { get; set; }
 
-        public VerificationSettingValue this[string settingId]
+        private VerificationSettingsTreeNode this[string settingId]
         {
-            get => !SettingIdToUiStringMap.TryGetValue(settingId, out var uiString)
-                ? null
-                : FindSettingValueRecursive(uiString);
-            set
+            get
             {
-                if (!SettingIdToUiStringMap.TryGetValue(settingId, out var uiString) || value == null)
-                    return;
+                var x = !SettingIdToUiStringMap.TryGetValue(settingId, out var uiString)
+                    ? null
+                    : FindSettingValueRecursive(uiString);
 
-                var target = FindSettingValueRecursive(uiString);
-                if (target != null)
-                    target.Value = value.Value;
+                return x;
             }
         }
 
@@ -35,19 +31,23 @@ namespace QATracker.Components.SettingsProvider.Verifiers.BaseClass
                     if (bool.Parse(settingsCategory.Value))
                         continue;
 
-                    Children = null;
                     Values = [new() { Name = "Enabled", Value = "False" }];
                     break;
                 }
 
-                this[settingsCategory.Key].Value = settingsCategory.Value;
+                var verificationSettingValue = this[settingsCategory.Key];
+
+                if (verificationSettingValue.Values is null || verificationSettingValue.Values.Count == 0)
+                    verificationSettingValue.Value = settingsCategory.Value;
+                else
+                    verificationSettingValue.Enabled = settingsCategory.Value;
             }
         }
 
-        public VerificationSettingsTreeNode ToSettingsTreeNode() => new()
+        public VerificationSettingsTreeNode ToSettingsValue() => new()
         {
             Name = Name,
-            Children = Children
+            Values = Values
         };
     }
 }

@@ -10,6 +10,6 @@ namespace QATracker.Components.SettingsProvider.Verifiers.Interface
 
         void LoadSettings(Dictionary<string, string> projectVerificationSetting);
 
-        VerificationSettingsTreeNode ToSettingsTreeNode();
+        VerificationSettingsTreeNode ToSettingsValue();
     }
 }
