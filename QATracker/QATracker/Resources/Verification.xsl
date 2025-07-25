@@ -218,8 +218,6 @@
 		</html>
 	</xsl:template>
 
-
-
 	<!-- Non-leaf node template -->
 	<xsl:template match="*[*]" mode="qa-tree">
 		<xsl:param name="isDisabled" select="false()" />
@@ -229,7 +227,9 @@
 				<xsl:text> </xsl:text>
 				<xsl:value-of select="@Name"/>
 				<xsl:if test="@Value">
-					:
+					<xsl:if test="@Name and string-length(@Name) > 0 and @Value and string-length(@Value) > 0">
+						:
+					</xsl:if>
 					<span>
 						<xsl:attribute name="class">
 							<xsl:choose>
@@ -264,7 +264,9 @@
 			<xsl:text> </xsl:text>
 			<xsl:value-of select="@Name"/>
 			<xsl:if test="@Value">
-				:
+				<xsl:if test="@Name and string-length(@Name) > 0 and @Value and string-length(@Value) > 0">
+					:
+				</xsl:if>
 				<span>
 					<xsl:attribute name="class">
 						<xsl:choose>

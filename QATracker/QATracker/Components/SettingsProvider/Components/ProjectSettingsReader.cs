@@ -55,11 +55,26 @@ namespace QATracker.Components.SettingsProvider.Components
             foreach (var group in settingsGroups)
             {
                 var groupId = group.Attribute("Id").Value;
-                var settings = group.Elements("Setting")
-                    .ToDictionary(
-                        s => s.Attribute("Id")?.Value ?? "",
-                        s => s.Value?.Trim() ?? ""
-                    );
+                var settings = new Dictionary<string, string>();
+
+                foreach (var setting in group.Elements("Setting"))
+                {
+                    var settingId = setting.Attribute("Id")?.Value ?? "";
+                    string value;
+
+                    // If the setting has child elements, serialize them as XML string
+                    if (setting.HasElements)
+                    {
+                        value = setting.ToString(SaveOptions.DisableFormatting);
+                    }
+                    else
+                    {
+                        value = setting.Value?.Trim() ?? "";
+                    }
+
+                    settings[settingId] = value;
+                }
+
                 result[groupId] = settings;
             }
 

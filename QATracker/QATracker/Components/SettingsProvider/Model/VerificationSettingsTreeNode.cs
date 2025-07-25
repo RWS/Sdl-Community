@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace QATracker.Components.SettingsProvider.Model;
@@ -22,20 +23,19 @@ public class VerificationSettingsTreeNode
     {
         node ??= this;
 
-        if (node.Values != null)
-        {
-            foreach (var value in node.Values)
-            {
-                if (value.Name == valueName)
-                    return value;
+        if (node.Name == valueName) return node;
+        if (node.Values == null) return null;
 
-                if (value.Values != null)
-                {
-                    var foundInValue = FindSettingValueInValueRecursive(valueName, value);
-                    if (foundInValue != null)
-                        return foundInValue;
-                }
-            }
+        foreach (var value in node.Values)
+        {
+            if (value.Name == valueName)
+                return value;
+
+            if (value.Values == null) continue;
+
+            var foundInValue = FindSettingValueInValueRecursive(valueName, value);
+            if (foundInValue != null)
+                return foundInValue;
         }
 
         return null;

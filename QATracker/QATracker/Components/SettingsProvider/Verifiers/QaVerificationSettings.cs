@@ -1,8 +1,10 @@
 ﻿using QATracker.Components.SettingsProvider.Verifiers.BaseClass;
 using QATracker.Components.SettingsProvider.Verifiers.Interface;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using QATracker.Components.SettingsProvider.Model;
+using QATracker.Extension;
 
 namespace QATracker.Components.SettingsProvider.Verifiers
 {
@@ -19,9 +21,16 @@ namespace QATracker.Components.SettingsProvider.Verifiers
                     Values =
                     [
                         new() { Name = "CheckUntranslatedSegments", Value = "True" },
-                        new() { Name = "CheckIdenticalSegments", Value = "False" },
-                        new() { Name = "IdenticalSegmentsIgnoreTags", Value = "False" },
-                        new() { Name = "IdenticalSegmentsIgnoreCase", Value = "False" },
+                        new()
+                        {
+                            Name = "CheckIdenticalSegments", Value = "False",
+                            Values =
+                            [
+                                new() { Name = "IdenticalSegmentsIgnoreTags", Value = "False" },
+                                new() { Name = "IdenticalSegmentsIgnoreCase", Value = "False" },
+                            ]
+                        },
+
                         new()
                         {
                             Name = "CheckTargetShorter", Value = "False",
@@ -101,16 +110,41 @@ namespace QATracker.Components.SettingsProvider.Verifiers
                     Name = Constants.Inconsistencies,
                     Values =
                     [
-                        new() { Name = "CheckInconsistencies", Value = "False" },
-                        new() { Name = "InconsistenciesIgnoreTags", Value = "False" },
-                        new() { Name = "InconsistenciesIgnoreCase", Value = "False" },
-                        new() { Name = "CheckRepeatedWords", Value = "False" },
-                        new() { Name = "RepeatedWordsNumbers", Value = "False" },
-                        new() { Name = "RepeatedWordsIgnoreCase", Value = "False" },
-                        new() { Name = "UneditedSegments", Value = "False" },
-                        new() { Name = "UneditedSegmentsSelectedFuzzyOnly", Value = "True" },
-                        new() { Name = "UneditedNotConfirmed", Value = "False" },
-                        new() { Name = "OnlyCheckIfMatchScoresBelow", Value = "False" }
+                        new()
+                        {
+                            Name = "CheckInconsistencies", Value = "False",
+                            Values =
+                            [
+                                new() { Name = "InconsistenciesIgnoreTags", Value = "False" },
+                                new() { Name = "InconsistenciesIgnoreCase", Value = "False" }
+                            ]
+                        },
+                        new()
+                        {
+                            Name = "CheckRepeatedWords", Value = "False",
+                            Values =
+                            [
+                                new() { Name = "RepeatedWordsNumbers", Value = "False" },
+                                new() { Name = "RepeatedWordsIgnoreCase", Value = "False" },
+                            ]
+                        },
+                        new()
+                        {
+                            Name = "UneditedSegments", Value = "False",
+                            Values =
+                            [
+                                new() { Name = "UneditedConfirmed", Value = "False" },
+                                new() { Name = "UneditedNotConfirmed", Value = "False" },
+                                new()
+                                {
+                                    Name = "UneditedSegmentsSelectedFuzzyOnly", Value = "False",
+                                    Values =
+                                    [
+                                        new() { Name = "UneditedConfirmedLevel", Value = "99" }
+                                    ]
+                                }
+                            ]
+                        }
                     ],
                 },
                 new()
@@ -120,11 +154,25 @@ namespace QATracker.Components.SettingsProvider.Verifiers
                     [
                         new() { Name = "CheckPunctuationDifferences", Value = "False" },
                         new() { Name = "CheckSpanishPunctuation", Value = "False" },
-                        new() { Name = "CheckPunctuationSpace", Value = "False" },
-                        new() { Name = "PunctuationSpacesFrench", Value = "False" },
+                        new()
+                        {
+                            Name = "CheckPunctuationSpace", Value = "False",
+                            Values =
+                            [
+                                new() { Name = "PunctuationSpaceCharsValue", Value = ":!?;" },
+                                new() { Name = "PunctuationSpacesFrench", Value = "False" },
+                            ]
+                        },
+
                         new() { Name = "CheckMultipleSpaces", Value = "False" },
-                        new() { Name = "CheckMultipleDots", Value = "False" },
-                        new() { Name = "Ignore3Dots", Value = "False" },
+                        new()
+                        {
+                            Name = "CheckMultipleDots", Value = "False",
+                            Values =
+                            [
+                                new() { Name = "Ignore3Dots", Value = "False" },
+                            ]
+                        },
                         new() { Name = "ExtraEndSpace", Value = "False" },
                         new() { Name = "CheckInitialCaps", Value = "False" },
                         new() { Name = "CheckGlobalCaps", Value = "False" },
@@ -147,9 +195,21 @@ namespace QATracker.Components.SettingsProvider.Verifiers
                     Name = Constants.WordList,
                     Values =
                     [
-                        new() { Name = "CheckWordList", Value = "False" },
-                        new() { Name = "WordListIgnoreCase", Value = "False" },
-                        new() { Name = "WordListWholeWord", Value = "False" }
+                        new()
+                        {
+                            Name = "CheckWordList", Value = "False",
+                            Values =
+                            [
+                                new() { Name = "WordListIgnoreCase", Value = "False" },
+                                new() { Name = "WordListWholeWord", Value = "False" },
+                                new()
+                                {
+                                    Name = "WrongWordPairs", Value = null,
+                                    Values = []
+                                },
+                            ]
+                        },
+
                     ],
                 },
                 new()
@@ -157,11 +217,15 @@ namespace QATracker.Components.SettingsProvider.Verifiers
                     Name = Constants.RegularExpressions,
                     Values =
                     [
-                        new() { Name = "CheckRegEx", Value = "False" },
                         new()
                         {
-                            Name = "WordListIgnoreCase", Value = "False"
-                        } // Use a specific RegEx ignore case if available
+                            Name = "CheckRegEx", Value = "False",
+                            Values =
+                            [
+                                new() { Name = "RegExRules", Value = "N/A" }
+                            ]
+                        },
+
                     ],
                 },
                 new()
@@ -169,7 +233,14 @@ namespace QATracker.Components.SettingsProvider.Verifiers
                     Name = Constants.TrademarkCheck,
                     Values =
                     [
-                        new() { Name = "CheckTrademarks", Value = "False" }
+                        new()
+                        {
+                            Name = "CheckTrademarks", Value = "False",
+                            Values =
+                            [
+                                new() { Name = "TrademarksSymbols", Value = "N/A" }
+                            ]
+                        }
                     ],
                 },
                 new()
@@ -187,16 +258,123 @@ namespace QATracker.Components.SettingsProvider.Verifiers
             ];
         }
 
-        private void MakeSpecificChanges()
+        private void MakeQaCheckerSpecificChanges()
         {
             EnhanceSegmentSizeCheckUi();
             EnhanceElementContextExclusionValueUi();
+            EnhanceWordListUi();
+            EnhanceRegexExpressionsUi();
+            EnhanceTrademarkListUi();
+        }
+
+        private void EnhanceTrademarkListUi()
+        {
+            var trademarkNode = this["TrademarksSymbols"];
+
+            var trademarks = string.Join(" ", trademarkNode.Values.Select(v => v.Value));
+            trademarkNode.Value = trademarkNode.Values.Count == 0 ? "N/A" : trademarks;
+
+            trademarkNode.Values = null;
+        }
+
+        private void EnhanceRegexExpressionsUi()
+        {
+            var regexRuleNode = this["RegExRules"];
+            ParseXmlToRegexValues(regexRuleNode.Values);
+
+            regexRuleNode.Value = regexRuleNode.Values.Count == 0 ? "N/A" : "";
+        }
+
+        private void ParseXmlToRegexValues(IEnumerable<VerificationSettingsTreeNode> regexNodeValues)
+        {
+            var regexList = regexNodeValues.Where(v => v.Name.EndsWithDigits());
+            foreach (var pair in regexList)
+            {
+                if (string.IsNullOrWhiteSpace(pair.Value))
+                    continue;
+
+                try
+                {
+                    var xml = System.Xml.Linq.XElement.Parse(pair.Value);
+
+                    // Find the RegExRule element, regardless of namespace
+                    var regexRule = xml.Elements().FirstOrDefault(e => e.Name.LocalName == "RegExRule");
+                    if (regexRule != null)
+                    {
+                        // Create subelements for each piece of info
+                        var description = regexRule.Elements().FirstOrDefault(e => e.Name.LocalName == "Description")?.Value;
+                        var ignoreCase = regexRule.Elements().FirstOrDefault(e => e.Name.LocalName == "IgnoreCase")?.Value;
+                        var regexSource = regexRule.Elements().FirstOrDefault(e => e.Name.LocalName == "RegExSource")?.Value;
+                        var regexTarget = regexRule.Elements().FirstOrDefault(e => e.Name.LocalName == "RegExTarget")?.Value;
+                        var ruleCondition = regexRule.Elements().FirstOrDefault(e => e.Name.LocalName == "RuleCondition")?.Value;
+
+                        pair.Values = new List<VerificationSettingsTreeNode>();
+
+                        if (!string.IsNullOrEmpty(description))
+                            if (!string.IsNullOrEmpty(ignoreCase))
+                                pair.Values.Add(new VerificationSettingsTreeNode { Name = "IgnoreCase", Value = ignoreCase });
+                        if (!string.IsNullOrEmpty(regexSource))
+                            pair.Values.Add(new VerificationSettingsTreeNode { Name = "RegExSource", Value = regexSource });
+                        if (!string.IsNullOrEmpty(regexTarget))
+                            pair.Values.Add(new VerificationSettingsTreeNode { Name = "RegExTarget", Value = regexTarget });
+                        if (!string.IsNullOrEmpty(ruleCondition))
+                            pair.Values.Add(new VerificationSettingsTreeNode { Name = "RuleCondition", Value = ruleCondition });
+
+                        // Optionally clear the string value, since info is now in subelements
+                        pair.Value = description;
+                        pair.Name = "";
+                    }
+                }
+                catch
+                {
+                    // If parsing fails, leave the value unchanged
+                }
+            }
+        }
+
+        private void EnhanceWordListUi()
+        {
+            var wrongPairsNode = this["WrongWordPairs"];
+            wrongPairsNode.Value = wrongPairsNode.Values.Count == 0 ? "N/A" : "";
+
+            var wordList = wrongPairsNode.Values.Where(v => v.Name.EndsWithDigits());
+            foreach (var pair in wordList)
+            {
+                if (string.IsNullOrWhiteSpace(pair.Value))
+                    continue;
+
+                try
+                {
+                    var xml = System.Xml.Linq.XElement.Parse(pair.Value);
+
+                    // Find the WrongWordDef element, regardless of namespace
+                    var wrongWordDef = xml.Elements().FirstOrDefault(e => e.Name.LocalName == "WrongWordDef");
+                    if (wrongWordDef != null)
+                    {
+                        var wrongWord = wrongWordDef.Elements().FirstOrDefault(e => e.Name.LocalName == "WrongWord")?.Value
+                                        ?? wrongWordDef.Elements().FirstOrDefault(e => e.Name.LocalName == "_WrongWord")?.Value;
+                        var correctWord = wrongWordDef.Elements().FirstOrDefault(e => e.Name.LocalName == "CorrectWord")?.Value
+                                          ?? wrongWordDef.Elements().FirstOrDefault(e => e.Name.LocalName == "_CorrectWord")?.Value;
+
+                        if (!string.IsNullOrEmpty(wrongWord) && !string.IsNullOrEmpty(correctWord))
+                        {
+                            pair.Value = $"({wrongWord}, {correctWord})";
+                            pair.Name = "";
+                        }
+                    }
+                }
+                catch
+                {
+                    // If parsing fails, leave the value unchanged
+                }
+            }
         }
 
         private void EnhanceElementContextExclusionValueUi()
         {
             var elementExclusion = this["ElementContextExclusion"];
-            elementExclusion.Values = elementExclusion.Values[0].Values;
+            var values = elementExclusion.Values[0].Values;
+            elementExclusion.Values = !values.Any() ? [new() { Name = "Values", Value = "N/A" }] : values;
         }
 
         private void EnhanceSegmentSizeCheckUi()
@@ -220,7 +398,7 @@ namespace QATracker.Components.SettingsProvider.Verifiers
 
         public override VerificationSettingsTreeNode ToSettingsValue()
         {
-            MakeSpecificChanges();
+            MakeQaCheckerSpecificChanges();
             return base.ToSettingsValue();
         }
 
@@ -269,14 +447,17 @@ namespace QATracker.Components.SettingsProvider.Verifiers
             ["RepeatedWordsNumbers"] = "Ignore numbers",
             ["RepeatedWordsIgnoreCase"] = "Ignore case repeated words",
             ["UneditedSegments"] = "Check for unedited fuzzy matches",
-            ["UneditedSegmentsSelectedFuzzyOnly"] = "Confirmed segments only",
+            ["UneditedSegmentsSelectedFuzzyOnly"] = "Only check if match scores below",
             ["UneditedNotConfirmed"] = "All segments",
+            ["UneditedConfirmed"] = "Confirmed segments only",
+            ["UneditedConfirmedLevel"] = "Level",
             ["OnlyCheckIfMatchScoresBelow"] = "Only check if match scores below",
 
             // Punctuation
             ["CheckPunctuationDifferences"] = "Check source and target end in same punctuation",
             ["CheckSpanishPunctuation"] = "Check spanish punctuation",
             ["CheckPunctuationSpace"] = "Check unintentional spaces before",
+            ["PunctuationSpaceCharsValue"] = "Characters",
             ["PunctuationSpacesFrench"] = "French compliant check",
             ["CheckMultipleSpaces"] = "Check for multiple spaces",
             ["CheckMultipleDots"] = "Check for multiple dots",
@@ -296,14 +477,17 @@ namespace QATracker.Components.SettingsProvider.Verifiers
             ["CheckWordList"] = "Check word list",
             ["WordListIgnoreCase"] = "Ignore case",
             ["WordListWholeWord"] = "Search whole words only",
+            ["WrongWordPairs"] = "Wrong word pairs",
+            ["WrongWordPairsCount"] = "Wrong word pairs count",
 
             // Regular Expressions
             ["CheckRegEx"] = "Search regular expressions",
-            ["RegExRules"] = "Search regular expressions",
+            ["RegExRules"] = "Regular expressions",
             // ["RegExRule.IgnoreCase"] = "Ignore case", // Only if present in XML
 
             // Trademark Check
             ["CheckTrademarks"] = "Check trademark characters",
+            ["TrademarksSymbols"] = "Symbols",
 
             // Length Verification
             ["CheckAbsoluteLength"] = "Check length limitation",

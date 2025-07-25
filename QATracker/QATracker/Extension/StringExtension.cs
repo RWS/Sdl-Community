@@ -5,8 +5,9 @@ namespace QATracker.Extension
 {
     public static class StringExtension
     {
-        public static bool ContainsDigit(this string s) =>
-            s.Any(char.IsDigit);
+        public static bool EndsWithDigits(this string input) =>
+            !string.IsNullOrEmpty(input) && Regex.IsMatch(input, @"\d+$");
+
 
         public static string TrimEndingDigits(this string s) => s.TrimEnd("0123456789".ToCharArray());
         

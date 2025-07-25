@@ -9,7 +9,7 @@ namespace QATracker.Components.SettingsProvider.Verifiers.BaseClass
         public virtual Dictionary<string, string> SettingIdToUiStringMap { get; set; }
 
         public VerificationSettingsTreeNode this[string settingId] =>
-            !settingId.ContainsDigit()
+            !settingId.EndsWithDigits()
                 ? FindSettingValueRecursive(settingId)
                 : CreateAndReturnNestedValue(settingId);
 
@@ -19,12 +19,14 @@ namespace QATracker.Components.SettingsProvider.Verifiers.BaseClass
             var parentSettingId = settingId.TrimEndingDigits();
 
             var settingParent = FindSettingValueRecursive(parentSettingId);
-            if (settingParent == null) return null;
+            if (settingParent == null)
+                return null;
 
             var settingsTreeNode = new VerificationSettingsTreeNode
             {
                 Name = $"{settingParent.Name}{settingId.GetEndingDigits()}",
             };
+
             settingParent.Values.Add(settingsTreeNode);
             return settingsTreeNode;
         }
@@ -47,7 +49,11 @@ namespace QATracker.Components.SettingsProvider.Verifiers.BaseClass
                     break;
                 }
 
-                this[settingsCategoryKey].Value = settingsCategory.Value;
+                try
+                {
+                    this[settingsCategoryKey].Value = settingsCategory.Value;
+                }
+                catch { }
             }
         }
 
@@ -75,7 +81,7 @@ namespace QATracker.Components.SettingsProvider.Verifiers.BaseClass
                 if (nodeName == "Enabled")
                     continue;
 
-                if (!nodeName.ContainsDigit())
+                if (!nodeName.EndsWithDigits())
                 {
                     if (SettingIdToUiStringMap.TryGetValue(nodeName, out var uiString))
                         node.Name = uiString;
