@@ -230,18 +230,22 @@
 				<xsl:value-of select="@Name"/>
 				<xsl:if test="@Value">
 					:
-					<xsl:choose>
-						<xsl:when test="@Value = 'False'">
-							<span class="value">
-								<xsl:value-of select="@Value"/>
-							</span>
-						</xsl:when>
-						<xsl:otherwise>
-							<span class="enabled">
-								<xsl:value-of select="@Value"/>
-							</span>
-						</xsl:otherwise>
-					</xsl:choose>
+					<span>
+						<xsl:attribute name="class">
+							<xsl:choose>
+								<xsl:when test="$isDisabled">
+									<xsl:text>value enabled disabled</xsl:text>
+								</xsl:when>
+								<xsl:when test="@Value = 'False'">
+									<xsl:text>value</xsl:text>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:text>enabled</xsl:text>
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:attribute>
+						<xsl:value-of select="@Value"/>
+					</span>
 				</xsl:if>
 				<ul class="children">
 					<xsl:apply-templates select="*" mode="qa-tree">
@@ -259,22 +263,25 @@
 			<span class="toggle invisible">&#160;</span>
 			<xsl:text> </xsl:text>
 			<xsl:value-of select="@Name"/>
-			<xsl:choose>
-				<xsl:when test="@Value = 'False'">
-					: <span class="value">
-						<xsl:value-of select="@Value"/>
-					</span>
-				</xsl:when>
-				<xsl:otherwise>
-					: <span>
-						<xsl:attribute name="class">
-							<xsl:text>enabled</xsl:text>
-							<xsl:if test="$isDisabled"> disabled</xsl:if>
-						</xsl:attribute>
-						<xsl:value-of select="@Value"/>
-					</span>
-				</xsl:otherwise>
-			</xsl:choose>
+			<xsl:if test="@Value">
+				:
+				<span>
+					<xsl:attribute name="class">
+						<xsl:choose>
+							<xsl:when test="$isDisabled">
+								<xsl:text>value enabled disabled</xsl:text>
+							</xsl:when>
+							<xsl:when test="@Value = 'False'">
+								<xsl:text>value</xsl:text>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:text>enabled</xsl:text>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:attribute>
+					<xsl:value-of select="@Value"/>
+				</span>
+			</xsl:if>
 		</li>
 	</xsl:template>
 
