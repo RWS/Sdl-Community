@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
+	
   <PropertyGroup>
 		<SignAssembly>True</SignAssembly>
 		<TargetFramework>net48</TargetFramework>
@@ -9,6 +10,7 @@
 		<LangVersion>latest</LangVersion>
 		<UseWPF>true</UseWPF>
   </PropertyGroup>
+	
   <ItemGroup>
     <None Remove="Resources\%24this.Icon.ico" />
     <None Remove="Resources\appicon.ico" />
@@ -37,6 +39,7 @@
     <None Remove="Resources\TellMe\TellMeSourceCode.ico" />
     <None Remove="Resources\warning.png" />
   </ItemGroup>
+	
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(TradosFolder)\Newtonsoft.Json.dll</HintPath>
@@ -95,6 +98,7 @@
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions">
       <HintPath>$(TradosFolder)\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
+	  
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SQLite">
@@ -125,14 +129,16 @@
     </None>
     <None Include="pluginpackage.manifest.xml" />
   </ItemGroup>
-  <ItemGroup>
-  	<PackageReference Include="Google.Cloud.AutoML.V1" Version="3.4.0" />
-  	<PackageReference Include="Google.Cloud.Translate.V3" Version="3.9.0" />
-  	<PackageReference Include="LanguageMappingProvider" Version="1.0.100" />
+	
+	<ItemGroup>
+		<PackageReference Include="Google.Cloud.AutoML.V1" Version="3.4.0" />
+		<PackageReference Include="Google.Cloud.Translate.V3" Version="3.9.0" />
+		<PackageReference Include="LanguageMappingProvider" Version="1.0.107" />
 		<PackageReference Include="Sdl.Core.PluginFramework" Version="2.1.0" />
 		<PackageReference Include="Sdl.Core.PluginFramework.Build" Version="18.0.1" />
 		<PackageReference Include="System.Diagnostics.DiagnosticSource" Version="8.0.1" />
-  </ItemGroup>
+	</ItemGroup>
+	
   <ItemGroup>
     <Resource Include="Resources\$this.Icon.ico" />
     <Resource Include="Resources\appicon.ico" />

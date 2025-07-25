@@ -8,7 +8,7 @@
 			 xmlns:helpers="clr-namespace:GoogleCloudTranslationProvider.Helpers"
 			 xmlns:uiHelpers="clr-namespace:GoogleCloudTranslationProvider.UiHelpers"
 			 xmlns:behaviours="clr-namespace:GoogleCloudTranslationProvider.Behaviours"
-			 xmlns:viewModels="clr-namespace:GoogleCloudTranslationProvider.ViewModels"
+			 xmlns:viewModels="clr-namespace:GoogleCloudTranslationProvider.ViewModel"
 			 xmlns:converters="clr-namespace:GoogleCloudTranslationProvider.Converters"
 			 xmlns:controls="clr-namespace:Sdl.Desktop.Platform.Controls.Controls;assembly=Sdl.Desktop.Platform.Controls"
 			 xmlns:sys="clr-namespace:System;assembly=mscorlib"
