@@ -172,7 +172,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="LanguageMappingProvider" Version="1.0.100" />
+		<PackageReference Include="LanguageMappingProvider" >
+			<Version>1.0.105</Version>
+		</PackageReference>
 		<PackageReference Include="Sdl.Core.PluginFramework">
 			<Version>2.1.0</Version>
 		</PackageReference>
