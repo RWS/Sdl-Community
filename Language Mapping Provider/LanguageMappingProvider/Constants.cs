@@ -17,6 +17,7 @@ internal static class Constants
     public const string SQL_SelectDefaultData = "select * from defaultdata";
     public const string SQL_UpdateData = "UPDATE languagemapping SET {0} = '{1}' WHERE `Index` = {2}";
     public const string SQL_DropTable = "DROP TABLE languagemapping";
+    public const string SQL_HasAnyData = "SELECT EXISTS(SELECT 1 FROM languagemapping LIMIT 1)";
 
     public const string UndefinedLanguageCode = "n/a";
 }

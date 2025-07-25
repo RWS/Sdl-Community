@@ -16,418 +16,457 @@ namespace LanguageMappingProvider;
 
 public class LanguageMappingDatabase : ILanguageMappingDatabase, IDisposable
 {
-	private readonly string _filePath;
-	private readonly SQLiteConnection _sqliteConnection;
-	private readonly IList<LanguageMapping> _pluginSupportedLanguages;
-	private readonly IDictionary<int, LanguageMapping> _mappedLanguagesDictionary;
+    private readonly string _filePath;
+    private readonly SQLiteConnection _sqliteConnection;
+    private readonly IList<LanguageMapping> _pluginSupportedLanguages;
+    private readonly IDictionary<int, LanguageMapping> _mappedLanguagesDictionary;
 
-	/// <summary>
-	/// Initializes a new instance of the <see cref="LanguageMappingDatabase"/> class
-	/// and establishes a connection to the SQLite database associated with the specified plugin.
-	/// </summary>
-	/// 
-	/// <param name="pluginName">
-	/// The unique identifier of the plugin.
-	/// This parameter is essential for establishing a secure and reliable connection to the dedicated database, 
-	/// ensuring seamless integration with the plugin's functionality. 
-	/// If the corresponding database does not exist, a new database will be created.</param>
-	/// 
-	/// <param name="pluginSupportedLanguages">
-	/// A collection of <see cref="LanguageMapping"/> objects representing the supported languages for the plugin.
-	/// The <see cref="LanguageMapping.LanguageCode"/> values in the database will be updated accordingly when creating or resetting the database.
-	/// This ensures seamless integration with the plugin's functionality, reflecting the accurate supported languages in the database.
-	/// </param>
-	/// 
-	/// <exception cref="DatabaseInitializationException">Thrown when the <paramref name="pluginSupportedLanguages"/> is not set and the database doesn't exist.</exception>
-	public LanguageMappingDatabase(string pluginName, IList<LanguageMapping> pluginSupportedLanguages)
-	{
-		_pluginSupportedLanguages = pluginSupportedLanguages;
-		_filePath = string.Format(Constants.DatabaseFilePath, pluginName);
-		_mappedLanguagesDictionary = new Dictionary<int, LanguageMapping>();
-		_sqliteConnection = new SQLiteConnection($"Data Source={_filePath}");
-		EnsureDatabaseFileExists();
-		EnsureTableExists();
-		LoadMappedLanguages();
-	}
+    /// <summary>
+    /// Initializes a new instance of the <see cref="LanguageMappingDatabase"/> class
+    /// and establishes a connection to the SQLite database associated with the specified plugin.
+    /// </summary>
+    /// 
+    /// <param name="pluginName">
+    /// The unique identifier of the plugin.
+    /// This parameter is essential for establishing a secure and reliable connection to the dedicated database, 
+    /// ensuring seamless integration with the plugin's functionality. 
+    /// If the corresponding database does not exist, a new database will be created.</param>
+    /// 
+    /// <param name="pluginSupportedLanguages">
+    /// A collection of <see cref="LanguageMapping"/> objects representing the supported languages for the plugin.
+    /// The <see cref="LanguageMapping.LanguageCode"/> values in the database will be updated accordingly when creating or resetting the database.
+    /// This ensures seamless integration with the plugin's functionality, reflecting the accurate supported languages in the database.
+    /// </param>
+    /// 
+    /// <exception cref="DatabaseInitializationException">Thrown when the <paramref name="pluginSupportedLanguages"/> is not set and the database doesn't exist.</exception>
+    public LanguageMappingDatabase(string pluginName, IList<LanguageMapping> pluginSupportedLanguages)
+    {
+        _pluginSupportedLanguages = pluginSupportedLanguages;
+        _filePath = string.Format(Constants.DatabaseFilePath, pluginName);
+        _mappedLanguagesDictionary = new Dictionary<int, LanguageMapping>();
+        _sqliteConnection = new SQLiteConnection($"Data Source={_filePath}");
+        EnsureDatabaseFileExists();
+        EnsureLanguageMappingTableInitialized();
+        LoadMappedLanguages();
+    }
 
-	public int Count => _mappedLanguagesDictionary.Count;
+    public int Count => _mappedLanguagesDictionary.Count;
 
-	public bool CanResetToDefaults => _pluginSupportedLanguages is not null && _pluginSupportedLanguages.Any();
+    public bool CanResetToDefaults => _pluginSupportedLanguages is not null && _pluginSupportedLanguages.Any();
 
-	public void InsertLanguage(LanguageMapping mappedLanguage)
-	{
-		EnsureMappedLanguageIsValid(mappedLanguage);
-		var syntax = string.Format(Constants.SQL_InsertData, mappedLanguage.Name, mappedLanguage.Region, mappedLanguage.TradosCode, mappedLanguage.LanguageCode);
-		ExecuteCommand(syntax);
-		LoadMappedLanguages();
-	}
+    public void InsertLanguage(LanguageMapping mappedLanguage)
+    {
+        EnsureMappedLanguageIsValid(mappedLanguage);
+        var syntax = string.Format(Constants.SQL_InsertData, mappedLanguage.Name, mappedLanguage.Region, mappedLanguage.TradosCode, mappedLanguage.LanguageCode);
+        ExecuteCommand(syntax);
+        LoadMappedLanguages();
+    }
 
-	public LanguageMapping GetLanguage(string languageCode)
-	{
-		var foundLanguage = _mappedLanguagesDictionary?.Values?.FirstOrDefault(x => x.TradosCode.Equals(languageCode));
-		return foundLanguage is not null
-			 ? foundLanguage
-			 : throw new LanguageNotFoundException();
-	}
+    public LanguageMapping GetLanguage(string languageCode)
+    {
+        var foundLanguage = _mappedLanguagesDictionary?.Values?.FirstOrDefault(x => x.TradosCode.Equals(languageCode));
+        return foundLanguage is not null
+             ? foundLanguage
+             : throw new LanguageNotFoundException();
+    }
 
-	public LanguageMapping GetLanguage(CultureCode cultureCode)
-	{
-		return GetLanguage(cultureCode.Name);
-	}
+    public LanguageMapping GetLanguage(CultureCode cultureCode)
+    {
+        return GetLanguage(cultureCode.Name);
+    }
 
-	public bool TryGetLanguage(string languageCode, out LanguageMapping languageMapping)
-	{
-		languageMapping = null;
-		try
-		{
-			languageMapping = GetLanguage(languageCode);
-			return true;
-		}
-		catch
-		{
-			return false;
-		}
-	}
+    public bool TryGetLanguage(string languageCode, out LanguageMapping languageMapping)
+    {
+        languageMapping = null;
+        try
+        {
+            languageMapping = GetLanguage(languageCode);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
 
-	public bool TryGetLanguage(CultureCode cultureCode, out LanguageMapping languageMapping)
-	{
-		return TryGetLanguage(cultureCode.Name, out languageMapping);
-	}
+    public bool TryGetLanguage(CultureCode cultureCode, out LanguageMapping languageMapping)
+    {
+        return TryGetLanguage(cultureCode.Name, out languageMapping);
+    }
 
-	public void UpdateAll(IEnumerable<LanguageMapping> mappedLanguages)
-	{
-		if (mappedLanguages is null || !mappedLanguages.Any())
-		{
-			return;
-		}
+    public void UpdateAll(IEnumerable<LanguageMapping> mappedLanguages)
+    {
+        if (mappedLanguages is null || !mappedLanguages.Any())
+        {
+            return;
+        }
 
-		var mappedLanguagesDictionary = mappedLanguages?.ToDictionary(language => language.Index, language => language);
-		UpdateAll(mappedLanguagesDictionary);
-	}
+        var mappedLanguagesDictionary = mappedLanguages?.ToDictionary(language => language.Index, language => language);
+        UpdateAll(mappedLanguagesDictionary);
+    }
 
-	public void UpdateAt(int index, string field, string value)
-	{
-		EnsureCanUpdate(index, field, value);
-		var syntax = string.Format(Constants.SQL_UpdateData, field, value, index);
-		ExecuteCommand(syntax);
-		LoadMappedLanguages();
-	}
+    public void UpdateAt(int index, string field, string value)
+    {
+        EnsureCanUpdate(index, field, value);
+        var syntax = string.Format(Constants.SQL_UpdateData, field, value, index);
+        ExecuteCommand(syntax);
+        LoadMappedLanguages();
+    }
 
-	public bool HasMappedLanguagesChanged(IEnumerable<LanguageMapping> mappedLanguages)
-	{
-		if (mappedLanguages is null || !mappedLanguages.Any())
-		{
-			return false;
-		}
+    public bool HasMappedLanguagesChanged(IEnumerable<LanguageMapping> mappedLanguages)
+    {
+        if (mappedLanguages is null || !mappedLanguages.Any())
+        {
+            return false;
+        }
 
-		EnsureCollectionIsValid(mappedLanguages);
-		var mappedLanguagesDictionary = mappedLanguages.ToDictionary(language => language.Index, language => language);
-		return HasMappedLanguagesChanged(mappedLanguagesDictionary);
-	}
+        EnsureCollectionIsValid(mappedLanguages);
+        var mappedLanguagesDictionary = mappedLanguages.ToDictionary(language => language.Index, language => language);
+        return HasMappedLanguagesChanged(mappedLanguagesDictionary);
+    }
 
-	private void EnsureCollectionIsValid(IEnumerable<LanguageMapping> collection)
-	{
-		var indexSet = new HashSet<int>();
-		foreach (var mappedLanguage in collection)
-		{
-			if (indexSet.Contains(mappedLanguage.Index))
-			{
-				throw new DuplicateIndexException();
-			}
+    private void EnsureCollectionIsValid(IEnumerable<LanguageMapping> collection)
+    {
+        var indexSet = new HashSet<int>();
+        foreach (var mappedLanguage in collection)
+        {
+            if (indexSet.Contains(mappedLanguage.Index))
+            {
+                throw new DuplicateIndexException();
+            }
 
-			indexSet.Add(mappedLanguage.Index);
-		}
-	}
+            indexSet.Add(mappedLanguage.Index);
+        }
+    }
 
-	public IEnumerable<LanguageMapping> GetMappedLanguages()
-	{
-		return _mappedLanguagesDictionary.Values.Select(mappedLanguage => new LanguageMapping
-		{
-			Index = mappedLanguage.Index,
-			Name = mappedLanguage.Name,
-			Region = mappedLanguage.Region,
-			TradosCode = mappedLanguage.TradosCode,
-			LanguageCode = mappedLanguage.LanguageCode
-		});
-	}
+    public IEnumerable<LanguageMapping> GetMappedLanguages()
+    {
+        return _mappedLanguagesDictionary.Values.Select(mappedLanguage => new LanguageMapping
+        {
+            Index = mappedLanguage.Index,
+            Name = mappedLanguage.Name,
+            Region = mappedLanguage.Region,
+            TradosCode = mappedLanguage.TradosCode,
+            LanguageCode = mappedLanguage.LanguageCode
+        });
+    }
 
-	public void ResetToDefault()
-	{
-		if (!CanResetToDefaults)
-		{
-			return;
-		}
+    public void ResetToDefault()
+    {
+        if (!CanResetToDefaults)
+        {
+            return;
+        }
 
-		ExecuteCommand(Constants.SQL_DropTable);
-		CreateNewTable();
-		LoadMappedLanguages();
-	}
+        ExecuteCommand(Constants.SQL_DropTable);
+        CreateNewTable();
+        LoadMappedLanguages();
+    }
 
-	public void Dispose()
-	{
-		_sqliteConnection.Dispose();
-	}
+    public void Dispose()
+    {
+        _sqliteConnection.Dispose();
+    }
 
-	private void LoadMappedLanguages()
-	{
-		IDbConnection connection = _sqliteConnection;
-		var databaseCollection = connection.Query<LanguageMapping>(Constants.SQL_SelectData, new DynamicParameters());
+    private void LoadMappedLanguages()
+    {
+        IDbConnection connection = _sqliteConnection;
+        var databaseCollection = connection.Query<LanguageMapping>(Constants.SQL_SelectData, new DynamicParameters());
 
-		_mappedLanguagesDictionary.Clear();
-		foreach (var pair in databaseCollection)
-		{
-			_mappedLanguagesDictionary[pair.Index] = pair;
-		}
+        _mappedLanguagesDictionary.Clear();
+        foreach (var pair in databaseCollection)
+        {
+            _mappedLanguagesDictionary[pair.Index] = pair;
+        }
 
-		HandleMissingLanguageCodes();
-	}
+        HandleMissingLanguageCodes();
+    }
 
-	private void HandleMissingLanguageCodes()
-	{
-		var mappedLanguages = new List<LanguageMapping>();
-		foreach (var mappedLanguage in _mappedLanguagesDictionary.Values)
-		{
-			if (string.IsNullOrEmpty(mappedLanguage.LanguageCode))
-			{
-				mappedLanguage.LanguageCode = Constants.UndefinedLanguageCode;
-				mappedLanguages.Add(mappedLanguage);
-			}
-		}
+    private void HandleMissingLanguageCodes()
+    {
+        var mappedLanguages = new List<LanguageMapping>();
+        foreach (var mappedLanguage in _mappedLanguagesDictionary.Values)
+        {
+            if (string.IsNullOrEmpty(mappedLanguage.LanguageCode))
+            {
+                mappedLanguage.LanguageCode = Constants.UndefinedLanguageCode;
+                mappedLanguages.Add(mappedLanguage);
+            }
+        }
 
-		UpdateAll(mappedLanguages);
-	}
+        UpdateAll(mappedLanguages);
+    }
 
-	private void ExecuteCommand(string syntax)
-	{
-		OpenConnection();
-		var command = new SQLiteCommand(syntax, _sqliteConnection);
-		command.ExecuteNonQuery();
-		CloseConnection();
-	}
+    private void ExecuteCommand(string syntax)
+    {
+        OpenConnection();
+        try
+        {
+            using var command = new SQLiteCommand(syntax, _sqliteConnection);
+            command.ExecuteNonQuery();
+        }
+        finally
+        {
+            CloseConnection();
+        }
+    }
 
-	private void OpenConnection()
-	{
-		if (_sqliteConnection.State != ConnectionState.Open)
-		{
-			_sqliteConnection.Open();
-		}
-	}
+    private void OpenConnection()
+    {
+        if (_sqliteConnection.State != ConnectionState.Open)
+        {
+            _sqliteConnection.Open();
+        }
+    }
 
-	private void CloseConnection()
-	{
-		if (_sqliteConnection.State != ConnectionState.Closed)
-		{
-			_sqliteConnection.Close();
-		}
-	}
+    private void CloseConnection()
+    {
+        if (_sqliteConnection.State != ConnectionState.Closed)
+        {
+            _sqliteConnection.Close();
+        }
+    }
 
-	private void EnsureDatabaseFileExists()
-	{
-		if (File.Exists(_filePath))
-		{
-			return;
-		}
+    private void EnsureDatabaseFileExists()
+    {
+        if (File.Exists(_filePath))
+        {
+            return;
+        }
 
-		if (!Directory.Exists(_filePath))
-		{
-			Directory.CreateDirectory(Constants.PluginAppDataLocation);
-		}
+        if (!Directory.Exists(_filePath))
+        {
+            Directory.CreateDirectory(Constants.PluginAppDataLocation);
+        }
 
-		EnsurePluginSupportedLanguagesAreValid(_pluginSupportedLanguages);
-		SQLiteConnection.CreateFile(_filePath);
-	}
+        EnsurePluginSupportedLanguagesAreValid(_pluginSupportedLanguages);
+        SQLiteConnection.CreateFile(_filePath);
+    }
 
-	private void EnsureTableExists()
-	{
-		OpenConnection();
-		var command = new SQLiteCommand(Constants.SQL_TableExists, _sqliteConnection);
-		var tableExists = command.ExecuteScalar() is not null;
-		CloseConnection();
+    private void EnsureLanguageMappingTableInitialized()
+    {
+        EnsurePluginSupportedLanguagesAreValid(_pluginSupportedLanguages);
+        if (!TableExists())
+        {
+            CreateNewTable();
+        }
 
-		if (!tableExists)
-		{
-			EnsurePluginSupportedLanguagesAreValid(_pluginSupportedLanguages);
-			CreateNewTable();
-		}
-	}
+        if (!TableHasData())
+        {
+            LoadData();
+        }
+    }
 
-	private void CreateNewTable()
-	{
-		ExecuteCommand(Constants.SQL_CreateTable);
-		var codes = GetTradosLanguages();
-		UpdateMappingCodes(codes);
-		InsertCollection(codes);
-	}
+    private bool TableExists()
+    {
+        OpenConnection();
+        try
+        {
+            using var command = new SQLiteCommand(Constants.SQL_TableExists, _sqliteConnection);
+            return command.ExecuteScalar() is not null;
+        }
+        finally
+        {
+            CloseConnection();
+        }
+    }
 
-	private IList<LanguageMapping> GetTradosLanguages()
-	{
-		var languages = LanguageRegistryApi.Instance.GetAllLanguages();
-		var mappedLanguages = new List<LanguageMapping>();
-		foreach (var language in languages)
-		{
-			if (string.IsNullOrEmpty(language.DisplayName)
-			 || language.DefaultSpecificLanguageCode is not null
-			 || language.DisplayName.Contains("deprecated"))
-			{
-				continue;
-			}
+    private bool TableHasData()
+    {
+        OpenConnection();
+        try
+        {
+            using var command = new SQLiteCommand(Constants.SQL_HasAnyData, _sqliteConnection);
+            return Convert.ToInt32(command.ExecuteScalar()) > 0;
+        }
+        finally
+        {
+            CloseConnection();
+        }
+    }
 
-			var LanguageMapping = TryCreateLanguageMapping(language);
+    private void CreateNewTable()
+    {
+        ExecuteCommand(Constants.SQL_CreateTable);
+        LoadData();
+    }
+
+    private void LoadData()
+    {
+        var codes = GetTradosLanguages();
+        UpdateMappingCodes(codes);
+        InsertCollection(codes);
+    }
+
+    private IList<LanguageMapping> GetTradosLanguages()
+    {
+        var languages = LanguageRegistryApi.Instance.GetAllLanguages();
+        var mappedLanguages = new List<LanguageMapping>();
+        foreach (var language in languages)
+        {
+            if (string.IsNullOrEmpty(language.DisplayName)
+             || language.DefaultSpecificLanguageCode is not null
+             || language.DisplayName.Contains("deprecated"))
+            {
+                continue;
+            }
+
+            var LanguageMapping = TryCreateLanguageMapping(language);
             mappedLanguages.Add(LanguageMapping);
         }
 
-		var output = mappedLanguages.OrderBy(x => x.Name).ThenBy(x => x.Region).ToList();
+        var output = mappedLanguages.OrderBy(x => x.Name).ThenBy(x => x.Region).ToList();
         return output;
-	}
+    }
 
-	private LanguageMapping TryCreateLanguageMapping(Language language)
-	{
-		var regex = new Regex(@"^(.*?)\s*(?:\((.*?)\))?$");
-		var match = regex.Match(language.DisplayName);
+    private LanguageMapping TryCreateLanguageMapping(Language language)
+    {
+        var regex = new Regex(@"^(.*?)\s*(?:\((.*?)\))?$");
+        var match = regex.Match(language.DisplayName);
 
-		var languageName = match.Groups[1].Value;
-		var tradosCode = language.CultureInfo.Name;
-		var languageMapping = new LanguageMapping
-		{
-			Name = languageName,
-			TradosCode = tradosCode
+        var languageName = match.Groups[1].Value;
+        var tradosCode = language.CultureInfo.Name;
+        var languageMapping = new LanguageMapping
+        {
+            Name = languageName,
+            TradosCode = tradosCode
         };
 
-		if (match.Groups[2].Success)
-		{
+        if (match.Groups[2].Success)
+        {
             languageMapping.Region = match.Groups[2].Value;
-		}
-		else
-		{
-			try
-			{
+        }
+        else
+        {
+            try
+            {
                 languageMapping.Region = new RegionInfo(language.CultureInfo.Name).DisplayName;
-			}
-			catch (CultureNotFoundException)
-			{
+            }
+            catch
+            {
                 languageMapping.Region = "Unknown";
-			}
-		}
+            }
+        }
 
         return languageMapping;
     }
 
     private void UpdateMappingCodes(IEnumerable<LanguageMapping> mappingList)
-	{
-		var mappingDictionary = _pluginSupportedLanguages?.ToDictionary(l => (l?.Name, l?.Region), l => l?.LanguageCode);
-		foreach (var mappedLanguage in mappingList)
-		{
-			if (mappingDictionary.TryGetValue((mappedLanguage.Name, mappedLanguage.Region), out var languageCode)
-			 || mappingDictionary.TryGetValue((mappedLanguage.Name, null), out languageCode)
-			 || mappingDictionary.TryGetValue((mappedLanguage.Name, string.Empty), out languageCode))
-			{
-				mappedLanguage.LanguageCode = languageCode;
-			}
-		}
-	}
+    {
+        var mappingDictionary = _pluginSupportedLanguages?.ToDictionary(l => (l?.Name, l?.Region), l => l?.LanguageCode);
+        foreach (var mappedLanguage in mappingList)
+        {
+            if (mappingDictionary.TryGetValue((mappedLanguage.Name, mappedLanguage.Region), out var languageCode)
+             || mappingDictionary.TryGetValue((mappedLanguage.Name, null), out languageCode)
+             || mappingDictionary.TryGetValue((mappedLanguage.Name, string.Empty), out languageCode))
+            {
+                mappedLanguage.LanguageCode = languageCode;
+            }
+        }
+    }
 
-	private void InsertCollection(IEnumerable<LanguageMapping> mappedLanguages)
-	{
-		if (mappedLanguages is null || !mappedLanguages.Any())
-		{
-			return;
-		}
+    private void InsertCollection(IEnumerable<LanguageMapping> mappedLanguages)
+    {
+        if (mappedLanguages is null || !mappedLanguages.Any())
+        {
+            return;
+        }
 
-		var syntax = GenerateInsertSyntax(mappedLanguages);
-		ExecuteCommand(syntax);
-	}
+        var syntax = GenerateInsertSyntax(mappedLanguages);
+        ExecuteCommand(syntax);
+    }
 
-	private string GenerateInsertSyntax(IEnumerable<LanguageMapping> collection)
-	{
-		var syntaxBuilder = new StringBuilder();
-		syntaxBuilder.AppendLine(Constants.SQL_InsertData_StringBuilder);
+    private string GenerateInsertSyntax(IEnumerable<LanguageMapping> collection)
+    {
+        var syntaxBuilder = new StringBuilder();
+        syntaxBuilder.AppendLine(Constants.SQL_InsertData_StringBuilder);
 
-		foreach (var item in collection)
-		{
-			syntaxBuilder.AppendLine($"(\"{item.Name}\", \"{item.Region}\", \"{item.TradosCode}\", \"{item.LanguageCode}\"),");
-		}
+        foreach (var item in collection)
+        {
+            syntaxBuilder.AppendLine($"(\"{item.Name}\", \"{item.Region}\", \"{item.TradosCode}\", \"{item.LanguageCode}\"),");
+        }
 
-		syntaxBuilder.Length -= 3;
-		syntaxBuilder.AppendLine(";");
-		return syntaxBuilder.ToString();
-	}
+        syntaxBuilder.Length -= 3;
+        syntaxBuilder.AppendLine(";");
+        return syntaxBuilder.ToString();
+    }
 
-	private void UpdateAll(IDictionary<int, LanguageMapping> mappedLanguagesDictionary)
-	{
-		foreach (var mappedLanguage in mappedLanguagesDictionary)
-		{
-			EnsureMappedLanguageIsValid(mappedLanguage.Value);
-			var index = mappedLanguage.Key;
-			var currentPair = mappedLanguage.Value;
+    private void UpdateAll(IDictionary<int, LanguageMapping> mappedLanguagesDictionary)
+    {
+        foreach (var mappedLanguage in mappedLanguagesDictionary)
+        {
+            EnsureMappedLanguageIsValid(mappedLanguage.Value);
+            var index = mappedLanguage.Key;
+            var currentPair = mappedLanguage.Value;
 
-			if (!_mappedLanguagesDictionary.TryGetValue(index, out var originalPair)
-			 || !string.Equals(currentPair.LanguageCode, originalPair.LanguageCode))
-			{
-				var languageCode = string.IsNullOrEmpty(currentPair.LanguageCode) ? Constants.UndefinedLanguageCode : currentPair.LanguageCode;
-				UpdateAt(index, nameof(currentPair.LanguageCode), languageCode);
-			}
-		}
-	}
+            if (!_mappedLanguagesDictionary.TryGetValue(index, out var originalPair)
+             || !string.Equals(currentPair.LanguageCode, originalPair.LanguageCode))
+            {
+                var languageCode = string.IsNullOrEmpty(currentPair.LanguageCode) ? Constants.UndefinedLanguageCode : currentPair.LanguageCode;
+                UpdateAt(index, nameof(currentPair.LanguageCode), languageCode);
+            }
+        }
+    }
 
-	private bool HasMappedLanguagesChanged(IDictionary<int, LanguageMapping> mappedLanguagesDictionary)
-	{
-		foreach (var pair in _mappedLanguagesDictionary)
-		{
-			if (!mappedLanguagesDictionary.TryGetValue(pair.Key, out var currentMappedLanguage)
-			 || !string.Equals(currentMappedLanguage.Name, pair.Value.Name)
-			 || !string.Equals(currentMappedLanguage.Region, pair.Value.Region)
-			 || !string.Equals(currentMappedLanguage.TradosCode, pair.Value.TradosCode)
-			 || !string.Equals(currentMappedLanguage.LanguageCode, pair.Value.LanguageCode))
-			{
-				return true;
-			}
-		}
+    private bool HasMappedLanguagesChanged(IDictionary<int, LanguageMapping> mappedLanguagesDictionary)
+    {
+        foreach (var pair in _mappedLanguagesDictionary)
+        {
+            if (!mappedLanguagesDictionary.TryGetValue(pair.Key, out var currentMappedLanguage)
+             || !string.Equals(currentMappedLanguage.Name, pair.Value.Name)
+             || !string.Equals(currentMappedLanguage.Region, pair.Value.Region)
+             || !string.Equals(currentMappedLanguage.TradosCode, pair.Value.TradosCode)
+             || !string.Equals(currentMappedLanguage.LanguageCode, pair.Value.LanguageCode))
+            {
+                return true;
+            }
+        }
 
-		return mappedLanguagesDictionary.Count != _mappedLanguagesDictionary.Count;
-	}
+        return mappedLanguagesDictionary.Count != _mappedLanguagesDictionary.Count;
+    }
 
-	private void EnsurePluginSupportedLanguagesAreValid(IEnumerable<LanguageMapping> pluginSupportedLanguages)
-	{
-		if (pluginSupportedLanguages is null
-		 || !pluginSupportedLanguages.Any())
-		{
-			throw new DatabaseInitializationException();
-		}
-	}
+    private void EnsurePluginSupportedLanguagesAreValid(IEnumerable<LanguageMapping> pluginSupportedLanguages)
+    {
+        if (pluginSupportedLanguages is null
+         || !pluginSupportedLanguages.Any())
+        {
+            throw new DatabaseInitializationException();
+        }
+    }
 
-	private void EnsureMappedLanguageIsValid(LanguageMapping mappedLanguage)
-	{
-		if (mappedLanguage is null)
-		{
-			throw new MappedLanguageNullException(nameof(mappedLanguage));
-		}
+    private void EnsureMappedLanguageIsValid(LanguageMapping mappedLanguage)
+    {
+        if (mappedLanguage is null)
+        {
+            throw new MappedLanguageNullException(nameof(mappedLanguage));
+        }
 
-		if (string.IsNullOrEmpty(mappedLanguage.Name))
-		{
-			throw new MappedLanguageValidationException("Mapped language property must be set.", nameof(mappedLanguage.Name));
-		}
+        if (string.IsNullOrEmpty(mappedLanguage.Name))
+        {
+            throw new MappedLanguageValidationException("Mapped language property must be set.", nameof(mappedLanguage.Name));
+        }
 
-		if (string.IsNullOrEmpty(mappedLanguage.TradosCode))
-		{
-			throw new MappedLanguageValidationException("Mapped language property must be set.", nameof(mappedLanguage.TradosCode));
-		}
-	}
+        if (string.IsNullOrEmpty(mappedLanguage.TradosCode))
+        {
+            throw new MappedLanguageValidationException("Mapped language property must be set.", nameof(mappedLanguage.TradosCode));
+        }
+    }
 
-	private void EnsureCanUpdate(int index, string property, string value)
-	{
-		if (!_mappedLanguagesDictionary.TryGetValue(index, out _))
-		{
-			throw new MappedLanguageIndexOutOfRangeException();
-		}
+    private void EnsureCanUpdate(int index, string property, string value)
+    {
+        if (!_mappedLanguagesDictionary.TryGetValue(index, out _))
+        {
+            throw new MappedLanguageIndexOutOfRangeException();
+        }
 
-		if (string.IsNullOrEmpty(property))
-		{
-			throw new MappedLanguageValidationException("The property must be set.", nameof(property));
-		}
+        if (string.IsNullOrEmpty(property))
+        {
+            throw new MappedLanguageValidationException("The property must be set.", nameof(property));
+        }
 
-		if (string.IsNullOrEmpty(value))
-		{
-			throw new MappedLanguageValidationException("The value must be set.", nameof(value));
-		}
-	}
+        if (string.IsNullOrEmpty(value))
+        {
+            throw new MappedLanguageValidationException("The value must be set.", nameof(value));
+        }
+    }
 }
