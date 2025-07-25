@@ -245,14 +245,15 @@ public class LanguageMappingDatabase : ILanguageMappingDatabase, IDisposable
 
     private void EnsureLanguageMappingTableInitialized()
     {
-        EnsurePluginSupportedLanguagesAreValid(_pluginSupportedLanguages);
         if (!TableExists())
         {
+            EnsurePluginSupportedLanguagesAreValid(_pluginSupportedLanguages);
             CreateNewTable();
         }
 
         if (!TableHasData())
         {
+            EnsurePluginSupportedLanguagesAreValid(_pluginSupportedLanguages);
             LoadData();
         }
     }
