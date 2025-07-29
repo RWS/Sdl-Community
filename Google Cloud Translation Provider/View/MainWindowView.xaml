@@ -6,7 +6,7 @@
 		xmlns:root="clr-namespace:GoogleCloudTranslationProvider"
         xmlns:views="clr-namespace:GoogleCloudTranslationProvider.Views"
 		xmlns:styles="clr-namespace:GoogleCloudTranslationProvider.Styles"
-		xmlns:viewModels="clr-namespace:GoogleCloudTranslationProvider.ViewModels"
+		xmlns:viewModels="clr-namespace:GoogleCloudTranslationProvider.ViewModel"
         xmlns:behaviours="clr-namespace:GoogleCloudTranslationProvider.Behaviours"
 		xmlns:converters="clr-namespace:GoogleCloudTranslationProvider.Converters"
 		mc:Ignorable="d"

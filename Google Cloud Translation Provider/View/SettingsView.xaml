@@ -6,7 +6,7 @@
 			 xmlns:root="clr-namespace:GoogleCloudTranslationProvider"
 			 xmlns:helpers="clr-namespace:GoogleCloudTranslationProvider.Helpers"
 			 xmlns:uiHelpers="clr-namespace:GoogleCloudTranslationProvider.UiHelpers"
-			 xmlns:viewModels="clr-namespace:GoogleCloudTranslationProvider.ViewModels"
+			 xmlns:viewModels="clr-namespace:GoogleCloudTranslationProvider.ViewModel"
 			 xmlns:converters="clr-namespace:GoogleCloudTranslationProvider.Converters"
 			 d:DataContext="{d:DesignInstance viewModels:SettingsViewModel}"
 			 mc:Ignorable="d">
