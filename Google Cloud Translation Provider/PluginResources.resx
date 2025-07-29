@@ -499,12 +499,6 @@ Path: {0}</value>
   <data name="RetrievedResources_NotAvailable" xml:space="preserve">
     <value>Not available</value>
   </data>
-  <data name="Database_PluginName_V2" xml:space="preserve">
-    <value>googlecloudbasic</value>
-  </data>
-  <data name="Database_PluginName_V3" xml:space="preserve">
-    <value>googlecloudadvanced</value>
-  </data>
   <data name="LMP_Button_CloseApp" xml:space="preserve">
     <value>Close</value>
   </data>

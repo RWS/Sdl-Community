@@ -1,4 +1,7 @@
-﻿using System;
+﻿using LanguageMappingProvider;
+using MicrosoftTranslatorProvider.Commands;
+using MicrosoftTranslatorProvider.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -6,10 +9,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using LanguageMappingProvider.Database.Interface;
-using LanguageMappingProvider.Model;
-using MicrosoftTranslatorProvider.Commands;
-using MicrosoftTranslatorProvider.ViewModel;
 using static MicrosoftTranslatorProvider.ViewModel.ProviderConfigurationViewModel;
 using MessageBox = System.Windows.MessageBox;
 
@@ -157,7 +156,9 @@ namespace MicrosoftTranslatorProvider.LanguageMappingProvider.ViewModel
         {
             try
             {
-                if (!ExecuteAction("Reset", "Reset"))
+                if (!ExecuteAction(
+                    "All changes will be lost and the database will be restored to its original state. This action cannot be undone.",
+                    "Reset to default"))
                 {
                     return;
                 }

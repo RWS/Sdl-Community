@@ -118,7 +118,7 @@
 		<None Include="pluginpackage.manifest.xml" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="LanguageMappingProvider" Version="1.0.92" />
+		<PackageReference Include="LanguageMappingProvider" Version="1.0.107" />
 		<PackageReference Include="Sdl.Core.PluginFramework">
 			<Version>2.1.0</Version>
 		</PackageReference>

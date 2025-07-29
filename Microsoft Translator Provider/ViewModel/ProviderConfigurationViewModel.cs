@@ -1,4 +1,4 @@
-﻿using LanguageMappingProvider.Database.Interface;
+﻿using LanguageMappingProvider;
 using MicrosoftTranslatorProvider.Commands;
 using MicrosoftTranslatorProvider.Interfaces;
 using MicrosoftTranslatorProvider.LanguageMappingProvider;

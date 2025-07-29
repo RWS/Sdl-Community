@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using LanguageMappingProvider;
+using MicrosoftTranslatorProvider.Service;
+using Sdl.Core.Globalization.LanguageRegistry;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using LanguageMappingProvider.Database;
-using LanguageMappingProvider.Model;
-using MicrosoftTranslatorProvider.Service;
-using Sdl.Core.Globalization.LanguageRegistry;
 
 namespace MicrosoftTranslatorProvider.LanguageMappingProvider
 {
