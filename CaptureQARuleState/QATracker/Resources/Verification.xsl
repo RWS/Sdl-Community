@@ -168,6 +168,10 @@
 						</td>
 						<td class="InfoData">
 							<xsl:value-of select="count(//task/file)"/>
+							<xsl:if test="//taskInfo/project/@projectFilesTotal">
+								<xsl:text> / </xsl:text>
+								<xsl:value-of select="//taskInfo/project/@projectFilesTotal"/>
+							</xsl:if>
 						</td>
 					</tr>
 

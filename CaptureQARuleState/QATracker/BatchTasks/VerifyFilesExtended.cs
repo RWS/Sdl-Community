@@ -29,12 +29,18 @@ public class VerifyFilesExtended : AbstractFileContentProcessingAutomaticTask
         var xmlString = GetOriginalVerificationReport();
         var extendedReport = ReportExtender.CreateReport(xmlString);
 
+        AddProjectFilesTotal(extendedReport);
         if (Settings.IncludeVerificationDetails) AddActiveQaProviders(extendedReport);
         AddMetadataToSegments(extendedReport);
         ApplySettings(extendedReport);
 
-        var extendedReportXmlString = extendedReport.GetExtendedReportXmlString();
-        CreateReport(extendedReportXmlString);
+        CreateReport(extendedReport);
+    }
+
+    private void AddProjectFilesTotal(IExtendedReport extendedReport)
+    {
+        var projectFilesTotal = Project.GetTargetLanguageFiles().Length;
+        extendedReport.AddProjectFilesTotal(projectFilesTotal);
     }
 
     private void ApplySettings(IExtendedReport extendedReport)
@@ -75,13 +81,15 @@ public class VerifyFilesExtended : AbstractFileContentProcessingAutomaticTask
         }
     }
 
-    private void CreateReport(string extendedReportString)
+    private void CreateReport(IExtendedReport extendedReport)
     {
+        var extendedReportXmlString = extendedReport.GetExtendedReportXmlString();
+
         var noLanguages = TaskFiles.Select(f => f.Language).Distinct().Count();
         if (noLanguages == 1)
-            CreateReport("Capture QA Rule State", "Capture QA Rule State", extendedReportString, TaskFiles.First().GetLanguageDirection());
+            CreateReport("Capture QA Rule State", "Capture QA Rule State", extendedReportXmlString, TaskFiles.First().GetLanguageDirection());
         else
-            CreateReport("Capture QA Rule State", "Capture QA Rule State", extendedReportString);
+            CreateReport("Capture QA Rule State", "Capture QA Rule State", extendedReportXmlString);
     }
 
     private string GetOriginalVerificationReport()

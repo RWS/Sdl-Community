@@ -40,7 +40,7 @@ public class ExtendedReport(string originalXmlString) : IExtendedReport
     public void AddStatuses(List<Segment> statuses, Guid languageFileId)
     {
         var xmlDoc = new XmlDocument();
-        xmlDoc.LoadXml(OriginalXmlString);
+        xmlDoc.LoadXml(UpdatedXmlString ?? OriginalXmlString);
 
         var statusLookup = statuses.ToDictionary(s => s.Id, s => s.Status);
 
@@ -95,6 +95,32 @@ public class ExtendedReport(string originalXmlString) : IExtendedReport
             var parent = messageNode.ParentNode;
             parent?.RemoveChild(messageNode);
         }
+        UpdatedXmlString = xmlDoc.OuterXml;
+    }
+
+    public void AddProjectFilesTotal(int projectFilesTotal)
+    {
+        // Use the most up-to-date XML string
+        var xmlString = UpdatedXmlString ?? OriginalXmlString;
+
+        var xmlDoc = new XmlDocument();
+        xmlDoc.LoadXml(xmlString);
+
+        // Find the <taskInfo>/<project> element
+        var projectNode = xmlDoc.SelectSingleNode("//taskInfo/project");
+        if (projectNode == null)
+            return;
+
+        // Add or update the projectFilesTotal attribute
+        var attr = projectNode.Attributes["projectFilesTotal"];
+        if (attr == null)
+        {
+            attr = xmlDoc.CreateAttribute("projectFilesTotal");
+            projectNode.Attributes.Append(attr);
+        }
+        attr.Value = projectFilesTotal.ToString();
+
+        // Save the updated XML
         UpdatedXmlString = xmlDoc.OuterXml;
     }
 
