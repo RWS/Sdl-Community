@@ -17,6 +17,7 @@
 	  <None Remove="SdlTmAnonymizer\Connected Services\**" />
 	</ItemGroup>
 	<ItemGroup>
+	  <None Remove="Resources\Information.png" />
 	  <None Remove="SdlTmAnonymizer\UsefulTips\de\de.zip" />
 	  <None Remove="SdlTmAnonymizer\UsefulTips\en\en.zip" />
 	  <None Remove="SdlTmAnonymizer\UsefulTips\es\es.zip" />
@@ -26,7 +27,6 @@
 	  <None Remove="SdlTmAnonymizer\UsefulTips\ko\ko.zip" />
 	  <None Remove="SdlTmAnonymizer\UsefulTips\ru\ru.zip" />
 	  <None Remove="SdlTmAnonymizer\UsefulTips\zh\zh.zip" />
-	  <None Remove="SdlTmAnonymizer\View\TellMe.xaml" />
 	</ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -130,6 +130,7 @@
     </Content>
     <Resource Include="Resources\clear.png" />
     <Content Include="Resources\icon.ico" />
+    <Resource Include="Resources\Information.png" />
     <Resource Include="Resources\SDPS.ico" />
     <Resource Include="Resources\lockImage.png" />
     <Content Include="Resources\question.ico" />

@@ -11,21 +11,42 @@ public static class CredentialStore
     private const uint Generic = 1;
     private const uint PersistLocalMachine = 2;
 
-    public static void Save(string key, string secret)
+    public static void Save(string key, string secret, bool isRetry = false)
     {
-        using var blob = SecureStringToCoTaskMem(secret);
+        string backup = CredRead(key, Generic, 0, out _) ? Load(key) : null;
+        Delete(key);
+        IntPtr blob = Marshal.StringToCoTaskMemUni(secret);
         var cred = new CREDENTIAL
         {
             Type = Generic,
             TargetName = key,
-            CredentialBlob = blob.DangerousGetHandle(),
-            CredentialBlobSize = (uint)Encoding.Unicode.GetByteCount(secret),
+            CredentialBlob = blob,
+            CredentialBlobSize = (uint)(secret.Length * 2),
             Persist = PersistLocalMachine,
-            UserName = ""
+            UserName = Environment.UserName
         };
 
-        if (!CredWrite(ref cred, 0))
-            throw new Win32Exception(Marshal.GetLastWin32Error());
+        try
+        {
+            if (CredWrite(ref cred, 0))
+            {
+                return;
+            }
+
+            int errorCode = Marshal.GetLastWin32Error();
+            if (!isRetry && backup is not null)
+            {
+                Save(key, backup, true);
+            }
+
+            var keyTarget = new Uri(key).AbsolutePath.Trim('/');
+            throw new Win32Exception(errorCode, $"Could not save credentials. Try again or contact support.\n(Error {errorCode}, Target: '{keyTarget}')");
+
+        }
+        finally
+        {
+            Marshal.FreeCoTaskMem(blob);
+        }
     }
 
     public static string Load(string key)
@@ -47,7 +68,7 @@ public static class CredentialStore
 
     public static void Delete(string key)
     {
-        CredDelete(Target, Generic, 0);
+        CredDelete(key, Generic, 0);
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]

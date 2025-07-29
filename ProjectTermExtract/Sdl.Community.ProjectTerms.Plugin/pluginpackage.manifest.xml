@@ -1,10 +1,11 @@
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>projectTermExtract</PlugInName>
-  <Version>5.0.0.2</Version>
+  <Version>5.1.0.1</Version>
   <Description>Extract project terms and generate a termbase</Description>
   <Author>Trados AppStore Team</Author>
-  <RequiredProduct name="TradosStudio" minversion="18.0" maxversion="18.9" />
+  <RequiredProduct name="TradosStudio" minversion="18.1" maxversion="18.1.9" />
   <Include>
+    <File>Sdl.MultiTerm.TMO.Interop.dll</File>
     <File>Sdl.Community.ProjectTerms.Telemetry.dll</File>
     <File>Sdl.Community.ProjectTerms.Controls.dll</File>
     <File>Microsoft.ApplicationInsights.dll</File>

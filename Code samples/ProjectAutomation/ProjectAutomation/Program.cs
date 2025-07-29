@@ -20,15 +20,24 @@ namespace ProjectAutomation
 
 			// TODO: Set the source and target language combination
 			var sourceLanguage = "en-US"; // Change this to match the source language
-			var targetLanguage = "it-IT"; // Change this to match the target language
+			var targetLanguage = "de-DE"; // Change this to match the target language
 
 			// TODO: Set the memory resource
 			var memory = new MemoryResource
 			{
-                //Example to connect to deepL provider (https://appstore.rws.com/Plugin/24)
-                Uri = new Uri("deepltranslationprovider:///"),
-                UserNameOrClientId = "[your DeepL account e-mail]",
-                Credential = "[your DeepL account API key]"
+				// Example: connect to a FileBased TM 
+                // Path = @"C:\...\Projects\Samples\SampleProject\TMs\English-German.sdltm",
+
+                // Example: connect to deepL provider (https://appstore.rws.com/Plugin/24)
+                // Uri = new Uri("deepltranslationprovider:///"),
+                // UserNameOrClientId = "[your DeepL account e-mail]",
+                // Credential = "[your DeepL account API key]"
+
+                // Example: connect to Groupshare resource
+                // Uri = new Uri("sdltm.http://URL/?orgPath=/Appstore&tmName=TM_NAME"),
+                // UserNameOrClientId = "",
+                // UserPasswordOrClientSecret = "",
+                // IsWindowsUser = false
             };
 
 			CreateProject(sourceFilesDirectory, projectsDirectory, sourceLanguage, targetLanguage, memory);

@@ -90,24 +90,6 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to googlecloudbasic.
-        /// </summary>
-        public static string Database_PluginName_V2 {
-            get {
-                return ResourceManager.GetString("Database_PluginName_V2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to googlecloudadvanced.
-        /// </summary>
-        public static string Database_PluginName_V3 {
-            get {
-                return ResourceManager.GetString("Database_PluginName_V3", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon Download {

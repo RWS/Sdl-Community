@@ -133,16 +133,6 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon ForumIcon {
-            get {
-                object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Credentials invalid!.
         /// </summary>
         public static string GroupShareCredentialManager_TryGetCredentialsWithoutUserInput_Credentials_invalid_ {
@@ -340,21 +330,25 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        ///   Looks up a localized string similar to To engage with Trados Data Protection Suite, follow these steps
+        /// 
+        ///1. In the Files View, select your file(s)
+        ///2. Under Home Tab find File Actions Group
+        ///3. Use the Batch Tasks dropdown menu
+        ///4. Select Protect Data.
         /// </summary>
-        public static System.Drawing.Icon TellMe_Documentation {
+        public static string TellMe_ActionWarning {
             get {
-                object obj = ResourceManager.GetObject("TellMe_Documentation", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
+                return ResourceManager.GetString("TellMe_ActionWarning", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon TellMe_Forum {
+        public static System.Drawing.Icon TellMe_Documentation {
             get {
-                object obj = ResourceManager.GetObject("TellMe_Forum", resourceCulture);
+                object obj = ResourceManager.GetObject("TellMe_Documentation", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

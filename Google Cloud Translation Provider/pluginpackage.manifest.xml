@@ -1,40 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
-  <PlugInName>Google Cloud Translation Provider</PlugInName>
-  <Version>2.1.0.2</Version>
-  <Description>Google Cloud Translation Provider</Description>
-  <Author>Trados AppStore Team</Author>
-  <RequiredProduct name="TradosStudio" minversion="18.1" maxversion="18.1.9" />
-		<Include>
-			<File>Dapper.StrongName.dll</File>
-			<File>Google.Api.CommonProtos.dll</File>
-			<File>Google.Api.Gax.dll</File>
-      <File>Grpc.Net.Client.dll</File>
-      <File>Grpc.Net.Common.dll</File>
-			<File>Google.Api.Gax.Grpc.dll</File>
-			<File>Google.Api.Gax.Grpc.GrpcCore.dll</File>
-			<File>Google.Api.Gax.Rest.dll</File>
-			<File>Google.Apis.Auth.dll</File>
-			<File>Google.Apis.Core.dll</File>
-			<File>Google.Apis.dll</File>
-			<File>Google.Cloud.Iam.V1.dll</File>
-			<File>Google.Cloud.AutoML.V1.dll</File>
-			<File>Google.Cloud.Storage.V1.dll</File>
-			<File>Google.Cloud.Translate.V3.dll</File>
-			<File>Google.Cloud.Location.dll</File>
-			<File>Google.LongRunning.dll</File>
-			<File>Google.Protobuf.dll</File>
-			<File>grpc_csharp_ext.x86.dll</File>
-			<File>Grpc.Auth.dll</File>
-			<File>Grpc.Core.Api.dll</File>
-			<File>Grpc.Core.dll</File>
-			<File>LanguageMappingProvider.dll</File>
-			<File>SQLite.Interop.dll</File>
-			<File>System.Data.SQLite.dll</File>
-			<File>System.Memory.dll</File>
-			<File>System.Net.Http.dll</File>
-			<File>System.Runtime.CompilerServices.Unsafe.dll</File>
-			<File>System.Text.Json.dll</File>
-			<File>System.Diagnostics.DiagnosticSource.dll</File>
-		</Include>
+	
+	<PlugInName>Google Cloud Translation Provider</PlugInName>
+	<Version>2.1.1.0</Version>
+	<Description>Google Cloud Translation Provider</Description>
+	<Author>Trados AppStore Team</Author>
+	<RequiredProduct name="TradosStudio" minversion="18.1" maxversion="18.1.9" />
+	
+	<Include>
+		<File>Dapper.StrongName.dll</File>
+		<File>Google.Api.CommonProtos.dll</File>
+		<File>Google.Api.Gax.dll</File>
+		<File>Grpc.Net.Client.dll</File>
+		<File>Grpc.Net.Common.dll</File>
+		<File>Google.Api.Gax.Grpc.dll</File>
+		<File>Google.Api.Gax.Grpc.GrpcCore.dll</File>
+		<File>Google.Api.Gax.Rest.dll</File>
+		<File>Google.Apis.Auth.dll</File>
+		<File>Google.Apis.Core.dll</File>
+		<File>Google.Apis.dll</File>
+		<File>Google.Cloud.Iam.V1.dll</File>
+		<File>Google.Cloud.AutoML.V1.dll</File>
+		<File>Google.Cloud.Storage.V1.dll</File>
+		<File>Google.Cloud.Translate.V3.dll</File>
+		<File>Google.Cloud.Location.dll</File>
+		<File>Google.LongRunning.dll</File>
+		<File>Google.Protobuf.dll</File>
+		<File>grpc_csharp_ext.x86.dll</File>
+		<File>Grpc.Auth.dll</File>
+		<File>Grpc.Core.Api.dll</File>
+		<File>Grpc.Core.dll</File>
+		<File>LanguageMappingProvider.dll</File>
+		<File>SQLite.Interop.dll</File>
+		<File>System.Data.SQLite.dll</File>
+		<File>System.Memory.dll</File>
+		<File>System.Net.Http.dll</File>
+		<File>System.Runtime.CompilerServices.Unsafe.dll</File>
+		<File>System.Text.Json.dll</File>
+		<File>System.Diagnostics.DiagnosticSource.dll</File>
+	</Include>
 </PluginPackage>

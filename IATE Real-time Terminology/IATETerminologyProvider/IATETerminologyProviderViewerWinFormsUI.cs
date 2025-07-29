@@ -44,7 +44,7 @@ namespace Sdl.Community.IATETerminologyProvider
             }
         }
 
-        public bool Initialized => true;
+        public bool Initialized { get; set; }
 
         public Entry SelectedTerm { get; set; }
 
@@ -68,6 +68,7 @@ namespace Sdl.Community.IATETerminologyProvider
         public void Initialize(ITerminologyProvider terminologyProvider, CultureCode source, CultureCode target)
         {
             _iateTerminologyProvider = (IATETerminologyProvider)terminologyProvider;
+            Initialized = true;
         }
 
         public void JumpToTerm(Entry entry)

@@ -19,9 +19,11 @@ namespace Sdl.Community.SdlDataProtectionSuite.TellMe
 			var forumAction = new CommunityForumAction();
 			var helpAction = new DocumentationAction();
 			var sourceCodeAction = new SourceCodeAction();
-			var settingsAction = new SettingsAction();
+			var settingsAction = new TmAnonymizerSettingsAction();
+			var tmAnonymizerViewAction = new TmAnonymizerViewAction();
+			var dataProtectionSuiteSettingsAction = new DataProtectionSuiteSettingsAction();
 
-			var providerActions = new AbstractTellMeAction[] { forumAction, helpAction, sourceCodeAction, settingsAction };
+            var providerActions = new AbstractTellMeAction[] { forumAction, helpAction, sourceCodeAction, settingsAction, tmAnonymizerViewAction, dataProtectionSuiteSettingsAction };
 			return providerActions;
 		}
 	}

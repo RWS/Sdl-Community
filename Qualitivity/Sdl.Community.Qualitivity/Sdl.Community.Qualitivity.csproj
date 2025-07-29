@@ -39,9 +39,6 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
-  <PropertyGroup>
-    <TradosFolder>C:\Program Files (x86)\Trados\Trados Studio\Studio18</TradosFolder>
-  </PropertyGroup>
   <ItemGroup>
     <None Remove="Resources\Information-32.png" />
     <None Remove="Resources\Information.png" />

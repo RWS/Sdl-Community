@@ -4,7 +4,6 @@
 		<TargetFramework>net48</TargetFramework>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
-		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18beta</TradosFolder>
 		<CreatePluginPackage>true</CreatePluginPackage>
 		<UseWPF>true</UseWPF>
 	</PropertyGroup>
@@ -43,8 +42,7 @@
       <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Implementation.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.MultiTerm.TMO.Interop">
-      <HintPath>$(TradosFolder)\Sdl.MultiTerm.TMO.Interop.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>$(MultiTermFolder)\Sdl.MultiTerm.TMO.Interop.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
       <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.Core.dll</HintPath>

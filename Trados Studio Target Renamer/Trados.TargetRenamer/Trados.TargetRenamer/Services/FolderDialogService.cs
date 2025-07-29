@@ -1,5 +1,5 @@
 ﻿using System;
-using Microsoft.Win32;
+using System.Windows.Forms;
 using Trados.TargetRenamer.Helpers;
 using Trados.TargetRenamer.Interfaces;
 
