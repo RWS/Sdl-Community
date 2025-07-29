@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-16"?>
+<VerificationSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="Tag Verifier">
+  <Settings Name="Common">
+    <Setting Name="Tags added">True</Setting>
+    <Setting Name="Tags deleted">True</Setting>
+    <Setting Name="Tag order change">True</Setting>
+    <Setting Name="Ghost tags">True</Setting>
+    <Setting Name="Spacing around tags">True</Setting>
+    <Setting Name="Check for tag id mismatch">False</Setting>
+    <Setting Name="Ignore formatting tags">True</Setting>
+    <Setting Name="Ignore locked segments">False</Setting>
+    <Setting Name="Ignore difference between normal and non-breaking space">False</Setting>
+  </Settings>
+</VerificationSettings>
