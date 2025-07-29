@@ -76,6 +76,7 @@ namespace QATracker.Components.SettingsProvider.Verifiers.BaseClass
 
             foreach (var node in nodes)
             {
+                if (node?.Name == null) continue;
                 var nodeName = node.Name;
 
                 if (nodeName == "Enabled")

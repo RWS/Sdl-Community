@@ -3,7 +3,7 @@
 	<xsl:template match="/task">
 		<html>
 			<head>
-				<link rel="stylesheet" href="C:/Things/Code/SDL/Trados/Bin/Mixed Platforms/Debug/ReportResources/css/reports.css" />
+				<link rel="stylesheet" href="C:\Program Files (x86)\Trados\Trados Studio\Studio18\ReportResources\css\reports.css" />
 				<style>
 					<!-- Add styles for the QA Providers tree view -->
 					.qa-providers-container .enabled.disabled { color: gray !important; }

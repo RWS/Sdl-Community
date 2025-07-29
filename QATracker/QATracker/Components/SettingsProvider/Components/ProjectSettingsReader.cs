@@ -40,15 +40,21 @@ namespace QATracker.Components.SettingsProvider.Components
             if (string.IsNullOrEmpty(settingsBundleGuid))
                 return result;
 
-            var settingsBundle = doc
+            // Find the outer SettingsBundle with the matching Guid
+            var outerSettingsBundle = doc
                 .Descendants("SettingsBundle")
                 .FirstOrDefault(sb => (string)sb.Attribute("Guid") == settingsBundleGuid);
 
-            if (settingsBundle == null)
+            if (outerSettingsBundle == null)
                 return result;
 
-            var settingsGroups = settingsBundle
-                .Descendants("SettingsGroup")
+            // The actual groups are inside the nested SettingsBundle
+            var innerSettingsBundle = outerSettingsBundle.Element("SettingsBundle");
+            if (innerSettingsBundle == null)
+                return result;
+
+            var settingsGroups = innerSettingsBundle
+                .Elements("SettingsGroup")
                 .Where(g => g.Attribute("Id") != null &&
                             g.Attribute("Id").Value.ToLower().Contains("verif"));
 
@@ -78,6 +84,20 @@ namespace QATracker.Components.SettingsProvider.Components
                 result[groupId] = settings;
             }
 
+            // Add termbase name to SettingsTermVerifier group if available
+            var termbaseName = doc
+                .Descendants("TermbaseConfiguration")
+                .Descendants("Termbases")
+                .Elements("Name")
+                .FirstOrDefault();
+
+            if (termbaseName != null)
+            {
+                if (!result.ContainsKey(Constants.SettingsTermVerifier))
+                    result[Constants.SettingsTermVerifier] = new Dictionary<string, string>();
+
+                result[Constants.SettingsTermVerifier]["TermbaseName"] = termbaseName.Value.Trim();
+            }
 
             return result;
         }

@@ -13,7 +13,7 @@
         //3rd party verifier names
         public const string NumberVerifierName = "Trados Number Verifier";
 
-        public const string NumberVerifierSettings = "Number Verifier";
+        public const string NumberVerifierSettings = "NumberVerifierSettings";
 
         //Trados Number Verifier
         public const string NumberVerifierSettingsCategory = "Number Verifier Settings";
