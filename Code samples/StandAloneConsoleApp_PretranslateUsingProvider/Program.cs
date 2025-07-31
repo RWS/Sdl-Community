@@ -36,10 +36,12 @@ namespace StandAloneConsoleApp_PretranslateUsingProvider
 
         private static void Main(string[] args)
         {
-            // Change the path with the actual directory where projects should be saved...
+            // Specify the folder where projects will be created and stored.
+            // The sample application will automatically generate projects in this location.
             var projectsDirectory = @"";
 
-            // Specify the path to the project template that contains the Language Cloud Translation Engine...
+            // Specify the full path to the project template that contains the Language Cloud resources.
+            // Example: C:\Path\To\Template.sdltpl
             var templatePath = @"";
 
             if (!Directory.Exists(projectsDirectory))
@@ -75,18 +77,19 @@ namespace StandAloneConsoleApp_PretranslateUsingProvider
 
             UpdateProjectProviderSettings(project);
 
-            // Update this variable with the actual URI of the translation provider if available.
-            // This URI can be retrieved from an existing project or project template (.sdlproj/.sdltpl).
-            // To locate it, open the project/template file in a text editor and search for the <MainTranslationProviderItem> XML element.
-            // Copy the value of its "uri" property, as this contains the URI for the translation provider.
+            // Update this variable with the actual URI of your translation provider.
+            // You can find this URI in an existing project or project template (.sdlproj/.sdltpl) file.
+            // To locate it:
+            // 1. Open the .sdlproj or .sdltpl file in a text editor.
+            // 2. Search for the <MainTranslationProviderItem> XML element.
+            // 3. Copy the value of its "uri" property.
             //
-            // Note:
-            // - If a project template is provided, this parameter can be left as an empty string.
-            // - URIs starting with "languagecloud.translation.https://" indicate a Translation Engine.
+            // Notes:
+            // - If you've provided a project template, you can leave this parameter as an empty string.
+            // - URIs starting with "languagecloud.translation.https://" indicate a Language Cloud Translation Engine.
+            // - URIs starting with "bmslanguagecloud.https://" indicate Language Cloud Machine Translation.
             //
-            // Copy the complete URI from the project/template file and assign it to the variable below.
-            // Remember: When using the project automation API, credentials must be provided explicitly 
-            //           since the API operates outside the context of Trados Studio.
+            // Copy the complete URI from your project or template file and assign it here.
             var tpUriString = @""; // Paste URI here
 
             if (string.IsNullOrEmpty(templatePath))
@@ -101,9 +104,9 @@ namespace StandAloneConsoleApp_PretranslateUsingProvider
 
             project.Save();
 
-            // Update the second parameter with the actual path to the source files.
+            // Update the second parameter with the actual path to the folder containing your source files.
             // Example: @"C:\Path\To\SourceFiles"
-            AddFilesToProject(project, @""); // Paste the source files path
+            AddFilesToProject(project, @""); // Paste the source files folder path
 
             RunScanTaskFiles(project);
             RunAnalyzeTaskFiles(project, targetLanguage);
