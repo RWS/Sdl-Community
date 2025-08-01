@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
+using NLog;
 using Sdl.Community.NumberVerifier.Interfaces;
 using Sdl.Community.NumberVerifier.MessageUI;
 using Sdl.Community.NumberVerifier.Model;
@@ -11,8 +13,12 @@ namespace Sdl.Community.NumberVerifier.Reporter
 {
     public class ErrorReporter
     {
-        public ErrorReporter(IBilingualContentMessageReporter messageReporter, INumberVerifierSettings settings, IMessageFilter messageFilter) =>
-            (MessageReporter, Settings, MessageFilter) = (messageReporter, settings, messageFilter);
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        private string _sourceText;
+        private string _targetText;
+
+        public ErrorReporter(IBilingualContentMessageReporter messageReporter, INumberVerifierSettings settings, IMessageFilter messageFilter, TextGenerator textGenerator) =>
+            (MessageReporter, Settings, MessageFilter, TextGenerator) = (messageReporter, settings, messageFilter, textGenerator);
 
         [Flags]
         public enum Range
@@ -28,8 +34,13 @@ namespace Sdl.Community.NumberVerifier.Reporter
         private IBilingualContentMessageReporter MessageReporter { get; }
         private INumberVerifierSettings Settings { get; }
 
+        private TextGenerator TextGenerator { get; }
+
         public void ReportErrors(NumberTexts sourceNumberTexts, NumberTexts targetNumberTexts, ISegmentPair segmentPair)
         {
+            _sourceText = GetSegmentText(segmentPair.Source);
+            _targetText = GetSegmentText(segmentPair.Target);
+
             var sourceNumbersTotal = sourceNumberTexts.Texts.Count;
             var targetNumbersTotal = targetNumberTexts.Texts.Count;
             var errorPairsTotal = sourceNumbersTotal > targetNumbersTotal ? sourceNumbersTotal : targetNumbersTotal;
@@ -87,11 +98,13 @@ namespace Sdl.Community.NumberVerifier.Reporter
 
                     if (!string.IsNullOrEmpty(errorReportInfo.Message) && !ShouldReport(errorReportInfo.Message)) return null;
 
-                    errorReportInfo.Report = new AlignmentErrorExtendedData
+                    errorReportInfo.Report = new AlignmentErrorExtendedData (errorReportInfo.Message)
                     {
                         SourceIssues = GetFormattedError(sourceNumberTexts[i]),
                         TargetIssues = "-",
-                        MessageType = "Segment-pair level errors"
+                        MessageType = "Segment-pair level errors",
+                        SourceSegmentPlainText = _sourceText,
+                        TargetSegmentPlainText = _targetText
                     };
                     errorReportInfo.ErrorLevel = GetNumbersErrorLevel(Settings.RemovedNumbersErrorType);
 
@@ -104,11 +117,13 @@ namespace Sdl.Community.NumberVerifier.Reporter
 
                     if (!string.IsNullOrEmpty(errorReportInfo.Message) && !ShouldReport(errorReportInfo.Message)) return null;
 
-                    errorReportInfo.Report = new AlignmentErrorExtendedData
+                    errorReportInfo.Report = new AlignmentErrorExtendedData (errorReportInfo.Message)
                     {
                         SourceIssues = GetFormattedError(sourceNumberTexts[i]),
                         TargetIssues = GetFormattedError(targetNumberTexts[i]),
-                        MessageType = "Segment-pair level errors"
+                        MessageType = "Segment-pair level errors",
+                        SourceSegmentPlainText = _sourceText,
+                        TargetSegmentPlainText = _targetText
                     };
 
                     errorReportInfo.ErrorLevel = GetNumbersErrorLevel(Settings.ModifiedNumbersErrorType);
@@ -125,11 +140,13 @@ namespace Sdl.Community.NumberVerifier.Reporter
 
                     if (!string.IsNullOrEmpty(errorReportInfo.Message) && !ShouldReport(errorReportInfo.Message)) return null;
 
-                    errorReportInfo.Report = new AlignmentErrorExtendedData
+                    errorReportInfo.Report = new AlignmentErrorExtendedData (errorReportInfo.Message)
                     {
                         SourceIssues = GetFormattedError(sourceNumberTexts[i]),
                         TargetIssues = GetFormattedError(targetNumberTexts[i]),
                         MessageType = "Segment-pair level errors",
+                        SourceSegmentPlainText = _sourceText,
+                        TargetSegmentPlainText = _targetText
                     };
                     errorReportInfo.ErrorLevel = GetNumbersErrorLevel(Settings.AddedNumbersErrorType);
 
@@ -160,5 +177,18 @@ namespace Sdl.Community.NumberVerifier.Reporter
         }
 
         private bool ShouldReport(string errorMessage) => MessageFilter.IsAllowed(errorMessage);
+
+        private string GetSegmentText(ISegment segment)
+        {
+            try
+            {
+                return Settings.ExcludeTagText == false ? segment.ToString() : TextGenerator.GetPlainText(segment, false);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
+                return string.Empty;
+            }
+        }
     }
 }
