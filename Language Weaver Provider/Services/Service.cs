@@ -70,7 +70,7 @@ namespace LanguageWeaverProvider.Services
             using var httpRequest = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
-                RequestUri = new Uri("https://sdl-prod.eu.auth0.com/"),
+                RequestUri = new Uri("https://sdl-preprod.eu.auth0.com/"),
                 Content = new FormUrlEncodedContent(parameters)
             };
 

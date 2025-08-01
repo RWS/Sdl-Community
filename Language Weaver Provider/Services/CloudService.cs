@@ -36,7 +36,7 @@ namespace LanguageWeaverProvider.Services
                 param["code_verifier"] = auth0Config.CodeVerifier;
                 param["grant_type"] = "authorization_code";
 
-                var requestUri = new Uri("https://sdl-prod.eu.auth0.com/oauth/token");
+                var requestUri = new Uri("https://sdl-preprod.eu.auth0.com/oauth/token");
                 var formUrlEncodedContent = new FormUrlEncodedContent(param);
                 using var httpRequest = new HttpRequestMessage()
                 {
@@ -287,7 +287,7 @@ namespace LanguageWeaverProvider.Services
 
         public static async Task<bool> CreateDictionaryTerm(AccessToken accessToken, PairDictionary pairDictionary, DictionaryTerm newDictionaryTerm)
         {
-            var requestUri = $"https://api.languageweaver.com/v4/accounts/{accessToken.AccountId}/dictionaries/{pairDictionary.DictionaryId}/terms";
+            var requestUri = $"https://uat.api.languageweaver.com/v4/accounts/{accessToken.AccountId}/dictionaries/{pairDictionary.DictionaryId}/terms";
             var content = JsonConvert.SerializeObject(newDictionaryTerm);
             var stringContent = new StringContent(content, new UTF8Encoding(), "application/json");
 

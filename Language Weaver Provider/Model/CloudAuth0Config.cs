@@ -5,8 +5,8 @@ namespace LanguageWeaverProvider.Model
 {
 	public class CloudAuth0Config
 	{
-		private const string UrlTemplateNormal = "https://sdl-prod.eu.auth0.com/authorize?audience={0}&response_type=code&scope=openid%20email%20profile%20offline_access&redirect_uri={1}&client_id={2}&allowsignup=false&state={3}&code_challenge={4}&code_challenge_method=S256";
-		private const string Audience = "https://api.sdl.com";
+		private const string UrlTemplateNormal = "https://sdl-preprod.eu.auth0.com/authorize?audience={0}&response_type=code&scope=openid%20email%20profile%20offline_access&redirect_uri={1}&client_id={2}&allowsignup=false&state={3}&code_challenge={4}&code_challenge_method=S256";
+		private const string Audience = "https://api-preprod.sdl.com";
 
 		public CloudAuth0Config(string connectionCode, string portalRegion)
 		{

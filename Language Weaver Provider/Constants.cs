@@ -44,7 +44,7 @@
 		public const string LanguageWeaverUSPortal = "https://us.portal.languageweaver.com/login";
 
 		// LW Cloud API Region
-		public static string CloudEUUrl = "https://api.languageweaver.com/";
+		public static string CloudEUUrl = "https://uat.api.languageweaver.com/";
 		public static string CloudUSUrl = "https://us.api.languageweaver.com/";
 
 		// Segment metadata
