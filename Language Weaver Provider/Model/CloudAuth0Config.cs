@@ -11,7 +11,7 @@ namespace LanguageWeaverProvider.Model
 		public CloudAuth0Config(string connectionCode, string portalRegion)
 		{
 			RedirectUri = "https://www.rws.com";
-			ClientId = "F4NpOGG1sBaEzk379M6ZxX3gGa0iH1Ff";
+			ClientId = "OltQlVmK6N9Y04bNMmFxoXmGleLMmdxB";
 			State = LoginGeneratorsHelper.RandomDataBase64url(32);
 			CodeVerifier = LoginGeneratorsHelper.RandomDataBase64url(32);
 			var codeChallenge = LoginGeneratorsHelper.Base64urlencodeNoPadding(LoginGeneratorsHelper.Sha256(CodeVerifier));
