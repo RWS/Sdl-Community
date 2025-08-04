@@ -227,7 +227,11 @@ namespace Sdl.Community.NumberVerifier
                             ErrorMessage = errorMessage.ErrorMessage,
                             IsHindiVerification = errorMessage.IsHindiVerification
                         };
-                        var extendedData = new NumberVerifierMessageData(messageDataModel);
+                        var extendedData = new NumberVerifierMessageData(messageDataModel)
+                        {
+                            SourceSegmentPlainText = _sourceText,
+                            TargetSegmentPlainText = _targetText,
+                        };
 
                         extendedMessageReporter.ReportMessage(this, PluginResources.Plugin_Name,
                             errorMessage.ErrorLevel, errorMessage.ExtendedErrorMessage,
@@ -361,7 +365,8 @@ namespace Sdl.Community.NumberVerifier
                 [PluginResources.Error_DifferentValues] = VerificationSettings.ReportModifiedNumbers,
                 [PluginResources.Error_AlphanumericsModified] = VerificationSettings.ReportModifiedAlphanumerics
             };
-            var errorReporter = new ErrorReporter(MessageReporter, VerificationSettings, new MessageFilter(reportAllowanceTable));
+
+            var errorReporter = new ErrorReporter(MessageReporter, VerificationSettings, new MessageFilter(reportAllowanceTable), TextGenerator);
             errorReporter.ReportErrors(sourceNumbers, targetNumbers, segmentPair);
         }
 
