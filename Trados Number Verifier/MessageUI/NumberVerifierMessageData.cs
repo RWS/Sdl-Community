@@ -2,13 +2,16 @@
 using Sdl.Community.NumberVerifier.Model;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
+using Sdl.Verification.Api;
+using System;
 
 namespace Sdl.Community.Extended.MessageUI
 {
-	public class NumberVerifierMessageData : ExtendedMessageEventData
+	public class NumberVerifierMessageData : ExtendedMessageEventData, IVerificationCustomMessageData
     {
 		public NumberVerifierMessageData(){}
-		public NumberVerifierMessageData(MessageDataModel messageDataModel)
+		public NumberVerifierMessageData(
+			MessageDataModel messageDataModel)
 		{
 			SourceIssues = messageDataModel.SourceIssues;
 			InitialSourceIssues = messageDataModel.InitialSourceIssues;
@@ -29,7 +32,9 @@ namespace Sdl.Community.Extended.MessageUI
 			{
 				MessageType = Constants.NumberIssue;
 			}
-		}
+
+			DetailedDescription = messageDataModel.ErrorMessage;
+        }
 
         /// <summary>
         /// Information which will be displayed in our custom UI.
@@ -66,5 +71,10 @@ namespace Sdl.Community.Extended.MessageUI
             get; 
             set;
         }
+
+		public string DetailedDescription { get; }
+
+		public string SourceSegmentPlainText { get; set; } = "Hello World";
+		public string TargetSegmentPlainText { get; set; } = "Hallo Welt!";
     }
 }
