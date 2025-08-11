@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
+using Sdl.Community.ApplyStudioProjectTemplate.Extension;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.ApplyStudioProjectTemplate
@@ -89,7 +90,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 				if (SelectedTemplate?.Items != null)
 				{
 					foreach (var comboObject in SelectedTemplate?.Items)
-					{
+                    {
 						var comboTemplate = comboObject as ApplyTemplate;
 						if (comboTemplate != null && comboTemplate.Id != Guid.Empty)
 						{
@@ -255,15 +256,13 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 		/// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
 		private void SelectedTemplate_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			var selectedTemplate = SelectedTemplate.SelectedItem as ApplyTemplate;
-		
-			if (selectedTemplate != null)
+            if (SelectedTemplate.SelectedItem is ApplyTemplate selectedTemplate)
 			{
-				TranslationProvidersAllLanguages.SelectedItem = selectedTemplate.TranslationProvidersAllLanguages.ToString();
+                TranslationProvidersAllLanguages.SelectedItem = selectedTemplate.TranslationProvidersAllLanguages.ToString().ToUiString();
 				TranslationProvidersSpecificLanguages.SelectedItem = selectedTemplate.TranslationProvidersSpecificLanguages.ToString();
 				TranslationMemoriesAllLanguages.SelectedItem = selectedTemplate.TranslationMemoriesAllLanguages.ToString();
 				TranslationMemoriesSpecificLanguages.SelectedItem = selectedTemplate.TranslationMemoriesSpecificLanguages.ToString();
-				TerminologyTermbases.SelectedItem = selectedTemplate.TerminologyTermbases.ToString();
+				TerminologyTermbases.SelectedItem = selectedTemplate.TerminologyTermbases.ToString().ToUiString();
 				TerminologySearchSettings.SelectedItem = selectedTemplate.TerminologySearchSettings.ToString();
 				TranslationQualityAssessment.SelectedItem = selectedTemplate.TranslationQualityAssessment.ToString();
 				BatchTasksAllLanguages.SelectedItem = selectedTemplate.BatchTasksAllLanguages.ToString();
@@ -281,20 +280,20 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 			}
 		}
 
-		/// <summary>
+        
+
+        /// <summary>
 		/// Handles the SelectedIndexChanged event of the TranslationProvidersAllLanguages control.
 		/// </summary>
 		/// <param name="sender">The source of the event.</param>
 		/// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
 		private void TranslationProvidersAllLanguages_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			if (SelectedTemplate.SelectedItem is ApplyTemplate applyTemplate)
-			{
-				applyTemplate.TranslationProvidersAllLanguages =
-					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
-						TranslationProvidersAllLanguages.SelectedItem.ToString());
-			}
-		}
+        {
+            if (!(SelectedTemplate.SelectedItem is ApplyTemplate applyTemplate)) return;
+            applyTemplate.TranslationProvidersAllLanguages =
+                (ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
+                    TranslationProvidersAllLanguages.SelectedItem.ToString().ToEnumString());
+        }
 
 		/// <summary>
 		/// Handles the SelectedIndexChanged event of the TranslationProvidersSpecificLanguages control.
@@ -352,7 +351,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 			{
 				applyTemplate.TerminologyTermbases =
 					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
-						TerminologyTermbases.SelectedItem.ToString());
+						TerminologyTermbases.SelectedItem.ToString().ToEnumString());
 			}
 		}
 
