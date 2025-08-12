@@ -12,6 +12,7 @@ using Sdl.Core.Settings;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
+using Multilingual.XML.FileType.Extensions;
 
 namespace Multilingual.XML.FileType.Services
 {
@@ -167,8 +168,9 @@ namespace Multilingual.XML.FileType.Services
 			_targetDocument.Load(_xmlReader);
 
 			_nsmgr = new XmlNamespaceManager(_targetDocument.NameTable);
+			_targetDocument.AddAllNamespaces(_nsmgr);
 
-			if (_originalFileProperties.FileSnifferInfo != null && _originalFileProperties.FileSnifferInfo.MetaDataContainsKey(Constants.DefaultNamespace))
+            if (_originalFileProperties.FileSnifferInfo != null && _originalFileProperties.FileSnifferInfo.MetaDataContainsKey(Constants.DefaultNamespace))
 			{
 				var namespaceUri = _originalFileProperties.FileSnifferInfo.GetMetaData(Constants.DefaultNamespace);
 				if (!string.IsNullOrEmpty(namespaceUri))

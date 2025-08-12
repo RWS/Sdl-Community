@@ -177,6 +177,7 @@ namespace Multilingual.XML.FileType.Services
 
             _document.Load(_xmlReader);
             _nsmgr = new XmlNamespaceManager(_document.NameTable);
+            _document.AddAllNamespaces(_nsmgr);
 
             UpdateLanguageMappingSettings(_nsmgr);
 
