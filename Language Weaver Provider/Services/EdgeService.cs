@@ -69,20 +69,37 @@ namespace LanguageWeaverProvider.Services
         {
             try
             {
-                var requestUri = $"{accessToken.BaseUri}api/v2/dictionaries";
-                var response = await Service.SendRequest(HttpMethod.Get, requestUri, accessToken);
+                var allDictionaries = new List<PairDictionary>();
+                var page = 1;
+                var hasMore = true;
 
-                var dictionaries = await response.DeserializeResponse<EdgeDictionariesResponse>();
-
-                var pairDictionaries = dictionaries.Dictionaries.Select(dictionary => new PairDictionary()
+                while (hasMore)
                 {
-                    Name = dictionary.DictionaryId,
-                    DictionaryId = dictionary.DictionaryId,
-                    Source = dictionary.SourceLanguageId,
-                    Target = dictionary.TargetLanguageId
-                });
+                    var requestUri = $"{accessToken.BaseUri}api/v2/dictionaries?perPage=1000&page={page}";
+                    var response = await Service.SendRequest(HttpMethod.Get, requestUri, accessToken);
+                    var dictionaries = await response.DeserializeResponse<EdgeDictionariesResponse>();
 
-                return pairDictionaries;
+                    if (dictionaries?.Dictionaries == null || !dictionaries.Dictionaries.Any())
+                    {
+                        hasMore = false;
+                    }
+                    else
+                    {
+                        allDictionaries.AddRange(dictionaries.Dictionaries.Select(dictionary => new PairDictionary()
+                        {
+                            Name = dictionary.DictionaryId,
+                            DictionaryId = dictionary.DictionaryId,
+                            Source = dictionary.SourceLanguageId,
+                            Target = dictionary.TargetLanguageId
+                        }));
+
+                        // If less than perPage returned, this is the last page
+                        hasMore = dictionaries.Dictionaries.Count == 1000;
+                        page++;
+                    }
+                }
+
+                return allDictionaries;
             }
             catch (Exception ex)
             {
