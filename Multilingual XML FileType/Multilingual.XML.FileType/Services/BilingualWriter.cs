@@ -441,7 +441,7 @@ namespace Multilingual.XML.FileType.Services
 
 		private XmlNode GetXmlUnitNode(XmlNode xmlUnit, string xPath)
 		{
-			var xmlNode = xmlUnit.SelectSingleNode(xPath, _nsmgr);
+			var xmlNode = xmlUnit.SafeSelectSingleNode(xPath, _nsmgr);
 			if (xmlNode == null)
 			{
 				xmlNode = _xmlNodeService.AddXmlNode(xmlUnit, xPath);

@@ -110,14 +110,19 @@ namespace Multilingual.XML.FileType.Services
 					}
 
 					var nodes = document.SelectNodes(_languageMappingSettings.LanguageMappingLanguagesXPath, nsmgr);
-					var node = nodes?.Item(0);
-
-					supported = _languageMappingSettings.LanguageMappingLanguages.Select(language =>
-						node?.SelectSingleNode(language.XPath, nsmgr)).Any(target => target != null);
+					foreach (XmlNode node in nodes)
+					{
+						if (_languageMappingSettings.LanguageMappingLanguages.Select(language =>
+                        node?.SafeSelectSingleNode(language.XPath, nsmgr)).Any(target => target != null) == true)
+						{
+							return true;
+						}
+						
+					}
 				}
 			}
 
-			return supported;
+			return false;
 		}
 	}
 }

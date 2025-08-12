@@ -26,5 +26,16 @@ namespace Multilingual.XML.FileType.Extensions
                 }
             }
         }
+
+        public static XmlNode SafeSelectSingleNode(this XmlNode node, string path, XmlNamespaceManager nsmgr)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+                return null;
+
+            if (path.TrimStart().StartsWith("["))
+                path = "(.)" + path;  // parentheses make it valid for .NET XPath
+
+            return node.SelectSingleNode(path, nsmgr);
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Multilingual.XML.FileType.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -50,12 +51,12 @@ namespace Multilingual.XML.FileType.Services
 
 				var queryNode = GetQueryNode(xmlNodeName, validAttributes);
 
-				var existingNode = xmlNode.SelectSingleNode(queryNode, _nsmgr);
+				var existingNode = xmlNode.SafeSelectSingleNode(queryNode, _nsmgr);
 				if (existingNode == null && !string.IsNullOrEmpty(normalizedXmlNodeName))
 				{
 					xmlNodeName = normalizedXmlNodeName;
 					queryNode = GetQueryNode(normalizedXmlNodeName, validAttributes);
-					existingNode = xmlNode.SelectSingleNode(queryNode, _nsmgr);
+					existingNode = xmlNode.SafeSelectSingleNode(queryNode, _nsmgr);
 				}
 				if (existingNode == null)
 				{

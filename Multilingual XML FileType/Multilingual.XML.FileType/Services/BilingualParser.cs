@@ -196,7 +196,7 @@ namespace Multilingual.XML.FileType.Services
 
                 var xmlNode = nodes[index];
 
-                var sourceXmlNode = xmlNode.SelectSingleNode(_sourceLanguage.XPath, _nsmgr);
+                var sourceXmlNode = xmlNode.SafeSelectSingleNode(_sourceLanguage.XPath, _nsmgr);
                 var childNode = sourceXmlNode?.FirstChild;
                 var isCdata = childNode?.NodeType == XmlNodeType.CDATA;
 
@@ -238,7 +238,7 @@ namespace Multilingual.XML.FileType.Services
             var allSegmentCommentXmlNodes = new List<XmlNode>();
             foreach (var languageMappingLanguage in LanguageMappingSettings.LanguageMappingLanguages)
             {
-                var languageXmlNode = xmlNode.SelectSingleNode(languageMappingLanguage.XPath, _nsmgr);
+                var languageXmlNode = xmlNode.SafeSelectSingleNode(languageMappingLanguage.XPath, _nsmgr);
                 var languageComments = languageXmlNode?.SelectNodes(".//" + CommentMappingSettings.CommentElementName, _nsmgr);
                 if (languageComments != null)
                 {

@@ -291,8 +291,8 @@ namespace Multilingual.XML.FileType.BatchTasks
 							: multilingualFileInfo.TargetLanguage.XPath;
 
 
-						var outputXmlNode = outputNode.SelectSingleNode(outputlanguagePath, nsmgr);
-						var multilingualXmlNode = multilingualNode.SelectSingleNode(outputlanguagePath, nsmgr);
+						var outputXmlNode = outputNode.SafeSelectSingleNode(outputlanguagePath, nsmgr);
+						var multilingualXmlNode = multilingualNode.SafeSelectSingleNode(outputlanguagePath, nsmgr);
 
 						if (multilingualXmlNode == null)
 						{
