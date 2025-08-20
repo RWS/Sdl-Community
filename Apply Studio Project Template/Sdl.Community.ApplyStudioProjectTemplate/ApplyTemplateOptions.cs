@@ -16,14 +16,20 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// </summary>
         Keep = 0,
 
-        /// <summary>
-        /// Merge the settings from the template with the existing settings
-        /// </summary>
         Merge = 1,
+        /// <summary>
+        /// Merge the settings from the template by prepending them to the existing settings
+        /// </summary>
+        MergePrepend = 2,
+
+        /// <summary>
+        /// Merge the settings from the template by appending them to the existing settings
+        /// </summary>
+        MergeAppend = 3,
 
         /// <summary>
         /// Overwrite the current settings with the settings from the template
         /// </summary>
-        Overwrite = 2,
+        Overwrite = 4,
     }
 }
