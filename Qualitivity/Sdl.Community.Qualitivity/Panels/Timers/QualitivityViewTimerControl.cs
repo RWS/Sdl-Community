@@ -52,7 +52,7 @@ namespace Sdl.Community.Qualitivity.Panels.Timers
 
             label_elapsed_time.Text = string.Format("{0:00}:{1:00}:{2:00}",
               0, 0, 0);
-            
+            StopTracking();
         }
 
 
