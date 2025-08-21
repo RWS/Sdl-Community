@@ -259,6 +259,27 @@ namespace LanguageWeaverProvider.Services
             }
         }
 
+        public static async Task SetUserPermisions(AccessToken accessToken)
+        {
+            try
+            {
+                var requestUri = $"{accessToken.BaseUri}api/v2/users/me/permissions";
+                var response = await Service.SendRequest(HttpMethod.Get, requestUri, accessToken);
+                response.EnsureSuccessStatusCode();
+
+                var userPermissions = await response.DeserializeResponse<EdgeUserPermissions>();
+                accessToken.EdgeUserPermissions = userPermissions;
+            }
+            catch (Exception ex)
+            {
+                accessToken.EdgeUserPermissions = EdgeUserPermissions.CreateAllTrue();
+                ex.ShowDialog(
+                    "Permissions Error",
+                    $"We couldn't retrieve your user permissions. Some features, such as sending feedback, may not be available or function properly.\n\nDetails: {ex.Message}",
+                    true);
+            }
+        }
+
         private static string Base64Decode(this string encodedText)
             => Encoding.UTF8.GetString(Convert.FromBase64String(encodedText));
 
