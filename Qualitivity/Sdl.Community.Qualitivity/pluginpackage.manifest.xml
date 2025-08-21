@@ -1,6 +1,6 @@
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 	<PlugInName>Qualitivity</PlugInName>
-	<Version>6.1.0.0</Version>
+	<Version>6.1.1.0</Version>
 	<Description>Qualitivity</Description>
 	<Author>Trados AppStore Team</Author>
 	<Include>
