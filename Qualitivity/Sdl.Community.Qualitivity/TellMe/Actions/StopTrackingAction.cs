@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using Sdl.Community.Qualitivity.Tracking;
 using Sdl.TellMe.ProviderApi;
 
 namespace Sdl.Community.Qualitivity.TellMe.Actions
@@ -11,11 +12,11 @@ namespace Sdl.Community.Qualitivity.TellMe.Actions
 			string.Format(PluginResources.TellMe_Provider_Results, PluginResources.Plugin_Name);
 
 		public override Icon Icon => PluginResources.QualitivityStopTimer_Icon;
-		public override bool IsAvailable => true;
+		public override bool IsAvailable => Tracked.TrackingState != Tracked.TimerState.Stopped;
 
 		public override void Execute()
 		{
-			ApplicationContext.QualitivityViewController.Activate();
+            ApplicationContext.QualitivityViewController.Activate();
 			ApplicationContext.QualitivityViewController.StopTimeTracking();
 		}
 	}
