@@ -38,6 +38,10 @@ namespace Sdl.Community.PostEdit.Compare.Core.TrackChangesForReportGeneration
             var activeDocument = EditorEventListener.ActiveDocument;
 
             var activeSegmentPair = activeDocument.GetActiveSegmentPair();
+
+            var isLocked = activeSegmentPair?.Properties.IsLocked ?? true;
+            if (isLocked) return;
+
             var translationOrigin = activeSegmentPair?.Properties.TranslationOrigin;
             if (translationOrigin is null) return;
 
@@ -60,13 +64,12 @@ namespace Sdl.Community.PostEdit.Compare.Core.TrackChangesForReportGeneration
             var difference = GetTuSourceDocSourceDifference(activeSegmentPair, translationOrigin.MatchPercent, tmPath, currentProject);
 
             translationOrigin.SetMetaData(Constants.OriginalTuKey, JsonConvert.SerializeObject(difference));
-            activeDocument.UpdateSegmentPairProperties(activeSegmentPair,
-                activeSegmentPair.Properties);
+            activeDocument.UpdateSegmentPairProperties(activeSegmentPair, activeSegmentPair.Properties);
         }
 
 
 
-        
+
 
         private static List<DiffSegment> GetTuSourceDocSourceDifference(ISegmentPair segmentPair, int matchPercent,
             string tmPath, FileBasedProject currentProject)
@@ -78,6 +81,6 @@ namespace Sdl.Community.PostEdit.Compare.Core.TrackChangesForReportGeneration
             return searchResult == null ? [] : FileBasedTmHelper.GetTuWithTrackedChanges(searchResult, segmentPair.Source.ToString());
         }
 
-        
+
     }
 }
