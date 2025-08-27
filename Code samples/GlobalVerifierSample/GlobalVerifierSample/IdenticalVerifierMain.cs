@@ -17,6 +17,11 @@ namespace GlobalVerifierSample
 		private ISharedObjects _sharedObjects;
 		private IdenticalVerifierSettings _verificationSettings;
 
+        public IdenticalVerifierMain()
+        {
+            
+        }
+
 		/// <summary>
 		/// Initializes the settings bundle object from which to retrieve the setting(s)
 		/// to be used in the verification logic, e.g. the context display code to
