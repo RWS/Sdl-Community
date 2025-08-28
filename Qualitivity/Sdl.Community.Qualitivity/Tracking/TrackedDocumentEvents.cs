@@ -44,7 +44,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 			}
 			Debug.WriteLine("TranslationOriginChanged");
 			var trackedDocuments = Tracked.DictCacheDocumentItems[projectFile.Id.ToString()];
-			trackedDocuments.ActiveSegment.CurrentISegmentPairProperties = Tracked.ActiveDocument.ActiveSegmentPair.Target.Properties.Clone() as ISegmentPairProperties;
+			trackedDocuments.ActiveSegment.CurrentISegmentPairProperties = Tracked.ActiveDocument.ActiveSegmentPair?.Target.Properties.Clone() as ISegmentPairProperties;
 		}
 
 		public static void ConfirmationLevelChanged(object sender, EventArgs e)
@@ -81,7 +81,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 				if (segment != null)
 				{
 					// Is the segment whose confirmation level changed different from the one we're tracking?
-					if (segment.Properties.Id != trackedDocuments.ActiveSegment.CurrentISegmentPairProperties.Id)
+					if (segment.Properties.Id != trackedDocuments.ActiveSegment.CurrentISegmentPairProperties?.Id)
 					{
 						// Yes - so we probably already received the ActiveSegmentChanged event, and have already
 						// logged the confirmation level etc. for the segment we were leaving, but incorrectly, 
