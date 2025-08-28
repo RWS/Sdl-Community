@@ -325,6 +325,7 @@ public class FeedbackViewModel : BaseViewModel
         {
             QualityEstimation = ratedSegment.QualityEstimation,
             Translation = ratedSegment.Translation,
+            Model = ratedSegment.Model,
             ModelName = ratedSegment.ModelName,
             AutoSendFeedback = ratedSegment.AutosendFeedback,
             Index = translationOrigin.GetLastTqeIndex() + 1

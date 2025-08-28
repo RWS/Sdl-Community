@@ -41,9 +41,10 @@ public class EdgeFeedback(ISegmentPair segmentPair) : LanguageWeaverFeedback
         }
         else
         {
-            if (accessToken.EdgeUserPermissions.SubmitFeedback)
+            if (!accessToken.EdgeUserPermissions.SubmitFeedback)
             {
                 ErrorHandling.ShowDialog(null, "Permission Denied", "You don’t have permission to submit new feedback. Please contact your administrator if you believe this is a mistake.");
+                return false;
             }
 
             feedbackId = await EdgeService.SendFeedback(accessToken, feedbackItem).ConfigureAwait(false);
