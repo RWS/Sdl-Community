@@ -215,8 +215,9 @@ namespace LanguageWeaverProvider.Services
 
                 return translatedXliff;
             }
-            catch
+            catch (Exception ex)
             {
+                ex.ShowDialog("Translation failed", ex.Message, true);
                 return null;
             }
         }

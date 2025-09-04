@@ -117,11 +117,21 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
             Segments = ModifySegmentsOnLookup(_preLookupEditor, Segments);
         }
 
+
         var mappedPair = GetMappedPair();
-        var xliffFile = CreateXliffFile(Segments);
-        var translation = GetTranslation(mappedPair, xliffFile);
-        var evaluatedSegments = translation.GetTargetSegments();
-        var translatedSegments = evaluatedSegments.Select(seg => seg.Translation).ToList();
+        var segmentBatches = SplitSegmentsIntoBatches(Segments);
+        var allEvaluatedSegments = new List<EvaluatedSegment>();
+
+        foreach (var segmentBatch in segmentBatches)
+        {
+            var xliffFile = CreateXliffFile(segmentBatch);
+            var translation = GetTranslation(mappedPair, xliffFile);
+            var evaluatedSegments = translation.GetTargetSegments();
+            allEvaluatedSegments.AddRange(evaluatedSegments);
+        }
+
+        var translatedSegments = allEvaluatedSegments.Select(seg => seg.Translation).ToList();
+
         if (Emojis.Any())
         {
             ReconstructBaseSegments(translatedSegments, Emojis);
@@ -144,16 +154,12 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
 
             _currentTranslationUnit = translationUnits[i];
             var currentSegment = translationUnits[i].SourceSegment;
-            var evaluatedSegment = evaluatedSegments[translatedSegmentsIndex];
+            var evaluatedSegment = allEvaluatedSegments[translatedSegmentsIndex];
             var translatedSegment = translatedSegments[translatedSegmentsIndex++];
 
             searchResults[i] = new SearchResults { SourceSegment = currentSegment.Duplicate() };
 
             var tuSearchResult = CreateTuSearchResult(currentSegment, translatedSegment);
-
-            var translationOrigin = tuSearchResult.DocumentSegmentPair.Properties.TranslationOrigin;
-
-            const int tqeIndex = 1;
 
             StoreSegmentMetadata(evaluatedSegment, mappedPair, fileName);
 
@@ -163,23 +169,57 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
                 TranslationProposal = tuSearchResult.Duplicate()
             };
 
-            if (!string.IsNullOrWhiteSpace(evaluatedSegment.QualityEstimation))
-            {
-                var evaluationTime = DateTime.Now.ToUniversalTime();
-                sr.MetaData[Constants.METADATA_EVALUATED_AT_PREFIX + tqeIndex] = evaluationTime.ToString(Constants.METADATA_EVALUATED_AT_FORMAT);
-                sr.MetaData[Constants.METADATA_SYSTEM_PREFIX + tqeIndex] = Constants.METADATA_SYSTEM_NAME;
-                sr.MetaData[Constants.METADATA_SCORE_PREFIX + tqeIndex] = GetScoreFromQE(evaluatedSegment.QualityEstimation);
-                sr.MetaData[Constants.METADATA_MODEL_PREFIX + tqeIndex] = mappedPair.SelectedModel.Name;
-                sr.MetaData[Constants.METADATA_DESCRIPTION_PREFIX + tqeIndex] = string.Format(Constants.METADATA_DESCRIPTION, Constants.METADATA_SYSTEM_NAME,
-                    mappedPair.SelectedModel.Name);
-
-            }
-
+            StoreTqeMetadata(sr, evaluatedSegment);
             searchResults[i].Add(sr);
         }
 
         ManageBatchTaskWindow();
         return searchResults;
+    }
+
+    private void StoreTqeMetadata(SearchResult searchResult, EvaluatedSegment evaluatedSegment)
+    {
+        if (string.IsNullOrWhiteSpace(evaluatedSegment.QualityEstimation))
+        {
+            return;
+        }
+
+        const int tqeIndex = 1;
+            
+        var mappedPair = GetMappedPair();
+        var evaluationTime = DateTime.Now.ToUniversalTime();
+        searchResult.MetaData[Constants.METADATA_EVALUATED_AT_PREFIX + tqeIndex] = evaluationTime.ToString(Constants.METADATA_EVALUATED_AT_FORMAT);
+        searchResult.MetaData[Constants.METADATA_SYSTEM_PREFIX + tqeIndex] = Constants.METADATA_SYSTEM_NAME;
+        searchResult.MetaData[Constants.METADATA_SCORE_PREFIX + tqeIndex] = GetScoreFromQE(evaluatedSegment.QualityEstimation);
+        searchResult.MetaData[Constants.METADATA_MODEL_PREFIX + tqeIndex] = mappedPair.SelectedModel.Name;
+        searchResult.MetaData[Constants.METADATA_DESCRIPTION_PREFIX + tqeIndex] = string.Format(Constants.METADATA_DESCRIPTION, Constants.METADATA_SYSTEM_NAME, mappedPair.SelectedModel.Name);
+    }
+
+    private IEnumerable<IEnumerable<Segment>> SplitSegmentsIntoBatches(List<Segment> segments)
+    {
+        const int MaxSegmentsPerCloudFile = 200;
+        const int MaxSegmentsPerEdgeFile = 70;
+
+        var segmentsPerBatch = _translationOptions.PluginVersion == PluginVersion.LanguageWeaverCloud
+            ? MaxSegmentsPerCloudFile
+            : MaxSegmentsPerEdgeFile;
+
+        int total = segments.Count;
+        int batchCount = (int)Math.Ceiling((double)total / segmentsPerBatch);
+        int baseSize = total / batchCount;
+        int remainder = total % batchCount;
+
+        var segmentBatches = new List<List<Segment>>();
+        int index = 0;
+
+        for (int i = 0; i < batchCount; i++)
+        {
+            int currentBatchSize = baseSize + (i < remainder ? 1 : 0);
+            segmentBatches.Add(segments.GetRange(index, currentBatchSize));
+            index += currentBatchSize;
+        }
+
+        return segmentBatches;
     }
 
     private static string GetScoreFromQE(string qualityEstimation) => QESCoreMap[qualityEstimation.ToLower()];
