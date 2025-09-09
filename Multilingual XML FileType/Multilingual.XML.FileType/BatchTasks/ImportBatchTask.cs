@@ -276,7 +276,7 @@ namespace Multilingual.XML.FileType.BatchTasks
 						// Target segmentation is unknown at this point.
 						// TODO: investigate if we can run pretranslation task reverting the language direction
 						for (var m = 0; m < paragraphUnitInfo.SegmentPairs.Count; m++)
-						{
+					{
 							var originalSegmentPairInfo = paragraphUnitInfo.SegmentPairs[m];
 							var segmentPairProperties = originalSegmentPairInfo.SegmentPair.Properties.Clone() as ISegmentPairProperties;
 							var sourceSegment = _segmentBuilder.CreateSegment(segmentPairProperties);
@@ -284,6 +284,11 @@ namespace Multilingual.XML.FileType.BatchTasks
 
 							foreach (var item in originalSegmentPairInfo.SegmentPair.Source)
 							{
+								if (item is IPlaceholderTag placeholder)
+								{
+									EnsureTagSubSegments(placeholder, paragraphUnitInfo);
+								}
+
 								sourceSegment.Add(item.Clone() as IAbstractMarkupData);
 							}
 
@@ -291,7 +296,12 @@ namespace Multilingual.XML.FileType.BatchTasks
 							{
 								foreach (var item in updatedParagraphUnitInfo.ParagraphUnit.Source)
 								{
-									targetSegment.Add(item.Clone() as IAbstractMarkupData);
+                                    if (item is IPlaceholderTag placeholder)
+                                    {
+										EnsureTagSubSegments(placeholder, paragraphUnitInfo);
+                                    }
+
+                                    targetSegment.Add(item.Clone() as IAbstractMarkupData);
 								}
 							}
 
@@ -400,7 +410,15 @@ namespace Multilingual.XML.FileType.BatchTasks
 			return paragraphUnits;
 		}
 
-		private void UpdateSegments(IAbstractMarkupDataContainer container, IEnumerable<ISegmentPair> segmentPairs, bool isSource)
+        private void EnsureTagSubSegments(IPlaceholderTag placeholder, ParagraphUnitInfo paragraphUnitInfo)
+        {
+            foreach (var subSegment in placeholder.SubSegments)
+            {
+                subSegment.ParagraphUnitId = new ParagraphUnitId(paragraphUnitInfo.ParagraphUnitId);
+            }
+        }
+
+        private void UpdateSegments(IAbstractMarkupDataContainer container, IEnumerable<ISegmentPair> segmentPairs, bool isSource)
 		{
 			for (var index = 0; index < container.Count; index++)
 			{
