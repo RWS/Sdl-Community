@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using Multilingual.XML.FileType.BatchTasks.Pages;
 using Multilingual.XML.FileType.BatchTasks.Settings;
+using Multilingual.XML.FileType.Extensions;
 using Multilingual.XML.FileType.FileType.Processors;
 using Multilingual.XML.FileType.FileType.Settings;
 using Multilingual.XML.FileType.Models;
@@ -220,6 +221,8 @@ namespace Multilingual.XML.FileType.BatchTasks
 					outputDocument.Load(outputXmlReader);
 
 					var nsmgr = new XmlNamespaceManager(outputDocument.NameTable);
+					outputDocument.AddAllNamespaces(nsmgr);
+
 					var namespaceUri = _defaultNamespaceHelper.GetXmlNameSpaceUri(
 						multilingualFileInfo.MultilingualFilePath, multilingualFileInfo.FileEncoding);
 					if (!string.IsNullOrEmpty(namespaceUri))
@@ -288,8 +291,8 @@ namespace Multilingual.XML.FileType.BatchTasks
 							: multilingualFileInfo.TargetLanguage.XPath;
 
 
-						var outputXmlNode = outputNode.SelectSingleNode(outputlanguagePath, nsmgr);
-						var multilingualXmlNode = multilingualNode.SelectSingleNode(outputlanguagePath, nsmgr);
+						var outputXmlNode = outputNode.SafeSelectSingleNode(outputlanguagePath, nsmgr);
+						var multilingualXmlNode = multilingualNode.SafeSelectSingleNode(outputlanguagePath, nsmgr);
 
 						if (multilingualXmlNode == null)
 						{

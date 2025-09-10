@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 using System.Xml;
+using Multilingual.XML.FileType.Extensions;
 using Multilingual.XML.FileType.FileType.Settings;
 using Sdl.Core.Globalization;
 using Sdl.Core.Settings;
@@ -86,7 +87,9 @@ namespace Multilingual.XML.FileType.Services
 					document.Load(reader);
 
 					var nsmgr = new XmlNamespaceManager(document.NameTable);
-					if (!string.IsNullOrEmpty(namespaceUri))
+					document.AddAllNamespaces(nsmgr);
+
+                    if (!string.IsNullOrEmpty(namespaceUri))
 					{
 						var defaultNameSpace = new XmlNameSpace { Name = Constants.DefaultNamespace, Value = namespaceUri };
 						_defaultNamespaceHelper.AddXmlNameSpacesFromDocument(nsmgr, document, defaultNameSpace);
@@ -107,14 +110,19 @@ namespace Multilingual.XML.FileType.Services
 					}
 
 					var nodes = document.SelectNodes(_languageMappingSettings.LanguageMappingLanguagesXPath, nsmgr);
-					var node = nodes?.Item(0);
-
-					supported = _languageMappingSettings.LanguageMappingLanguages.Select(language =>
-						node?.SelectSingleNode(language.XPath, nsmgr)).Any(target => target != null);
+					foreach (XmlNode node in nodes)
+					{
+						if (_languageMappingSettings.LanguageMappingLanguages.Select(language =>
+                        node?.SafeSelectSingleNode(language.XPath, nsmgr)).Any(target => target != null) == true)
+						{
+							return true;
+						}
+						
+					}
 				}
 			}
 
-			return supported;
+			return false;
 		}
 	}
 }

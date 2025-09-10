@@ -16,7 +16,25 @@ namespace Multilingual.XML.FileType.Services
 			_xmlReaderFactory = xmlReaderFactory;
 		}
 
-		public string GetXmlNameSpaceUri(string filePath, Encoding encoding)
+        public void AddAllNamespacesFromDocument(XmlDocument doc, XmlNamespaceManager nsmgr)
+        {
+            var root = doc.DocumentElement;
+            if (root == null) return;
+
+            foreach (XmlAttribute attr in root.Attributes)
+            {
+                if (attr.Prefix == "xmlns")
+                {
+                    nsmgr.AddNamespace(attr.LocalName, attr.Value);
+                }
+                else if (attr.Name == "xmlns")
+                {
+                    nsmgr.AddNamespace(string.Empty, attr.Value); // default namespace
+                }
+            }
+        }
+
+        public string GetXmlNameSpaceUri(string filePath, Encoding encoding)
 		{
 			string namespaceUri;
 			using (var fs = new FileStream(filePath, FileMode.Open))
