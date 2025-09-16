@@ -36,7 +36,7 @@ namespace Sdl.Community.TermExcelerator
 			}
 		}
 
-		public bool Initialized => true;
+		public bool Initialized { get; private set; }
 
 		public Entry SelectedTerm { get; set; }
 
@@ -74,6 +74,7 @@ namespace Sdl.Community.TermExcelerator
 		{
 			_terminologyProvider = (TerminologyProviderExcel)terminologyProvider;
 			Task.Run(_terminologyProvider.LoadEntries);
+			Initialized = true;
 		}
 
 		public void JumpToTerm(Entry entry)
