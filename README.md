@@ -51,7 +51,7 @@ The following table shows all the plugins available in the repository.
 
 By clicking on each plugin name in the table, you'll be redirected to the plugin's download page in RWS AppStore. The Source Code column will redirect to the code project for the selected plugin.
 
-| Plugin | Source Code | API Integration(s) | SonarCLoud |
+| Plugin | Source Code | API Integration(s) | SonarCloud |
 | --- | --- | --- | --- |
 | [Amazon Translate MT provider](https://appstore.rws.com/Plugin/18) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Amazon%20Translate%20MT%20provider) | Translation Memory API | Yes |
 | [ApplyTM Template](https://appstore.rws.com/Plugin/21) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/ApplyTM%20Template) | Translation Memory API | Yes |
