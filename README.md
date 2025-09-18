@@ -74,7 +74,7 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [Post-Edit Compare](https://appstore.rws.com/Plugin/15) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Post-Edit%20Compare) | Integration API | Yes |
 | [projectTermExtract](https://appstore.rws.com/Plugin/34) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/ProjectTermExtract) | Integration API | Yes |
 | [Qualitivity](https://appstore.rws.com/Plugin/16) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Qualitivity) | Integration API | Yes |
-| [Rapid Add Term](https://appstore.rws.com/Plugin/35) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Rapid%20Add%20Term) | Integration API | No |
+| [Rapid Add Term](https://appstore.rws.com/Plugin/35) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Rapid%20Add%20Term) | Integration API | -- No |
 | [Reports Viewer Plus](https://appstore.rws.com/Plugin/37) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Reports%20Viewer%20Plus) | Integration API | Yes |
 | [Trados Data Protection Suite](https://appstore.rws.com/Plugin/39) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20Data%20Protection%20Suite) | Integration API | Yes |
 | [Trados Transcreate](https://appstore.rws.com/Plugin/42) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20Transcreate) | Integration API | Yes |
@@ -96,16 +96,16 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [Trados Number Verifier](https://appstore.rws.com/Plugin/33) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20Number%20Verifier) | Verification API | Yes |
 | [CleanUp Tasks](https://appstore.rws.com/Plugin/23) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/CleanUp%20Tasks) | Batch Task API | Yes |
 | [Export to Excel](https://appstore.rws.com/Plugin/27) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Export%20to%20Excel) | Batch Task API | Yes |
-| [Fail Safe Task](https://appstore.rws.com/Plugin/28) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Fail%20Safe%20Task) | Batch Task API | No |
+| [Fail Safe Task](https://appstore.rws.com/Plugin/28) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Fail%20Safe%20Task) | Batch Task API | -- No |
 | [Trados Batch Anonymizer](https://appstore.rws.com/Plugin/38) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20Batch%20Anonymizer) | Batch Task API | Yes |
 | [Trados Studio Target Renamer](https://appstore.rws.com/Plugin/73) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20Studio%20Target%20Renamer) | Batch Task API | Yes |
 | [Target Word Count](https://appstore.rws.com/Plugin/74) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Target%20Word%20Count) | Batch Task API | Yes |
 | [Apply Studio Project Template](https://appstore.rws.com/Plugin/20) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Apply%20Studio%20Project%20Template) | Project Automation API | Yes |
 | [Google API Validator](https://appstore.rws.com/Plugin/53) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Google%20API%20Validator) | Standalone Application | Yes |
-| [Hunspell Dictionary Manager](https://appstore.rws.com/Plugin/54) | [Source Code](https://github.com/sdl/Sdl-Community/tree/master/Hunspell%20Dictionary%20Manager) | Standalone Application | No |
-| [SDLXLIFF to Legacy Converter](https://appstore.rws.com/Plugin/56) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/SDLXLIFF%20to%20Legacy%20Converter) | Standalone Application |      No |
-| [Language Mapping Provider](https://www.nuget.org/packages/LanguageMappingProvider/) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Language%20Mapping%20Provider) | Standalone Application | No |
-| Trados Proxy Settings | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20Proxy%20Settings) | Standalone Application | No |
+| [Hunspell Dictionary Manager](https://appstore.rws.com/Plugin/54) | [Source Code](https://github.com/sdl/Sdl-Community/tree/master/Hunspell%20Dictionary%20Manager) | Standalone Application | -- No |
+| [SDLXLIFF to Legacy Converter](https://appstore.rws.com/Plugin/56) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/SDLXLIFF%20to%20Legacy%20Converter) | Standalone Application | -- No |
+| [Language Mapping Provider](https://www.nuget.org/packages/LanguageMappingProvider/) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Language%20Mapping%20Provider) | Standalone Application | -- No |
+| Trados Proxy Settings | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20Proxy%20Settings) | Standalone Application | -- No |
 
 
 
