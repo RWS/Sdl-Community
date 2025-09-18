@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using Sdl.Community.TargetWordCount.Helpers;
 using Sdl.Community.TargetWordCount.Models;
 using Sdl.Community.TargetWordCount.Utilities;
 using Sdl.Desktop.IntegrationApi;
@@ -52,6 +53,11 @@ namespace Sdl.Community.TargetWordCount
 		{
 			var invoiceRates = new BindingList<InvoiceItem>();
 
+			if (dataGridView.Rows.Count == 0)
+			{
+				return;
+			}
+
 			foreach (DataGridViewRow row in dataGridView.Rows)
 			{
 				var rateType = displayString.First(p => p.Value == row.Cells[0].Value.ToString()).Key;
@@ -99,6 +105,11 @@ namespace Sdl.Community.TargetWordCount
 		private void AddRows()
 		{
 			// Display all rows
+			if (Settings.InvoiceRates == null || Settings.InvoiceRates.Count == 0)
+			{
+				Settings.InvoiceRates = DefaultInvoiceRateService.CreateDefaultInvoiceRates();
+			}
+
 			for (int i = 0; i < Enum.GetValues(typeof(RateType)).Length; ++i)
 			{
 				dataGridView.Rows.Add(new object[] { displayString[Settings.InvoiceRates[i].Type], Settings.InvoiceRates[i].Rate });
