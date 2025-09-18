@@ -63,7 +63,7 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [SDLTM Repair](https://appstore.rws.com/Plugin/41) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/SDLTM%20Repair) | Translation Memory API | Yes |
 | [Trados Translation Memory Management Utility](https://appstore.rws.com/Plugin/78) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20Translation%20Memory%20Management%20Utility) | Translation Memory API | Yes |
 | [TuToTm](https://appstore.rws.com/Plugin/79) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/TuToTm) | Translation Memory API | Yes |
-| memoQ Translation Memory Provider | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/memoQ%20Translation%20Memory%20Provider) | Translation Memory API | No |
+| memoQ Translation Memory Provider | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/memoQ%20Translation%20Memory%20Provider) | Translation Memory API | --- No |
 | [IATE Real-time Terminology](https://appstore.rws.com/Plugin/30) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/IATE%20Real-time%20Terminology) | Terminology Provider API | Yes |
 | [InterpretBank Terminology Provider](https://appstore.rws.com/Plugin/243) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/InterpretBank%20Terminology%20Provider) | Terminology Provider API | Yes |
 | [Trados Studio InQuote](https://appstore.rws.com/Plugin/55/) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20Studio%20InQuote) | Terminology Provider API | Yes |
