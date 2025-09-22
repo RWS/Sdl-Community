@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
+using System.Text;
 using Amazon.Runtime.CredentialManagement;
 using Amazon.Translate;
 using Amazon.Translate.Model;
@@ -79,24 +82,40 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin.AmzConnect
             }
 
             var tclient = new AmazonTranslateClient(awsCreds, awsRegion);
-            var trequest = new TranslateTextRequest();
-            trequest.SourceLanguageCode = sourceLc;
-            trequest.TargetLanguageCode = targetLc;
-            trequest.Text = textToTranslate;
-            try
-            {
-                var result = tclient.TranslateText(trequest);
-                System.Diagnostics.Debug.WriteLine(result.TranslatedText);
-                translatedText = result.TranslatedText;
-            }
-            catch (Amazon.Translate.AmazonTranslateException e)
-            {
-                System.Diagnostics.Debug.WriteLine(e.Message);
-                throw e;
-            }
+			byte[] byteArray = Encoding.UTF8.GetBytes(textToTranslate);
+
+			using (MemoryStream memoryStream = new MemoryStream(byteArray))
+			{
+				var amazonDocument = new Document
+				{
+					ContentType = "text/html",
+					Content = memoryStream
+				};
+
+				var tDocRequest = new TranslateDocumentRequest();
+				tDocRequest.SourceLanguageCode = sourceLc;
+				tDocRequest.TargetLanguageCode = targetLc;
+				tDocRequest.Document = amazonDocument;
+
+				try
+				{
+					var resultDoc = tclient.TranslateDocument(tDocRequest);
+					using (var translatedStream = resultDoc.TranslatedDocument.Content)
+					using (var reader = new StreamReader(translatedStream, Encoding.UTF8))
+					{
+						translatedText = reader.ReadToEnd();
+					}
+					System.Diagnostics.Debug.WriteLine(translatedText);
+				}
+				catch (Exception e)
+				{
+					System.Diagnostics.Debug.WriteLine(e.Message);
+					throw e;
+				}
+			}
+			
             return translatedText;
         }
-
 
         /// <summary>
         /// Checks if lang pair is supported by AWS
