@@ -23,7 +23,7 @@ namespace LanguageWeaverProvider
             var serializedCredentials = credentialStore.GetCredential(translationProviderUri).Credential;
             var standaloneCredentials = new StandaloneCredentials(serializedCredentials);
 
-            ApplicationInitializer.Is = standaloneCredentials.AuthenticationType != AuthenticationType.None;
+            ApplicationInitializer.IsStandalone = standaloneCredentials.AuthenticationType != AuthenticationType.None;
 
             var options = GetOptions(translationProviderState);
             CredentialManager.GetCredentials(options, true, standaloneCredentials);
