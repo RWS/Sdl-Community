@@ -1,4 +1,5 @@
-﻿using LanguageWeaverProvider.Model;
+﻿using LanguageWeaverProvider.Extensions;
+using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Services;
 using LanguageWeaverProvider.XliffConverter.Converter;
