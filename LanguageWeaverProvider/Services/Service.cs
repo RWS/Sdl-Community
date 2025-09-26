@@ -36,14 +36,42 @@ namespace LanguageWeaverProvider.Services
 			return deserializedObject;
 		}
 
-		public static async void ValidateToken(ITranslationOptions translationOptions)
+		public static bool ValidateToken(ITranslationOptions translationOptions, bool showErrors = true)
+		{
+			if (translationOptions.AccessToken is null) return false;
+
+			if (
+				translationOptions.AuthenticationType == AuthenticationType.CloudSSO
+			 && IsTimestampExpired(translationOptions.AccessToken.ExpiresAt))
+			{
+				return
+				CloudService
+					.RefreshAuth0Token(translationOptions)
+					.GetAwaiter()
+					.GetResult();
+			}
+
+			if (translationOptions.PluginVersion == PluginVersion.LanguageWeaverCloud
+			 && translationOptions.AuthenticationType != AuthenticationType.CloudSSO
+			 && IsTimestampExpired(translationOptions.AccessToken?.ExpiresAt))
+			{
+				return CloudService
+					.AuthenticateUser(translationOptions, translationOptions.AuthenticationType)
+					.GetAwaiter()
+					.GetResult();
+			}
+
+			return false;
+		}
+
+		public static async void ValidateTokenAsync(ITranslationOptions translationOptions)
 		{
 			if (translationOptions.AccessToken is null) return;
 
 			if (translationOptions.AuthenticationType == AuthenticationType.CloudSSO
 			 && IsTimestampExpired(translationOptions.AccessToken.ExpiresAt))
 			{
-				await RefreshAuth0Token(translationOptions.AccessToken);
+				await CloudService.RefreshAuth0Token(translationOptions);
 				return;
 			}
 
@@ -56,24 +84,6 @@ namespace LanguageWeaverProvider.Services
 			}
 		}
 
-		public static async Task RefreshAuth0Token(AccessToken accessToken)
-		{
-			var parameters = new Dictionary<string, string>
-			{
-				{ "grant_type", "refresh_token" },
-				{ "refresh_token", accessToken.RefreshToken }
-			};
-
-			using var httpRequest = new HttpRequestMessage
-			{
-				Method = HttpMethod.Post,
-				RequestUri = new Uri("https://sdl-prod.eu.auth0.com/"),
-				Content = new FormUrlEncodedContent(parameters)
-			};
-
-			await new HttpClient().SendAsync(httpRequest);
-		}
-
 		private static bool IsTimestampExpired(double? unixTimeStamp)
 		{
 			if (!unixTimeStamp.HasValue)
@@ -82,7 +92,7 @@ namespace LanguageWeaverProvider.Services
 			}
 
 			var expirationTime = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero).AddMilliseconds((double)unixTimeStamp);
-			var currentTime = DateTimeOffset.UtcNow;
+			var currentTime = DateTimeOffset.UtcNow.AddHours(-1);
 
 			return expirationTime <= currentTime;
 		}

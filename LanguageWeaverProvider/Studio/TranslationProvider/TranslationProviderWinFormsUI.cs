@@ -69,7 +69,7 @@ namespace LanguageWeaverProvider
 
 		private PairMappingViewModel ShowPairMappingView(LanguagePair[] languagePairs, ITranslationOptions translationOptions)
 		{
-			Service.ValidateToken(translationOptions);
+			Service.ValidateTokenAsync(translationOptions);
 			var pairMappingViewModel = new PairMappingViewModel(translationOptions, languagePairs);
 			var pairMappingView = new PairMappingView() { DataContext = pairMappingViewModel };
 			pairMappingViewModel.CloseEventRaised += pairMappingView.Close;
