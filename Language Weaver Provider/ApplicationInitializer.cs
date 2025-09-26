@@ -19,7 +19,7 @@ namespace LanguageWeaverProvider
 
 		public static string CurrentAppVersion { get; private set; }
 
-		public static IList<RatedSegment> RatedSegments { get; set; }
+		public static IList<RatedSegment> RatedSegments { get; set; } = new List<RatedSegment>();
 
         public static ITranslationProviderCredentialStore CredentialStore { get; set; }
 
@@ -30,7 +30,6 @@ namespace LanguageWeaverProvider
 
         public void Execute()
         {
-			RatedSegments = new List<RatedSegment>();
 			CurrentAppVersion = GetAssemblyFileVersion();
             Log.Setup();
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings
