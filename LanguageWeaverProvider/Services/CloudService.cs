@@ -110,7 +110,6 @@ namespace LanguageWeaverProvider.Services
 					BaseUri = new Uri(selectedRegion)
 				};
 
-				translationOptions.CloudCredentials.ClientID = auth0Config.ClientId;
 				await SetAccountId(translationOptions, selectedRegion);
 				return true;
 			}
