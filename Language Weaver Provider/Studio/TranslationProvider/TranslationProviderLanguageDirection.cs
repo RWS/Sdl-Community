@@ -100,6 +100,8 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
             _translationOptions = currentOptions;
         }
 
+        Service.ValidateToken(_translationOptions, false);
+
         ManageBatchTaskWindow(true);
         var searchResults = new SearchResults[mask.Length];
         var segmentsInput = translationUnits.Select(x => x.SourceSegment).ToList();
