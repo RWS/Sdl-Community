@@ -23,6 +23,52 @@ namespace LanguageWeaverProvider.Services
 	{
 		private static Logger _logger = LogManager.GetCurrentClassLogger();
 
+		public static async Task<bool> RefreshAuth0Token(ITranslationOptions translationOptions)
+		{
+			var parameters = new Dictionary<string, string>
+			{
+				{ "client_id", "F4NpOGG1sBaEzk379M6ZxX3gGa0iH1Ff"},
+				{ "grant_type", "refresh_token" },
+				{ "refresh_token", translationOptions.AccessToken.RefreshToken }
+			};
+
+			using var httpRequest = new HttpRequestMessage
+			{
+				Method = HttpMethod.Post,
+				RequestUri = new Uri("https://sdl-prod.eu.auth0.com/oauth/token"),
+				Content = new FormUrlEncodedContent(parameters)
+			};
+
+			try
+			{
+				var result = await new HttpClient().SendAsync(httpRequest);
+
+				var content = result.Content.ReadAsStringAsync().Result;
+
+				if (!result.IsSuccessStatusCode)
+				{
+					return false;
+				}
+
+				var ssoToken = JsonConvert.DeserializeObject<CloudAuth0Response>(content);
+				translationOptions.AccessToken = new AccessToken
+				{
+					Token = ssoToken.AccessToken,
+					TokenType = ssoToken.TokenType,
+					RefreshToken = ssoToken.RefreshToken ?? translationOptions.AccessToken?.RefreshToken,
+					ExpiresAt = (long)(DateTime.UtcNow.AddSeconds(ssoToken.ExpiresIn) - new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).TotalMilliseconds,
+					BaseUri = translationOptions.AccessToken.BaseUri,
+				};
+
+				return true;
+
+			}
+			catch (Exception)
+			{
+				return false;
+			}
+		}
+
 		public static async Task<bool> AuthenticateSSOUser(ITranslationOptions translationOptions, CloudAuth0Config auth0Config, Uri uri, string selectedRegion)
 		{
 			try
@@ -64,6 +110,7 @@ namespace LanguageWeaverProvider.Services
 					BaseUri = new Uri(selectedRegion)
 				};
 
+				translationOptions.CloudCredentials.ClientID = auth0Config.ClientId;
 				await SetAccountId(translationOptions, selectedRegion);
 				return true;
 			}

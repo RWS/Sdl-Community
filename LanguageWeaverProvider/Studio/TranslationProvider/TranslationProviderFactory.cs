@@ -28,7 +28,12 @@ namespace LanguageWeaverProvider
 			var options = GetOptions(translationProviderState);
 			CredentialManager.GetCredentials(options, true, standaloneCredentials);
 
-			Service.ValidateToken(options);
+			var validated = Service.ValidateToken(options);
+			if (validated)
+			{
+				CredentialManager.UpdateCredentials(credentialStore, options);
+			}
+
 			ApplicationInitializer.TranslationOptions[options.Id] = options;
 
 			return new TranslationProvider(options);

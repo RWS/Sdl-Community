@@ -99,6 +99,8 @@ namespace LanguageWeaverProvider
 				_translationOptions = currentOptions;
 			}
 
+			Service.ValidateTokenAsync(_translationOptions);
+
 			ManageBatchTaskWindow(true);
 			var searchResults = new SearchResults[mask.Length];
 			var segmentsInput = translationUnits.Select(x => x.SourceSegment).ToList();

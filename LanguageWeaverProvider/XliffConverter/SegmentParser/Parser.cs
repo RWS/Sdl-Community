@@ -21,7 +21,9 @@ namespace LanguageWeaverProvider.XliffConverter.SegmentParser
 				return segment;
 			}
 
-			var tags = Regex.Split(text, @"(<(?:""[^""]*""['""]*|'[^']*'['""]*|[^'"">])+>)");
+			var tags = SplitTags(text);
+
+			//var tags = Regex.Split(text, @"(<(?:""[^""]*""['""]*|'[^']*'['""]*|[^'"">])+>)");
 			var startingTags = new Stack<Tag>();
 			foreach (var tag in tags)
 			{
@@ -129,6 +131,39 @@ namespace LanguageWeaverProvider.XliffConverter.SegmentParser
             }
 
 			return null;
+		}
+
+		private static List<string> SplitTags(string text)
+		{
+			var result = new List<string>();
+
+			var master = new Regex(
+				$@"({StartingTag}|{EndingTag}|{StandaloneTag}|{PlaceholderTag}|{LockedTag})",
+				RegexOptions.Compiled
+			);
+
+			int lastIndex = 0;
+			foreach (Match match in master.Matches(text))
+			{
+				// Add plain text before the tag
+				if (match.Index > lastIndex)
+				{
+					var plain = text.Substring(lastIndex, match.Index - lastIndex);
+					if (!string.IsNullOrEmpty(plain))
+						result.Add(plain);
+				}
+
+				result.Add(match.Value);
+
+				lastIndex = match.Index + match.Length;
+			}
+
+			if (lastIndex < text.Length)
+			{
+				result.Add(text.Substring(lastIndex));
+			}
+
+			return result;
 		}
 	}
 }
