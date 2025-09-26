@@ -39,7 +39,37 @@ namespace LanguageWeaverProvider.Services
             return deserializedObject;
         }
 
-        public static async void ValidateToken(ITranslationOptions translationOptions, bool showErrors = true)
+        // we need a sync and an Async method..
+
+        public static bool ValidateToken(ITranslationOptions translationOptions, bool showErrors = true)
+        { 
+            if (translationOptions.AccessToken is null) return false;
+
+            if (
+                translationOptions.AuthenticationType == AuthenticationType.CloudSSO
+             && IsTimestampExpired(translationOptions.AccessToken.ExpiresAt))
+            {
+                return
+                CloudService
+                    .RefreshAuth0Token(translationOptions)
+                    .GetAwaiter()
+                    .GetResult();
+            }
+
+            if (translationOptions.PluginVersion == PluginVersion.LanguageWeaverCloud
+             && translationOptions.AuthenticationType != AuthenticationType.CloudSSO
+             && IsTimestampExpired(translationOptions.AccessToken?.ExpiresAt))
+            {
+                return CloudService
+                    .AuthenticateUser(translationOptions, translationOptions.AuthenticationType, showErrors)
+                    .GetAwaiter()
+                    .GetResult();
+            }
+
+            return false;
+        }
+
+        public static async void ValidateTokenAsync(ITranslationOptions translationOptions, bool showErrors = true)
         {
             if (translationOptions.AccessToken is null) return;
 
@@ -67,10 +97,8 @@ namespace LanguageWeaverProvider.Services
                 return false;
             }
 
-            // Change the time to check with one hour later
-            // Since it's async we want to make sure that there is no delay between calls.
             var expirationTime = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero).AddMilliseconds((double)unixTimeStamp);
-            var currentTime = DateTimeOffset.UtcNow.AddHours(1); 
+            var currentTime = DateTimeOffset.UtcNow.AddHours(-1); 
 
             return expirationTime <= currentTime;
         }

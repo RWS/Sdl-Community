@@ -100,7 +100,7 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
             _translationOptions = currentOptions;
         }
 
-        Service.ValidateToken(_translationOptions, false);
+        Service.ValidateTokenAsync(_translationOptions, false);
 
         ManageBatchTaskWindow(true);
         var searchResults = new SearchResults[mask.Length];

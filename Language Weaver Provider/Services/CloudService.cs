@@ -28,9 +28,9 @@ namespace LanguageWeaverProvider.Services
         {
             var parameters = new Dictionary<string, string>
             {
-                { "client_id", translationOptions.CloudCredentials.ClientID},
+				{ "client_id", "F4NpOGG1sBaEzk379M6ZxX3gGa0iH1Ff"},
                 { "grant_type", "refresh_token" },
-                { "refresh_token", translationOptions.AccessToken.RefreshToken }
+                { "refresh_token", translationOptions.AccessToken?.RefreshToken }
             };
 
             using var httpRequest = new HttpRequestMessage
@@ -58,7 +58,7 @@ namespace LanguageWeaverProvider.Services
                     TokenType = ssoToken.TokenType,
                     RefreshToken = ssoToken.RefreshToken ?? translationOptions.AccessToken?.RefreshToken,
                     ExpiresAt = (long)(DateTime.UtcNow.AddSeconds(ssoToken.ExpiresIn) - new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).TotalMilliseconds,
-                    BaseUri = new Uri(translationOptions.CloudCredentials.AccountRegion)
+                    BaseUri = translationOptions.AccessToken.BaseUri
                 };
 
                 return true;
@@ -110,8 +110,6 @@ namespace LanguageWeaverProvider.Services
                     ExpiresAt = (long)(DateTime.UtcNow.AddSeconds(ssoToken.ExpiresIn) - new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).TotalMilliseconds,
                     BaseUri = new Uri(selectedRegion)
                 };
-
-                translationOptions.CloudCredentials.ClientID = auth0Config.ClientId;
 
                 await SetAccountId(translationOptions, selectedRegion);
                 return true;

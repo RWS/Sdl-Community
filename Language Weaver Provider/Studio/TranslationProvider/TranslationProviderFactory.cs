@@ -2,6 +2,7 @@
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Options;
 using LanguageWeaverProvider.Services;
+using LanguageWeaverProvider.WindowsCredentialStore;
 using Newtonsoft.Json;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using System;
@@ -20,15 +21,32 @@ namespace LanguageWeaverProvider
 
             if (translationProviderState is null) return new TranslationProvider(new TranslationOptions());
 
-            var serializedCredentials = credentialStore.GetCredential(translationProviderUri).Credential;
+            var serializedCredentials = credentialStore.GetCredential(translationProviderUri)?.Credential;
+            
+            if (serializedCredentials is null)
+            {
+                serializedCredentials = CredentialStore.Load($"{translationProviderUri}cred");
+                if (!string.IsNullOrEmpty(serializedCredentials))
+                {
+                    var credentialsToAdd = new TranslationProviderCredential(serializedCredentials, true);
+                    credentialStore.AddCredential(translationProviderUri, credentialsToAdd);
+                } 
+            }
+
             var standaloneCredentials = new StandaloneCredentials(serializedCredentials);
 
             ApplicationInitializer.IsStandalone = standaloneCredentials.AuthenticationType != AuthenticationType.None;
 
             var options = GetOptions(translationProviderState);
+
             CredentialManager.GetCredentials(options, true, standaloneCredentials);
 
-            Service.ValidateToken(options);
+            var validated = Service.ValidateToken(options);
+            if (validated)
+            {
+                CredentialManager.UpdateCredentials(credentialStore, options);
+            }
+
             ApplicationInitializer.TranslationOptions[options.Id] = options;
 
             return new TranslationProvider(options);
