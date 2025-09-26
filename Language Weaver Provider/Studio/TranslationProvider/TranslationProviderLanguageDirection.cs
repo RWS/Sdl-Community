@@ -1,4 +1,5 @@
-﻿using LanguageWeaverProvider.Model;
+﻿using LanguageWeaverProvider.Extensions;
+using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Services;
 using LanguageWeaverProvider.XliffConverter.Converter;
@@ -98,6 +99,8 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
         {
             _translationOptions = currentOptions;
         }
+
+        Service.ValidateTokenAsync(_translationOptions, false);
 
         ManageBatchTaskWindow(true);
         var searchResults = new SearchResults[mask.Length];

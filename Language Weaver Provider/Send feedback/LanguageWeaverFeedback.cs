@@ -20,7 +20,7 @@ namespace LanguageWeaverProvider.Send_feedback
             if (translationOptions is null) return null;
 
             CredentialManager.GetCredentials(translationOptions, true);
-            Service.ValidateToken(translationOptions, false);
+            Service.ValidateTokenAsync(translationOptions, false);
 
             var accessToken = translationOptions.AccessToken;
             return accessToken;

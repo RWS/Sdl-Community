@@ -7,6 +7,7 @@ using LanguageWeaverProvider.Model.Interface;
 using Newtonsoft.Json;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace LanguageWeaverProvider
 {
@@ -18,7 +19,9 @@ namespace LanguageWeaverProvider
 
 		public static string CurrentAppVersion { get; private set; }
 
-		public static IList<RatedSegment> RatedSegments { get; set; }
+		public static IList<RatedSegment> RatedSegments { get; set; } = new List<RatedSegment>();
+
+        public static ITranslationProviderCredentialStore CredentialStore { get; set; }
 
         public static PluginVersion PluginVersion { get; set; } = PluginVersion.None;
 
@@ -27,7 +30,6 @@ namespace LanguageWeaverProvider
 
         public void Execute()
         {
-			RatedSegments = new List<RatedSegment>();
 			CurrentAppVersion = GetAssemblyFileVersion();
             Log.Setup();
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings
