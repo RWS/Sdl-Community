@@ -74,7 +74,7 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [Post-Edit Compare](https://appstore.rws.com/Plugin/15) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Post-Edit%20Compare) | Integration API | Yes |
 | [projectTermExtract](https://appstore.rws.com/Plugin/34) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/ProjectTermExtract) | Integration API | Yes |
 | [Qualitivity](https://appstore.rws.com/Plugin/16) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Qualitivity) | Integration API | Yes |
-| [Rapid Add Term](https://appstore.rws.com/Plugin/35) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Rapid%20Add%20Term) | Integration API | --- No |
+| [Rapid Add Term](https://appstore.rws.com/Plugin/35) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Rapid%20Add%20Term) | Integration API | Yes |
 | [Reports Viewer Plus](https://appstore.rws.com/Plugin/37) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Reports%20Viewer%20Plus) | Integration API | Yes |
 | [Trados Data Protection Suite](https://appstore.rws.com/Plugin/39) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20Data%20Protection%20Suite) | Integration API | Yes |
 | [Trados Transcreate](https://appstore.rws.com/Plugin/42) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20Transcreate) | Integration API | Yes |
