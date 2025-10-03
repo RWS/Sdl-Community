@@ -50,7 +50,7 @@ namespace LanguageWeaverProvider.Services
         {
             if (translationOptions.AccessToken is null) return false;
 
-            if (true ||
+            if (
                 translationOptions.AuthenticationType == AuthenticationType.CloudSSO
              && IsTimestampExpired(translationOptions.AccessToken.ExpiresAt))
             {
