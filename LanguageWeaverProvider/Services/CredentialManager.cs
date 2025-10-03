@@ -14,6 +14,7 @@ namespace LanguageWeaverProvider.Extensions
 	{
 		private const string CredentialsKey = "credentials";
 		private const string TokenKey = "accessToken";
+		private static readonly object _credentialLock = new object();
 
 		public static bool CredentialsArePersisted(Uri translationProviderUri)
 		{
@@ -158,20 +159,23 @@ namespace LanguageWeaverProvider.Extensions
 				return;
 			}
 
-			var credentials = translationOptions.PluginVersion == PluginVersion.LanguageWeaverCloud
-							? JsonConvert.SerializeObject(translationOptions.CloudCredentials)
-							: JsonConvert.SerializeObject(translationOptions.EdgeCredentials);
+			lock (_credentialLock)
+			{
+				var credentials = translationOptions.PluginVersion == PluginVersion.LanguageWeaverCloud
+								? JsonConvert.SerializeObject(translationOptions.CloudCredentials)
+								: JsonConvert.SerializeObject(translationOptions.EdgeCredentials);
 
-			var accessToken = JsonConvert.SerializeObject(translationOptions.AccessToken);
+				var accessToken = JsonConvert.SerializeObject(translationOptions.AccessToken);
 
-			var jsonStructure = new JObject(
-				new JProperty(CredentialsKey, JToken.Parse(credentials)),
-				new JProperty(TokenKey, JToken.Parse(accessToken))
-			).ToString();
+				var jsonStructure = new JObject(
+					new JProperty(CredentialsKey, JToken.Parse(credentials)),
+					new JProperty(TokenKey, JToken.Parse(accessToken))
+				).ToString();
 
-			var translationProviderCredential = new TranslationProviderCredential(jsonStructure, true);
-			credentialStore.RemoveCredential(translationOptions.Uri);
-			credentialStore.AddCredential(translationOptions.Uri, translationProviderCredential);
+				var translationProviderCredential = new TranslationProviderCredential(jsonStructure, true);
+				credentialStore.RemoveCredential(translationOptions.Uri);
+				credentialStore.AddCredential(translationOptions.Uri, translationProviderCredential);
+			}
 		}
 	}
 }
