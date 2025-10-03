@@ -36,52 +36,31 @@ namespace LanguageWeaverProvider.Services
 			return deserializedObject;
 		}
 
-		public static bool ValidateToken(ITranslationOptions translationOptions, bool showErrors = true)
+		public static async Task ValidateAndUpdateTokenAsync(ITranslationOptions translationOptions, Action? onValidated)
 		{
-			if (translationOptions.AccessToken is null) return false;
-
-			if (
-				translationOptions.AuthenticationType == AuthenticationType.CloudSSO
-			 && IsTimestampExpired(translationOptions.AccessToken.ExpiresAt))
-			{
-				return
-				CloudService
-					.RefreshAuth0Token(translationOptions)
-					.GetAwaiter()
-					.GetResult();
-			}
-
-			if (translationOptions.PluginVersion == PluginVersion.LanguageWeaverCloud
-			 && translationOptions.AuthenticationType != AuthenticationType.CloudSSO
-			 && IsTimestampExpired(translationOptions.AccessToken?.ExpiresAt))
-			{
-				return CloudService
-					.AuthenticateUser(translationOptions, translationOptions.AuthenticationType)
-					.GetAwaiter()
-					.GetResult();
-			}
-
-			return false;
+			var result = await ValidateTokenAsync(translationOptions);
+			if (result)
+				onValidated?.Invoke();
 		}
 
-		public static async void ValidateTokenAsync(ITranslationOptions translationOptions)
+		public static async Task<bool> ValidateTokenAsync(ITranslationOptions translationOptions)
 		{
-			if (translationOptions.AccessToken is null) return;
+			if (translationOptions.AccessToken is null) return false;
 
 			if (translationOptions.AuthenticationType == AuthenticationType.CloudSSO
 			 && IsTimestampExpired(translationOptions.AccessToken.ExpiresAt))
 			{
-				await CloudService.RefreshAuth0Token(translationOptions);
-				return;
+				return await CloudService.RefreshAuth0Token(translationOptions);
 			}
 
 			if (translationOptions.PluginVersion == PluginVersion.LanguageWeaverCloud
 			 && translationOptions.AuthenticationType != AuthenticationType.CloudSSO
 			 && IsTimestampExpired(translationOptions.AccessToken?.ExpiresAt))
 			{
-				await CloudService.AuthenticateUser(translationOptions, translationOptions.AuthenticationType);
-				return;
+				return await CloudService.AuthenticateUser(translationOptions, translationOptions.AuthenticationType);
 			}
+
+			return false;
 		}
 
 		private static bool IsTimestampExpired(double? unixTimeStamp)
