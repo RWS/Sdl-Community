@@ -39,55 +39,32 @@ namespace LanguageWeaverProvider.Services
             return deserializedObject;
         }
 
-        // we need a sync and an Async method..
+        public static async Task ValidateAndUpdateTokenAsync(ITranslationOptions translationOptions, Action? onValidated)
+        {
+            var result = await ValidateTokenAsync(translationOptions, false);
+            if (result)
+                onValidated?.Invoke();
+        }
 
-        public static bool ValidateToken(ITranslationOptions translationOptions, bool showErrors = true)
-        { 
+        public static async Task<bool> ValidateTokenAsync(ITranslationOptions translationOptions, bool showErrors = true)
+        {
             if (translationOptions.AccessToken is null) return false;
 
             if (
                 translationOptions.AuthenticationType == AuthenticationType.CloudSSO
              && IsTimestampExpired(translationOptions.AccessToken.ExpiresAt))
             {
-                return
-                CloudService
-                    .RefreshAuth0Token(translationOptions)
-                    .GetAwaiter()
-                    .GetResult();
+                return await CloudService.RefreshAuth0Token(translationOptions);
             }
 
             if (translationOptions.PluginVersion == PluginVersion.LanguageWeaverCloud
              && translationOptions.AuthenticationType != AuthenticationType.CloudSSO
              && IsTimestampExpired(translationOptions.AccessToken?.ExpiresAt))
             {
-                return CloudService
-                    .AuthenticateUser(translationOptions, translationOptions.AuthenticationType, showErrors)
-                    .GetAwaiter()
-                    .GetResult();
+                return await CloudService.AuthenticateUser(translationOptions, translationOptions.AuthenticationType, showErrors);
             }
 
             return false;
-        }
-
-        public static async void ValidateTokenAsync(ITranslationOptions translationOptions, bool showErrors = true)
-        {
-            if (translationOptions.AccessToken is null) return;
-
-            if (
-                translationOptions.AuthenticationType == AuthenticationType.CloudSSO
-             && IsTimestampExpired(translationOptions.AccessToken.ExpiresAt))
-            {
-                await CloudService.RefreshAuth0Token(translationOptions);
-                return;
-            }
-
-            if (translationOptions.PluginVersion == PluginVersion.LanguageWeaverCloud
-             && translationOptions.AuthenticationType != AuthenticationType.CloudSSO
-             && IsTimestampExpired(translationOptions.AccessToken?.ExpiresAt))
-            {
-                await CloudService.AuthenticateUser(translationOptions, translationOptions.AuthenticationType, showErrors);
-                return;
-            }
         }
 
         private static bool IsTimestampExpired(double? unixTimeStamp)

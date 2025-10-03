@@ -6,6 +6,7 @@ using LanguageWeaverProvider.WindowsCredentialStore;
 using Newtonsoft.Json;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using System;
+using System.Threading.Tasks;
 
 namespace LanguageWeaverProvider
 {
@@ -41,12 +42,7 @@ namespace LanguageWeaverProvider
 
             CredentialManager.GetCredentials(options, true, standaloneCredentials);
 
-            var validated = Service.ValidateToken(options);
-            if (validated)
-            {
-                CredentialManager.UpdateCredentials(credentialStore, options);
-            }
-
+            _ = Service.ValidateAndUpdateTokenAsync(options, () => CredentialManager.UpdateCredentials(credentialStore, options));
             ApplicationInitializer.TranslationOptions[options.Id] = options;
 
             return new TranslationProvider(options);
