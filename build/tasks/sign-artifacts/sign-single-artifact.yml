@@ -1,16 +1,28 @@
 parameters:
-  fileToSign: '$PSScriptRoot\signme.exe'
+  fileToSign: 'signme.exe'
   description: 'a file to sign'
  
 steps:
-- task: PowerShell@2
-  displayName: 'Sign artifacts'
+
+- task: TrustedSigning@0
+  displayName: Sign with Trusted Signing
   inputs:
-    targetType: filePath
-    filePath: './build/tasks/sign-artifacts/sign-single-artifact-azure.ps1'
-    arguments: '"${{ parameters.fileToSign }}" "${{ parameters.description }}"'
-  env:
-    CurrentCertificateName: $(CurrentCertificateName)
-    SigningClientId: $(SigningClientId)
-    SigningSecret: $(SigningSecret)
-    KeyVaultUrl: $(KeyVaultUrl)
+    Endpoint: '$(TS-ENDPOINT)'
+    TrustedSigningAccountName: '$(TS-ACCOUNT-NAME)'
+    CertificateProfileName: '$(TS-CERTIFICATE-PROFILE-NAME)'
+    Files: |
+      ${{ parameters.fileToSign }}
+    FileDigest: 'SHA256'
+    TimestampRfc3161: 'http://timestamp.acs.microsoft.com'
+    TimestampDigest: 'SHA256'
+    description: '${{ parameters.description }}'
+    ExcludeEnvironmentCredential: true
+    ExcludeWorkloadIdentityCredential: true
+    ExcludeManagedIdentityCredential: true
+    ExcludeSharedTokenCacheCredential: true
+    ExcludeVisualStudioCredential: true
+    ExcludeVisualStudioCodeCredential: true
+    ExcludeAzureCliCredential: false
+    ExcludeAzurePowershellCredential: true
+    ExcludeAzureDeveloperCliCredential: true
+    ExcludeInteractiveBrowserCredential: true
