@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11111.16 d18.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trados AI Essentials", "Trados AI Essentials\Trados AI Essentials.csproj", "{923CF81F-0613-4DB3-B30E-443E0A92D586}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trados AI Essentials Tests", "Trados AI Essentials Tests\Trados AI Essentials Tests.csproj", "{ACB691FA-0409-4298-8157-DF24C0253C34}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{923CF81F-0613-4DB3-B30E-443E0A92D586}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{923CF81F-0613-4DB3-B30E-443E0A92D586}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{923CF81F-0613-4DB3-B30E-443E0A92D586}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{923CF81F-0613-4DB3-B30E-443E0A92D586}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACB691FA-0409-4298-8157-DF24C0253C34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACB691FA-0409-4298-8157-DF24C0253C34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACB691FA-0409-4298-8157-DF24C0253C34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACB691FA-0409-4298-8157-DF24C0253C34}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {300E72AC-BCC0-44D3-B96B-2DA0D5D25CD2}
+	EndGlobalSection
+EndGlobal
