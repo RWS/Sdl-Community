@@ -1,16 +1,17 @@
 steps:
-
-- task: UniversalPackages@0
-  displayName: 'signing tools'
+- task: AzureCLI@2
+  displayName: 'Prep Azure CLI'
   inputs:
-    vstsFeed: '35b7ee7d-77cc-45b7-97ec-af5915143636'
-    vstsFeedPackage: 'ab6a7eee-f4d3-4e0a-8e9a-906cce713a29'
-    vstsPackageVersion: '1.1.0'
+    azureSubscription: 'sdl-trados-keyvault-connection'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      echo "##vso[task.setvariable variable=ARM_CLIENT_ID;issecret=true]$servicePrincipalId" 
+      echo "##vso[task.setvariable variable=ARM_ID_TOKEN;issecret=true]$idToken"
+      echo "##vso[task.setvariable variable=ARM_TENANT_ID;issecret=true]$tenantId"
+    addSpnToEnvironment: true
 
-- task: CmdLine@2
-  displayName: 'copy to nuget location'
-  inputs:
-    script: |
-      IF not exist "%USERPROFILE%\.nuget\packages\SdlKeys" (MD  "%USERPROFILE%\.nuget\packages\SdlKeys")
+- bash: |
+    az login --service-principal -u $(ARM_CLIENT_ID) --tenant $(ARM_TENANT_ID) --allow-no-subscriptions --federated-token $(ARM_ID_TOKEN)
+  displayName: 'Azure Login'
 
-      XCOPY /c/h/i/e/r/y "%SYSTEM_DEFAULTWORKINGDIRECTORY%\tools\*.*" "%USERPROFILE%\.nuget\packages\SdlKeys\2.0.0\tools"
