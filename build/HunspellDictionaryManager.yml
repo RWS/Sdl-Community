@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - master_UpdateSigning
   paths:
     include:
      - Hunspell Dictionary Manager/*
