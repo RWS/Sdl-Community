@@ -7,11 +7,17 @@
 		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
 	</PropertyGroup>
 	<ItemGroup>
+		<Reference Include="Newtonsoft.Json">
+			<HintPath>$(TradosFolder)\Newtonsoft.Json.dll</HintPath>
+		</Reference>
 		<Reference Include="Sdl.Core.Globalization.Async">
 			<HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
 		</Reference>
 		<Reference Include="Sdl.Core.Globalization">
 			<HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.LanguageCloud.IdentityApi">
+		  <HintPath>$(TradosFolder)\Sdl.LanguageCloud.IdentityApi.dll</HintPath>
 		</Reference>
 		<Reference Include="Sdl.LanguagePlatform.Core">
 			<HintPath>$(TradosFolder)\Sdl.LanguagePlatform.Core.dll</HintPath>
@@ -43,8 +49,8 @@
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="PluginResources.resx">
-		  <Generator>PublicResXFileCodeGenerator</Generator>
-		  <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+			<Generator>PublicResXFileCodeGenerator</Generator>
+			<LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
 		</None>
 		<None Include="pluginpackage.manifest.xml" />
 	</ItemGroup>
@@ -57,14 +63,11 @@
 		</PackageReference>
 	</ItemGroup>
 	<ItemGroup>
-	  <Compile Update="PluginResources.Designer.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>PluginResources.resx</DependentUpon>
-	  </Compile>
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Model\" />
+		<Compile Update="PluginResources.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>PluginResources.resx</DependentUpon>
+		</Compile>
 	</ItemGroup>
 	<PropertyGroup>
 		<CreatePluginPackage>true</CreatePluginPackage>

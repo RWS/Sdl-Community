@@ -1,7 +1,10 @@
-﻿using Sdl.LanguagePlatform.Core;
+﻿using Sdl.LanguageCloud.IdentityApi;
+using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using System;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using Trados_AI_Essentials.LC;
 
 namespace Trados_AI_Essentials.Studio
 {
@@ -23,6 +26,12 @@ namespace Trados_AI_Essentials.Studio
 
         public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
         {
+            //var lcClient = new LCClient(new HttpClient());
+
+            //lcClient.Authenticate();
+
+            //Task.Run(() => lcClient.GetLLMTranslationEngines().GetAwaiter().GetResult());
+
             return new[] { new TranslationProvider() };
         }
 
