@@ -306,7 +306,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 			{
 				applyTemplate.TranslationProvidersSpecificLanguages =
 					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
-						TranslationProvidersSpecificLanguages.SelectedItem.ToString());
+						TranslationProvidersSpecificLanguages.SelectedItem.ToString().ToEnumString());
 			}
 		}
 
