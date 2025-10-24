@@ -2,10 +2,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net48</TargetFramework>
+		<UseWPF>true</UseWPF>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
-		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
+		<TradosFolder>C:\Program Files (x86)\Trados\Trados Studio\Studio18</TradosFolder>
 	</PropertyGroup>
+	<ItemGroup>
+		<Compile Remove="Model\Generative Translation\**" />
+		<EmbeddedResource Remove="Model\Generative Translation\**" />
+		<None Remove="Model\Generative Translation\**" />
+		<Page Remove="Model\Generative Translation\**" />
+	</ItemGroup>
 	<ItemGroup>
 		<Reference Include="Newtonsoft.Json">
 			<HintPath>$(TradosFolder)\Newtonsoft.Json.dll</HintPath>
@@ -16,8 +23,11 @@
 		<Reference Include="Sdl.Core.Globalization">
 			<HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
 		</Reference>
+		<Reference Include="Sdl.FileTypeSupport.Framework.Core">
+			<HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+		</Reference>
 		<Reference Include="Sdl.LanguageCloud.IdentityApi">
-		  <HintPath>$(TradosFolder)\Sdl.LanguageCloud.IdentityApi.dll</HintPath>
+			<HintPath>$(TradosFolder)\Sdl.LanguageCloud.IdentityApi.dll</HintPath>
 		</Reference>
 		<Reference Include="Sdl.LanguagePlatform.Core">
 			<HintPath>$(TradosFolder)\Sdl.LanguagePlatform.Core.dll</HintPath>
@@ -73,5 +83,6 @@
 		<CreatePluginPackage>true</CreatePluginPackage>
 		<SignAssembly>True</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
 </Project>

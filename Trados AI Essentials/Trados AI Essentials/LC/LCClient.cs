@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Sdl.LanguageCloud.IdentityApi;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -7,7 +8,6 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Trados_AI_Essentials.Interface;
 using Trados_AI_Essentials.Model;
-using Trados_AI_Essentials.Model.Generative_Translation;
 
 namespace Trados_AI_Essentials.LC
 {
@@ -16,6 +16,7 @@ namespace Trados_AI_Essentials.LC
         public LCClient(IHttpClient httpClient)
         {
             HttpClient = httpClient;
+            Authenticate();
         }
 
         private string GenerativeTranslationAddress =>
@@ -28,9 +29,10 @@ namespace Trados_AI_Essentials.LC
 
         public void Authenticate()
         {
+            //TODO - implement refresh token mechanism (for cases in which users leave Trados open for a long time)
             var authenticated = LanguageCloudIdentityApi.Instance.TryLogin(out var errorMessage);
             if (!authenticated)
-                return;
+                throw new Exception($"Authentication failed: {errorMessage}");
 
             HttpClient.DefaultHeaders.Authorization = new AuthenticationHeaderValue("Bearer", LanguageCloudIdentityApi.Instance.AccessToken);
             HttpClient.DefaultHeaders.Add("X-LC-Tenant", LanguageCloudIdentityApi.Instance.ActiveTenantId);

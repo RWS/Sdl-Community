@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Trados_AI_Essentials.Model.Generative_Translation
+namespace Trados_AI_Essentials.Model
 {
     public class GenerativeTranslationResult
     {

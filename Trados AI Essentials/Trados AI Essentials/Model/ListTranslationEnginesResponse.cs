@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Trados_AI_Essentials.Model.Generative_Translation
+namespace Trados_AI_Essentials.Model
 {
     public class ListTranslationEnginesResponse
     {

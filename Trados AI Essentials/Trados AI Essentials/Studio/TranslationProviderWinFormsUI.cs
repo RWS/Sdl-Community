@@ -1,10 +1,7 @@
-﻿using Sdl.LanguageCloud.IdentityApi;
-using Sdl.LanguagePlatform.Core;
+﻿using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using System;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Trados_AI_Essentials.LC;
 
 namespace Trados_AI_Essentials.Studio
 {
@@ -24,21 +21,11 @@ namespace Trados_AI_Essentials.Studio
 
         public string TypeName => "Trados AI Essentials";
 
-        public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
-        {
-            //var lcClient = new LCClient(new HttpClient());
+        public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs,
+            ITranslationProviderCredentialStore credentialStore) =>
+            new[] { StudioIntegration.GetTranslationProviderFromUserSettings() };
 
-            //lcClient.Authenticate();
-
-            //Task.Run(() => lcClient.GetLLMTranslationEngines().GetAwaiter().GetResult());
-
-            return new[] { new TranslationProvider() };
-        }
-
-        public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
-        {
-            throw new NotImplementedException();
-        }
+        public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore) => StudioIntegration.EditTranslationProvider();
 
         public bool GetCredentialsFromUser(IWin32Window owner, Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
         {

@@ -1,0 +1,645 @@
+﻿<view:WindowBase x:Class="Trados_AI_Essentials.View.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Trados_AI_Essentials.View"
+        xmlns:resources="clr-namespace:Trados_AI_Essentials"
+        xmlns:viewModel="clr-namespace:Trados_AI_Essentials.UI.ViewModel"
+        xmlns:view="clr-namespace:Trados_AI_Essentials.UI.View"
+        xmlns:converters="clr-namespace:Trados_AI_Essentials.UI.View.Converters"
+        xmlns:model="clr-namespace:Trados_AI_Essentials.Model"
+        mc:Ignorable="d"
+        WindowStyle="ThreeDBorderWindow"
+        WindowStartupLocation="CenterScreen"
+        AllowsTransparency="False"
+        ResizeMode="CanResizeWithGrip"
+        Title="SettingsWindow"
+        MinHeight="550"
+        MinWidth="700"
+        Height="620"
+        d:DataContext="{d:DesignInstance viewModel:SettingsWindowViewModel}"
+        Width="700">
+    <view:WindowBase.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../Styles/General.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="{x:Type Window}">
+                <Setter Property="FontFamily"
+                        Value="Segoe UI" />
+                <Setter Property="FontSize"
+                        Value="11" />
+                <Setter Property="Foreground"
+                        Value="{StaticResource WindowsControl.Control.Text}" />
+            </Style>
+
+            <converters:CountToBoolConverter x:Key="CountToBoolConverter" />
+        </ResourceDictionary>
+    </view:WindowBase.Resources>
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0">
+            <Grid Margin="2">
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="1"
+              Margin="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+
+                </Grid.RowDefinitions>
+                <GroupBox Grid.Row="0"
+                          Header="{x:Static resources:PluginResources.Label_LLMTranslationEngines}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+
+                        </Grid.ColumnDefinitions>
+
+                        <Grid Grid.Row="1"
+                              Grid.Column="0"
+                              Grid.ColumnSpan="3"
+                              Margin="5,10,5,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Column="0"
+                                   Grid.Row="0"
+                                   Name="ModelConfigurationLabel"
+                                   AutomationProperties.Name="{x:Static resources:PluginResources.Label_Selected_LLMTE}"
+                                   Target="{Binding ElementName=ModelConfigurationsComboBox}"
+                                   VerticalAlignment="Center"
+                                   Margin="-2,5,5,0"
+                                   IsEnabled="False"
+                                   HorizontalContentAlignment="Left">
+                                <TextBlock>
+                                    <Run Text="{x:Static resources:PluginResources.Label_Selected_LLMTE}" />
+                                    <Run Text=":" />
+                                </TextBlock>
+                            </Label>
+                            <ComboBox Grid.Row="1"
+                                      Grid.Column="0"
+                                      Name="ModelConfigurationsComboBox"
+                                      AutomationProperties.LabeledBy="{Binding ElementName=ModelConfigurationLabel}"
+                                      Grid.ColumnSpan="3"
+                                      Height="25"
+                                      Margin="0,0,0,0"
+                                      VerticalContentAlignment="Center"
+                                      TextElement.FontFamily="Arial Unicode MS"
+                                      IsEnabled="{Binding LLMTranslationEngines.Count, Converter={StaticResource CountToBoolConverter}}"
+                                      TextElement.FontSize="12"
+                                      Focusable="True"
+                                      IsTabStop="True"
+                                      HorizontalContentAlignment="Left"
+                                      ItemsSource="{Binding LLMTranslationEngines, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                      SelectedItem="{Binding SelectedLLMEngine, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type model:TranslationEngineItem}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Margin="0,0,0,0"
+                                                       HorizontalAlignment="Stretch"
+                                                       Width="{Binding ActualWidth,ElementName=ModelConfigurationsComboBox}"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       TextWrapping="NoWrap">
+                                                    <Run FontStyle="Normal" FontWeight="Normal" Foreground="#484747" 
+                                                         Text="Name:"/>
+                                                    <Run FontStyle="Normal"
+                                                         FontWeight="Bold"
+                                                         Text="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                    <Run FontStyle="Normal"
+                                                         FontWeight="Normal"
+                                                         Foreground="#484747"
+                                                         Text=" ID:" />
+                                                    <Run FontStyle="Normal"
+                                                         FontWeight="Normal"
+                                                         Foreground="Gray"
+                                                         Text="{Binding Id, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                    <!--<Run FontStyle="Normal"
+                                                         FontWeight="Normal"
+                                                         Foreground="#484747"
+                                                         Text=" Definition:" />
+                                                    <Run FontStyle="Normal"
+                                                         FontWeight="Normal"
+                                                         Foreground="Gray"
+                                                         Text="{Binding Definition, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                    <Run Text="  " />-->
+                                            </TextBlock>
+                                        </StackPanel>
+
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+
+                            <!--<StackPanel Grid.Row="0"
+                                        Grid.Column="1"
+                                        Grid.ColumnSpan="2"
+                                        HorizontalAlignment="Right"
+                                        Orientation="Horizontal"
+                                        Margin="0,0,5,0">
+                                <Button Style="{StaticResource BaseButtonStyle}"
+                                        Name="AddModelConfigurationButton"
+                                        ToolTip="{x:Static resources:PluginResources.Button_Tooltip_Add_Connection}"
+                                        AutomationProperties.Name="{x:Static resources:PluginResources.Button_Text_Add_Connection}"
+                                        Focusable="True"
+                                        Command="{Binding AddModelItemCommand}"
+                                        CommandParameter="{Binding ElementName=ModelConfigurationsComboBox}"
+                                        AutomationProperties.AccessKey="a">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="../../Resource/Add.ico"
+                                               Width="15"
+                                               AutomationProperties.LabeledBy="{Binding ElementName=AddModelConfigurationButton}" />
+                                        <TextBlock Margin="5,0,0,0"
+                                                   AutomationProperties.LabeledBy="{Binding ElementName=AddModelConfigurationButton}"
+                                                   Text="{x:Static resources:PluginResources.Button_Text_Add}" />
+                                    </StackPanel>
+                                </Button>
+                                <Button Style="{StaticResource BaseButtonStyle}"
+                                        Name="EditModelConfigurationButton"
+                                        Focusable="True"
+                                        AutomationProperties.Name="{x:Static resources:PluginResources.Button_Text_Edit_Connection}"
+                                        ToolTip="{x:Static resources:PluginResources.Button_Tooltip_Edit_Connection}"
+                                        Margin="5,0,0,0"
+                                        Command="{Binding EditModelItemCommand}"
+                                        CommandParameter="{Binding ElementName=ModelConfigurationsComboBox}"
+                                        IsEnabled="{Binding IsConnectionSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                        AutomationProperties.AccessKey="e">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="../../Resource/Edit.ico"
+                                               Width="15"
+                                               AutomationProperties.LabeledBy="{Binding ElementName=EditModelConfigurationButton}" />
+                                        <TextBlock  Margin="5,0,0,0"
+                                                    AutomationProperties.LabeledBy="{Binding ElementName=EditModelConfigurationButton}"
+                                                    Text="{x:Static resources:PluginResources.Button_Text_Edit}" />
+                                    </StackPanel>
+                                </Button>
+                                <Button Style="{StaticResource BaseButtonStyle}"
+                                        Name="RemoveModelConfigurationButton"
+                                        Focusable="True"
+                                        AutomationProperties.Name="{x:Static resources:PluginResources.Button_Text_Delete_Connection}"
+                                        ToolTip="{x:Static resources:PluginResources.Button_Tooltip_Delete_Connection}"
+                                        Margin="5,0,0,0"
+                                        Command="{Binding RemoveModelItemCommand}"
+                                        CommandParameter="{Binding ElementName=ModelConfigurationsComboBox}"
+                                        IsEnabled="{Binding IsConnectionSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                        AutomationProperties.AccessKey="">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="../../Resource/Delete.ico"
+                                               Width="15"
+                                               AutomationProperties.LabeledBy="{Binding ElementName=RemoveModelConfigurationButton}" />
+                                        <TextBlock Margin="5,0,0,0"
+                                                   AutomationProperties.LabeledBy="{Binding ElementName=RemoveModelConfigurationButton}"
+                                                   Text="{x:Static resources:PluginResources.Button_Text_Delete}" />
+                                    </StackPanel>
+                                </Button>
+
+                            </StackPanel>-->
+
+                            <!--<Grid Grid.Row="3"
+                                  Grid.Column="0"
+                                  Grid.ColumnSpan="3">
+                                <Label HorizontalAlignment="Right"
+                                       AutomationProperties.Name="{x:Static resources:PluginResources.Label_Connections}"
+                                       Foreground="#4E4D4D">
+                                    <TextBlock>
+                                        <Run Text="{x:Static resources:PluginResources.Label_Connections}" />
+                                        <Run Text=":" />
+                                        <Run Text="{Binding ConnectionsCount, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, FallbackValue='0'}" />
+                                    </TextBlock>
+                                </Label>
+                            </Grid>-->
+                        </Grid>
+                    </Grid>
+                </GroupBox>
+                <!--<GroupBox Grid.Row="1"
+                          Header="{x:Static resources:PluginResources.Label_Prompts}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+
+                        <Grid Grid.Row="1"
+                              Grid.Column="0"
+                              Grid.ColumnSpan="3"
+                              Margin="5,10,5,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Column="0"
+                                   Grid.Row="0"
+                                   Name="PromptsLabel"
+                                   Target="{Binding ElementName=PromptsComboBox}"
+                                   VerticalAlignment="Center"
+                                   Margin="-2,5,5,0"
+                                   IsEnabled="False"
+                                   HorizontalContentAlignment="Left">
+                                <TextBlock>
+                                    <Run Text="{x:Static resources:PluginResources.Label_Selected_Prompt}" />
+                                    <Run Text=":" />
+                                </TextBlock>
+                            </Label>
+                            <ComboBox Grid.Row="1"
+                                      Grid.Column="0"
+                                      Name="PromptsComboBox"
+                                      AutomationProperties.LabeledBy="{Binding ElementName=PromptsLabel}"
+                                      Grid.ColumnSpan="3"
+                                      Height="25"
+                                      Margin="0,0,0,0"
+                                      VerticalContentAlignment="Center"
+                                      TextElement.FontFamily="Arial Unicode MS"
+                                      TextElement.FontSize="12"
+                                      Focusable="True"
+                                      IsTabStop="True"
+                                      HorizontalContentAlignment="Left"
+                                      ItemsSource="{Binding PromptItems, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                      SelectedItem="{Binding SelectedPrompt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type models:ModelPrompt }">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Margin="0,0,0,0"
+                                                       HorizontalAlignment="Stretch"
+                                                       Width="{Binding ActualWidth,ElementName=PromptsComboBox}"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       TextWrapping="NoWrap"
+                                                       Text="{Binding Name}">
+                                            </TextBlock>
+                                        </StackPanel>
+
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+
+                            <StackPanel Grid.Row="0"
+                                        Grid.Column="1"
+                                        Grid.ColumnSpan="2"
+                                        HorizontalAlignment="Right"
+                                        Orientation="Horizontal"
+                                        Margin="0,0,5,0">
+                                <Button Style="{StaticResource BaseButtonStyle}"
+                                        Name="AddPromptButton"
+                                        ToolTip="{x:Static resources:PluginResources.Button_Tooltip_Add_Prompt}"
+                                        Focusable="True"
+                                        AutomationProperties.Name="{x:Static resources:PluginResources.Button_Text_Add_Prompt}"
+                                        Command="{Binding AddPromptItemCommand}"
+                                        CommandParameter="{Binding ElementName=PromptsComboBox}"
+                                        AutomationProperties.AccessKey="a">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="../../Resource/Add.ico"
+                                               Width="15"
+                                               AutomationProperties.LabeledBy="{Binding ElementName=AddPromptButton}" />
+                                        <TextBlock Margin="5,0,0,0"
+                                                   AutomationProperties.LabeledBy="{Binding ElementName=AddPromptButton}"
+                                                   Text="{x:Static resources:PluginResources.Button_Text_Add}" />
+                                    </StackPanel>
+                                </Button>
+                                <Button Style="{StaticResource BaseButtonStyle}"
+                                        Name="EditPromptButton"
+                                        Focusable="True"
+                                        AutomationProperties.Name="{x:Static resources:PluginResources.Button_Text_Edit_Prompt}"
+                                        ToolTip="{x:Static resources:PluginResources.Button_Tooltip_Edit_Prompt}"
+                                        Margin="5,0,0,0"
+                                        Command="{Binding EditPromptItemCommand}"
+                                        CommandParameter="{Binding ElementName=PromptsComboBox}"
+                                        IsEnabled="{Binding IsPromptSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                        AutomationProperties.AccessKey="e">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="../../Resource/Edit.ico"
+                                               Width="15"
+                                               AutomationProperties.LabeledBy="{Binding ElementName=EditPromptButton}" />
+                                        <TextBlock  Margin="5,0,0,0"
+                                                    AutomationProperties.LabeledBy="{Binding ElementName=EditPromptButton}"
+                                                    Text="{x:Static resources:PluginResources.Button_Text_Edit}" />
+                                    </StackPanel>
+                                </Button>
+                                <Button Style="{StaticResource BaseButtonStyle}"
+                                        Name="RemovePromptButton"
+                                        Focusable="True"
+                                        AutomationProperties.Name="{x:Static resources:PluginResources.Button_Text_Delete_Prompt}"
+                                        ToolTip="{x:Static resources:PluginResources.Button_Tooltip_Delete_Prompt}"
+                                        Margin="5,0,0,0"
+                                        Command="{Binding RemovePromptItemCommand}"
+                                        CommandParameter="{Binding ElementName=PromptsComboBox}"
+                                        IsEnabled="{Binding IsPromptSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                        AutomationProperties.AccessKey="">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="../../Resource/Delete.ico"
+                                               Width="15"
+                                               AutomationProperties.LabeledBy="{Binding ElementName=RemovePromptButton}" />
+                                        <TextBlock Margin="5,0,0,0"
+                                                   AutomationProperties.LabeledBy="{Binding ElementName=RemovePromptButton}"
+                                                   Text="{x:Static resources:PluginResources.Button_Text_Delete}" />
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                            <Grid Grid.Row="3"
+                                  Grid.Column="0"
+                                  Grid.ColumnSpan="3">
+                                <Label HorizontalAlignment="Right"
+                                       AutomationProperties.Name="{x:Static resources:PluginResources.Label_Prompts}"
+                                       Foreground="#4E4D4D">
+                                    <TextBlock>
+                                        <Run Text="{x:Static resources:PluginResources.Label_Prompts}" />
+                                        <Run Text=":" />
+                                        <Run Text="{Binding PromptsCount, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, FallbackValue='0'}" />
+                                    </TextBlock>
+                                </Label>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Grid.Row="2"
+                          Header="{x:Static resources:PluginResources.Label_Search_Options}">
+                    <Grid  Margin="5,10, 0, 10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="1"
+                                    VerticalAlignment="Center"
+                                    Margin="15,2,5,2"
+                                    Orientation="Horizontal">
+                            <CheckBox Margin="0,0,5,0"
+                                      VerticalAlignment="Center"
+                                      VerticalContentAlignment="Center"
+                                      IsChecked="{Binding IgnoreTranslated}"
+                                      AutomationProperties.Name="{x:Static resources:PluginResources.Label_Ignore_translated_segments}"
+                                      Content="{x:Static resources:PluginResources.Label_Ignore_translated_segments}" />
+                            <Image Source="../../Resource/Information.png"
+                                   Height="16"
+                                   HorizontalAlignment="Left"
+                                   RenderOptions.BitmapScalingMode="NearestNeighbor"
+                                   RenderOptions.EdgeMode="Aliased"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,0,0">
+                                <Image.ToolTip>
+                                    <StackPanel>
+                                        <TextBlock MaxWidth="600"
+                                                   TextWrapping="Wrap"
+                                                   Text="{x:Static resources:PluginResources.Tooltip_Ignore_translated_segments}" />
+                                    </StackPanel>
+                                </Image.ToolTip>
+                            </Image>
+                        </StackPanel>
+                        <StackPanel Grid.Row="2"
+                                    VerticalAlignment="Center"
+                                    Margin="15,2,5,2"
+                                    Orientation="Horizontal">
+                            <CheckBox IsEnabled="False"
+                                      Margin="0,0,5,0"
+                                      VerticalAlignment="Center"
+                                      VerticalContentAlignment="Center"
+                                      IsChecked="True"
+                                      AutomationProperties.Name="{x:Static resources:PluginResources.Label_Ignore_locked_segments}"
+                                      Content="{x:Static resources:PluginResources.Label_Ignore_locked_segments}" />
+                            <Image Source="../../Resource/Information.png"
+                                   Height="16"
+                                   HorizontalAlignment="Left"
+                                   RenderOptions.BitmapScalingMode="NearestNeighbor"
+                                   RenderOptions.EdgeMode="Aliased"
+                                   Margin="0,0,0,0">
+                                <Image.ToolTip>
+                                    <StackPanel>
+                                        <TextBlock MaxWidth="600"
+                                                   TextWrapping="Wrap"
+                                                   Text="{x:Static resources:PluginResources.Tooltip_Ignore_locked_segments}" />
+                                    </StackPanel>
+                                </Image.ToolTip>
+                            </Image>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="3"
+                                    VerticalAlignment="Center"
+                                    Margin="15,2,5,2"
+                                    Orientation="Horizontal">
+                            <CheckBox VerticalAlignment="Center"
+                                      VerticalContentAlignment="Center"
+                                      IsChecked="{Binding UseTerminologyProvider}"
+                                      AutomationProperties.Name="{x:Static resources:PluginResources.Label_Enable_Terminology_aware}"
+                                      Content="{x:Static resources:PluginResources.Label_Enable_Terminology_aware}" />
+                            <Image Source="../../Resource/Information.png"
+                                   Height="16"
+                                   HorizontalAlignment="Left"
+                                   RenderOptions.BitmapScalingMode="NearestNeighbor"
+                                   RenderOptions.EdgeMode="Aliased"
+                                   Margin="5,0,0,0">
+                                <Image.ToolTip>
+                                    <StackPanel>
+                                        <TextBlock MaxWidth="600"
+                                                   TextWrapping="Wrap"
+                                                   Text="{x:Static resources:PluginResources.Tooltip_Enable_Terminology_aware}" />
+                                    </StackPanel>
+                                </Image.ToolTip>
+                            </Image>
+                        </StackPanel>
+                        <StackPanel Grid.Row="4"
+                                    VerticalAlignment="Center"
+                                    Margin="15,2,5,2"
+                                    Orientation="Horizontal">
+                            <CheckBox VerticalAlignment="Center"
+                                      VerticalContentAlignment="Center"
+                                      IsChecked="{Binding IncludeTranslation}"
+                                      AutomationProperties.Name="{x:Static resources:PluginResources.Label_Include_target_segment}"
+                                      Content="{x:Static resources:PluginResources.Label_Include_target_segment}" />
+                            <Image Source="../../Resource/Information.png"
+                                   Height="16"
+                                   HorizontalAlignment="Left"
+                                   RenderOptions.BitmapScalingMode="NearestNeighbor"
+                                   RenderOptions.EdgeMode="Aliased"
+                                   Margin="5,0,0,0">
+                                <Image.ToolTip>
+                                    <StackPanel>
+                                        <TextBlock MaxWidth="600"
+                                                   TextWrapping="Wrap"
+                                                   Text="{x:Static resources:PluginResources.Tooltip_Include_target_segment}" />
+                                    </StackPanel>
+                                </Image.ToolTip>
+                            </Image>
+                        </StackPanel>
+                        <StackPanel Grid.Row="5"
+                                    Margin="15,2,5,2"
+                                    Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding IncludeTags}"
+                                      VerticalContentAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      AutomationProperties.Name="{x:Static resources:PluginResources.Label_Include_tags}"
+                                      Content="{x:Static resources:PluginResources.Label_Include_tags}" />
+                            <Image  Source="../../Resource/Information.png"
+                                    Height="16"
+                                    HorizontalAlignment="Left"
+                                    RenderOptions.BitmapScalingMode="NearestNeighbor"
+                                    RenderOptions.EdgeMode="Aliased"
+                                    Margin="5,0,0,0">
+
+                                <Image.ToolTip>
+                                    <StackPanel>
+                                        <TextBlock MaxWidth="600"
+                                                   TextWrapping="Wrap"
+                                                   Text="{x:Static resources:PluginResources.Tooltip_persist_tag_markup}" />
+                                    </StackPanel>
+                                </Image.ToolTip>
+                            </Image>
+                        </StackPanel>
+                        <StackPanel Grid.Row="6"
+                                    Margin="15,2,5,2"
+                                    Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding UseCachedResults}"
+                                      AutomationProperties.Name="{x:Static resources:PluginResources.Label_Use_InProcess_Cache}"
+                                      Content="{x:Static resources:PluginResources.Label_Use_InProcess_Cache}"
+                                      VerticalContentAlignment="Center"
+                                      VerticalAlignment="Center" />
+                            <Image  Source="../../Resource/Information.png"
+                                    Height="16"
+                                    HorizontalAlignment="Left"
+                                    RenderOptions.BitmapScalingMode="NearestNeighbor"
+                                    RenderOptions.EdgeMode="Aliased"
+                                    Margin="5,0,0,0">
+                                <Image.ToolTip>
+                                    <StackPanel>
+                                        <TextBlock MaxWidth="600"
+                                                   TextWrapping="Wrap"
+                                                   Text="{x:Static resources:PluginResources.Tooltip_Use_InProcess_Cache}" />
+                                    </StackPanel>
+                                </Image.ToolTip>
+                            </Image>
+                            <Button Style="{StaticResource LinkButton}"
+                                    Foreground="#FF4040C5"
+                                    Margin="10,0,0,0"
+                                    Command="{Binding ClearCacheCommand}"
+                                    VerticalAlignment="Center"
+                                    HorizontalContentAlignment="Left"
+                                    HorizontalAlignment="Left"
+                                    AutomationProperties.Name="{x:Static resources:PluginResources.Label_Reset_cache}"
+                                    ToolTip="{x:Static resources:PluginResources.Tooltip_Reset_cache}">
+                                <TextBlock TextDecorations="Underline">
+                                    <AccessText Text="{x:Static resources:PluginResources.Label_Reset_cache}" />
+                                </TextBlock>
+                            </Button>
+                        </StackPanel>
+
+                    </Grid>
+                </GroupBox>
+                <GroupBox Grid.Row="3"
+                          Header="{x:Static resources:PluginResources.Label_Translation_Results}"
+                          Padding="5,10,0,0"
+                          Margin="0,5,0,0">
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Margin="12,2,5,2"
+                                    Orientation="Horizontal">
+                            <Label AutomationProperties.Name="{x:Static resources:PluginResources.Label_Assign_Match_value}"
+                                   VerticalContentAlignment="Center">
+                                <TextBlock>
+                                    <Run Text="{x:Static resources:PluginResources.Label_Assign_Match_value}" />
+                                    <Run Text=":" />
+                                </TextBlock>
+                            </Label>
+                            <controls1:NumericUpDown Value="{Binding TranslationMatchValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=0}"
+                                                     VerticalContentAlignment="Center"
+                                                     Style="{StaticResource  Sdl.NumericUpDown.Generic}"
+                                                     Minimum="0"
+                                                     Maximum="100" />
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>-->
+            </Grid>
+
+        </Grid>
+
+        <!--<StackPanel Grid.Row="2"
+                    Grid.Column="0"
+                    VerticalAlignment="Bottom"
+                    Orientation="Vertical"
+                    Margin="0,10,5,0"
+                    Height="36">
+            <Grid Height="28">
+                <Grid Margin="10,0,0,0">
+                    <Button Style="{StaticResource LinkButton}"
+                            Command="{Binding OpenAISignupCommand}"
+                            VerticalAlignment="Center"
+                            HorizontalContentAlignment="Left"
+                            HorizontalAlignment="Left"
+                            AutomationProperties.Name="{x:Static resources:PluginResources.Label_Signup_for_OpenAI_account}"
+                            AutomationProperties.AccessKey="s">
+                        <TextBlock TextDecorations="Underline"
+                                   Text="{x:Static resources:PluginResources.Label_Signup_for_OpenAI_account}" />
+
+                    </Button>
+                </Grid>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Right">
+                    <Button Margin="0,0,10,0"
+                            Width="90"
+                            Content="{x:Static resources:PluginResources.Button_Text_OK}"
+                            Focusable="True"
+                            AutomationProperties.Name="{x:Static resources:PluginResources.Button_Text_OK}"
+                            Command="{Binding SaveCommand}"
+                            IsDefault="True"
+                            AutomationProperties.AccessKey="o">
+
+                    </Button>
+                    <Button Margin="0"
+                            Width="90"
+                            IsCancel="True"
+                            AutomationProperties.Name="{x:Static resources:PluginResources.Button_Text_Cancel}"
+                            Content="{x:Static resources:PluginResources.Button_Text_Cancel}"
+                            AutomationProperties.AccessKey="c">
+                    </Button>
+                </StackPanel>
+
+            </Grid>
+        </StackPanel>-->
+    </Grid>
+</view:WindowBase>

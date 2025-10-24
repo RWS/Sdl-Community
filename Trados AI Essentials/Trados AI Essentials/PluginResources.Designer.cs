@@ -61,6 +61,24 @@ namespace Trados_AI_Essentials {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to LLM Translation Engines.
+        /// </summary>
+        public static string Label_LLMTranslationEngines {
+            get {
+                return ResourceManager.GetString("Label_LLMTranslationEngines", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected LLM Translation Engine.
+        /// </summary>
+        public static string Label_Selected_LLMTE {
+            get {
+                return ResourceManager.GetString("Label_Selected_LLMTE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon Logo {
@@ -71,7 +89,7 @@ namespace Trados_AI_Essentials {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Trados AI Essentials.
+        ///   Looks up a localized string similar to Trados AI Essentials Provider.
         /// </summary>
         public static string Plugin_Name {
             get {

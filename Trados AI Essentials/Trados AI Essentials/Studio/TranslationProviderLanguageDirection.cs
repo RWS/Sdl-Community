@@ -6,7 +6,7 @@ using System;
 
 namespace Trados_AI_Essentials.Studio
 {
-    internal class TranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
+    public class TranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
     {
         #region ITranslationProviderLanguageDirection Members
 
@@ -15,20 +15,11 @@ namespace Trados_AI_Essentials.Studio
             get { throw new NotImplementedException(); }
         }
 
-        public CultureCode SourceLanguage
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public CultureCode SourceLanguage { get; set; }
 
-        public CultureCode TargetLanguage
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public CultureCode TargetLanguage { get; set; }
 
-        public ITranslationProvider TranslationProvider
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public ITranslationProvider TranslationProvider { get; set; }
 
         public ImportResult[] AddOrUpdateTranslationUnits(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings)
         {
@@ -85,10 +76,9 @@ namespace Trados_AI_Essentials.Studio
             throw new NotImplementedException();
         }
 
-        public SearchResults[] SearchTranslationUnitsMasked(SearchSettings settings, TranslationUnit[] translationUnits, bool[] mask)
-        {
-            throw new NotImplementedException();
-        }
+        public SearchResults[] SearchTranslationUnitsMasked(SearchSettings settings, TranslationUnit[] translationUnits,
+            bool[] mask) => StudioIntegration.Translate(translationUnits, mask, SourceLanguage.ToString(),
+            TargetLanguage.ToString());
 
         public ImportResult UpdateTranslationUnit(TranslationUnit translationUnit)
         {

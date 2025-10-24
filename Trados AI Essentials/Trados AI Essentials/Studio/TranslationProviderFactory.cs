@@ -10,10 +10,9 @@ namespace Trados_AI_Essentials.Studio
     {
         #region ITranslationProviderFactory Members
 
-        public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
-        {
-            return new TranslationProvider();
-        }
+        public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri,
+            string translationProviderState, ITranslationProviderCredentialStore credentialStore) =>
+            StudioIntegration.GetTranslationProviderFromState(translationProviderState);
 
         public TranslationProviderInfo GetTranslationProviderInfo(Uri translationProviderUri,
             string translationProviderState) =>

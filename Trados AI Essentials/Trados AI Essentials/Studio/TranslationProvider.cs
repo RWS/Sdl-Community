@@ -1,24 +1,35 @@
-﻿using Sdl.LanguagePlatform.Core;
+﻿using Newtonsoft.Json;
+using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using System;
+using Trados_AI_Essentials.Model;
 
 namespace Trados_AI_Essentials.Studio
 {
-    internal class TranslationProvider : ITranslationProvider
+    public class TranslationProvider : ITranslationProvider
     {
         private ProviderStatusInfo _statusInfo;
 
+        private TranslationProvider()
+        {
+        }
+
+        public static TranslationProvider CreateFromSettings(Settings settings) => new() { Settings = settings };
+
+        public static TranslationProvider CreateFromState(string state)
+        {
+            var translationProvider = new TranslationProvider();
+            translationProvider.LoadState(state);
+            return translationProvider;
+        }
+
         #region ITranslationProvider Members
 
-        public bool IsReadOnly
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public bool IsReadOnly => true;
 
-        public string Name
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public string Name => PluginResources.Plugin_Name;
+
+        public Settings Settings { get; set; }
 
         public ProviderStatusInfo StatusInfo
         {
@@ -26,9 +37,7 @@ namespace Trados_AI_Essentials.Studio
             set => _statusInfo = value;
         }
 
-        public bool SupportsConcordanceSearch =>
-            //TODO
-            true;
+        public bool SupportsConcordanceSearch => false;
 
         public bool SupportsDocumentSearches
         {
@@ -65,39 +74,24 @@ namespace Trados_AI_Essentials.Studio
             get { throw new NotImplementedException(); }
         }
 
-        public bool SupportsSearchForTranslationUnits
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public bool SupportsSearchForTranslationUnits => true;
 
         public bool SupportsSourceConcordanceSearch
         {
             get { throw new NotImplementedException(); }
         }
 
-        public bool SupportsStructureContext
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public bool SupportsStructureContext => false;
 
-        public bool SupportsTaggedInput
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public bool SupportsTaggedInput => false;
 
-        public bool SupportsTargetConcordanceSearch
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public bool SupportsTargetConcordanceSearch => false;
 
-        public bool SupportsTranslation
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public bool SupportsTranslation => true;
 
         public bool SupportsUpdate
         {
-            //TODO
+            //TODO - implement supportsUpdate functionality
             get { return true; }
         }
 
@@ -110,15 +104,11 @@ namespace Trados_AI_Essentials.Studio
 
         public Uri Uri => new Uri(PluginResources.ProviderScheme);
 
-        public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
-        {
-            throw new NotImplementedException();
-        }
+        public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection) =>
+            StudioIntegration.GetTranslationProviderLanguageDirection(languageDirection, this);
 
-        public void LoadState(string translationProviderState)
-        {
-            throw new NotImplementedException();
-        }
+        public void LoadState(string translationProviderState) =>
+            Settings = JsonConvert.DeserializeObject<Settings>(translationProviderState);
 
         public void RefreshStatusInfo()
         {
@@ -127,12 +117,12 @@ namespace Trados_AI_Essentials.Studio
 
         public string SerializeState()
         {
-            return "";
+            return JsonConvert.SerializeObject(Settings);
         }
 
         public bool SupportsLanguageDirection(LanguagePair languageDirection)
         {
-            //TODO
+            //TODO - check supported languages from settings
             return true;
         }
 

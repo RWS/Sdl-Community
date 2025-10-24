@@ -117,12 +117,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Label_LLMTranslationEngines" xml:space="preserve">
+    <value>LLM Translation Engines</value>
+  </data>
+  <data name="Label_Selected_LLMTE" xml:space="preserve">
+    <value>Selected LLM Translation Engine</value>
+  </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="Logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Logo.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Plugin_Name" xml:space="preserve">
-    <value>Trados AI Essentials</value>
+    <value>Trados AI Essentials Provider</value>
   </data>
   <data name="ProviderScheme" xml:space="preserve">
     <value>tradosaiessentialsprovider:///</value>
