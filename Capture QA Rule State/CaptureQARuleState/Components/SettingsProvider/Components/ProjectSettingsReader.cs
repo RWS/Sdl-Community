@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
@@ -15,7 +16,7 @@ namespace CaptureQARuleState.Components.SettingsProvider.Components
         public Dictionary<string, Dictionary<string, string>> ReadProjectVerificationSettings(IProject project, Language language = null)
         {
             var projectInfo = project.GetProjectInfo();
-            var sdlprojFilePath = Path.Combine(projectInfo.LocalProjectFolder, $"{projectInfo.Name}.sdlproj");
+            var sdlprojFilePath = Uri.UnescapeDataString(projectInfo.Uri.AbsolutePath);
 
             var doc = XDocument.Load(sdlprojFilePath);
 
