@@ -10,8 +10,6 @@ using InterpretBank.Studio;
 using InterpretBank.TermbaseViewer.UI;
 using InterpretBank.TermbaseViewer.ViewModel;
 using InterpretBank.TerminologyService.Interface;
-using Sdl.Core.Globalization.CultureMetadataManager;
-using Sdl.Core.Globalization.CultureMetadataService;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 
