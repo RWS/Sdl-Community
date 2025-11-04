@@ -15,6 +15,9 @@
 		<Reference Include="Autofac">
 			<HintPath>$(TradosFolder)\Autofac.dll</HintPath>
 		</Reference>
+		<Reference Include="Microsoft.Bcl.AsyncInterfaces">
+			<HintPath>$(TradosFolder)\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+		</Reference>
 		<Reference Include="DocumentFormat.OpenXml">
 			<HintPath>$(TradosFolder)\DocumentFormat.OpenXml.dll</HintPath>
 		</Reference>
