@@ -62,6 +62,7 @@ namespace Sdl.Community.NumberVerifier
             get
             {
                 if (_verificationSettings != null || _sharedObjects == null) return _verificationSettings;
+
                 var bundle = _sharedObjects.GetSharedObject<ISettingsBundle>("SettingsBundle");
                 if (bundle == null) return _verificationSettings;
                 _verificationSettings = bundle.GetSettingsGroup<NumberVerifierSettings>();
@@ -170,6 +171,11 @@ namespace Sdl.Community.NumberVerifier
         public void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
         {
             // Apply the verification logic.
+            if (!IsEnabled())
+            {
+                return;
+            }
+
             CheckParagraphUnit(paragraphUnit);
         }
 
@@ -795,6 +801,26 @@ namespace Sdl.Community.NumberVerifier
                 if (Regex.Match(itemWoSeparators, unitsOfMeasurement).Success || int.TryParse(itemWoSeparators, out _)) forRemoval.Add(item);
             }
             forRemoval.ForEach(item => normalizedAlphaList.Remove(item));
+        }
+
+        private bool IsEnabled()
+        {
+            if (_sharedObjects == null)
+                return false;
+
+            var bundle = _sharedObjects.GetSharedObject<ISettingsBundle>("SettingsBundle");
+            if (bundle == null)
+                return false;
+
+            var settingsGroup = bundle.GetSettingsGroup("Number Verifier");
+            if (settingsGroup == null)
+                return false;
+
+            var enabledSetting = settingsGroup.GetSetting<bool>("Enabled");
+            if (enabledSetting == null)
+                return false;
+
+            return enabledSetting.Value;
         }
     }
 }
