@@ -10,17 +10,23 @@ namespace LanguageWeaverProvider.Model
             try
             {
                 CloudCredentials = JsonConvert.DeserializeObject<CloudCredentials>(serializedCredentials);
-                CloudCredentials.AccountRegion
-                    = CloudCredentials.AccountRegion.ToLower().Equals("eu")
-                        ? Constants.CloudEUUrl
-                        : Constants.CloudUSUrl;
+                if (CloudCredentials.AccountRegion != null)
+                {
+                    CloudCredentials.AccountRegion
+                        = CloudCredentials.AccountRegion.ToLower().Equals("eu")
+                            ? Constants.CloudEUUrl
+                            : Constants.CloudUSUrl;
+                }
             }
             catch { }
 
             try
             {
                 EdgeCredentials = JsonConvert.DeserializeObject<EdgeCredentials>(serializedCredentials);
-                EdgeCredentials.Uri = new Uri(EdgeCredentials.Host);
+                if (EdgeCredentials.Host != null)
+                {
+                    EdgeCredentials.Uri = new Uri(EdgeCredentials.Host);
+                }
             }
             catch { }
         }
