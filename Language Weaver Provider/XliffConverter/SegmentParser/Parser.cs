@@ -86,12 +86,6 @@ namespace LanguageWeaverProvider.XliffConverter.SegmentParser
         {
             Match match;
 
-            if ((match = StartingTag.Match(tag)).Success)
-                return NewTag(TagType.Start, match);
-
-            if ((match = EndingTag.Match(tag)).Success)
-                return new Tag(TagType.End, "0", int.Parse(match.Groups[1].Value));
-
             if ((match = StandaloneTag.Match(tag)).Success)
                 return NewTag(TagType.Standalone, match);
 
@@ -100,6 +94,12 @@ namespace LanguageWeaverProvider.XliffConverter.SegmentParser
 
             if ((match = PlaceholderTag.Match(tag)).Success)
                 return NewTag(TagType.TextPlaceholder, match, hasTextEquivalent: true);
+
+            if ((match = StartingTag.Match(tag)).Success)
+                return NewTag(TagType.Start, match);
+
+            if ((match = EndingTag.Match(tag)).Success)
+                return new Tag(TagType.End, "0", int.Parse(match.Groups[1].Value));
 
             return null;
         }
