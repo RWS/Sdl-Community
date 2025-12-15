@@ -2,86 +2,100 @@
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Options;
 using LanguageWeaverProvider.Services;
+using LanguageWeaverProvider.WindowsCredentialStore;
 using Newtonsoft.Json;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using System;
+using System.Threading.Tasks;
 
 namespace LanguageWeaverProvider
 {
-	[TranslationProviderFactory(Id = Constants.Provider_TranslationProviderFactory,
-								Name = Constants.Provider_TranslationProviderFactory,
-								Description = Constants.Provider_TranslationProviderFactory)]
-	internal class TranslationProviderFactory : ITranslationProviderFactory
-	{
-		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
-		{
-			ApplicationInitializer.CredentialStore = credentialStore;
-			ApplicationInitializer.PluginVersion = translationProviderUri.ToPluginVersion();
+    [TranslationProviderFactory(Id = Constants.Provider_TranslationProviderFactory,
+                                Name = Constants.Provider_TranslationProviderFactory,
+                                Description = Constants.Provider_TranslationProviderFactory)]
+    internal class TranslationProviderFactory : ITranslationProviderFactory
+    {
+        public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
+        {
+            ApplicationInitializer.CredentialStore = credentialStore;
+            ApplicationInitializer.PluginVersion = translationProviderUri.ToPluginVersion();
 
-			if (translationProviderState is null) return new TranslationProvider(new TranslationOptions());
+            if (translationProviderState is null) return new TranslationProvider(new TranslationOptions());
 
-			var serializedCredentials = credentialStore.GetCredential(translationProviderUri).Credential;
-			var standaloneCredentials = new StandaloneCredentials(serializedCredentials);
+            var serializedCredentials = credentialStore.GetCredential(translationProviderUri)?.Credential;
+            
+            if (serializedCredentials is null)
+            {
+                serializedCredentials = CredentialStore.Load($"{translationProviderUri}cred");
+                if (!string.IsNullOrEmpty(serializedCredentials))
+                {
+                    var credentialsToAdd = new TranslationProviderCredential(serializedCredentials, true);
+                    credentialStore.AddCredential(translationProviderUri, credentialsToAdd);
+                } 
+            }
 
-			ApplicationInitializer.IsStandAlone = standaloneCredentials.AuthenticationType != AuthenticationType.None;
+            var standaloneCredentials = new StandaloneCredentials(serializedCredentials);
 
-			var options = GetOptions(translationProviderState);
-			CredentialManager.GetCredentials(options, true, standaloneCredentials);
+            ApplicationInitializer.IsStandalone = standaloneCredentials.AuthenticationType != AuthenticationType.None;
 
-			_ = Service.ValidateAndUpdateTokenAsync(options, () => CredentialManager.UpdateCredentials(credentialStore, options));
-			ApplicationInitializer.TranslationOptions[options.Id] = options;
+            var options = GetOptions(translationProviderState);
 
-			return new TranslationProvider(options);
-		}
+            CredentialManager.GetCredentials(options, true, standaloneCredentials);
 
-		public TranslationProviderInfo GetTranslationProviderInfo(Uri translationProviderUri, string translationProviderState)
-		{
-			var pluginName = string.IsNullOrEmpty(translationProviderState)
-						   ? Constants.PluginName
-						   : JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState).ProviderName;
+            _ = Service.ValidateAndUpdateTokenAsync(options, () => CredentialManager.UpdateCredentials(credentialStore, options));
+            ApplicationInitializer.TranslationOptions[options.Id] = options;
 
-			return new TranslationProviderInfo
-			{
-				TranslationMethod = TranslationMethod.MachineTranslation,
-				Name = pluginName
-			};
-		}
+            return new TranslationProvider(options);
+        }
 
-		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
-		{
-			var providerVersion = translationProviderUri.ToPluginVersion();
-			if (providerVersion != PluginVersion.None &&
-				providerVersion != ApplicationInitializer.PluginVersion)
-			{
-				ApplicationInitializer.CredentialStore = null;
-			}
+        public TranslationProviderInfo GetTranslationProviderInfo(Uri translationProviderUri, string translationProviderState)
+        {
+            var pluginName = string.IsNullOrEmpty(translationProviderState)
+                           ? Constants.PluginName
+                           : JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState).ProviderName;
 
-			if (ApplicationInitializer.CredentialStore is not null && !CredentialManager.CredentialsArePersisted(translationProviderUri))
-			{
-				return false;
-			}
+            return new TranslationProviderInfo
+            {
+                TranslationMethod = TranslationMethod.MachineTranslation,
+                Name = pluginName
+            };
+        }
 
-			return translationProviderUri switch
-			{
-				null => throw new ArgumentNullException("Unsuported"),
-				_ => translationProviderUri.Scheme.StartsWith(Constants.BaseTranslationScheme)
-			};
-		}
+        public bool SupportsTranslationProviderUri(Uri translationProviderUri)
+        {
+            var providerVersion = translationProviderUri.ToPluginVersion();
+            if (providerVersion != PluginVersion.None &&
+                providerVersion != ApplicationInitializer.PluginVersion)
+            {
+                ApplicationInitializer.CredentialStore = null;
+            }
 
-		private static TranslationOptions GetOptions(string translationProviderState)
-		{
-			TranslationOptions options;
-			try
-			{
-				options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
-			}
-			catch
-			{
-				options = new TranslationOptions();
-			}
-			if (options.Id is null) options.AssignId();
+            if (ApplicationInitializer.CredentialStore is not null && !CredentialManager.CredentialsArePersisted(translationProviderUri))
+            {
+                return false;
+            }
 
-			return options;
-		}
-	}
+            return translationProviderUri switch
+            {
+                null => throw new ArgumentNullException("Unsuported"),
+                _ => translationProviderUri.Scheme.StartsWith(Constants.BaseTranslationScheme)
+            };
+        }
+
+        private static TranslationOptions GetOptions(string translationProviderState)
+        {
+            TranslationOptions options;
+            try
+            {
+                options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
+            }
+            catch
+            {
+                options = new TranslationOptions();
+            }
+            if (options.Id is null) options.AssignId();
+
+            return options;
+        }
+    }
 }

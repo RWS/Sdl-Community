@@ -177,7 +177,7 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 				return;
 			}
 
-			SelectedRegion = TranslationOptions.CloudCredentials.AccountRegion;
+			SelectedRegion = TranslationOptions.CloudCredentials.AccountRegion ??= Constants.CloudEUUrl;
 			UserName = TranslationOptions.CloudCredentials.UserName;
 			UserPassword = TranslationOptions.CloudCredentials.UserPassword;
 			ClientId = TranslationOptions.CloudCredentials.ClientID;

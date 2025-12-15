@@ -5,165 +5,137 @@ using Sdl.LanguagePlatform.Core;
 
 namespace LanguageWeaverProvider.XliffConverter.SegmentParser
 {
-	public class Parser
-	{
-		private static readonly Regex StartingTag = new(@"<(\d+) (?:x=(\d+) )?id=([^ />]+)>");
-		private static readonly Regex EndingTag = new(@"</(\d+)>");
-		private static readonly Regex StandaloneTag = new(@"<(\d+) (?:x=(\d+) )?id=([^ />]+)/>");
-		private static readonly Regex PlaceholderTag = new(@"<(\d+) (?:x=(\d+) )?id=([^ />]+) text-equiv=""([\S\s]+)""/>");
-		private static readonly Regex LockedTag = new(@"<(\d+) (?:x=(\d+) )?id=([^ />]+) text-equiv=""([\S\s]+)"" locked=""true""/>");
+    public class Parser
+    {
+        #region Tag Regex Patterns
 
-		public static Segment ParseLine(string text)
-		{
-			var segment = new Segment();
-			if (string.IsNullOrEmpty(text))
-			{
-				return segment;
-			}
+        // Base pattern fragments
+        private const string Anchor = @"(\d+)";
+        private const string Alignment = @"(?:\s+x=(\d+))?";
+        private const string Id = @"\s+id=([^ >]+)";
+        private const string TextEquiv = @"\s+text-equiv\\?=""([^""]*?)""";
+        private const string Locked = @"\s+locked=""true""";
 
-			var tags = SplitTags(text);
+        // Specific tag patterns
+        private const string StartingTagPattern = $@"<{Anchor}{Alignment}{Id}\s*>";
+        private const string EndingTagPattern = $@"</{Anchor}\s*>";
+        private const string StandaloneTagPattern = $@"<{Anchor}{Alignment}{Id}\s*/>";
+        private const string PlaceholderTagPattern = $@"<{Anchor}{Alignment}{Id}{TextEquiv}\s*/>";
+        private const string LockedTagPattern = $@"<{Anchor}{Alignment}{Id}{TextEquiv}{Locked}\s*/>";
 
-			//var tags = Regex.Split(text, @"(<(?:""[^""]*""['""]*|'[^']*'['""]*|[^'"">])+>)");
-			var startingTags = new Stack<Tag>();
-			foreach (var tag in tags)
-			{
-				if (tag == string.Empty)
-				{
-					continue;
-				}
+        // Compiled regex instances for individual detection
+        private static readonly Regex StartingTag = new(StartingTagPattern, RegexOptions.Compiled);
+        private static readonly Regex EndingTag = new(EndingTagPattern, RegexOptions.Compiled);
+        private static readonly Regex StandaloneTag = new(StandaloneTagPattern, RegexOptions.Compiled);
+        private static readonly Regex PlaceholderTag = new(PlaceholderTagPattern, RegexOptions.Compiled);
+        private static readonly Regex LockedTag = new(LockedTagPattern, RegexOptions.Compiled);
 
-				var parsedTag = ParseTag(tag);
-				if (parsedTag == null)
-				{
-					segment.Add(tag.Replace("\r\n", "\n"));
-					continue;
-				}
+        // Master regex used by SplitTags — uses the same exact patterns
+        private static readonly Regex MasterTagRegex =
+            new($"({LockedTagPattern}|{PlaceholderTagPattern}|{StandaloneTagPattern}|{StartingTagPattern}|{EndingTagPattern})",
+                RegexOptions.Compiled);
 
-				if (parsedTag.Type == TagType.Start)
-				{
-					startingTags.Push(parsedTag);
-				}
-				else if (parsedTag.Type == TagType.End && startingTags.Count == 0)
-				{
-					throw new Exception($"Line does not have matching starting and ending tags: {text}");
-				}
-				else if (parsedTag.Type == TagType.End)
-				{
-					if (parsedTag.Anchor == startingTags.Peek().Anchor)
-					{
-						var correspondingStartTag = startingTags.Pop();
-						parsedTag.TagID = correspondingStartTag.TagID;
-					}
-					else
-					{
-						segment.Add(tag);
-						continue;
-					}
-				}
+        #endregion
 
-				segment.Add(parsedTag);
-			}
+        public static Segment ParseLine(string text)
+        {
+            var segment = new Segment();
+            if (string.IsNullOrEmpty(text))
+                return segment;
 
-			if (startingTags.Count != 0)
-			{
-				throw new Exception($"Line does not have matching starting and ending tags: {text}");
-			}
+            var pieces = SplitTags(text);
+            var startTags = new Stack<Tag>();
 
-			return segment;
-		}
-
-		/// <summary>
-		/// Converts text in a tag
-		/// </summary>
-		/// <param name="tag"></param>
-		/// <returns cref="Tag"/>
-		public static Tag ParseTag(string tag) 
-		{
-			Match match;
-			if ((match = StartingTag.Match(tag)).Success)
-			{
-				const TagType TagType = TagType.Start;
-				var tagId = match.Groups[3].Value;
-				var anchor = int.Parse(match.Groups[1].Value);
-				var alignmentAnchor = !string.IsNullOrEmpty(match.Groups[2].Value) ? int.Parse(match.Groups[2].Value) : 0;
-				return new Tag(TagType, tagId, anchor, alignmentAnchor, null);
-			}
-
-			if ((match = EndingTag.Match(tag)).Success)
-			{
-				const TagType TagType = TagType.End;
-				const string TagId = "0";
-				var anchor = int.Parse(match.Groups[1].Value);
-
-				return new Tag(TagType, TagId, anchor);
-			}
-
-			if ((match = StandaloneTag.Match(tag)).Success)
-			{
-				const TagType TagType = TagType.Standalone;
-				var tagId = match.Groups[3].Value;
-				var anchor = int.Parse(match.Groups[1].Value);
-				var alignmentAnchor = !string.IsNullOrEmpty(match.Groups[2].Value) ? int.Parse(match.Groups[2].Value) : 0;
-
-				return new Tag(TagType, tagId, anchor, alignmentAnchor, null);
-			}
-
-			if ((match = LockedTag.Match(tag)).Success)
-			{
-				const TagType TagType = TagType.LockedContent;
-				var tagId = match.Groups[3].Value;
-				var anchor = int.Parse(match.Groups[1].Value);
-				var alignmentAnchor = !string.IsNullOrEmpty(match.Groups[2].Value) ? int.Parse(match.Groups[2].Value) : 0;
-				var textEquivalent = match.Groups[4].Value;
-
-				return new Tag(TagType, tagId, anchor, alignmentAnchor, textEquivalent);
-			}
-
-            if ((match = PlaceholderTag.Match(tag)).Success)
+            foreach (var chunk in pieces)
             {
-				const TagType TagType = TagType.TextPlaceholder;
-				var tagId = match.Groups[3].Value;
-	            var textEquivalent = match.Groups[4].Value;
-				var anchor = int.Parse(match.Groups[1].Value);
-				var alignmentAnchor = !string.IsNullOrEmpty(match.Groups[2].Value) ? int.Parse(match.Groups[2].Value) : 0;
+                if (string.IsNullOrEmpty(chunk))
+                    continue;
 
-				return new Tag(TagType, tagId, anchor, alignmentAnchor, textEquivalent);
+                var tag = ParseTag(chunk);
+                if (tag == null)
+                {
+                    segment.Add(chunk.Replace("\r\n", "\n"));
+                    continue;
+                }
+
+                switch (tag.Type)
+                {
+                    case TagType.Start:
+                        startTags.Push(tag);
+                        break;
+
+                    case TagType.End:
+                        if (startTags.Count > 0 && tag.Anchor == startTags.Peek().Anchor)
+                        {
+                            var start = startTags.Pop();
+                            tag.TagID = start.TagID;
+                        }
+                        break;
+                }
+
+                segment.Add(tag);
             }
 
-			return null;
-		}
+            if (startTags.Count > 0)
+                throw new Exception($"Line does not have matching starting/ending tags: {text}");
 
-		private static List<string> SplitTags(string text)
-		{
-			var result = new List<string>();
+            return segment;
+        }
 
-			var master = new Regex(
-				$@"({StartingTag}|{EndingTag}|{StandaloneTag}|{PlaceholderTag}|{LockedTag})",
-				RegexOptions.Compiled
-			);
+        public static Tag ParseTag(string tag)
+        {
+            Match match;
 
-			int lastIndex = 0;
-			foreach (Match match in master.Matches(text))
-			{
-				// Add plain text before the tag
-				if (match.Index > lastIndex)
-				{
-					var plain = text.Substring(lastIndex, match.Index - lastIndex);
-					if (!string.IsNullOrEmpty(plain))
-						result.Add(plain);
-				}
+            if ((match = StandaloneTag.Match(tag)).Success)
+                return NewTag(TagType.Standalone, match);
 
-				result.Add(match.Value);
+            if ((match = LockedTag.Match(tag)).Success)
+                return NewTag(TagType.LockedContent, match, hasTextEquivalent: true);
 
-				lastIndex = match.Index + match.Length;
-			}
+            if ((match = PlaceholderTag.Match(tag)).Success)
+                return NewTag(TagType.TextPlaceholder, match, hasTextEquivalent: true);
 
-			if (lastIndex < text.Length)
-			{
-				result.Add(text.Substring(lastIndex));
-			}
+            if ((match = StartingTag.Match(tag)).Success)
+                return NewTag(TagType.Start, match);
 
-			return result;
-		}
-	}
+            if ((match = EndingTag.Match(tag)).Success)
+                return new Tag(TagType.End, "0", int.Parse(match.Groups[1].Value));
+
+            return null;
+        }
+
+        private static List<string> SplitTags(string text)
+        {
+            var parts = new List<string>();
+            int lastIndex = 0;
+
+            foreach (Match match in MasterTagRegex.Matches(text))
+            {
+                if (match.Index > lastIndex)
+                {
+                    string plain = text.Substring(lastIndex, match.Index - lastIndex);
+                    if (!string.IsNullOrEmpty(plain))
+                        parts.Add(plain);
+                }
+
+                parts.Add(match.Value);
+                lastIndex = match.Index + match.Length;
+            }
+
+            if (lastIndex < text.Length)
+                parts.Add(text.Substring(lastIndex));
+
+            return parts;
+        }
+
+        private static Tag NewTag(TagType type, Match m, bool hasTextEquivalent = false)
+        {
+            string tagId = m.Groups[3].Value;
+            int anchor = int.Parse(m.Groups[1].Value);
+            int alignmentAnchor = !string.IsNullOrEmpty(m.Groups[2].Value) ? int.Parse(m.Groups[2].Value) : 0;
+            string textEq = hasTextEquivalent && m.Groups.Count >= 5 ? m.Groups[4].Value : null;
+
+            return new Tag(type, tagId, anchor, alignmentAnchor, textEq);
+        }
+    }
 }

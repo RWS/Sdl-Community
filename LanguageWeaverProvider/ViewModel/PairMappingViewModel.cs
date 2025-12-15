@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Input;
-using LanguageMappingProvider.Database.Interface;
+﻿using LanguageMappingProvider;
 using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.LanguageMappingProvider;
 using LanguageWeaverProvider.LanguageMappingProvider.View;
@@ -14,6 +7,13 @@ using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Services;
 using Sdl.LanguagePlatform.Core;
+using System;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace LanguageWeaverProvider.ViewModel
 {

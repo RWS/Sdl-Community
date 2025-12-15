@@ -270,6 +270,12 @@
   <data name="FeedbackView_Title" xml:space="preserve">
     <value>Give feedback!</value>
   </data>
+  <data name="LCCloud_ShortName" xml:space="preserve">
+    <value>Language Weaver Cloud</value>
+  </data>
+  <data name="LCEdge_ShortName" xml:space="preserve">
+    <value>Language Weaver Edge</value>
+  </data>
   <data name="LMPViewModel_ResetTitle" xml:space="preserve">
     <value>Reset to default</value>
   </data>
@@ -459,16 +465,16 @@ Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
     <comment>Second part of the text, acting as button</comment>
   </data>
   <data name="SettingsAction_ExternalHelp_3" xml:space="preserve">
-    <value>for documentation.</value>
+    <value>to view the documentation.</value>
     <comment>Third part of the text, acting as plain text</comment>
   </data>
   <data name="SettingsAction_NoProviderAvailable" xml:space="preserve">
-    <value>We couldn't find an instance of Language Weaver Provider for the current project selected. To add it to your project, follow these steps:
+    <value>Unable to locate 'Language Weaver Provider' in your current project. To add it to your project, follow these steps:
 
-1. Open Project Settings;
-2. Go to Translation Memory and Automated Translation;
-3. Select Use;
-4. Via the dropdown menu locate Language Weaver Provider.</value>
+1. Open Project Settings
+2. Go to ‘Translation Memory and Automated Translation’
+3. Select 'Language Weaver Provider' from the ‘Use…’ dropdown button menu
+4. Save &amp; close the Project Settings</value>
   </data>
   <data name="SettingsView_BackButton_LeftContent" xml:space="preserve">
     <value>←</value>
@@ -482,17 +488,17 @@ Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
   <data name="SettingsView_Tags" xml:space="preserve">
     <value>Include tags in translation</value>
   </data>
-  <data name="TellMeDoc" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellMeDoc.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="TellMe_Documentation" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMe_Documentation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="TellMeForum" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellMeForum.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="TellMe_Forum" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMe_Forum.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="TellMeSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellMeSettings.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="TellMe_Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMe_Settings.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="TellMeSourceCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellMeSourceCode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="TellMe_SourceCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMe_SourceCode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="TranslationDraftNotResent" xml:space="preserve">
     <value>[segment already translated...source not re-sent]</value>

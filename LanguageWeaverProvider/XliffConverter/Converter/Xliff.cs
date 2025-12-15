@@ -58,7 +58,7 @@ namespace LanguageWeaverProvider.XliffConverter.Converter
 				segment.Culture = File.TargetCulture ?? File.SourceCulture;
 				segments.Add(new EvaluatedSegment
 				{
-					Segment = segment,
+					Translation = segment,
 					QualityEstimation = option.MatchQuality
 				});
 			}

@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Windows;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
+using Newtonsoft.Json;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -18,21 +19,23 @@ namespace LanguageWeaverProvider
 
 		public static string CurrentAppVersion { get; private set; }
 
-		public static IList<RatedSegment> RatedSegments { get; set; }
+		public static IList<RatedSegment> RatedSegments { get; set; } = new List<RatedSegment>();
 
-		public static ITranslationProviderCredentialStore CredentialStore { get; set; }
+        public static ITranslationProviderCredentialStore CredentialStore { get; set; }
 
-		public static PluginVersion PluginVersion { get; set; } = PluginVersion.None;
+        public static PluginVersion PluginVersion { get; set; } = PluginVersion.None;
 
 		public static IDictionary<string, ITranslationOptions> TranslationOptions { get; set; } = new Dictionary<string, ITranslationOptions>();
+        public static bool IsStandalone { get; set; }
 
-		public static bool IsStandAlone { get; set; }
-
-		public void Execute()
+        public void Execute()
         {
-			RatedSegments = new List<RatedSegment>();
 			CurrentAppVersion = GetAssemblyFileVersion();
             Log.Setup();
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            };
         }
 
         public static Window GetBatchTaskWindow()

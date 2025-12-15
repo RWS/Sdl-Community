@@ -29,8 +29,8 @@ namespace LanguageWeaverProvider.XliffConverter.Converter
 				return null;
 			}
 
-			text = text.Replace("\\r", "").Replace("\\n", "");
-			var sourceText = Regex.Matches(text, SourceTextRegex, RegexOptions.Singleline);
+            text = text.Replace("\\r", "").Replace("\\n", "");
+            var sourceText = Regex.Matches(text, SourceTextRegex, RegexOptions.Singleline);
 			text = Regex.Replace(text, SourceTextRegex, EmptySourceTextRegex, RegexOptions.Singleline);
 
 			var targetText = Regex.Matches(text, TargetTextRegex, RegexOptions.Singleline);
@@ -66,12 +66,21 @@ namespace LanguageWeaverProvider.XliffConverter.Converter
 			return writer.ToString().Replace("&lt;", "<").Replace("&gt;", ">").Replace("&amp;lt;", "&lt;");
 		}
 
-		internal static string RemoveXliffTags(string xliffString)
-		{
-			const string xliffTagRegex = "(<.*?>)";
-			xliffString = Regex.Replace(xliffString, xliffTagRegex, "");
+        internal static string RemoveXliffTags(string xliffString)
+        {
+            if (string.IsNullOrEmpty(xliffString))
+                return xliffString;
 
-			return WebUtility.HtmlDecode(xliffString);
-		}
-	}
+            // Remove any of the inline XLIFF tags but keep their inner text
+            // Examples handled: <x>, <bpt>, <ept>, <ph>, <it>, <g>
+            const string inlineTagOpenPattern = @"</?(x|bpt|ept|ph|it|g)[^>]*>";
+            xliffString = Regex.Replace(xliffString, inlineTagOpenPattern, "",
+                RegexOptions.IgnoreCase | RegexOptions.Singleline);
+
+            // decode the escaped pseudo-tags inside
+            var htmlDecodedStr = WebUtility.HtmlDecode(xliffString);
+
+            return htmlDecodedStr;
+        }
+    }
 }

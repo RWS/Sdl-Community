@@ -1,23 +1,22 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using LanguageMappingProvider.Database;
-using LanguageMappingProvider.Model;
+﻿using LanguageMappingProvider;
 using Sdl.Core.Globalization;
+using System.Collections.Generic;
 
-namespace LanguageWeaverProvider.LanguageMappingProvider
+namespace LanguageWeaverProvider.LanguageMappingProvider;
+
+public static class DatabaseControl
 {
-	public static class DatabaseControl
+    public static LanguageMappingDatabase InitializeDatabase()
     {
-		public static LanguageMappingDatabase InitializeDatabase()
-		{
-			var supportedLanguages = GetLanguageCodes();
-			return new LanguageMappingDatabase(Constants.DatabaseName, supportedLanguages);
-		}
+        var supportedLanguages = GetLanguageCodes();
+        var languageMappingDatabase = new LanguageMappingDatabase(Constants.DatabaseName, supportedLanguages);
+        return languageMappingDatabase;
+    }
 
-		private static List<LanguageMapping> GetLanguageCodes()
-		{
-			// delete this method when they create the endpoint to retrieve this
-			var table = @"Afrikaans 	afr 	af
+    private static List<LanguageMapping> GetLanguageCodes()
+    {
+        // delete this method when they create the endpoint to retrieve this
+        var table = @"Afrikaans 	afr 	af
 Albanian 	alb 	sq
 Amharic 	amh 	am
 Arabic 	ara 	ar
@@ -114,43 +113,41 @@ Uzbek 	uzb 	uz
 Vietnamese 	vie 	vi
 Welsh 	wel 	cy
 Yiddish 	yid 	yi";
-			return GetLanguageCodes(table);
-		}
+        return GetLanguageCodes(table);
+    }
 
-		public static string GetLanguageCode(this CultureCode cultureCode)
-		{
-			var languageMappingDatabase = new LanguageMappingDatabase(Constants.DatabaseName, null);
-			var languageMappings = languageMappingDatabase.GetMappedLanguages();
-			var targetLanguage = languageMappings.FirstOrDefault(x => x.TradosCode == cultureCode.Name);
-			var languageCode = targetLanguage?.LanguageCode ?? string.Empty;
-			return languageCode;
-		}
+    public static string GetLanguageCode(this CultureCode cultureCode)
+    {
+        var languageMappingDatabase = DatabaseControl.InitializeDatabase();
+        return languageMappingDatabase.TryGetLanguage(cultureCode, out var languageMapping)
+             ? languageMapping.LanguageCode
+             : string.Empty;
+    }
 
-		private static List<LanguageMapping> GetLanguageCodes(string table)
-		{
-			var languageMappings = new List<LanguageMapping>();
+    private static List<LanguageMapping> GetLanguageCodes(string table)
+    {
+        var languageMappings = new List<LanguageMapping>();
 
-			var lines = table.Split('\n');
-			foreach (var line in lines)
-			{
-				var parts = line.Trim().Split('\t');
-				var nameParts = parts[0].Trim().Split('(');
-				var name = nameParts[0].Trim();
-				var region = nameParts.Length > 1 ? nameParts[1].Trim(')', ' ') : null;
-				var languageCodeParts = parts[1].Trim().Split(' ');
-				var languageCode = languageCodeParts.Length > 1 ? languageCodeParts[1].Trim() : languageCodeParts[0].Trim();
+        var lines = table.Split('\n');
+        foreach (var line in lines)
+        {
+            var parts = line.Trim().Split('\t');
+            var nameParts = parts[0].Trim().Split('(');
+            var name = nameParts[0].Trim();
+            var region = nameParts.Length > 1 ? nameParts[1].Trim(')', ' ') : null;
+            var languageCodeParts = parts[1].Trim().Split(' ');
+            var languageCode = languageCodeParts.Length > 1 ? languageCodeParts[1].Trim() : languageCodeParts[0].Trim();
 
-				var mappedLanguage = new LanguageMapping
-				{
-					Name = name,
-					Region = region,
-					LanguageCode = languageCode
-				};
+            var mappedLanguage = new LanguageMapping
+            {
+                Name = name,
+                Region = region,
+                LanguageCode = languageCode
+            };
 
-				languageMappings.Add(mappedLanguage);
-			}
+            languageMappings.Add(mappedLanguage);
+        }
 
-			return languageMappings;
-		}
-	}
+        return languageMappings;
+    }
 }

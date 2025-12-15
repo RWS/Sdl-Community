@@ -13,17 +13,17 @@ namespace LanguageWeaverProvider.Model.Options
 		public TranslationOptions(bool isNewInstance = false)
 		{
 			if (isNewInstance)
-			{
-				Id = Guid.NewGuid().ToString();
-			}
+            {
+                AssignId();
+            }
 		}
 
-		public void AssignId()
-		{
-			Id = Guid.NewGuid().ToString();
-		}
+        public void AssignId()
+        {
+            Id = Guid.NewGuid().ToString();
+        }
 
-		[JsonIgnore]
+        [JsonIgnore]
 		public AccessToken AccessToken { get; set; }
 
 		[JsonIgnore]

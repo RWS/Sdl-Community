@@ -1,4 +1,6 @@
-﻿namespace LanguageWeaverProvider.Model
+﻿using LanguageWeaverProvider.Model.Interface;
+
+namespace LanguageWeaverProvider.Model
 {
     public class CloudCredentials
     {
