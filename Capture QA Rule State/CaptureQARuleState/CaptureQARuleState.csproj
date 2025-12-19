@@ -9,7 +9,13 @@
 		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
 	</PropertyGroup>
 	<ItemGroup>
+	  <None Remove="Resources\alert.gif" />
+	  <None Remove="Resources\error.gif" />
+	  <None Remove="Resources\minus.gif" />
+	  <None Remove="Resources\plus.gif" />
+	  <None Remove="Resources\TradosStudio_Logo.svg" />
 	  <None Remove="Resources\Verification.xsl" />
+	  <None Remove="Resources\warning.gif" />
 	</ItemGroup>
 	<ItemGroup>
 	  <EmbeddedResource Include="Resources\Verification.xsl" />
@@ -77,6 +83,14 @@
   	<PackageReference Include="Sdl.Core.PluginFramework.Build">
   		<Version>18.0.1</Version>
   	</PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\alert.gif" />
+    <Resource Include="Resources\error.gif" />
+    <Resource Include="Resources\minus.gif" />
+    <Resource Include="Resources\plus.gif" />
+    <Resource Include="Resources\TradosStudio_Logo.svg" />
+    <Resource Include="Resources\warning.gif" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="PluginResources.Designer.cs">
