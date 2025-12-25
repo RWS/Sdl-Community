@@ -241,7 +241,7 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
                     var jsonResponse = await response.Content.ReadAsStringAsync();
                     var modelsResponse = JsonConvert.DeserializeObject<TranslationModelsResponse>(jsonResponse);
 
-                    return modelsResponse.Models;
+                    return modelsResponse.Models ?? [];
                 }
 
                 _logger.Error($"Error: {response.StatusCode} - {await response.Content.ReadAsStringAsync()}");
@@ -280,7 +280,7 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 
             // Add V3 translation models while checking for duplicates
             var v3Models = await GetV3TranslationModelsAsync();
-            
+
             foreach (var model in v3Models)
             {
                 var existingModel = combinedModels.FirstOrDefault(a => 
