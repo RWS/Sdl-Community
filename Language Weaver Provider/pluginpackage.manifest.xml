@@ -5,8 +5,8 @@
 	<PlugInName>Language Weaver Provider</PlugInName>
 	<Description>Language Weaver Provider</Description>
 	
-  <Version>2.1.5.1</Version>
-	<RequiredProduct name="TradosStudio" minversion="18.1" maxversion="18.1.9" />
+  <Version>3.0.0.0</Version>
+	<RequiredProduct name="TradosStudio" minversion="19.0" maxversion="19.9" />
 
 	<Include>
 		<File>LanguageMappingProvider.dll</File>
