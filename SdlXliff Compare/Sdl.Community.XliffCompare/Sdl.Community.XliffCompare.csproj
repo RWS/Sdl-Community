@@ -3,7 +3,7 @@
     <TargetFramework>net48</TargetFramework>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <OutputType>Library</OutputType>
-    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
+    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19beta\Plugins</PluginDeploymentPath>
     <UseWindowsForms>true</UseWindowsForms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>

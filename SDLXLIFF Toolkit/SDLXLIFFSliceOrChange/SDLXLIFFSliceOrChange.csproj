@@ -21,7 +21,7 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
+    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19beta\Plugins</PluginDeploymentPath>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
@@ -41,7 +41,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
-    <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
+    <TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19Beta</TradosFolder>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>

@@ -12,7 +12,7 @@
 		<AssemblyName>AddTUToTM</AssemblyName>
 		<TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
 		<FileAlignment>512</FileAlignment>
-		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
+		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19beta\Plugins</PluginDeploymentPath>
 		<NuGetPackageImportStamp>
 		</NuGetPackageImportStamp>
 	</PropertyGroup>
@@ -34,7 +34,7 @@
 		<WarningLevel>4</WarningLevel>
 	</PropertyGroup>
 	<PropertyGroup>
-		<TradosFolder>C:\Program Files (x86)\Trados\Trados Studio\Studio18</TradosFolder>
+		<TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19Beta</TradosFolder>
 	</PropertyGroup>
 	<ItemGroup>
 		<Reference Include="Sdl.Core.Globalization.Async">

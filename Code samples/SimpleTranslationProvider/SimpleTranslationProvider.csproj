@@ -3,7 +3,7 @@
   <PropertyGroup>
   	<TargetFramework>net48</TargetFramework>
   	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-  	<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
+  	<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19beta\Plugins</PluginDeploymentPath>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Sdl.Core.Globalization">

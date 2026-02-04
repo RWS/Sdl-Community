@@ -6,8 +6,8 @@
     <PlatformTarget>x86</PlatformTarget>
     <AssemblyName>Reports.Viewer.Plus</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <TradosFolder>C:\Program Files (x86)\Trados\Trados Studio\Studio18</TradosFolder>
-    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
+    <TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19Beta</TradosFolder>
+    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19beta\Plugins</PluginDeploymentPath>
     <CefSharpAnyCpuSupport>true</CefSharpAnyCpuSupport>
     <CefSharpBuildAction>Content</CefSharpBuildAction>
     <UseWindowsForms>true</UseWindowsForms>

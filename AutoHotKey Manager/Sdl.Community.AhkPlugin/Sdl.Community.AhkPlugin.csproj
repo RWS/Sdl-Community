@@ -2,8 +2,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net48</TargetFramework>
-		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
-		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
+		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19beta\Plugins</PluginDeploymentPath>
+		<TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19Beta</TradosFolder>
 	</PropertyGroup>
 
 	<PropertyGroup>

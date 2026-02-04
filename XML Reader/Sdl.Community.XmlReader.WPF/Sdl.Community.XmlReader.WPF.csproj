@@ -5,7 +5,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <UseWPF>true</UseWPF>
-    <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
+    <TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19Beta</TradosFolder>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>

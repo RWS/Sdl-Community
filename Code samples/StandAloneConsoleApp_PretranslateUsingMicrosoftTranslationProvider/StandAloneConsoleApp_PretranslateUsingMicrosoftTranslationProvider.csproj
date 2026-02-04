@@ -7,7 +7,7 @@
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<EmbeddedResourceUseDependentUponConvention>true</EmbeddedResourceUseDependentUponConvention>
 		<SignAssembly>true</SignAssembly>
-		<TradosFolder>C:\Program Files (x86)\Trados\Trados Studio\Studio18</TradosFolder>
+		<TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19Beta</TradosFolder>
 		<OutputType>Exe</OutputType>
 		<OutputPath>$(TradosFolder)\</OutputPath>
 		<PlatformTarget>x86</PlatformTarget>

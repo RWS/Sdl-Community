@@ -26,8 +26,8 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
-    <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
+    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19beta\Plugins</PluginDeploymentPath>
+    <TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19Beta</TradosFolder>
     <UseWindowsForms>true</UseWindowsForms>
     <UseWPF>true</UseWPF>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>

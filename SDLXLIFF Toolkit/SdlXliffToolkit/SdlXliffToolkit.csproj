@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
     <OutputType>Library</OutputType>
-    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
+    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19beta\Plugins</PluginDeploymentPath>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
@@ -17,7 +17,7 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
-    <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
+    <TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19Beta</TradosFolder>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Sdl.Desktop.IntegrationApi">
