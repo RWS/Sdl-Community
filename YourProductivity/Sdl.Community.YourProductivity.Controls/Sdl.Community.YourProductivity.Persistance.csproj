@@ -5,7 +5,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
-    <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
+    <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio19Beta</TradosFolder>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>

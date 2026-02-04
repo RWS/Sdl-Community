@@ -39,7 +39,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup>
-		<TradosFolder>C:\Program Files (x86)\Trados\Trados Studio\Studio18</TradosFolder>
+		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio19Beta</TradosFolder>
 	  <ApplicationIcon>Resources\h_icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
