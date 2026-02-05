@@ -1,16 +1,16 @@
-﻿<Window x:Class="LanguageWeaverProvider.View.CohereSubscriptionWindow"
+﻿<Window x:Class="LanguageWeaverProvider.SubscriptionJourney.View.CohereSubscriptionWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:LanguageWeaverProvider.View"
+        xmlns:local="clr-namespace:LanguageWeaverProvider.SubscriptionJourney.ViewModel"
+		xmlns:converters="clr-namespace:LanguageWeaverProvider.SubscriptionJourney.Converters"
         mc:Ignorable="d"
-        Title="CohereSubscriptionWindow" Height="450" Width="800">
+        d:DataContext="{d:DesignInstance local:SubscriptionViewModel}"
+        Title="{Binding WindowTitle}" Height="450" Width="800">
     <Window.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
-            </ResourceDictionary.MergedDictionaries>
+            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         </ResourceDictionary>
     </Window.Resources>
     <Grid Margin="10">
@@ -21,12 +21,10 @@
         </Grid.RowDefinitions>
 
         <!-- Window Header -->
-        <!-- TODO
-            Add Binding -->
         <TextBlock 
             Grid.Row="0"
             HorizontalAlignment="Center"
-            Text="Cohere Title"
+            Text="{Binding Title}"
             FontSize="30"
             FontWeight="SemiBold"
             Margin="0,0,0,10"/>
@@ -34,7 +32,7 @@
         <TextBlock 
             Grid.Row="1"
             HorizontalAlignment="Left"
-            Text="Start your free Cohere trial to unlock AI-powered features and see what you can build in minutes."
+            Text="{Binding Description}"
             FontSize="20"
             TextWrapping="Wrap"
             FontWeight="Light"
@@ -47,7 +45,10 @@
             </Grid.ColumnDefinitions>
 
             <!-- Checkbox on the left -->
+            <!-- Use Plugin Resources and replace the hardcoded content -->
             <CheckBox Grid.Column="0"
+                      Visibility="{Binding IsDoNotShowAgainVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                      IsChecked="{Binding DoNotShowThisAgain}"
               VerticalAlignment="Center"
               Content="Do not show this again" />
 
@@ -58,20 +59,23 @@
                 
                 <Button Width="120"
                 Height="30"
-                Content="Start Trial"
+                Command="{Binding PrimaryCommand}"
+                Content="{Binding PrimaryButtonContent}"
+                Visibility="{Binding ShowPrimaryButton, Converter={StaticResource BooleanToVisibilityConverter}}"
                 Margin="10,0,0,0" />
                 
                 <Button Width="120"
                 Height="30"
-                Content="Buy Now"
+                Command="{Binding SecondaryCommand}"
+                Content="{Binding SecondaryButtonContent}"
+                Visibility="{Binding ShowSecondaryButton, Converter={StaticResource BooleanToVisibilityConverter}}"
                 Margin="10,0,0,0" />
                 
                 <Button Width="75"
                 Height="30"
-                Content="Cancel"
+                Content="{Binding CancelContent}"
                 IsCancel="True"
                 Margin="10,0,0,0" />
-                
             </StackPanel>
         </Grid>
     </Grid>
