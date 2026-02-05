@@ -71,6 +71,7 @@
 	  <None Remove="Resources\lwLogo_Main16.png" />
 	  <None Remove="Resources\lwLogo_Main32.png" />
 	  <None Remove="Resources\Report.xsl" />
+	  <None Remove="Resources\settings.ico" />
 	</ItemGroup>
 	
 	<ItemGroup>
@@ -80,6 +81,9 @@
 	<ItemGroup>
 		<Reference Include="Microsoft.Web.WebView2.Core">
 		  <HintPath>$(TradosFolder)\Microsoft.Web.WebView2.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.LanguageCloud.IdentityApi">
+			<HintPath>$(TradosFolder)\Sdl.LanguageCloud.IdentityApi.dll</HintPath>
 		</Reference>
 		<Reference Include="Microsoft.Web.WebView2.Wpf">
 		  <HintPath>$(TradosFolder)\Microsoft.Web.WebView2.WPF.dll</HintPath>
@@ -172,7 +176,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="LanguageMappingProvider" >
+		<PackageReference Include="LanguageMappingProvider">
 			<Version>1.0.107</Version>
 		</PackageReference>
 		<PackageReference Include="Sdl.Core.PluginFramework">
@@ -201,6 +205,7 @@
 	  <Resource Include="Resources\lwLogo_Main.png" />
 	  <Resource Include="Resources\lwLogo_Main16.png" />
 	  <Resource Include="Resources\lwLogo_Main32.png" />
+	  <Resource Include="Resources\settings.ico" />
 	  <Resource Include="Style\Buttons.xaml" />
 	</ItemGroup>
 

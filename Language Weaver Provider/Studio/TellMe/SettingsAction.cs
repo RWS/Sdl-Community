@@ -42,7 +42,7 @@ namespace LanguageWeaverProvider.Studio.TellMe
 			}
 
 			var languagePairs = GetLanguagePairs(projectController);
-			var providerViewModel = new PairMappingViewModel(selectedTranslationOptions, languagePairs.ToArray());
+            var providerViewModel = new PairMappingViewModel(selectedTranslationOptions, languagePairs.ToArray());
 			var providerView = new PairMappingView() { DataContext = providerViewModel };
 			providerViewModel.CloseEventRaised += providerView.Close;
 			providerView.ShowDialog();

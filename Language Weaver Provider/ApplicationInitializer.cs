@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Windows;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
+using LanguageWeaverProvider.View;
 using Newtonsoft.Json;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
@@ -36,6 +37,9 @@ namespace LanguageWeaverProvider
             {
                 NullValueHandling = NullValueHandling.Ignore
             };
+
+            //var cohereWindow = new CohereSubscriptionWindow();
+            //cohereWindow.ShowDialog();
         }
 
         public static Window GetBatchTaskWindow()

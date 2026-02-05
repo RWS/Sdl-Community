@@ -13,7 +13,7 @@
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="../Controls/ToggleOption.xaml" />
+				<ResourceDictionary Source="../Controls/CheckboxOption.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
@@ -44,8 +44,11 @@
 
 		<ScrollViewer Grid.Row="1"
 					  VerticalScrollBarVisibility="Auto">
-			<StackPanel Margin="32 0">
-				<controls:ToggleOption Checked="{Binding UseCustomName, Mode=TwoWay}"
+            <GroupBox Header="Settings: " Margin="20 5">
+                <StackPanel>
+                    <CheckBox/>
+
+                    <controls:CheckboxOption Checked="{Binding UseCustomName, Mode=TwoWay}"
 									   CheckBoxContent="Friendly provider name"
 									   DescriptionText="When this option is enabled, the provider's name will display as 'Language Weaver - Custom Name'."
 									   TextBoxVisible="True"
@@ -54,25 +57,25 @@
 									   ClearButtonParameter="{controls:NameOf Member=CustomName, Type={x:Type viewModel:SettingsViewModel}}"
 									   Margin="0 4" />
 
-				<controls:ToggleOption Checked="{Binding IncludeTags, Mode=TwoWay}"
+                    <controls:CheckboxOption Checked="{Binding IncludeTags, Mode=TwoWay}"
 									   CheckBoxContent="Include tags in translations"
 									   DescriptionText="When this option is enabled, segments will be sent for translation with their corresponding tags. Conversely, if the option is disabled, the Target Segments will lack any formatting or tags."
 									   TextBoxVisible="False"
 									   Margin="0 4" />
 
-				<controls:ToggleOption Checked="{Binding ResendDrafts, Mode=TwoWay}"
+                    <controls:CheckboxOption Checked="{Binding ResendDrafts, Mode=TwoWay}"
 									   CheckBoxContent="Re-translation of unconfirmed segments"
 									   DescriptionText="When this option is enabled, previously translated but unconfirmed segments will be sent to the service for translation each time you revisit them."
 									   TextBoxVisible="False"
 									   Margin="0 4" />
 
-				<controls:ToggleOption Checked="{Binding AutosendFeedback, Mode=TwoWay}"
+                    <controls:CheckboxOption Checked="{Binding AutosendFeedback, Mode=TwoWay}"
 									   CheckBoxContent="Feedback for Language Weaver translations"
 									   DescriptionText="When this option is enabled, segments that have been translated using the Language Weaver service will be automatically submitted for feedback."
 									   TextBoxVisible="False"
 									   Margin="0 4" />
 
-				<controls:ToggleOption Checked="{Binding UsePreLookup}"
+                    <controls:CheckboxOption Checked="{Binding UsePreLookup}"
 									   CheckBoxContent="Pre-Lookup Find/Replace"
 									   DescriptionText="Uses terms from a text file to tailor source text before translation, enhancing context and accuracy."
 									   TextBoxVisible="False"
@@ -85,7 +88,7 @@
 									   ButtonContent="Browse" 
 									   Margin="0 4"/>
 
-				<controls:ToggleOption Checked="{Binding UsePostLookup}"
+                    <controls:CheckboxOption Checked="{Binding UsePostLookup}"
 									   CheckBoxContent="Post-Lookup Find/Replace"
 									   DescriptionText="Applies terms from a text file to the machine-translated target text, ensuring terminological precision and consistency."
 									   TextBoxVisible="False"
@@ -97,7 +100,8 @@
 									   ClearButtonParameter="{controls:NameOf Member=PostLookupFilePath, Type={x:Type viewModel:SettingsViewModel}}"
 									   ButtonContent="Browse" 
 									   Margin="0 4"/>
-			</StackPanel>
+                </StackPanel>
+            </GroupBox>
 		</ScrollViewer>
 	</Grid>
 </UserControl>

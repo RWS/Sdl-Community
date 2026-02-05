@@ -5,76 +5,76 @@ using System.Windows.Input;
 
 namespace LanguageWeaverProvider.Controls
 {
-	public class ToggleOption : Control
+	public class CheckboxOption : Control
 	{
 		public static readonly DependencyProperty CheckBoxContentProperty = DependencyProperty.Register(
 			"CheckBoxContent",
 			typeof(object),
-			typeof(ToggleOption));
+			typeof(CheckboxOption));
 
 		public static readonly DependencyProperty DescriptionTextProperty = DependencyProperty.Register(
 			"DescriptionText",
 			typeof(string),
-			typeof(ToggleOption));
+			typeof(CheckboxOption));
 
 		public static readonly DependencyProperty TextBoxVisibleProperty = DependencyProperty.Register(
 			"TextBoxVisible",
 			typeof(bool),
-			typeof(ToggleOption),
+			typeof(CheckboxOption),
 			new PropertyMetadata(true));
 
 		public static readonly DependencyProperty TextBoxTextProperty = DependencyProperty.Register(
 			"TextBoxText",
 			typeof(string),
-			typeof(ToggleOption),
+			typeof(CheckboxOption),
 			new PropertyMetadata("Watermark"));
 
 		public static readonly DependencyProperty ButtonVisibleProperty = DependencyProperty.Register(
 			"ButtonVisible",
 			typeof(bool),
-			typeof(ToggleOption),
+			typeof(CheckboxOption),
 			new PropertyMetadata(true));
 
 		public static readonly DependencyProperty ButtonContentProperty = DependencyProperty.Register(
 			"ButtonContent",
 			typeof(string),
-			typeof(ToggleOption));
+			typeof(CheckboxOption));
 
 		public static readonly DependencyProperty CheckedProperty = DependencyProperty.Register(
 			"Checked",
 			typeof(bool),
-			typeof(ToggleOption),
+			typeof(CheckboxOption),
 			new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
 		public static readonly DependencyProperty ClearButtonCommandProperty = DependencyProperty.Register(
 			"ClearButtonCommand",
 			typeof(ICommand),
-			typeof(ToggleOption));
+			typeof(CheckboxOption));
 
 		public static readonly DependencyProperty ClearButtonParameterProperty = DependencyProperty.Register(
 			"ClearButtonParameter",
 			typeof(string),
-			typeof(ToggleOption));
+			typeof(CheckboxOption));
 
 		public static readonly DependencyProperty ButtonCommandProperty = DependencyProperty.Register(
 			"ButtonCommand",
 			typeof(ICommand),
-			typeof(ToggleOption));
+			typeof(CheckboxOption));
 
 		public static readonly DependencyProperty ButtonParameterProperty = DependencyProperty.Register(
 			"ButtonParameter",
 			typeof(string),
-			typeof(ToggleOption));
+			typeof(CheckboxOption));
 
 		public static readonly DependencyProperty TextBlockTextProperty = DependencyProperty.Register(
 			"TextBlockText",
 			typeof(string),
-			typeof(ToggleOption));
+			typeof(CheckboxOption));
 
 		public static readonly DependencyProperty TextBlockVisibilityProperty = DependencyProperty.Register(
 			"TextBlockVisibility",
 			typeof(bool),
-			typeof(ToggleOption),
+			typeof(CheckboxOption),
 			new PropertyMetadata(false));
 
 

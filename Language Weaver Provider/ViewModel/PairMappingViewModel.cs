@@ -6,6 +6,7 @@ using LanguageWeaverProvider.LanguageMappingProvider.ViewModel;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Services;
+using LanguageWeaverProvider.View;
 using Sdl.LanguagePlatform.Core;
 using System;
 using System.Collections.ObjectModel;
@@ -25,8 +26,6 @@ namespace LanguageWeaverProvider.ViewModel
 
 		string _headerImagePath;
 
-		SettingsViewModel _settingsView;
-		bool _showSettingsView;
 		string _loadingAction;
 		string _windowTitle;
 
@@ -40,7 +39,6 @@ namespace LanguageWeaverProvider.ViewModel
 			_languagePairs = languagePairs;
 			_translationOptions = translationOptions;
 			_languageMappingDatabase = DatabaseControl.InitializeDatabase();
-			InitializeSettingsView();
 			InitializeCommands();
 			LoadPairMapping();
 			SetHeader();
@@ -52,26 +50,6 @@ namespace LanguageWeaverProvider.ViewModel
 			set
 			{
 				_headerImagePath = value;
-				OnPropertyChanged();
-			}
-		}
-
-		public SettingsViewModel SettingsView
-		{
-			get => _settingsView;
-			set
-			{
-				_settingsView = value;
-				OnPropertyChanged();
-			}
-		}
-
-		public bool ShowSettingsView
-		{
-			get => _showSettingsView;
-			set
-			{
-				_showSettingsView = value;
 				OnPropertyChanged();
 			}
 		}
@@ -146,20 +124,8 @@ namespace LanguageWeaverProvider.ViewModel
 			OpenLanguageMappingProviderViewCommand = new RelayCommand(OpenLanguageMappingProviderView);
 		}
 
-		private void InitializeSettingsView()
-		{
-			var settingsViewModel = new SettingsViewModel(_translationOptions);
-			settingsViewModel.BackCommandExecuted += ChangeSettingsViewState;
-			_settingsView = settingsViewModel;
-		}
-
 		private void Save(object parameter)
 		{
-			if (!SettingsView.SettingsAreValid())
-			{
-				return;
-			}
-
 			if (!LinguisticOptionsAreActive() && !ContinueWithDisabledLinguisticOptions())
 			{
 				return;
@@ -167,15 +133,6 @@ namespace LanguageWeaverProvider.ViewModel
 
 			SaveChanges = true;
 			_translationOptions.PairMappings = [.. PairMappings];
-			_translationOptions.ProviderSettings.AutosendFeedback = SettingsView.AutosendFeedback;
-			_translationOptions.ProviderSettings.ResendDrafts = SettingsView.ResendDrafts;
-			_translationOptions.ProviderSettings.IncludeTags = SettingsView.IncludeTags;
-			_translationOptions.ProviderSettings.UseCustomName = SettingsView.UseCustomName;
-			_translationOptions.ProviderSettings.CustomName = SettingsView.CustomName;
-			_translationOptions.ProviderSettings.UsePrelookup = SettingsView.UsePreLookup;
-			_translationOptions.ProviderSettings.PreLookupFilePath = SettingsView.PreLookupFilePath;
-			_translationOptions.ProviderSettings.UsePostLookup = SettingsView.UsePostLookup;
-			_translationOptions.ProviderSettings.PostLookupFilePath = SettingsView.PostLookupFilePath;
 			CloseEventRaised.Invoke();
 		}
 
@@ -227,14 +184,23 @@ namespace LanguageWeaverProvider.ViewModel
 
 		private void OpenSettingsView(object parameter)
 		{
-			ChangeSettingsViewState(null, null);
-		}
+            var settingsViewModel = new SettingsViewModel(_translationOptions);
+            var settingsWindow = new SettingsWindow() { DataContext = settingsViewModel };
+            if (settingsWindow?.ShowDialog() == true &&
+                settingsViewModel.SettingsAreValid())
+            {
+                _translationOptions.ProviderSettings.AutosendFeedback = settingsViewModel.AutosendFeedback;
+                _translationOptions.ProviderSettings.ResendDrafts = settingsViewModel.ResendDrafts;
+                _translationOptions.ProviderSettings.IncludeTags = settingsViewModel.IncludeTags;
+                _translationOptions.ProviderSettings.UseCustomName = settingsViewModel.UseCustomName;
+                _translationOptions.ProviderSettings.CustomName = settingsViewModel.CustomName;
+                _translationOptions.ProviderSettings.UsePrelookup = settingsViewModel.UsePreLookup;
+                _translationOptions.ProviderSettings.PreLookupFilePath = settingsViewModel.PreLookupFilePath;
+                _translationOptions.ProviderSettings.UsePostLookup = settingsViewModel.UsePostLookup;
+                _translationOptions.ProviderSettings.PostLookupFilePath = settingsViewModel.PostLookupFilePath;
 
-		private void ChangeSettingsViewState(object sender, EventArgs e)
-		{
-			ShowSettingsView = !ShowSettingsView;
-			WindowTitle = ShowSettingsView ? Constants.PairMapping_SettingsWindow : Constants.PairMapping_MainWindow;
-		}
+            }
+        }
 
 		private void OpenLanguageMappingProviderView(object parameter)
 		{
