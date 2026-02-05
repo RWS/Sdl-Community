@@ -2,11 +2,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net48</TargetFramework>
+        <PlatformTarget>x64</PlatformTarget>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<LangVersion>latest</LangVersion>
 		<UseWPF>true</UseWPF>
-		<TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19Beta</TradosFolder>
-		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19beta\Plugins</PluginDeploymentPath>
+		<TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19</TradosFolder>
+		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19\Plugins</PluginDeploymentPath>
 	</PropertyGroup>
 	<ItemGroup>
 	  <None Remove="Resources\alert.gif" />

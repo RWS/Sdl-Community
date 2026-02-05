@@ -3,6 +3,7 @@
 	<PropertyGroup>
 		<TradosFolder>$(Trados16)</TradosFolder>
 		<TargetFramework>net48</TargetFramework>
+        <PlatformTarget>x64</PlatformTarget>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<CreatePluginPackage>true</CreatePluginPackage>

@@ -12,5 +12,5 @@
 		<File>Microsoft.IdentityModel.Logging.dll</File>
 		<File>Microsoft.Web.WebView2.Core.dll</File>
 	</Include>
-  <RequiredProduct name="TradosStudio" minversion="18.1" maxversion="18.1.9"/>
+  <RequiredProduct name="TradosStudio" minversion="19.0" maxversion="19.9"/>
 </PluginPackage> 

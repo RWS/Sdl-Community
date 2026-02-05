@@ -4,7 +4,7 @@
 	<Version>2.0.0.21</Version>
 	<Description>SDL Reports Viewer API Example for SDL Trados Studio</Description>
 	<Author>SDL</Author>
-	<RequiredProduct name="SDLTradosStudio" minversion="16.1" />
+	<RequiredProduct name="SDLTradosStudio" minversion="19.0" />
 	<Include>
 		<File>Sdl.Reports.Viewer.API.dll</File>
 	</Include>

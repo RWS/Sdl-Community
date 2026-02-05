@@ -7,5 +7,5 @@
 	<Include>
 		<File>Interop.MultiTermIX.dll</File>
 	</Include>
-  <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
+  <RequiredProduct name="SDLTradosStudio" minversion="19.0" />
 </PluginPackage>

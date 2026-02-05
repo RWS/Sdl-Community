@@ -5,6 +5,7 @@
 		<LangVersion>latest</LangVersion>
     <IsTestProject>true</IsTestProject>
     <TargetFramework>net48</TargetFramework>
+        <PlatformTarget>x64</PlatformTarget>
 
 	</PropertyGroup>
 

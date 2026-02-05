@@ -3,6 +3,7 @@
 	<PropertyGroup>
 		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18Beta</TradosFolder>
 		<TargetFramework>net48</TargetFramework>
+        <PlatformTarget>x64</PlatformTarget>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<CreatePluginPackage>true</CreatePluginPackage>

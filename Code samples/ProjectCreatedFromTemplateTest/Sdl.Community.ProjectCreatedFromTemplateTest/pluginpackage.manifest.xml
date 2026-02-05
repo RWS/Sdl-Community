@@ -4,5 +4,5 @@
   <Version>1.0</Version>
   <Description>Plugin description</Description>
   <Author></Author>
-  <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
+  <RequiredProduct name="SDLTradosStudio" minversion="19.0" />
 </PluginPackage>

@@ -4,7 +4,7 @@
 	<Version>3.1.0.0</Version>
 	<Description>studioViews is a plugin that supports the ability to export/import files in a Studio project based on various filtering or selection criteria.</Description>
 	<Author>Trados AppStore Team</Author>
-	<RequiredProduct name="TradosStudio" minversion="18.1" maxversion="18.1.9"/>
+	<RequiredProduct name="TradosStudio" minversion="19.0" maxversion="19.9"/>
 	<Include>
 		<File>Rws.MultiSelectComboBox.dll</File>
 	</Include>

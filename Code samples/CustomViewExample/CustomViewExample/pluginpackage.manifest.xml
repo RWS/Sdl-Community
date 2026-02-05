@@ -4,7 +4,7 @@
 		<Version>1.0.1.0</Version>
 		<Description>Custom View Example</Description>
 		<Author>Trados AppStore Team</Author>
-		<RequiredProduct name="TradosStudio" minversion="17.0" />
+		<RequiredProduct name="TradosStudio" minversion="19.0" />
 		<Include>
 				<File>RwsAppStore.UsefulTipsService.dll</File>
 				<File>RwsAppStore.UsefulTipsService.Update.exe</File>
