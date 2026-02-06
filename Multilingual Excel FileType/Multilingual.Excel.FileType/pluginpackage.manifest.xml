@@ -4,7 +4,7 @@
 	<Version>2.1.1.1</Version>
 	<Description>Multilingual Excel File Type</Description>
 	<Author>Trados AppStore Team</Author>
-	<RequiredProduct name="TradosStudio" minversion="18.1.3" maxversion="18.1.9"/>
+	<RequiredProduct name="TradosStudio" minversion="19.0" maxversion="19.9"/>
   <Include>
 	  <File>Rws.MultiSelectComboBox.dll</File>
   </Include>

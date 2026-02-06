@@ -4,7 +4,7 @@
   <Version>2.1.1.0</Version>
   <Description>Microsoft Translator Provider</Description>
   <Author>Trados AppStore Team</Author>
-  <RequiredProduct name="TradosStudio" minversion="18.1" maxversion="18.1.9" />
+  <RequiredProduct name="TradosStudio" minversion="19.0" maxversion="19.9" />
 	<Include>
 		<File>System.Text.Json.dll</File>
 		<File>LanguageMappingProvider.dll</File>

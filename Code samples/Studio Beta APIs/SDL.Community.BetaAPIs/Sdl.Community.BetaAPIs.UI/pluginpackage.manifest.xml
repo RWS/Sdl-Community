@@ -4,7 +4,7 @@
 	<Version>2.1.2.0</Version>
 	<Description>SDL Community BetaAPIs</Description>
 	<Author>SDL Community Developers</Author>
-	<RequiredProduct name="SDLTradosStudio" minversion="15.0" />
+	<RequiredProduct name="SDLTradosStudio" minversion="19.0" />
 	<Include>
 		<File>Markdown.Xaml.dll</File>
 	</Include>

@@ -4,7 +4,7 @@
   <Version>5.1.0.0</Version>
   <Description>This plugin takes an analysis from any Trados Studio Project and creates a quote which can be created in MS Word, MS Excel or copied to your clipboard.</Description>
   <Author>Trados AppStore Team</Author>
-  <RequiredProduct name="TradosStudio" minversion="18.1" maxversion="18.1.9" />
+  <RequiredProduct name="TradosStudio" minversion="19.0" maxversion="19.9" />
   <Include>
     <File>Sdl.Community.StudioInQuote.dll</File>
 	<File>Sdl.Community.InvoiceAndQuotes.dll</File>

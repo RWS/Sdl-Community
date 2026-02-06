@@ -4,7 +4,7 @@
   <Version>1.0</Version>
   <Description>Notification plugin sample</Description>
   <Author>SDL Community Developers</Author>
-  <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
+  <RequiredProduct name="SDLTradosStudio" minversion="19.0" />
   <Include>
 	  <File>System.Reactive.dll</File>
   </Include>

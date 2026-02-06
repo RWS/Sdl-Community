@@ -4,5 +4,5 @@
   <Version>1.0.0.0</Version>
   <Description>Sample app for adding new view part within Studio. The app contains 2 controls: one for ExplorerBar side and the other one for the view content</Description>
   <Author></Author>
-  <RequiredProduct name="SDLTradosStudio" minversion="16.0" />
+  <RequiredProduct name="SDLTradosStudio" minversion="19.0" />
 </PluginPackage>

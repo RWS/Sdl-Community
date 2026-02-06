@@ -3,6 +3,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net48</TargetFramework>
+        <PlatformTarget>x64</PlatformTarget>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<LangVersion>latest</LangVersion>
 		<UseWPF>true</UseWPF>

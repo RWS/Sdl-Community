@@ -4,7 +4,7 @@
   <Version>1.0.0</Version>
   <Description>MTConnectors.Google for Studio 2019</Description>
   <Author>SDL</Author>
-  <RequiredProduct name="SDLTradosStudio" minversion="15.2" />
+  <RequiredProduct name="SDLTradosStudio" minversion="19.0" />
   <Include>    
     <File>NLog.dll</File>
   </Include>

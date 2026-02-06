@@ -10,5 +10,5 @@
 	  <File>Castle.Core.dll</File>
 	  <File>DocumentFormat.OpenXml.dll</File>
   </Include>
-  <RequiredProduct name="TradosStudio" minversion="18.1.3" maxversion="18.1.9"/>
+  <RequiredProduct name="TradosStudio" minversion="19.0" maxversion="19.9"/>
 </PluginPackage>
