@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Microsoft Translator Provider</PlugInName>
-  <Version>2.1.1.0</Version>
+  <Version>3.0.0.0</Version>
   <Description>Microsoft Translator Provider</Description>
   <Author>Trados AppStore Team</Author>
   <RequiredProduct name="TradosStudio" minversion="19.0" maxversion="19.9" />

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Trados Translation Memory Management Utility</PlugInName>
-  <Version>5.1.0.0</Version>
+  <Version>6.0.0.0</Version>
   <Description>The Trados Translation Memory Management utility is a utility for administering file based Trados Studio translation memories.</Description>
   <Author>Trados AppStore Team</Author>
   <Include>
