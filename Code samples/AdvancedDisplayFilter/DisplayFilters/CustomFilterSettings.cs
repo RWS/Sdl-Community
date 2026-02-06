@@ -72,7 +72,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 
 		public string CreatedBy { get; set; }		
 
-		public string DocumentStructureInformation { get; set; }
+		public string IStudioDocumentStructureInformation { get; set; }
 
 		public bool SearchInTagContent { get; set; }
 	

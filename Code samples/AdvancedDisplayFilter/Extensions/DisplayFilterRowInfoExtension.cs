@@ -4,15 +4,16 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Sdl.Community.AdvancedDisplayFilter.DisplayFilters;
 using Sdl.Community.AdvancedDisplayFilter.Helpers;
-using Sdl.Community.Toolkit.FileType;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.DisplayFilters;
+using Trados.Community.Toolkit.FileType;
+using Trados.Community.Toolkit.FileType.Extensions;
 
 namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 {
-	public static class DisplayFilterRowInfoExtension
+	public static class IDisplayFilterRowInfoExtension
 	{
-		public static bool IsSegmentReviewTypes(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsSegmentReviewTypes(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -27,7 +28,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			return success;
 		}
 
-		public static bool IsSegmentWithTQAs(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsSegmentWithTQAs(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -46,7 +47,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			return success;
 		}
 
-		public static bool IsSegmentWithTrackedChanges(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsSegmentWithTrackedChanges(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -68,7 +69,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			return success;
 		}
 
-		public static bool IsSegmentWithSourceTrackedChanges(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsSegmentWithSourceTrackedChanges(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -86,7 +87,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 			return success;
 		}
-		public static bool IsSegmentWithTargetTrackedChanges(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsSegmentWithTargetTrackedChanges(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -104,7 +105,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			return success;
 		}
 
-		public static bool SegmentContainsTrackedChanges(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool SegmentContainsTrackedChanges(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			// If both options and the "And" relationship operator is selected
 			if (settings.IsAndOperator && AreBothSourceAndTargetTrackedSelected(settings))
@@ -118,7 +119,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			       || rowInfo.IsSegmentWithSourceAndTargetTrackedChanges(settings);
 		}
 
-		public static bool IsSegmentWithSourceAndTargetTrackedChanges(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsSegmentWithSourceAndTargetTrackedChanges(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -143,7 +144,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 		}
 
 
-		public static bool IsSegmentWithComments(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsSegmentWithComments(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -169,7 +170,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			return success;
 		}
 
-		public static bool IsSegmentWithMessages(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsSegmentWithMessages(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -188,7 +189,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			return success;
 		}
 
-		public static bool IsSeverityFoundInComment(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsSeverityFoundInComment(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -208,7 +209,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			return success;
 		}
 
-		public static bool IsAuthorFoundInComment(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsAuthorFoundInComment(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -228,7 +229,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			return success;
 		}
 
-		public static bool IsTextFoundInComment(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsTextFoundInComment(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -250,7 +251,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			return success;
 		}
 
-		public static bool IsConfirmationLevelFound(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsConfirmationLevelFound(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -264,7 +265,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			return success;
 		}
 
-		public static bool IsOriginTypeFound(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsOriginTypeFound(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -307,7 +308,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			return success;
 		}
 
-		public static bool IsFuzzyMatchRepairOriginTypeFound(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsFuzzyMatchRepairOriginTypeFound(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -325,7 +326,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			return false;
 		}
 
-		public static bool IsPreviousOriginTypeFound(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsPreviousOriginTypeFound(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -370,7 +371,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 				   originType == OriginType.UneditedFuzzy;
 		}
 
-		public static bool IsFuzzyMatchRepairPreviousOriginTypeFound(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsFuzzyMatchRepairPreviousOriginTypeFound(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -393,7 +394,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			return false;
 		}
 
-		public static bool IsRepetitionTypes(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsRepetitionTypes(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -412,7 +413,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			return success;
 		}
 
-		public static bool IsUniqueRepetition(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsUniqueRepetition(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -441,7 +442,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			return false;
 		}
 
-		public static bool IsRepetitionsAll(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsRepetitionsAll(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -460,7 +461,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			return success;
 		}
 
-		public static bool IsRepetitionsFirstOccurrences(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsRepetitionsFirstOccurrences(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -479,7 +480,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			return success;
 		}
 
-		public static bool IsRepetitionsExcludingFirstOccurrences(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsRepetitionsExcludingFirstOccurrences(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -498,7 +499,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			return success;
 		}
 
-		public static bool IsSegmentLockingTypes(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsSegmentLockingTypes(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -511,7 +512,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			return success;
 		}
 
-		public static bool IsSegmentLockingTypeLocked(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsSegmentLockingTypeLocked(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -530,7 +531,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			return success;
 		}
 
-		public static bool IsSegmentLockingTypeUnLocked(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsSegmentLockingTypeUnLocked(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -549,7 +550,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			return success;
 		}
 
-		public static bool IsSegmentContentTypes(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsSegmentContentTypes(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -568,7 +569,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			return success;
 		}
 
-		public static bool IsSegmentContentTypeNumbersOnly(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsSegmentContentTypeNumbersOnly(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -591,7 +592,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			return success;
 		}
 
-		public static bool IsSegmentContentTypeExcludingNumberOnly(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsSegmentContentTypeExcludingNumberOnly(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -616,7 +617,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			return !success;
 		}
 
-		public static bool IsTextFoundInSource(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsTextFoundInSource(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -632,7 +633,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			return success;
 		}
 
-		public static bool IsTextFoundInTarget(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsTextFoundInTarget(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -648,7 +649,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			return success;
 		}
 
-		public static bool IsContextInfoTypes(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsContextInfoTypes(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -669,7 +670,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 			return success;
 		}
-		public static bool IsEditedFuzzyMatchFound(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsEditedFuzzyMatchFound(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -681,7 +682,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 				   FuzzyHelper.IsEditedFuzzyMatch(rowInfo.SegmentPair.Target?.Properties?.TranslationOrigin);
 		}
 
-		public static bool IsUnEditedFuzzyMatchFound(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsUnEditedFuzzyMatchFound(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -693,7 +694,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 				   !FuzzyHelper.IsEditedFuzzyMatch(rowInfo.SegmentPair.Target?.Properties?.TranslationOrigin);
 		}
 
-		public static bool IsPreviousEditedFuzzyMatchFound(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsPreviousEditedFuzzyMatchFound(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -705,7 +706,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 				   FuzzyHelper.IsEditedFuzzyMatch(rowInfo.SegmentPair.Target?.Properties?.TranslationOrigin?.OriginBeforeAdaptation);
 		}
 
-		public static bool IsPreviousUnEditedFuzzyMatchFound(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		public static bool IsPreviousUnEditedFuzzyMatchFound(this IDisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
 			{

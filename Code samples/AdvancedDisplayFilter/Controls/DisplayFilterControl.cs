@@ -9,7 +9,7 @@ using Sdl.Community.AdvancedDisplayFilter.DisplayFilters;
 using Sdl.Community.AdvancedDisplayFilter.Helpers;
 using Sdl.Community.AdvancedDisplayFilter.Models;
 using Sdl.Community.AdvancedDisplayFilter.Services;
-using Sdl.Community.Toolkit.FileType;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -19,7 +19,7 @@ using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace Sdl.Community.AdvancedDisplayFilter.Controls
 {
-	public partial class DisplayFilterControl : UserControl
+	public partial class DisplayFilterControl : UserControl, IUIControl
 	{
 		public delegate void OnApplyFilterHandler(DisplayFilterSettings displayFilterSettings, CustomFilterSettings customSettings, bool reverse, FilteredCountsCallback result);
 		public event OnApplyFilterHandler OnApplyDisplayFilter;
@@ -27,7 +27,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private readonly HighlightService _highlightService;
 		private readonly QualitySamplingService _qualitySamplingService;
 		private CustomFilterSettings _customFilterSettings;
-		private Document _activeDocument;
+		private IStudioDocument _activeIStudioDocument;
 		private bool _reverseFilter;
 		private List<string> _qualitySamplingSegmentsIds;
 
@@ -46,10 +46,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			listView_selected.ListViewItemSorter = new ListViewItemComparer();
 
 			var editorController = GetEditorController();
-			editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
+			editorController.ActiveDocumentChanged += EditorController_ActiveIStudioDocumentChanged;
 
-			_activeDocument = editorController.ActiveDocument;
-			ActiveDocumentChanged(_activeDocument);
+			_activeIStudioDocument = editorController.ActiveDocument;
+			ActiveIStudioDocumentChanged(_activeIStudioDocument);
 
 			OnApplyDisplayFilter += ApplyDisplayFilter;
 
@@ -140,7 +140,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					ModifiedByChecked = modifiedByCheck.Checked,
 					CreatedBy = createdByBox.Text,
 					CreatedByChecked = createdByCheck.Checked,
-					DocumentStructureInformation = dsiLocation_textbox.Text,
+					IStudioDocumentStructureInformation = dsiLocation_textbox.Text,
 					SearchInTagContent = checkBox_TagContent.Checked,
 					SearchInTagContentAndText = alsoTags_radioButton.Checked
 				};
@@ -213,7 +213,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				modifiedByCheck.Checked = value.ModifiedByChecked;
 				createdByBox.Text = value.CreatedBy;
 				createdByCheck.Checked = value.CreatedByChecked;
-				dsiLocation_textbox.Text = value.DocumentStructureInformation;
+				dsiLocation_textbox.Text = value.IStudioDocumentStructureInformation;
 
 				foreach (var color in value.Colors)
 				{
@@ -678,7 +678,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				//		}
 				//	}
 				//}
-				_qualitySamplingSegmentsIds = _qualitySamplingService.GetSamplingSegmentPairsIds(_activeDocument, CustomFilterSettings);
+				_qualitySamplingSegmentsIds = _qualitySamplingService.GetSamplingSegmentPairsIds(_activeIStudioDocument, CustomFilterSettings);
 
 				var result = new FilteredCountsCallback(UpdateFilteredCountDisplay);
 
@@ -753,7 +753,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			}
 		}
 
-		private void ActiveDocument_DocumentFilterChanged(object sender, DocumentFilterEventArgs e)
+		private void ActiveIStudioDocument_IStudioDocumentFilterChanged(object sender, DocumentFilterEventArgs e)
 		{
 			if (e.DisplayFilter == null || e.DisplayFilter.GetType() != typeof(DisplayFilter))
 			{
@@ -763,30 +763,30 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			UpdateFilteredCountDisplay(e.FilteredSegmentPairsCount, e.TotalSegmentPairsCount);
 		}
 
-		private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
+		private void EditorController_ActiveIStudioDocumentChanged(object sender, DocumentEventArgs e)
 		{
-			ActiveDocumentChanged(e.Document);
+			ActiveIStudioDocumentChanged(e.Document);
 		}
 
-		private void ActiveDocumentChanged(Document document)
+		private void ActiveIStudioDocumentChanged(IStudioDocument IStudioDocument)
 		{
 			InitializeSettings();
 
-			if (_activeDocument != null)
+			if (_activeIStudioDocument != null)
 			{
-				_activeDocument.DocumentFilterChanged -= ActiveDocument_DocumentFilterChanged;
-				_activeDocument.ContentChanged -= ActiveDocument_ContentChanged;
-				_activeDocument.ActiveSegmentChanged -= ActiveDocument_ActiveSegmentChanged;
+				_activeIStudioDocument.DocumentFilterChanged -= ActiveIStudioDocument_IStudioDocumentFilterChanged;
+				_activeIStudioDocument.ContentChanged -= ActiveIStudioDocument_ContentChanged;
+				_activeIStudioDocument.ActiveSegmentChanged -= ActiveIStudioDocument_ActiveSegmentChanged;
 			}
 
-			// get a reference to the active document            
-			_activeDocument = document;
+			// get a reference to the active IStudioDocument            
+			_activeIStudioDocument = IStudioDocument;
 
-			if (_activeDocument != null)
+			if (_activeIStudioDocument != null)
 			{
-				_activeDocument.DocumentFilterChanged += ActiveDocument_DocumentFilterChanged;
-				_activeDocument.ContentChanged += ActiveDocument_ContentChanged;
-				_activeDocument.ActiveSegmentChanged += ActiveDocument_ActiveSegmentChanged;
+				_activeIStudioDocument.DocumentFilterChanged += ActiveIStudioDocument_IStudioDocumentFilterChanged;
+				_activeIStudioDocument.ContentChanged += ActiveIStudioDocument_ContentChanged;
+				_activeIStudioDocument.ActiveSegmentChanged += ActiveIStudioDocument_ActiveSegmentChanged;
 
 				SetContextInfoList();
 				PopulateContextInfoList();
@@ -794,21 +794,21 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 				PopulateColorList();
 
-				if (_activeDocument.DisplayFilter != null &&
-					_activeDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
+				if (_activeIStudioDocument.DisplayFilter != null &&
+					_activeIStudioDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
 				{
-					//invalidate UI with display settings recovered from the active document
-					DisplayFilterSettings = ((DisplayFilter)_activeDocument.DisplayFilter).Settings;
-					CustomFilterSettings = ((DisplayFilter)_activeDocument.DisplayFilter).CustomSettings;
+					//invalidate UI with display settings recovered from the active IStudioDocument
+					DisplayFilterSettings = ((DisplayFilter)_activeIStudioDocument.DisplayFilter).Settings;
+					CustomFilterSettings = ((DisplayFilter)_activeIStudioDocument.DisplayFilter).CustomSettings;
 				}
 
-				UpdateFilteredCountDisplay(_activeDocument.FilteredSegmentPairsCount, _activeDocument.TotalSegmentPairsCount);
+				UpdateFilteredCountDisplay(_activeIStudioDocument.FilteredSegmentPairsCount, _activeIStudioDocument.TotalSegmentPairsCount);
 			}
 		}
 
-		private void ActiveDocument_ActiveSegmentChanged(object sender, EventArgs e)
+		private void ActiveIStudioDocument_ActiveSegmentChanged(object sender, EventArgs e)
 		{
-			var segmentPair = _activeDocument?.ActiveSegmentPair;
+			var segmentPair = _activeIStudioDocument?.ActiveSegmentPair;
 			if (segmentPair == null)
 			{
 				return;
@@ -817,9 +817,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			AddNewColorCodes(segmentPair);
 		}
 
-		private void ActiveDocument_ContentChanged(object sender, DocumentContentEventArgs e)
+		private void ActiveIStudioDocument_ContentChanged(object sender, DocumentContentEventArgs e)
 		{
-			var segmentPair = _activeDocument?.ActiveSegmentPair;
+			var segmentPair = _activeIStudioDocument?.ActiveSegmentPair;
 			if (segmentPair == null)
 			{
 				return;
@@ -844,7 +844,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 		private void ApplyDisplayFilter(DisplayFilterSettings displayFilterSettings, CustomFilterSettings customFilterSettings, bool reverse, FilteredCountsCallback result)
 		{
-			if (_activeDocument == null)
+			if (_activeIStudioDocument == null)
 			{
 				return;
 			}
@@ -852,13 +852,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			_reverseFilter = reverse;
 
 			var contentMatchingService = new ContentMatchingService(DisplayFilterSettings, CustomFilterSettings);
-			CustomFilterService = new CustomFilterService(DisplayFilterSettings, CustomFilterSettings, _activeDocument);
+			CustomFilterService = new CustomFilterService(DisplayFilterSettings, CustomFilterSettings, _activeIStudioDocument);
 
 			DisplayFilter = new DisplayFilter(displayFilterSettings, customFilterSettings, reverse, _qualitySamplingService, contentMatchingService, CustomFilterService);
 
-			_activeDocument.ApplyFilterOnSegments(DisplayFilter);
+			_activeIStudioDocument.ApplyFilterOnSegments(DisplayFilter);
 
-			result.Invoke(_activeDocument.FilteredSegmentPairsCount, _activeDocument.TotalSegmentPairsCount);
+			result.Invoke(_activeIStudioDocument.FilteredSegmentPairsCount, _activeIStudioDocument.TotalSegmentPairsCount);
 		}
 
 		private void UpdateFilteredCountDisplay(int filteredSegments, int totalSegments)
@@ -1129,9 +1129,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 													CustomFilterSettings.ModifiedBy + "\"");
 				}
 
-				if (!string.IsNullOrEmpty(CustomFilterSettings.DocumentStructureInformation))
+				if (!string.IsNullOrEmpty(CustomFilterSettings.IStudioDocumentStructureInformation))
 				{
-					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_DSI + ":\"" + CustomFilterSettings.DocumentStructureInformation + "\"");
+					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_DSI + ":\"" + CustomFilterSettings.IStudioDocumentStructureInformation + "\"");
 				}
 			}
 		}
@@ -1151,12 +1151,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 		private void CheckEnabledFilterIcons()
 		{
-			if (_activeDocument != null)
+			if (_activeIStudioDocument != null)
 			{
-				if (_activeDocument.DisplayFilter != null
-					&& _activeDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
+				if (_activeIStudioDocument.DisplayFilter != null
+					&& _activeIStudioDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
 				{
-					var settings = ((DisplayFilter)_activeDocument.DisplayFilter).Settings;
+					var settings = ((DisplayFilter)_activeIStudioDocument.DisplayFilter).Settings;
 
 					InvalidateIconsFilterApplied_contentTab(settings);
 					InvalidateIconsFilterApplied_filtersTab(settings);
@@ -1233,7 +1233,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		{
 			if (!string.IsNullOrEmpty(settings.SourceText) ||
 				!string.IsNullOrEmpty(settings.TargetText) ||
-				!string.IsNullOrEmpty(CustomFilterSettings.DocumentStructureInformation))
+				!string.IsNullOrEmpty(CustomFilterSettings.IStudioDocumentStructureInformation))
 			{
 				tabPage_content.ImageIndex = 0;
 			}
@@ -1328,10 +1328,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 		private void InvalidateIconsFilterEdited(TabPage tabPage)
 		{
-			if (_activeDocument?.DisplayFilter != null && _activeDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
+			if (_activeIStudioDocument?.DisplayFilter != null && _activeIStudioDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
 			{
-				var settings = ((DisplayFilter)_activeDocument.DisplayFilter).Settings;
-				var customSettings = ((DisplayFilter)_activeDocument.DisplayFilter).CustomSettings;
+				var settings = ((DisplayFilter)_activeIStudioDocument.DisplayFilter).Settings;
+				var customSettings = ((DisplayFilter)_activeIStudioDocument.DisplayFilter).CustomSettings;
 
 				if (tabPage == tabPage_content)
 				{
@@ -1496,7 +1496,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 		private void GenerateXliff_Click(object sender, EventArgs e)
 		{
-			var segments = _activeDocument?.FilteredSegmentPairs?.ToList();
+			var segments = _activeIStudioDocument?.FilteredSegmentPairs?.ToList();
 
 			//list with ids of segments from filter result 
 			if (segments == null)
@@ -1519,7 +1519,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					File.Delete(selectedFilePath);
 				}
 
-				var activeFilePath = _activeDocument?.ActiveFile?.LocalFilePath;
+				var activeFilePath = _activeIStudioDocument?.ActiveFile?.LocalFilePath;
 
 				if (activeFilePath != null)
 				{
@@ -1562,13 +1562,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		{
 			if (sender is ToolStripMenuItem toolStripButton && toolStripButton.Tag is HighlightColor highlightColor)
 			{
-				_highlightService.ApplyHighlightColor(_activeDocument, HighlightService.HighlightScope.Filtered, highlightColor);
+				_highlightService.ApplyHighlightColor(_activeIStudioDocument, HighlightService.HighlightScope.Filtered, highlightColor);
 			}
 		}
 
 		private void ClearHighlightingToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			_highlightService.ClearHighlightColors(_activeDocument, HighlightService.HighlightScope.Filtered);
+			_highlightService.ClearHighlightColors(_activeIStudioDocument, HighlightService.HighlightScope.Filtered);
 		}
 
 		#endregion
@@ -1981,7 +1981,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private void SetContextInfoList()
 		{
 			ContextInfoList = new List<IContextInfo>();
-			foreach (var segmentPair in _activeDocument.SegmentPairs)
+			foreach (var segmentPair in _activeIStudioDocument.SegmentPairs)
 			{
 				var contexts = segmentPair.GetParagraphUnitProperties().Contexts;
 				if (contexts == null) continue;
@@ -2030,9 +2030,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 			listView_contextInfo.EndUpdate();
 
-			if (_activeDocument?.DisplayFilter != null && _activeDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
+			if (_activeIStudioDocument?.DisplayFilter != null && _activeIStudioDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
 			{
-				var settings = ((DisplayFilter)_activeDocument.DisplayFilter).Settings;
+				var settings = ((DisplayFilter)_activeIStudioDocument.DisplayFilter).Settings;
 
 				if (settings.ContextInfoTypes.Any())
 				{
@@ -2186,7 +2186,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 				colorsListView.Items.Clear();
 
-				foreach (var segmentPair in _activeDocument.SegmentPairs)
+				foreach (var segmentPair in _activeIStudioDocument.SegmentPairs)
 				{
 					var colors = ColorPickerHelper.GetColors(segmentPair, DisplayFilterSettings.ContentLocation.SourceOrTarget);
 					foreach (var color in colors)
@@ -2280,7 +2280,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 			colorsListView.EndUpdate();
 
-			if (_activeDocument?.DisplayFilter != null && _activeDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
+			if (_activeIStudioDocument?.DisplayFilter != null && _activeIStudioDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
 			{
 				if (_customFilterSettings.Colors.Any())
 				{

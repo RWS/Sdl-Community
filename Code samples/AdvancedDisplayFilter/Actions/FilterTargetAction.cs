@@ -15,11 +15,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Actions
 
 		protected override void Execute()
 		{
-			var activeDocument = SdlTradosStudio.Application.GetController<EditorController>()?.ActiveDocument;
+			var activeIStudioDocument = SdlTradosStudio.Application.GetController<EditorController>()?.ActiveDocument;
 			var displayFilterControl = CommunityApplicationInitializer.DisplayFilterControl;
-			if (activeDocument != null && displayFilterControl != null)
+			if (activeIStudioDocument != null && displayFilterControl != null)
 			{
-				var activeSegment = activeDocument.ActiveSegmentPair;
+				var activeSegment = activeIStudioDocument.ActiveSegmentPair;
 				var targetText = _segmentTextVisitor.GetText(activeSegment?.Target);
 				displayFilterControl.target_textbox.Text = targetText;
 				displayFilterControl.ApplyFilter(false);

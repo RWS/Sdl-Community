@@ -27,21 +27,21 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 			_highlightColors = GetHighlightColors();
 		}
 
-		public void ApplyHighlightColor(Document document, HighlightScope highlightScope, HighlightColor highlightColor)
+		public void ApplyHighlightColor(IStudioDocument IStudioDocument, HighlightScope highlightScope, HighlightColor highlightColor)
 		{
 			var segments = highlightScope == HighlightScope.Filtered
-				? document?.FilteredSegmentPairs?.ToList()
-				: new List<ISegmentPair> { document.GetActiveSegmentPair() };
+				? IStudioDocument?.FilteredSegmentPairs?.ToList()
+				: new List<ISegmentPair> { IStudioDocument.GetActiveSegmentPair() };
 
 			if (segments == null)
 			{
 				return;
 			}
 
-			var allTagIds = GetAllTagIds(document);
+			var allTagIds = GetAllTagIds(IStudioDocument);
 			var seed = GetLargestSeedValue(allTagIds);
 
-			var itemFactory = document.ItemFactory;
+			var itemFactory = IStudioDocument.ItemFactory;
 			var propertyFactory = itemFactory.PropertiesFactory;
 			var formattingFactory = propertyFactory.FormattingItemFactory;
 			var formattingItem = formattingFactory.CreateFormattingItem("BackgroundColor", highlightColor.GetArgb());
@@ -66,19 +66,19 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 				var startTagProperties = CreateStartTagProperties(propertyFactory, formattingFactory, formattingItem, tagId, highlightColor.Name);
 				var endTagProperties = CreateEndTagProperties(propertyFactory);
 
-				var tagPairNew = document.ItemFactory.CreateTagPair(startTagProperties, endTagProperties);
+				var tagPairNew = IStudioDocument.ItemFactory.CreateTagPair(startTagProperties, endTagProperties);
 				segmentPair.Target.MoveAllItemsTo(tagPairNew);
 				segmentPair.Target.Add(tagPairNew);
 
-				document.UpdateSegmentPair(segmentPair);
+				IStudioDocument.UpdateSegmentPair(segmentPair);
 			}
 		}
 
-		public void ClearHighlightColors(Document document, HighlightScope highlightScope)
+		public void ClearHighlightColors(IStudioDocument IStudioDocument, HighlightScope highlightScope)
 		{
 			var segments = highlightScope == HighlightScope.Filtered
-				? document?.FilteredSegmentPairs?.ToList()
-				: new List<ISegmentPair> { document.GetActiveSegmentPair() };
+				? IStudioDocument?.FilteredSegmentPairs?.ToList()
+				: new List<ISegmentPair> { IStudioDocument.GetActiveSegmentPair() };
 
 			if (segments == null)
 			{
@@ -103,7 +103,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 					segmentPair.Target.Clear();
 					tagPair.MoveAllItemsTo(segmentPair.Target);
 
-					document.UpdateSegmentPair(segmentPair);
+					IStudioDocument.UpdateSegmentPair(segmentPair);
 				}
 			}
 		}
@@ -192,10 +192,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 			return i;
 		}
 
-		private static List<string> GetAllTagIds(Document document)
+		private static List<string> GetAllTagIds(IStudioDocument IStudioDocument)
 		{
 			var allTagIds = new List<string>();
-			foreach (var segmentPair in document.SegmentPairs)
+			foreach (var segmentPair in IStudioDocument.SegmentPairs)
 			{
 				var paragraphUnit = ColorPickerHelper.GetParagraphUnit(segmentPair);
 				if (paragraphUnit != null)

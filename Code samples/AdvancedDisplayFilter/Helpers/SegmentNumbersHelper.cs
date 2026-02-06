@@ -136,14 +136,14 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 		/// Sslit segments : 1 a , 1 a b, 1 b c
 		/// </summary>
 		/// <param name="rowId"></param>
-		/// <param name="currentDocument"></param>
+		/// <param name="currentIStudioDocument"></param>
 		/// <returns></returns>
-		public static bool IsSplitSegment(string rowId, Document currentDocument)
+		public static bool IsSplitSegment(string rowId, IStudioDocument currentIStudioDocument)
 		{
 			var isCompex = IsComplexId(rowId);
 			if (isCompex)
 			{
-				var isMergedSegment = IsMergedSegment(rowId, currentDocument,false);
+				var isMergedSegment = IsMergedSegment(rowId, currentIStudioDocument,false);
 				if (isMergedSegment)
 				{
 					//is not split segment
@@ -166,13 +166,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 		/// Merged segments has ids like this 1a and appears only once
 		/// </summary>
 		/// <param name="rowId"></param>
-		/// <param name="currentDocument"></param>
+		/// <param name="currentIStudioDocument"></param>
 		/// <returns></returns>
-		public static bool IsMergedSegment(string rowId, Document currentDocument,bool mergedAcross)
+		public static bool IsMergedSegment(string rowId, IStudioDocument currentIStudioDocument,bool mergedAcross)
 		{
 			var isCompexId = IsComplexId(rowId);
 			var count = 0;
-			var segments = currentDocument.SegmentPairs.ToList();
+			var segments = currentIStudioDocument.SegmentPairs.ToList();
 			if (isCompexId)
 			{
 				var match = Regex.Matches(rowId, "[1-9]*");

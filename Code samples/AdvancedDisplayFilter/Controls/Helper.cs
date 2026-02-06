@@ -1,5 +1,4 @@
 ﻿using Sdl.Community.AdvancedDisplayFilter.DisplayFilters;
-using Sdl.Community.Toolkit.FileType;
 
 namespace Sdl.Community.AdvancedDisplayFilter.Controls
 {

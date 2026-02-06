@@ -91,7 +91,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             this.commentRegexBox = new System.Windows.Forms.CheckBox();
             this.tabPage_contextInfo = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
-            this.label_documentStructure_message = new System.Windows.Forms.Label();
+            this.label_IStudioDocumentStructure_message = new System.Windows.Forms.Label();
             this.listView_contextInfo = new System.Windows.Forms.ListView();
             this.columnHeader_code = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader_name = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -701,17 +701,17 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             // tableLayoutPanel4
             // 
             resources.ApplyResources(this.tableLayoutPanel4, "tableLayoutPanel4");
-            this.tableLayoutPanel4.Controls.Add(this.label_documentStructure_message, 0, 0);
+            this.tableLayoutPanel4.Controls.Add(this.label_IStudioDocumentStructure_message, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.listView_contextInfo, 0, 1);
             this.tableLayoutPanel4.Controls.Add(this.linkLabel_contextInfoClearSelection, 0, 2);
             this.tableLayoutPanel4.Controls.Add(this.label_contextInfoSelected, 1, 2);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             // 
-            // label_documentStructure_message
+            // label_IStudioDocumentStructure_message
             // 
-            resources.ApplyResources(this.label_documentStructure_message, "label_documentStructure_message");
-            this.tableLayoutPanel4.SetColumnSpan(this.label_documentStructure_message, 2);
-            this.label_documentStructure_message.Name = "label_documentStructure_message";
+            resources.ApplyResources(this.label_IStudioDocumentStructure_message, "label_IStudioDocumentStructure_message");
+            this.tableLayoutPanel4.SetColumnSpan(this.label_IStudioDocumentStructure_message, 2);
+            this.label_IStudioDocumentStructure_message.Name = "label_IStudioDocumentStructure_message";
             // 
             // listView_contextInfo
             // 
@@ -1632,7 +1632,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private CheckBox commentRegexBox;
 		private TabPage tabPage_contextInfo;
 		private TableLayoutPanel tableLayoutPanel4;
-		private Label label_documentStructure_message;
+		private Label label_IStudioDocumentStructure_message;
 		private ListView listView_contextInfo;
 		private ColumnHeader columnHeader_code;
 		private ColumnHeader columnHeader_name;

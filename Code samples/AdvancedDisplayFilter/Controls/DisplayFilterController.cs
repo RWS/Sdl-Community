@@ -2,6 +2,7 @@
 using Sdl.Desktop.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.AdvancedDisplayFilter.Controls
 {
@@ -14,7 +15,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         typeof(EditorController), Dock = DockType.Right)]
     public class DisplayFilterController : AbstractViewPartController
     {
-        protected override Control GetContentControl()
+        protected override IUIControl GetContentControl()
         {
 	        return CommunityApplicationInitializer.DisplayFilterControl; 
         }

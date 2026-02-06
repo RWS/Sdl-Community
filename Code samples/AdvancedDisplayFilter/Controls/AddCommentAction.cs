@@ -18,13 +18,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				var severityLevel = addCommentsWindow.SeverityLevel;
 				var comment = addCommentsWindow.Comment;
 				var editorController = SdlTradosStudio.Application.GetController<EditorController>();
-				var activeDocument = editorController?.ActiveDocument;
-				if (activeDocument != null)
+				var activeIStudioDocument = editorController?.ActiveDocument;
+				if (activeIStudioDocument != null)
 				{
-					var filteredSegments = activeDocument.FilteredSegmentPairs;
+					var filteredSegments = activeIStudioDocument.FilteredSegmentPairs;
 					foreach (var filteredSegment in filteredSegments)
 					{
-						activeDocument.AddCommentOnSegment(filteredSegment, comment, severityLevel);
+						activeIStudioDocument.AddCommentOnSegment(filteredSegment, comment, severityLevel);
 					}
 				}
 			}

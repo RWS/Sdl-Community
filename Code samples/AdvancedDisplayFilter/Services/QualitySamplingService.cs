@@ -10,7 +10,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 {
 	public class QualitySamplingService
 	{		
-		public List<string> GetSamplingSegmentPairsIds(Document document, CustomFilterSettings customFilterSettings)
+		public List<string> GetSamplingSegmentPairsIds(IStudioDocument IStudioDocument, CustomFilterSettings customFilterSettings)
 		{
 			if (!customFilterSettings.QualitySamplingSegmentSelection &&
 			    !customFilterSettings.QualitySamplingMinMaxCharacters)
@@ -18,7 +18,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 				return null;
 			}
 
-			var segmentPairs = document.SegmentPairs.ToList();
+			var segmentPairs = IStudioDocument.SegmentPairs.ToList();
 
 			if (segmentPairs.Count <= 0)
 			{
