@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Capture QA Rule State</PlugInName>
-  <Version>1.0.0.2</Version>
+  <Version>2.0.0.0</Version>
   <Description>
     Capture QA Rule State is a Trados Studio plugin designed to enhance verification reporting by offering complete visibility into the active QA configuration at the time of execution.  It summarizes all QA categories, checks, and sub-options that were enabled—whether or not issues were detected.  Developed for project managers, linguists, and compliance teams in regulated industries, it provides the detailed QA evidence required for auditing and quality assurance, reducing reliance on external tools such as Xbench.
   </Description>

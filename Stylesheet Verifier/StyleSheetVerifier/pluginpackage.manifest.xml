@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 	<PlugInName>Stylesheet Verifier</PlugInName>
-	<Version>5.1.0.0</Version>
+	<Version>6.0.0.0</Version>
 	<Description>This plugin provides a way to generate a preview of an XML file against a stylesheet, used by anyone working on the creation realtime previews for XML in Studio.</Description>
 	<Author>Trados AppStore Team</Author>
 	<RequiredProduct name="TradosStudio" minversion="19.0" maxversion="19.9" />
