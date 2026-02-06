@@ -5,7 +5,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 {
 	public static class SegmentTypesHelper
 	{
-		public static bool IsNewContent(DisplayFilterRowInfo rowInfo)
+		public static bool IsNewContent(IDisplayFilterRowInfo rowInfo)
 		{
 			var isFuzzy = rowInfo.SegmentPair.Properties.TranslationOrigin == null ||
 			              rowInfo.SegmentPair.Properties.TranslationOrigin.MatchPercent < 100;

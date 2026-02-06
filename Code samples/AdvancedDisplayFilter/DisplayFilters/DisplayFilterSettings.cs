@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Sdl.Community.Toolkit.FileType;
 
 namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 {

@@ -64,7 +64,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 			return success;
 		}
 	
-		public bool FilterOnSourceAndTarget(DisplayFilterRowInfo rowInfo, bool success)
+		public bool FilterOnSourceAndTarget(IDisplayFilterRowInfo rowInfo, bool success)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -84,7 +84,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 			return success;
 		}
 
-		public bool FilterOnSourceAndTargetWithBackreferences(DisplayFilterRowInfo rowInfo, out bool appliedFilter)
+		public bool FilterOnSourceAndTargetWithBackreferences(IDisplayFilterRowInfo rowInfo, out bool appliedFilter)
 		{					
 			appliedFilter = false;
 

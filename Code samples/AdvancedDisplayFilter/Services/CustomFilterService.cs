@@ -13,16 +13,16 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 	{
 		private readonly DisplayFilterSettings _settings;
 		private readonly CustomFilterSettings _customSettings;
-		private readonly Document _document;
+		private readonly IStudioDocument _IStudioDocument;
 
-		public CustomFilterService(DisplayFilterSettings settings, CustomFilterSettings customSettings, Document document)
+		public CustomFilterService(DisplayFilterSettings settings, CustomFilterSettings customSettings, IStudioDocument IStudioDocument)
 		{
 			_settings = settings;
 			_customSettings = customSettings;
-			_document = document;
+			_IStudioDocument = IStudioDocument;
 		}
 
-		public bool Filter(DisplayFilterRowInfo rowInfo, bool success)
+		public bool Filter(IDisplayFilterRowInfo rowInfo, bool success)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -43,12 +43,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 
 			if (success && _customSettings.SplitSegments)
 			{
-				success = SegmentNumbersHelper.IsSplitSegment(rowId, _document);
+				success = SegmentNumbersHelper.IsSplitSegment(rowId, _IStudioDocument);
 			}
 
 			if (success && (_customSettings.MergedSegments || _customSettings.MergedAcross))
 			{
-				success = SegmentNumbersHelper.IsMergedSegment(rowId, _document, _customSettings.MergedAcross);
+				success = SegmentNumbersHelper.IsMergedSegment(rowId, _IStudioDocument, _customSettings.MergedAcross);
 			}
 
 			if (success && _customSettings.SourceEqualsTarget)
@@ -99,20 +99,20 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 				success = userVisitor.ModifiedBy(rowInfo.SegmentPair.Source, _customSettings.ModifiedBy);
 			}
 
-			if (success && !string.IsNullOrEmpty(_customSettings.DocumentStructureInformation))
+			if (success && !string.IsNullOrEmpty(_customSettings.IStudioDocumentStructureInformation))
 			{
 				success = _settings.IsRegularExpression
-					? DocumentStructureInfoRegexSearch(rowInfo, _customSettings.DocumentStructureInformation,
+					? IStudioDocumentStructureInfoRegexSearch(rowInfo, _customSettings.IStudioDocumentStructureInformation,
 						_settings.IsCaseSensitive
 							? RegexOptions.None
 							: RegexOptions.IgnoreCase)
-					: DocumentStructureInfoSearch(rowInfo, _customSettings);
+					: IStudioDocumentStructureInfoSearch(rowInfo, _customSettings);
 			}
 
 			return success;
 		}
 
-		public bool FilterAttributeSuccess(DisplayFilterRowInfo rowInfo, bool success)
+		public bool FilterAttributeSuccess(IDisplayFilterRowInfo rowInfo, bool success)
 		{
 			if (GetAttributeFilterGroupsCount() == 0)
 			{
@@ -223,7 +223,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 				   _customSettings.ContainsTags ||
 				   (_customSettings.CreatedByChecked && !string.IsNullOrWhiteSpace(_customSettings.CreatedBy)) ||
 				   (_customSettings.ModifiedByChecked && !string.IsNullOrWhiteSpace(_customSettings.ModifiedBy)) ||
-				   !string.IsNullOrEmpty(_customSettings.DocumentStructureInformation);
+				   !string.IsNullOrEmpty(_customSettings.IStudioDocumentStructureInformation);
 		}
 
 		private bool LogicalSuccess(bool success)
@@ -236,7 +236,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 			return !success;
 		}
 
-		private static bool DocumentStructureInfoSearch(DisplayFilterRowInfo rowInfo, CustomFilterSettings customSettings)
+		private static bool IStudioDocumentStructureInfoSearch(IDisplayFilterRowInfo rowInfo, CustomFilterSettings customSettings)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -247,19 +247,19 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 			{
 				if (contextInfo != null)
 				{
-					if (contextInfo.DisplayName?.IndexOf(customSettings.DocumentStructureInformation,
+					if (contextInfo.DisplayName?.IndexOf(customSettings.IStudioDocumentStructureInformation,
 							StringComparison.InvariantCultureIgnoreCase) > -1)
 					{
 						return true;
 					}
 
-					if (contextInfo.DisplayCode?.IndexOf(customSettings.DocumentStructureInformation,
+					if (contextInfo.DisplayCode?.IndexOf(customSettings.IStudioDocumentStructureInformation,
 							StringComparison.InvariantCultureIgnoreCase) > -1)
 					{
 						return true;
 					}
 
-					if (contextInfo.Description?.IndexOf(customSettings.DocumentStructureInformation,
+					if (contextInfo.Description?.IndexOf(customSettings.IStudioDocumentStructureInformation,
 							StringComparison.InvariantCultureIgnoreCase) > -1)
 					{
 						return true;
@@ -270,7 +270,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 			return false;
 		}
 
-		private static bool DocumentStructureInfoRegexSearch(DisplayFilterRowInfo rowInfo, string regexExpression, RegexOptions options)
+		private static bool IStudioDocumentStructureInfoRegexSearch(IDisplayFilterRowInfo rowInfo, string regexExpression, RegexOptions options)
 		{
 			if (!rowInfo.IsSegment)
 			{

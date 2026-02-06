@@ -1870,40 +1870,40 @@
   <data name="tableLayoutPanel4.ColumnCount" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
-  <data name="label_documentStructure_message.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+  <data name="label_IStudioDocumentStructure_message.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Left, Right</value>
   </data>
-  <data name="label_documentStructure_message.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="label_IStudioDocumentStructure_message.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="label_documentStructure_message.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="label_IStudioDocumentStructure_message.Location" type="System.Drawing.Point, System.Drawing">
     <value>2, 4</value>
   </data>
-  <data name="label_documentStructure_message.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="label_IStudioDocumentStructure_message.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 0, 2, 0</value>
   </data>
-  <data name="label_documentStructure_message.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="label_IStudioDocumentStructure_message.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 2, 0, 0</value>
   </data>
-  <data name="label_documentStructure_message.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="label_IStudioDocumentStructure_message.Size" type="System.Drawing.Size, System.Drawing">
     <value>226, 32</value>
   </data>
-  <data name="label_documentStructure_message.TabIndex" type="System.Int32, mscorlib">
+  <data name="label_IStudioDocumentStructure_message.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
   </data>
-  <data name="label_documentStructure_message.Text" xml:space="preserve">
-    <value>Display segments with the following document structure elements:</value>
+  <data name="label_IStudioDocumentStructure_message.Text" xml:space="preserve">
+    <value>Display segments with the following IStudioDocument structure elements:</value>
   </data>
-  <data name="&gt;&gt;label_documentStructure_message.Name" xml:space="preserve">
-    <value>label_documentStructure_message</value>
+  <data name="&gt;&gt;label_IStudioDocumentStructure_message.Name" xml:space="preserve">
+    <value>label_IStudioDocumentStructure_message</value>
   </data>
-  <data name="&gt;&gt;label_documentStructure_message.Type" xml:space="preserve">
+  <data name="&gt;&gt;label_IStudioDocumentStructure_message.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;label_documentStructure_message.Parent" xml:space="preserve">
+  <data name="&gt;&gt;label_IStudioDocumentStructure_message.Parent" xml:space="preserve">
     <value>tableLayoutPanel4</value>
   </data>
-  <data name="&gt;&gt;label_documentStructure_message.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;label_IStudioDocumentStructure_message.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <data name="listView_contextInfo.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
@@ -2051,7 +2051,7 @@
     <value>0</value>
   </data>
   <data name="tableLayoutPanel4.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="label_documentStructure_message" Row="0" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="listView_contextInfo" Row="1" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="linkLabel_contextInfoClearSelection" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="label_contextInfoSelected" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50" /&gt;&lt;Rows Styles="Absolute,32,Percent,100,Absolute,24" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="label_IStudioDocumentStructure_message" Row="0" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="listView_contextInfo" Row="1" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="linkLabel_contextInfoClearSelection" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="label_contextInfoSelected" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50" /&gt;&lt;Rows Styles="Absolute,32,Percent,100,Absolute,24" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tabPage_contextInfo.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 27</value>
@@ -2069,7 +2069,7 @@
     <value>4</value>
   </data>
   <data name="tabPage_contextInfo.Text" xml:space="preserve">
-    <value>Document Structure  </value>
+    <value>IStudioDocument Structure  </value>
   </data>
   <data name="&gt;&gt;tabPage_contextInfo.Name" xml:space="preserve">
     <value>tabPage_contextInfo</value>

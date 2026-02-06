@@ -274,8 +274,8 @@
   <data name="DisplayFilterControl_ContextInfo" xml:space="preserve">
     <value>ContextInfo</value>
   </data>
-  <data name="DisplayFilterControl_Document_structure" xml:space="preserve">
-    <value>Document Structure</value>
+  <data name="DisplayFilterControl_IStudioDocument_structure" xml:space="preserve">
+    <value>IStudioDocument Structure</value>
   </data>
   <data name="DisplayFilterControl_Colors" xml:space="preserve">
     <value>Colors</value>
@@ -346,8 +346,8 @@
   <data name="DisplayFilter_OnlyTags_Tooltip" xml:space="preserve">
     <value>Using this option will filter the results based on matches that are ONLY found within the content of any tags in your file(s). It will not filter on the translatable text.</value>
   </data>
-  <data name="Tooltip_Document_Structure_Information_Location" xml:space="preserve">
-    <value>Document Structure Information</value>
+  <data name="Tooltip_IStudioDocument_Structure_Information_Location" xml:space="preserve">
+    <value>IStudioDocument Structure Information</value>
   </data>
   <data name="DisplayFilterControl_Operator" xml:space="preserve">
     <value>Operator</value>

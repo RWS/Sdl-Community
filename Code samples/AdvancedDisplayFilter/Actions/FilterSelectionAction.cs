@@ -13,13 +13,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Actions
 		protected override void Execute()
 		{
 			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
-			var activeDocument = editorController?.ActiveDocument;
+			var activeIStudioDocument = editorController?.ActiveDocument;
 			var displayFilterControl = CommunityApplicationInitializer.DisplayFilterControl;
 
-			if (activeDocument!= null && displayFilterControl != null)
+			if (activeIStudioDocument!= null && displayFilterControl != null)
 			{
-				var sourceSelection = activeDocument.Selection?.Source?.ToString().TrimStart().TrimEnd();
-				var targetSelection = activeDocument.Selection?.Target?.ToString().TrimStart().TrimEnd();
+				var sourceSelection = activeIStudioDocument.Selection?.Source?.ToString().TrimStart().TrimEnd();
+				var targetSelection = activeIStudioDocument.Selection?.Target?.ToString().TrimStart().TrimEnd();
 
 				if (!string.IsNullOrEmpty(sourceSelection))
 				{

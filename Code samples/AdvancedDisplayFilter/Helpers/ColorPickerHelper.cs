@@ -11,7 +11,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 {
 	public static class ColorPickerHelper
 	{
-		public static bool ContainsColor(DisplayFilterRowInfo rowInfo, List<string> colorsCodes, DisplayFilterSettings.ContentLocation colorsFoundIn)
+		public static bool ContainsColor(IDisplayFilterRowInfo rowInfo, List<string> colorsCodes, DisplayFilterSettings.ContentLocation colorsFoundIn)
 		{
 			try
 			{				

@@ -33,7 +33,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 
 		public CustomFilterSettings CustomSettings { get; }
 
-		public bool EvaluateRow(DisplayFilterRowInfo rowInfo)
+		public bool EvaluateRow(IDisplayFilterRowInfo rowInfo)
 		{
 			var success = Settings.ShowAllContent || rowInfo.IsSegment;
 

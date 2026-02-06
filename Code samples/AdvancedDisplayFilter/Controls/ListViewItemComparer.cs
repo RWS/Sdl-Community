@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Forms;
 using Sdl.Community.AdvancedDisplayFilter.DisplayFilters;
-using Sdl.Community.Toolkit.FileType;
 
 namespace Sdl.Community.AdvancedDisplayFilter.Controls
 {
@@ -84,8 +83,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 				if (item.Tag.GetType() == typeof(DisplayFilterSettings.ConfirmationLevel))
 					return (int)(DisplayFilterSettings.ConfirmationLevel)item.Tag;				
-				if (item.Tag.GetType() == typeof(OriginType))
-					return (int)(OriginType)item.Tag;
+				if (item.Tag.GetType() == typeof(DisplayFilterSettings.OriginType))
+					return (int)(DisplayFilterSettings.OriginType)item.Tag;
 				if (item.Tag.GetType() == typeof(DisplayFilterSettings.RepetitionType))
 					return (int)(DisplayFilterSettings.RepetitionType)item.Tag;
 				if (item.Tag.GetType() == typeof(DisplayFilterSettings.SegmentReviewType))
