@@ -1,14 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
+using LanguageWeaverProvider.CohereSubscription;
+using LanguageWeaverProvider.CohereSubscription.Decision;
+using LanguageWeaverProvider.CohereSubscription.Settings;
+using LanguageWeaverProvider.CohereSubscription.Workflow;
+using LanguageWeaverProvider.CohereSubscription.Workflow.Interfaces;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.View;
 using Newtonsoft.Json;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.Desktop.IntegrationApi.Interfaces;
+using Sdl.Desktop.IntegrationApi.Notifications.Events;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.TranslationStudioAutomation.IntegrationApi.Internal;
 
 namespace LanguageWeaverProvider
 {
@@ -38,9 +49,36 @@ namespace LanguageWeaverProvider
                 NullValueHandling = NullValueHandling.Ignore
             };
 
-            //var cohereWindow = new CohereSubscriptionWindow();
-            //cohereWindow.ShowDialog();
+            SdlTradosStudio.Application.GetService<IStudioEventAggregator>()
+              .GetEvent<StudioWindowCreatedNotificationEvent>().Subscribe(OnStudioWindowCreated);
         }
+
+        private void OnStudioWindowCreated(StudioWindowCreatedNotificationEvent obj)
+        {
+            var cohereSettingsService = CohereSubscriptionSettingsServiceFactory.Create();
+            var cohereWorkflowService = CohereWorkflowServiceFactory.Create();
+            var cohereDecisionService = CohereSubscriptionDecisionServiceFactory.Create();
+
+            var cohereOrchestrator = new CohereSubscriptionOrchestrator(
+                cohereSettingsService, cohereWorkflowService, cohereDecisionService);
+
+            List<AbstractViewController> viewControllers = new List<AbstractViewController>()
+            {
+                SdlTradosStudio.Application.GetController<WelcomeViewController>(),
+                SdlTradosStudio.Application.GetController<ProjectsController>(),
+                SdlTradosStudio.Application.GetController<FilesController>(),
+                SdlTradosStudio.Application.GetController<EditorController>(),
+                SdlTradosStudio.Application.GetController<ReportsViewController>(),
+                SdlTradosStudio.Application.GetController<TranslationMemoriesViewController>()
+            };
+
+            var cohereStartupManager = new CohereStartupManager(
+                cohereOrchestrator, cohereSettingsService, viewControllers);
+
+            cohereStartupManager.Initialize();
+        }
+
+
 
         public static Window GetBatchTaskWindow()
         {

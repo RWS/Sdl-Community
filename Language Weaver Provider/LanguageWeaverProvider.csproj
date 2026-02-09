@@ -85,6 +85,9 @@
 		<Reference Include="Sdl.LanguageCloud.IdentityApi">
 			<HintPath>$(TradosFolder)\Sdl.LanguageCloud.IdentityApi.dll</HintPath>
 		</Reference>
+		<Reference Include="System.Reactive">
+			<HintPath>$(TradosFolder)\System.Reactive.dll</HintPath>
+		</Reference>
 		<Reference Include="Microsoft.Web.WebView2.Wpf">
 		  <HintPath>$(TradosFolder)\Microsoft.Web.WebView2.WPF.dll</HintPath>
 		</Reference>

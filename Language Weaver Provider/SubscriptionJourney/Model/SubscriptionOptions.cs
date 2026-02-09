@@ -4,26 +4,26 @@ namespace LanguageWeaverProvider.SubscriptionJourney.Model
 {
     public class SubscriptionOptions : ISubscriptionOptions
     {
-        public string Title { get; }
+        public string Title { get; set; }
         
-        public string Description { get; }
-        
-        public bool IsDoNotShowAgainVisible { get; }
+        public string Description { get; set; }
 
-        public string TrialUri { get; }
+        public bool IsDoNotShowAgainVisible { get; set; }
 
-        public string BuyUri { get; }
+        public string TrialUri { get; set; }
 
-        public bool DoNotShowThisAgain { get; }
+        public string BuyUri { get; set; }
 
-        public bool ShowPrimary { get; }
+        public bool DoNotShowThisAgain { get; set; }
 
-        public string PrimaryContent { get; }
+        public bool ShowPrimary { get; set; }
 
-        public bool ShowSecondary { get; }
+        public string PrimaryContent { get; set; }
 
-        public string SecondaryContent { get; }
+        public bool ShowSecondary { get; set; }
 
-        public string CancelContent { get; }
+        public string SecondaryContent { get; set; }
+
+        public string CancelContent { get; set; }
     }
 }
