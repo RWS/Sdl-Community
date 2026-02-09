@@ -10,9 +10,9 @@ namespace LanguageWeaverProvider.SubscriptionJourney.Model
 
         public bool IsDoNotShowAgainVisible { get; set; }
 
-        public string TrialUri { get; set; }
+        public string PrimaryUri { get; set; }
 
-        public string BuyUri { get; set; }
+        public string SecondaryUri { get; set; }
 
         public bool DoNotShowThisAgain { get; set; }
 

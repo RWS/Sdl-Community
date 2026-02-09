@@ -8,8 +8,8 @@ namespace LanguageWeaverProvider.Model.Interface
         public string Description { get; }
         public bool IsDoNotShowAgainVisible { get; }
         public bool DoNotShowThisAgain { get; }
-        public string TrialUri { get; }
-        public string BuyUri { get; }
+        public string PrimaryUri { get; }
+        public string SecondaryUri { get; }
         public bool ShowPrimary { get; }
         public string PrimaryContent { get; }
         public bool ShowSecondary { get; }

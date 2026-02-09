@@ -36,9 +36,10 @@ namespace LanguageWeaverProvider.SubscriptionJourney.ViewModel
             CancelContent = subscriptionOptions.CancelContent ?? string.Empty;
             PrimaryCommand = new RelayCommand(_ =>
             {
-                if (!string.IsNullOrWhiteSpace(subscriptionOptions.TrialUri))
+                if (!string.IsNullOrWhiteSpace(subscriptionOptions.PrimaryUri))
                 {
-                    uriOpener.OpenUri(subscriptionOptions.TrialUri);
+                    uriOpener.OpenUri(subscriptionOptions.PrimaryUri);
+                    return;
                 }
 
                 RequestClose?.Invoke();
@@ -46,9 +47,10 @@ namespace LanguageWeaverProvider.SubscriptionJourney.ViewModel
 
             SecondaryCommand = new RelayCommand(_ =>
             {
-                if (!string.IsNullOrWhiteSpace(subscriptionOptions.BuyUri))
+                if (!string.IsNullOrWhiteSpace(subscriptionOptions.SecondaryUri))
                 {
-                    uriOpener.OpenUri(subscriptionOptions.BuyUri);
+                    uriOpener.OpenUri(subscriptionOptions.SecondaryUri);
+                    return;
                 }
 
                 RequestClose?.Invoke();
