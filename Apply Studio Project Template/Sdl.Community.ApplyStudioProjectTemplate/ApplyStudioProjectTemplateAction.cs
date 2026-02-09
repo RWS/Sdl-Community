@@ -277,10 +277,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 
                         if (selectedTemplate.TerminologyTermbases.ToString().Contains("Merge"))
                         {
-                            if (targetTermbaseConfig.TermbaseServerUri is null)
-                            {
-                                targetTermbaseConfig.TermbaseServerUri = sourceTermbaseConfig.TermbaseServerUri;
-                            }
                             if (!targetTermbaseConfig.Termbases.Any())
                             {
                                 targetTermbaseConfig.Termbases?.AddRange(sourceTermbaseConfig.Termbases);
@@ -289,7 +285,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                         }
                         else
                         {
-                            targetTermbaseConfig.TermbaseServerUri = sourceTermbaseConfig.TermbaseServerUri;
                             targetTermbaseConfig.Termbases.Clear();
                             targetTermbaseConfig.LanguageIndexes.Clear();
                             MergeTermbases(sourceTermbaseConfig, targetTermbaseConfig, selectedTemplate.TerminologyTermbases);
@@ -849,20 +844,16 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                     }
                     else
                     {
-                        // If we're dealing with server termbase then we need the same server!
-                        if (sourceTermbaseConfig.TermbaseServerUri == targetTermbaseConfig.TermbaseServerUri)
+                        if (targetTermbase is ServerTermbase targetServerTermbase &&
+                            sourceTermbase is ServerTermbase sourceServerTermbase &&
+                            sourceServerTermbase.TermbaseServerUri == targetServerTermbase.TermbaseServerUri)
                         {
-                            // Must be the same type to match
-                            if (targetTermbase is ServerTermbase)
-                            {
-                                // Match based on name
-                                var serverTermbase = sourceTermbase as ServerTermbase;
-                                if (serverTermbase != null && serverTermbase.Name.Equals((targetTermbase as ServerTermbase).Name, StringComparison.InvariantCultureIgnoreCase))
-                                {
-                                    foundEntry = true;
-                                    break;
-                                }
-                            }
+                            // Match based on name
+                            if (!sourceServerTermbase.Name.Equals(
+                                    targetServerTermbase.Name,
+                                    StringComparison.InvariantCultureIgnoreCase)) continue;
+                            foundEntry = true;
+                            break;
                         }
                         else
                         {
