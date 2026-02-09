@@ -36,13 +36,26 @@ namespace LanguageWeaverProvider.SubscriptionJourney.ViewModel
             CancelContent = subscriptionOptions.CancelContent ?? string.Empty;
             PrimaryCommand = new RelayCommand(_ =>
             {
-                uriOpener.OpenUri(subscriptionOptions.TrialUri);
+                if (!string.IsNullOrWhiteSpace(subscriptionOptions.TrialUri))
+                {
+                    uriOpener.OpenUri(subscriptionOptions.TrialUri);
+                }
+
+                RequestClose?.Invoke();
             });
+
             SecondaryCommand = new RelayCommand(_ =>
             {
-                uriOpener.OpenUri(subscriptionOptions.BuyUri);
+                if (!string.IsNullOrWhiteSpace(subscriptionOptions.BuyUri))
+                {
+                    uriOpener.OpenUri(subscriptionOptions.BuyUri);
+                }
+
+                RequestClose?.Invoke();
             });
         }
+
+        public event Action RequestClose;
 
         public string WindowTitle { get; }
 

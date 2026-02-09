@@ -17,17 +17,46 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
             if (data.IsPaid)
                 return null;
 
+            var uriOpener = new UriOpener();
             // Cohere not detected
             if (!data.IsCohereDetected)
             {
-                var options = BuildOptions(
-                    title: "Cohere Subscription",
-                    description: "Try Cohere for 14 days free and see the benefits.",
-                    isAdmin: data.IsAdmin,
-                    trialDays: 14
-                );
+                if (data.IsAdmin)
+                {
+                    return new SubscriptionViewModel(
+                        "Cohere Subscription",
+                        new SubscriptionOptions()
+                        {
+                            Title = "Try the best translation LLM in the world!",
+                            Description = "Unleash unprecedented translation power with the Trados LLM, powered by Cohere and Language Weaver. Start a 14‑day free trial or buy the add-on anytime.",
+                            ShowPrimary = true,
+                            PrimaryContent = "Start free trial",
+                            BuyUri = "https://example.com/",
+                            ShowSecondary = true,
+                            SecondaryContent = "Buy now",
+                            TrialUri = "https://example.com/",
+                            CancelContent = "Cancel",
+                            IsDoNotShowAgainVisible = true,
+                        },
+                        uriOpener);
 
-                return new SubscriptionViewModel("Cohere Subscription", options, new UriOpener());
+                }
+
+                return new SubscriptionViewModel(
+                    "Cohere Subscription",
+                    new SubscriptionOptions
+                    {
+                        Title = "Trados LLM available for your organization",
+                        Description = "The brand new Trados LLM (powered by Cohere) can be enabled on your Language Weaver account. Ask your administrator to start a 14‑day free trial or purchase the add-on.",
+                        ShowPrimary = true,
+                        PrimaryContent = "OK",
+                        ShowSecondary = true,
+                        SecondaryContent = "Learn more",
+                        TrialUri = "https://example.com/",
+                        CancelContent = "Cancel",
+                        IsDoNotShowAgainVisible = true,
+                    },
+                    uriOpener);
             }
 
             // Trial active: only show if 7–1 days remaining
@@ -36,66 +65,79 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
                 if (data.TrialRemainingDays > 7)
                     return null;
 
-                var options = BuildOptions(
-                    title: "Cohere Trial",
-                    description: $"Your trial expires in {data.TrialRemainingDays} day(s).",
-                    isAdmin: data.IsAdmin,
-                    trialDays: data.TrialRemainingDays
-                );
+                if (data.IsAdmin)
+                {
+                    return new SubscriptionViewModel(
+                        "Cohere Subscription",
+                        new SubscriptionOptions
+                        {
+                            Title = "Trados LLM trial ending soon",
+                            Description = $"Your Trados LLM (powered by Cohere) trial ends in {data.TrialRemainingDays} day(s). Purchase the add-on to keep using the LLM without interruption.",
+                            ShowPrimary = true,
+                            PrimaryContent = "Buy now",
+                            BuyUri = "https://example.com/",
+                            ShowSecondary = false,
+                            CancelContent = "Cancel",
+                            IsDoNotShowAgainVisible = true,
+                        },
+                        uriOpener);
 
-                return new SubscriptionViewModel("Cohere Trial", options, new UriOpener());
+                }
+
+                return new SubscriptionViewModel(
+                  "Cohere Subscription",
+                  new SubscriptionOptions
+                  {
+                      Title = "Trados LLM trial ending soon",
+                      Description = $"Your organization’s Trados LLM trial ends in {data.TrialRemainingDays} day(s). Contact your administrator to purchase the add-on and avoid interruption.",
+                      ShowPrimary = true,
+                      PrimaryContent = "OK",
+                      ShowSecondary = true,
+                      SecondaryContent = "Learn more",
+                      TrialUri = "https://example.com/",
+                      CancelContent = "Cancel",
+                      IsDoNotShowAgainVisible = true,
+                  },
+                  uriOpener);
             }
 
             // Trial expired
             if (data.IsTrial && data.IsTrialExpired)
             {
-                var options = BuildOptions(
-                    title: "Cohere Trial Expired",
-                    description: "Your trial has expired.",
-                    isAdmin: data.IsAdmin
-                );
+                if (data.IsAdmin)
+                {
+                    return new SubscriptionViewModel(
+                        "Cohere Subscription",
+                        new SubscriptionOptions
+                        {
+                            Title = "Trados LLM trial expired",
+                            Description = "Your 14‑day Trados LLM trial has ended. Purchase the add-on to continue using the LLM.",
+                            ShowPrimary = true,
+                            PrimaryContent = "Buy now",
+                            BuyUri = "https://example.com/",
+                            ShowSecondary = false,
+                            CancelContent = "Cancel",
+                            IsDoNotShowAgainVisible = true,
+                        }, uriOpener);
+                }
 
                 return new SubscriptionViewModel(
-                    "Cohere Trial Expired", options, new UriOpener());
+                    "Cohere Subscription",
+                    new SubscriptionOptions
+                    {
+                        Title = "Trados LLM trial expired",
+                        Description = "Your organization’s Trados LLM trial has ended. Contact your administrator to purchase the add-on to restore access.",
+                        ShowPrimary = true,
+                        PrimaryContent = "OK",
+                        ShowSecondary = true,
+                        SecondaryContent = "Learn more",
+                        TrialUri = "https://example.com/",
+                        CancelContent = "Cancel",
+                        IsDoNotShowAgainVisible = true,
+                    }, uriOpener);
             }
 
             return null;
-        }
-
-        private SubscriptionOptions BuildOptions(string title, string description, bool isAdmin, int trialDays = 0)
-        {
-            if (isAdmin)
-            {
-                return new SubscriptionOptions
-                {
-                    Title = title,
-                    Description = description,
-                    IsDoNotShowAgainVisible = true,
-                    DoNotShowThisAgain = false,
-                    ShowPrimary = true,
-                    PrimaryContent = trialDays > 0 ? "Start Free Trial" : "Buy Now",
-                    TrialUri = "https://account.portal/trial",
-                    ShowSecondary = trialDays > 0 ? true : false,
-                    SecondaryContent = "Buy Now",
-                    BuyUri = "https://account.portal/buy",
-                    CancelContent = "Cancel"
-                };
-            }
-            else
-            {
-                return new SubscriptionOptions
-                {
-                    Title = title,
-                    Description = description,
-                    IsDoNotShowAgainVisible = true,
-                    DoNotShowThisAgain = false,
-                    ShowPrimary = true,
-                    PrimaryContent = trialDays > 0 ? "Contact your Admin" : "Contact Admin to purchase/extend access",
-                    ShowSecondary = true,
-                    SecondaryContent = "Learn more",
-                    CancelContent = "Cancel"
-                };
-            }
         }
     }
 }

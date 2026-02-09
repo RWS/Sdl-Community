@@ -10,7 +10,7 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
         {
             var fakeData = new CohereSubscriptionData
             {
-                IsCohereDetected = true,
+                IsCohereDetected = false,
                 IsPaid = false,
                 IsTrial = true,
                 IsTrialExpired = false,
