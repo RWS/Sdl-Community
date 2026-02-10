@@ -12,11 +12,6 @@ namespace InterpretBank.Studio
         private ILifetimeScope TerminologyProviderScope { get; } =
             ApplicationInitializer.ApplicationLifetimeScope.BeginLifetimeScope();
 
-        public ITerminologyProvider CreateTerminologyProvider(Uri terminologyProviderUri, ITerminologyProviderCredentialStore credentials)
-        {
-            return CreateTerminologyProvider(terminologyProviderUri);
-        }
-
         public ITerminologyProvider CreateTerminologyProvider(Uri terminologyProviderUri)
         {
             var settingsId = terminologyProviderUri.AbsolutePath.Split('.')[0].TrimStart('/');

@@ -18,10 +18,7 @@ namespace InterpretBank.Studio
         private PersistenceService.PersistenceService PersistenceService { get; } = ApplicationInitializer.ApplicationLifetimeScope.Resolve<PersistenceService.PersistenceService>();
 
 
-        public ITerminologyProvider[] Browse(IWin32Window owner, ITerminologyProviderCredentialStore credentialStore)
-        {
-            return Browse(owner);
-        }
+       
 
         public ITerminologyProvider[] Browse(IWin32Window owner)
         {

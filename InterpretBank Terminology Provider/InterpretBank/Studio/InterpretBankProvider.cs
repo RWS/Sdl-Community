@@ -51,7 +51,6 @@ namespace InterpretBank.Studio
         }
 
         public ITerminologyService TermSearchService { get; } = termSearchService;
-        public TerminologyProviderType Type => TerminologyProviderType.Custom;
         public Uri Uri => new($"{Constants.InterpretBankUri}/{Settings.SettingsId}.json://");
         private HashSet<Entry> Entries { get; } = new();
 
@@ -106,10 +105,6 @@ namespace InterpretBank.Studio
             return true;
         }
 
-        public bool Initialize(TerminologyProviderCredential credential)
-        {
-            return true;
-        }
 
         public bool IsProviderUpToDate()
         {
