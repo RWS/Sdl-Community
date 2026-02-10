@@ -380,14 +380,17 @@ namespace CaptureQARuleState.Components.SettingsProvider.Verifiers
         private void EnhanceSegmentSizeCheckUi()
         {
             var diffUnitWord = this["DiffUnitWord"];
-            var wordsOrChars = diffUnitWord.Value == "True" ? "words" : "characters";
+            var wordsOrChars = diffUnitWord?.Value == "True" ? "words" : "characters";
 
             var shorterBy = this["CheckTargetShorter"];
             var longerBy = this["CheckTargetLonger"];
 
             var minimalWordCountValue = this["MinimalWordCountValue"];
 
-            var minimalWordCountName = Regex.Replace(SettingIdToUiStringMap["MinimalWordCountValue"], "#", minimalWordCountValue.Value);
+            if (minimalWordCountValue is null) return;
+
+            var minimalWordCountName = Regex.Replace(SettingIdToUiStringMap["MinimalWordCountValue"], "#",
+                minimalWordCountValue.Value);
             minimalWordCountName = Regex.Replace(minimalWordCountName, "words", wordsOrChars);
 
             minimalWordCountValue.Name = minimalWordCountName;
