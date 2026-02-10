@@ -79,7 +79,6 @@ namespace Sdl.Community.IATETerminologyProvider
 
 		public string Id { get; }
 
-		public TerminologyProviderType Type => TerminologyProviderType.Custom;
 
 		public bool IsReadOnly => false;
 
@@ -94,10 +93,7 @@ namespace Sdl.Community.IATETerminologyProvider
 			//Nothing to do here
 		}
 
-		public bool Initialize(TerminologyProviderCredential _)
-		{
-			return Initialize();
-		}
+		
 
 		public bool IsProviderUpToDate()
 		{

@@ -2,6 +2,6 @@
 {
     public interface IModel
     {
-        public bool IsSelected { get; set; }
+        bool IsSelected { get; set; }
     }
 }

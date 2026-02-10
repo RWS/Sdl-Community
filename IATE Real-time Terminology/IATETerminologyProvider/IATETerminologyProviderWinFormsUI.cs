@@ -16,11 +16,6 @@ namespace Sdl.Community.IATETerminologyProvider
         public string TypeDescription => PluginResources.IATETerminologyProviderDescription;
         public string TypeName => PluginResources.IATETerminologyProviderName;
 
-        public ITerminologyProvider[] Browse(IWin32Window owner, ITerminologyProviderCredentialStore credentialStore)
-        {
-            return Browse();
-        }
-
         public ITerminologyProvider[] Browse(IWin32Window owner)
         {
             return Browse();

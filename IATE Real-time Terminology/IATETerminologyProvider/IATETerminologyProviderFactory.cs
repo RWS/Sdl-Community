@@ -22,11 +22,6 @@ namespace Sdl.Community.IATETerminologyProvider
             return terminologyProviderUri.Scheme == Constants.IATEGlossary;
         }
 
-        public ITerminologyProvider CreateTerminologyProvider(Uri terminologyProviderUri, ITerminologyProviderCredentialStore credentials)
-        {
-            return CreateTerminologyProvider();
-        }
-
         public ITerminologyProvider CreateTerminologyProvider(Uri terminologyProviderUri)
         {
             return CreateTerminologyProvider();

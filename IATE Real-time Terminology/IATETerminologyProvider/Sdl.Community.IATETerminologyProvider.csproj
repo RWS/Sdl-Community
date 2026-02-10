@@ -1,45 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{5D9C89B8-ACAC-4A3D-9373-43F6343D00E4}</ProjectGuid>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sdl.Community.IATETerminologyProvider</RootNamespace>
-    <AssemblyName>Sdl.Community.IATETerminologyProvider</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>latest</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>latest</LangVersion>
-  </PropertyGroup>
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net48</TargetFramework>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<CreatePluginPackage>true</CreatePluginPackage>
+		<PlatformTarget>x64</PlatformTarget>
+		<AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
+		<SignAssembly>true</SignAssembly>
+		<UseWPF>true</UseWPF>
+	</PropertyGroup>
   <PropertyGroup>
     <TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19</TradosFolder>
     <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19\Plugins</PluginDeploymentPath>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Resources\IATE_settings.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\IATE_settings.ico" />
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="MahApps.Metro">
       <HintPath>$(TradosFolder)\MahApps.Metro.dll</HintPath>
@@ -130,199 +109,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Commands\CommandHandler.cs" />
-    <Compile Include="Commands\RelayCommand.cs" />
-    <Compile Include="Controls\CustomProgressRing.cs" />
-    <Compile Include="EventArgs\TermEntryModelChanged.cs" />
-    <Compile Include="Helpers\CurrentViewDetector.cs" />
-    <Compile Include="Helpers\JwtHelper.cs" />
-    <Compile Include="IATEProviderTellMe\IATESettingsAction.cs" />
-    <Compile Include="IATEProviderTellMe\IATESourceCode.cs" />
-    <Compile Include="Interface\IEUProvider.cs" />
-    <Compile Include="Interface\IModel.cs" />
-    <Compile Include="Model\CheckStateEnum.cs" />
-    <Compile Include="Model\CollectionModel.cs" />
-    <Compile Include="Model\InstitutionModel.cs" />
-    <Compile Include="Model\Primarities.cs" />
-    <Compile Include="Model\Reliabilities.cs" />
-    <Compile Include="Model\ResponseModels\IateLanguage.cs" />
-    <Compile Include="Model\ResponseModels\IateName.cs" />
-    <Compile Include="Model\ResponseModels\IateInstitution.cs" />
-    <Compile Include="Service\EUProvider.cs" />
-    <Compile Include="Service\SettingsService.cs" />
-    <Compile Include="ViewModel\FineGrainedFilterViewModel.cs" />
-    <Compile Include="Helpers\ApiUrls.cs" />
-    <Compile Include="Helpers\Constants.cs" />
-    <Compile Include="Helpers\LanguageFlags.cs" />
-    <Compile Include="Helpers\Log.cs" />
-    <Compile Include="Helpers\Utils.cs" />
-    <Compile Include="IATEApplication.cs" />
-    <Compile Include="IATEProviderTellMe\IATEDocumentationAction.cs" />
-    <Compile Include="IATEProviderTellMe\IATECommunityForumAction.cs" />
-    <Compile Include="IATEProviderTellMe\IATEContactAction.cs" />
-    <Compile Include="IATEProviderTellMe\IATETellMeProvider.cs" />
-    <Compile Include="IATETerminologyProviderAction.cs" />
-    <Compile Include="IATETerminologyProviderWinFormsUI.cs" />
-    <Compile Include="IATETerminologyProviderViewerWinFormsUI.cs" />
-    <Compile Include="IATETerminologyProvider.cs" />
-    <Compile Include="IATETerminologyProviderFactory.cs" />
-    <Compile Include="Interface\ICacheProvider.cs" />
-    <Compile Include="Interface\IMessageBoxService.cs" />
-    <Compile Include="Interface\ISettingsViewModel.cs" />
-    <Compile Include="Model\SearchCache.cs" />
-    <Compile Include="Model\ResponseModels\JsonAccessTokenModel.cs" />
-    <Compile Include="Model\DocumentEntryState.cs" />
-    <Compile Include="Model\DomainModel.cs" />
-    <Compile Include="Model\EntryLanguageModel.cs" />
-    <Compile Include="Model\EntryModel.cs" />
-    <Compile Include="Model\EntryModelItem.cs" />
-    <Compile Include="Model\LanguageModel.cs" />
-    <Compile Include="Model\PathInfo.cs" />
-    <Compile Include="Model\ResponseModels\JsonDomainResponseModel.cs" />
-    <Compile Include="Model\ResponseModels\MetaResponseModel.cs" />
-    <Compile Include="Model\ResponseModels\ItemsResponseModel.cs" />
-    <Compile Include="Model\ResponseModels\SubdomainsResponseModel.cs" />
-    <Compile Include="Model\ResponseModels\TermsDomainResponseModel.cs" />
-    <Compile Include="Model\ResponseModels\TermTypeResponseModel.cs" />
-    <Compile Include="Model\SearchResultModel.cs" />
-    <Compile Include="Model\SettingsModel.cs" />
-    <Compile Include="Model\TermResultGroup.cs" />
-    <Compile Include="Model\TermTypeModel.cs" />
-    <Compile Include="Model\ViewModelBase.cs" />
-    <Compile Include="PluginResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PluginResources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\PluginProperties.cs" />
-    <Compile Include="Service\CacheProvider.cs" />
-    <Compile Include="Service\DocumentStateService.cs" />
-    <Compile Include="Service\InventoriesProvider.cs" />
-    <Compile Include="Service\ConnectionProvider.cs" />
-    <Compile Include="Service\MessageBoxService.cs" />
-    <Compile Include="Service\SegmentVisitor.cs" />
-    <Compile Include="Service\SqliteDatabaseProvider.cs" />
-    <Compile Include="Service\TermSearchService.cs" />
-    <Compile Include="Model\ResponseModels\IateCollection.cs" />
-    <Compile Include="Events\ResetEvent.cs" />
-    <Compile Include="View\BrowserWindow.xaml.cs">
-      <DependentUpon>BrowserWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\FineGrainedFilter.xaml.cs">
-      <DependentUpon>FineGrainedFilter.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\WindowsControl.xaml.cs">
-      <DependentUpon>WindowsControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\DomainsAndTermTypes.xaml.cs">
-      <DependentUpon>DomainsAndTermTypes.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModel\MainWindowViewModel.cs" />
-    <Compile Include="View\SearchResultsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="View\SearchResultsControl.Designer.cs">
-      <DependentUpon>SearchResultsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="View\SearchResultsViewerController.cs" />
-    <Compile Include="View\IATETermsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="View\IATETermsControl.Designer.cs">
-      <DependentUpon>IATETermsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="View\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModel\DomainsAndTermTypesFilterViewModel.cs" />
-    <Page Include="Styles\Buttons.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\DataGridStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\General.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\WindowsBorder.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\BrowserWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\FineGrainedFilter.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\WindowsControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\Generic\CustomProgressRing.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI Helpers\CustomProgressRing.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\DomainsAndTermTypes.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\MainWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="pluginpackage.manifest.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <None Include="Resources\TellMe_Documentation.ico" />
-    <None Include="Resources\IATE-logo-cropped[1].ico" />
-    <None Include="Resources\IATE-logo-cropped[1].png" />
-    <Resource Include="Resources\Forum.ico" />
-    <Resource Include="Resources\Settings.ico" />
-    <Resource Include="Resources\SourceCode.ico" />
-    <Resource Include="Resources\StarGrey.png" />
-    <Resource Include="Resources\StarYellow.png" />
-    <Resource Include="Resources\Question.ico" />
-    <EmbeddedResource Include="View\SearchResultsControl.resx">
-      <DependentUpon>SearchResultsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <Resource Include="Resources\IATE_logo.png" />
-    <Resource Include="Resources\IATE_settings.ico" />
-    <Resource Include="Resources\IATE_settings.png" />
-    <EmbeddedResource Include="Resources\report.xslt" />
-    <None Include="Resources\ForumIcon.ico" />
-    <Resource Include="Resources\Iate_logo.ico" />
-    <None Include="Resources\Download.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="SdlCommunity.snk" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="PluginResources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="View\IATETermsControl.resx">
-      <DependentUpon>IATETermsControl.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
+  
+  
+  
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
@@ -337,7 +126,6 @@
       <Version>18.0.1</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>
@@ -346,6 +134,6 @@
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
