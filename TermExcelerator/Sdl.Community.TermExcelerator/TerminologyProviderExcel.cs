@@ -20,7 +20,6 @@ namespace Sdl.Community.TermExcelerator
         public List<ExcelEntry> Terms { get; private set; }
 		public static readonly Log Log = Log.Instance;
 
-		public TerminologyProviderType Type => TerminologyProviderType.Custom;
 		public bool IsReadOnly => false;
 		public bool SearchEnabled => true;
 
@@ -172,11 +171,6 @@ namespace Sdl.Community.TermExcelerator
 		{
 			IsInitialized = true;
 			return true;
-		}
-
-		public bool Initialize(TerminologyProviderCredential credential)
-		{
-			return Initialize();
 		}
 
 		public bool IsProviderUpToDate()

@@ -22,10 +22,6 @@ namespace Sdl.Community.TermExcelerator
 
 		public PersistenceService PersistenceService => _persistenceService ??= new PersistenceService();
 
-		public ITerminologyProvider[] Browse(IWin32Window owner, ITerminologyProviderCredentialStore credentialStore)
-        {
-            return Browse(owner);
-        }
 
         public ITerminologyProvider[] Browse(IWin32Window owner)
         {

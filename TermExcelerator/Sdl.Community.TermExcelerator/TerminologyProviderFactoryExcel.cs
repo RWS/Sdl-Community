@@ -14,13 +14,6 @@ namespace Sdl.Community.TermExcelerator
             return terminologyProviderUri.Scheme == "excelglossary";
         }
 
-        public ITerminologyProvider CreateTerminologyProvider(Uri terminologyProviderUri,
-            ITerminologyProviderCredentialStore credentials)
-        {
-            return CreateTerminologyProvider(terminologyProviderUri);
-
-        }
-
         public ITerminologyProvider CreateTerminologyProvider(Uri terminologyProviderUri)
         {
             TerminologyProviderExcel terminologyProvider;
