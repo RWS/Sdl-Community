@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 	<PlugInName>Trados Transcreate</PlugInName>
-	<Version>5.0.0.0</Version>
+	<Version>5.0.0.1</Version>
 	<Description>Trados Transcreate is a plugin for Trados Studio designed to help manage the Transcreation process.</Description>
 	<Author>Trados AppStore Team</Author>
 	<RequiredProduct name="TradosStudio" minversion="19.0" maxversion="19.9" />

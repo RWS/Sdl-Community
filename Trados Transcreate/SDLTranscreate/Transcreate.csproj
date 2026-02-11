@@ -1,174 +1,174 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net48</TargetFramework>
-        <PlatformTarget>x64</PlatformTarget>
-    <OutputType>Library</OutputType>
-    <RootNamespace>Trados.Transcreate</RootNamespace>
-    <AssemblyName>Trados.Transcreate</AssemblyName>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19\Plugins</PluginDeploymentPath>
-    <UseWindowsForms>true</UseWindowsForms>
-    <UseWPF>true</UseWPF>
-    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
-    <LangVersion>latest</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19</TradosFolder>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="Rws.MultiSelectComboBox">
-      <HintPath>ThirdParty\Rws.MultiSelectComboBox.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Core.Globalization.Async">
-      <HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Core.Settings">
-      <HintPath>$(TradosFolder)\Sdl.Core.Settings.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Desktop.Platform.Styles">
-      <HintPath>$(TradosFolder)\Sdl.Desktop.Platform.Styles.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
-      <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.LanguagePlatform.Core">
-      <HintPath>$(TradosFolder)\Sdl.LanguagePlatform.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
-      <HintPath>$(TradosFolder)\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.TellMe.ProviderApi">
-      <HintPath>$(TradosFolder)\Sdl.TellMe.ProviderApi.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Versioning">
-      <HintPath>$(TradosFolder)\Sdl.Versioning.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="PresentationFramework.Aero" />
-    <Reference Include="DocumentFormat.OpenXml">
-      <HintPath>$(TradosFolder)\DocumentFormat.OpenXml.dll</HintPath>
-    </Reference>
-    <Reference Include="MahApps.Metro">
-      <HintPath>$(TradosFolder)\MahApps.Metro.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>$(TradosFolder)\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="NLog">
-      <HintPath>$(TradosFolder)\NLog.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Core.Globalization">
-      <HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Desktop.IntegrationApi">
-      <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
-      <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Desktop.Platform.Controls">
-      <HintPath>$(TradosFolder)\Sdl.Desktop.Platform.Controls.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.ProjectAutomation.AutomaticTasks">
-      <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.AutomaticTasks.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Framework.Core">
-      <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.ProjectAutomation.Core">
-      <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.ProjectAutomation.FileBased">
-      <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.FileBased.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
-      <HintPath>$(TradosFolder)\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions">
-      <HintPath>$(TradosFolder)\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Sdl.Core.PluginFramework">
-      <Version>2.1.0</Version>
-    </PackageReference>
-    <PackageReference Include="Sdl.Core.PluginFramework.Build">
-      <Version>17.0.0</Version>
-    </PackageReference>
-    <PackageReference Include="Trados.Community.Toolkit.Core">
-      <Version>6.0.2</Version>
-    </PackageReference>
-    <PackageReference Include="Trados.Community.Toolkit.LanguagePlatform">
-      <Version>6.0.2</Version>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="ThirdParty\Rws.MultiSelectComboBox.dll" />
-    <EmbeddedResource Include="Resources\TranscreateFinalReport.xsl" />
-    <Resource Include="Resources\Report.ico" />
-    <Resource Include="Resources\Report.png" />
-    <Resource Include="Resources\sdl_transcreate_wizard.ico" />
-    <Resource Include="Resources\OpenForReview.ico" />
-    <Resource Include="Resources\OpenForSignOff.ico" />
-    <Resource Include="Resources\OpenForTranslation.ico" />
-    <Resource Include="Resources\sdl_transcreate_back.ico" />
-    <Resource Include="Resources\sdl_transcreate_view.ico" />
-    <EmbeddedResource Include="Resources\TranscreateReport.xsl" />
-    <Content Include="pluginpackage.manifest.xml" />
-    <Resource Include="Resources\Checked.png" />
-    <Resource Include="Resources\Close.png" />
-    <Resource Include="Resources\document_add.png" />
-    <Resource Include="Resources\Export.ico" />
-    <Resource Include="Resources\Exported.png" />
-    <Resource Include="Resources\ExportTo.ico" />
-    <Resource Include="Resources\File.png" />
-    <Resource Include="Resources\Folder.png" />
-    <Resource Include="Resources\folder_add.png" />
-    <Resource Include="Resources\Import.ico" />
-    <Resource Include="Resources\Imported.png" />
-    <Resource Include="Resources\ImportFrom.ico" />
-    <Resource Include="Resources\invalid-32.png" />
-    <Resource Include="Resources\job_cancelling.gif" />
-    <Resource Include="Resources\job_completed.gif" />
-    <Resource Include="Resources\job_failed.gif" />
-    <Resource Include="Resources\job_running.gif" />
-    <Resource Include="Resources\job_scheduled.gif" />
-    <Resource Include="Resources\LanguageMapping.ico" />
-    <Resource Include="Resources\minus.png" />
-    <Resource Include="Resources\plus.png" />
-    <Resource Include="Resources\Project.ico" />
-    <Resource Include="Resources\Question.ico" />
-    <Resource Include="Resources\Remove-32.png" />
-    <Resource Include="Resources\Add.ico" />
-    <Resource Include="Resources\Delete.ico" />
-    <Resource Include="Resources\Edit.ico" />
-    <Resource Include="Resources\export_small.ico" />
-    <Resource Include="Resources\import_small.ico" />
-    <Resource Include="Resources\back_translation.ico" />
-    <Resource Include="Resources\back_translation_small.ico" />
-    <Resource Include="Resources\information.png" />
-    <Resource Include="Resources\check.ico" />
-    <Content Include="Resources\Download.ico" />
-    <Content Include="Resources\Forum.ico" />
-    <Content Include="Resources\Refresh.ico" />
-    <ProjectReference Include="..\..\Reports Viewer Plus\Reports.Viewer.Api\Reports.Viewer.Api.csproj" />
-    <Resource Include="Resources\Search.png" />
-    <Resource Include="Resources\Settings.ico" />
-    <Resource Include="Resources\TellMe.ico" />
-    <Resource Include="Resources\warning-32.png" />
-    <Resource Include="Resources\Warning.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Connected Services\" />
-  </ItemGroup>
-  <PropertyGroup>
-    <CreatePluginPackage>true</CreatePluginPackage>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net48</TargetFramework>
+		<PlatformTarget>x64</PlatformTarget>
+		<OutputType>Library</OutputType>
+		<RootNamespace>Trados.Transcreate</RootNamespace>
+		<AssemblyName>Trados.Transcreate</AssemblyName>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19\Plugins</PluginDeploymentPath>
+		<UseWindowsForms>true</UseWindowsForms>
+		<UseWPF>true</UseWPF>
+		<ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+		<LangVersion>latest</LangVersion>
+	</PropertyGroup>
+	<PropertyGroup>
+		<TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19</TradosFolder>
+	</PropertyGroup>
+	<ItemGroup>
+		<Reference Include="Rws.MultiSelectComboBox">
+			<HintPath>ThirdParty\Rws.MultiSelectComboBox.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Core.Globalization.Async">
+			<HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Core.Settings">
+			<HintPath>$(TradosFolder)\Sdl.Core.Settings.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Desktop.Platform.Styles">
+			<HintPath>$(TradosFolder)\Sdl.Desktop.Platform.Styles.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
+			<HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.LanguagePlatform.Core">
+			<HintPath>$(TradosFolder)\Sdl.LanguagePlatform.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
+			<HintPath>$(TradosFolder)\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.TellMe.ProviderApi">
+			<HintPath>$(TradosFolder)\Sdl.TellMe.ProviderApi.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Versioning">
+			<HintPath>$(TradosFolder)\Sdl.Versioning.dll</HintPath>
+		</Reference>
+		<Reference Include="System.Data.DataSetExtensions" />
+		<Reference Include="Microsoft.CSharp" />
+		<Reference Include="PresentationFramework.Aero" />
+		<Reference Include="DocumentFormat.OpenXml">
+			<HintPath>$(TradosFolder)\DocumentFormat.OpenXml.dll</HintPath>
+		</Reference>
+		<Reference Include="MahApps.Metro">
+			<HintPath>$(TradosFolder)\MahApps.Metro.dll</HintPath>
+		</Reference>
+		<Reference Include="Newtonsoft.Json">
+			<HintPath>$(TradosFolder)\Newtonsoft.Json.dll</HintPath>
+		</Reference>
+		<Reference Include="NLog">
+			<HintPath>$(TradosFolder)\NLog.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Core.Globalization">
+			<HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Desktop.IntegrationApi">
+			<HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
+			<HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Desktop.Platform.Controls">
+			<HintPath>$(TradosFolder)\Sdl.Desktop.Platform.Controls.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.ProjectAutomation.AutomaticTasks">
+			<HintPath>$(TradosFolder)\Sdl.ProjectAutomation.AutomaticTasks.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.FileTypeSupport.Framework.Core">
+			<HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.ProjectAutomation.Core">
+			<HintPath>$(TradosFolder)\Sdl.ProjectAutomation.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.ProjectAutomation.FileBased">
+			<HintPath>$(TradosFolder)\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
+			<HintPath>$(TradosFolder)\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions">
+			<HintPath>$(TradosFolder)\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Sdl.Core.PluginFramework">
+			<Version>2.1.0</Version>
+		</PackageReference>
+		<PackageReference Include="Sdl.Core.PluginFramework.Build">
+			<Version>17.0.0</Version>
+		</PackageReference>
+		<PackageReference Include="Trados.Community.Toolkit.Core">
+			<Version>6.0.2</Version>
+		</PackageReference>
+		<PackageReference Include="Trados.Community.Toolkit.LanguagePlatform">
+			<Version>6.0.2</Version>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup>
+		<Resource Include="ThirdParty\Rws.MultiSelectComboBox.dll" />
+		<EmbeddedResource Include="Resources\TranscreateFinalReport.xsl" />
+		<Resource Include="Resources\Report.ico" />
+		<Resource Include="Resources\Report.png" />
+		<Resource Include="Resources\sdl_transcreate_wizard.ico" />
+		<Resource Include="Resources\OpenForReview.ico" />
+		<Resource Include="Resources\OpenForSignOff.ico" />
+		<Resource Include="Resources\OpenForTranslation.ico" />
+		<Resource Include="Resources\sdl_transcreate_back.ico" />
+		<Resource Include="Resources\sdl_transcreate_view.ico" />
+		<EmbeddedResource Include="Resources\TranscreateReport.xsl" />
+		<Content Include="pluginpackage.manifest.xml" />
+		<Resource Include="Resources\Checked.png" />
+		<Resource Include="Resources\Close.png" />
+		<Resource Include="Resources\document_add.png" />
+		<Resource Include="Resources\Export.ico" />
+		<Resource Include="Resources\Exported.png" />
+		<Resource Include="Resources\ExportTo.ico" />
+		<Resource Include="Resources\File.png" />
+		<Resource Include="Resources\Folder.png" />
+		<Resource Include="Resources\folder_add.png" />
+		<Resource Include="Resources\Import.ico" />
+		<Resource Include="Resources\Imported.png" />
+		<Resource Include="Resources\ImportFrom.ico" />
+		<Resource Include="Resources\invalid-32.png" />
+		<Resource Include="Resources\job_cancelling.gif" />
+		<Resource Include="Resources\job_completed.gif" />
+		<Resource Include="Resources\job_failed.gif" />
+		<Resource Include="Resources\job_running.gif" />
+		<Resource Include="Resources\job_scheduled.gif" />
+		<Resource Include="Resources\LanguageMapping.ico" />
+		<Resource Include="Resources\minus.png" />
+		<Resource Include="Resources\plus.png" />
+		<Resource Include="Resources\Project.ico" />
+		<Resource Include="Resources\Question.ico" />
+		<Resource Include="Resources\Remove-32.png" />
+		<Resource Include="Resources\Add.ico" />
+		<Resource Include="Resources\Delete.ico" />
+		<Resource Include="Resources\Edit.ico" />
+		<Resource Include="Resources\export_small.ico" />
+		<Resource Include="Resources\import_small.ico" />
+		<Resource Include="Resources\back_translation.ico" />
+		<Resource Include="Resources\back_translation_small.ico" />
+		<Resource Include="Resources\information.png" />
+		<Resource Include="Resources\check.ico" />
+		<Content Include="Resources\Download.ico" />
+		<Content Include="Resources\Forum.ico" />
+		<Content Include="Resources\Refresh.ico" />
+		<ProjectReference Include="..\..\Reports Viewer Plus\Reports.Viewer.Api\Reports.Viewer.Api.csproj" />
+		<Resource Include="Resources\Search.png" />
+		<Resource Include="Resources\Settings.ico" />
+		<Resource Include="Resources\TellMe.ico" />
+		<Resource Include="Resources\warning-32.png" />
+		<Resource Include="Resources\Warning.png" />
+	</ItemGroup>
+	<ItemGroup>
+		<WCFMetadata Include="Connected Services\" />
+	</ItemGroup>
+	<PropertyGroup>
+		<CreatePluginPackage>true</CreatePluginPackage>
+	</PropertyGroup>
+	<PropertyGroup>
+		<SignAssembly>true</SignAssembly>
+	</PropertyGroup>
+	<PropertyGroup>
+		<AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
+	</PropertyGroup>
 </Project>
