@@ -1,170 +1,169 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net48</TargetFramework>
-        <PlatformTarget>x64</PlatformTarget>
-    <OutputType>Library</OutputType>
-    <RootNamespace>Sdl.Community.XLIFF.Manager</RootNamespace>
-    <AssemblyName>Sdl.Community.XLIFF.Manager</AssemblyName>
-    <UseWindowsForms>true</UseWindowsForms>
-    <UseWPF>true</UseWPF>
-    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19\Plugins</PluginDeploymentPath>
-	  <TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19</TradosFolder>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="DocumentFormat.OpenXml">
-      <HintPath>$(TradosFolder)\DocumentFormat.OpenXml.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>$(TradosFolder)\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="NLog">
-      <HintPath>$(TradosFolder)\NLog.dll</HintPath>
-    </Reference>
-    <Reference Include="PresentationFramework.Aero" />
-    <Reference Include="Rws.MultiSelectComboBox">
-      <HintPath>ThirdParty\Rws.MultiSelectComboBox.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Core.Globalization">
-      <HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Core.Globalization.Async">
-      <HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Core.Settings">
-      <HintPath>$(TradosFolder)\Sdl.Core.Settings.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Desktop.IntegrationApi">
-      <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
-      <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Desktop.Platform.Controls">
-      <HintPath>$(TradosFolder)\Sdl.Desktop.Platform.Controls.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Framework.Core">
-      <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
-      <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Utilities.SdlXliffConvertor">
-      <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Utilities.SdlXliffConvertor.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.ProjectAutomation.AutomaticTasks">
-      <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.AutomaticTasks.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.ProjectAutomation.Core">
-      <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.ProjectAutomation.FileBased">
-      <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.FileBased.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
-      <HintPath>$(TradosFolder)\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions">
-      <HintPath>$(TradosFolder)\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Versioning">
-      <HintPath>$(TradosFolder)\Sdl.Versioning.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.TellMe.ProviderApi">
-      <HintPath>$(TradosFolder)\Sdl.TellMe.ProviderApi.dll</HintPath>
-    </Reference>
-    <Reference Include="System.IO.Compression" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Update="BatchTasks\ImportSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="BatchTasks\ExportSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Controls\ProjectFileActivityViewControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Controls\ProjectFilesViewControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Controls\ProjectsNavigationViewControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\DefaultLanguageMappings.xlsx" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Resources\Download.ico" />
-    <Content Include="Resources\Refresh.ico" />
-    <Content Include="Resources\SourceCode.ico" />
-    <Content Include="Resources\TellmeDocumentation.ico" />
-    <Resource Include="ThirdParty\Rws.MultiSelectComboBox.dll" />
-    <Resource Include="Resources\LanguageMapping.ico" />
-    <Resource Include="Resources\Search.png" />
-    <EmbeddedResource Include="BatchTasks\Report.xsl" />
-    <Content Include="pluginpackage.manifest.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Resource Include="Resources\Import.ico" />
-    <Resource Include="Resources\Remove-32.png" />
-    <Resource Include="Resources\invalid-32.png" />
-    <Resource Include="Resources\job_cancelling.gif" />
-    <Resource Include="Resources\job_completed.gif" />
-    <Resource Include="Resources\job_failed.gif" />
-    <Resource Include="Resources\job_running.gif" />
-    <Resource Include="Resources\job_scheduled.gif" />
-    <Resource Include="Resources\warning-32.png" />
-    <Resource Include="Resources\Exported.png" />
-    <Resource Include="Resources\Imported.png" />
-    <Resource Include="Resources\Project.ico" />
-    <Resource Include="Resources\Close.png" />
-    <Resource Include="Resources\Fie.png" />
-    <Resource Include="Resources\folder_add.png" />
-    <Resource Include="Resources\document_add.png" />
-    <Resource Include="Resources\Folder.png" />
-    <Resource Include="Resources\Export.ico" />
-    <Content Include="Resources\Icon.Jigsaw.ico" />
-    <Resource Include="Resources\Minus.png" />
-    <Resource Include="Resources\Plus.png" />
-    <Resource Include="Resources\xliffManager.ico" />
-    <Resource Include="Resources\xliffManager_2.ico" />
-    <Resource Include="Resources\xliffManager_3.ico" />
-    <Resource Include="Resources\ExportTo.ico" />
-    <Resource Include="Resources\ImportFrom.ico" />
-    <Resource Include="Resources\Checked.png" />
-    <Resource Include="Resources\ForumIcon.ico" />
-    <Resource Include="Resources\Question.ico" />
-    <Resource Include="Resources\Settings.ico" />
-    <Resource Include="Resources\TellMe.ico" />
-    <Resource Include="Resources\Warning.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Sdl.Core.PluginFramework">
-      <Version>2.1.0</Version>
-    </PackageReference>
-    <PackageReference Include="Sdl.Core.PluginFramework.Build">
-      <Version>18.0.1</Version>
-    </PackageReference>
-    <PackageReference Include="Trados.Community.Toolkit.Core">
-      <Version>6.0.2</Version>
-    </PackageReference>
-    <PackageReference Include="Trados.Community.Toolkit.LanguagePlatform">
-      <Version>6.0.2</Version>
-    </PackageReference>
-  </ItemGroup>
-  <PropertyGroup>
-    <CreatePluginPackage>true</CreatePluginPackage>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net48</TargetFramework>
+		<PlatformTarget>x64</PlatformTarget>
+		<OutputType>Library</OutputType>
+		<RootNamespace>Sdl.Community.XLIFF.Manager</RootNamespace>
+		<AssemblyName>Sdl.Community.XLIFF.Manager</AssemblyName>
+		<UseWindowsForms>true</UseWindowsForms>
+		<UseWPF>true</UseWPF>
+		<ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+	</PropertyGroup>
+	<PropertyGroup>
+		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19beta\Plugins</PluginDeploymentPath>
+	</PropertyGroup>
+	<ItemGroup>
+		<Reference Include="DocumentFormat.OpenXml">
+			<HintPath>$(TradosFolder)\DocumentFormat.OpenXml.dll</HintPath>
+		</Reference>
+		<Reference Include="Newtonsoft.Json">
+			<HintPath>$(TradosFolder)\Newtonsoft.Json.dll</HintPath>
+		</Reference>
+		<Reference Include="NLog">
+			<HintPath>$(TradosFolder)\NLog.dll</HintPath>
+		</Reference>
+		<Reference Include="PresentationFramework.Aero" />
+		<Reference Include="Rws.MultiSelectComboBox">
+			<HintPath>ThirdParty\Rws.MultiSelectComboBox.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Core.Globalization">
+			<HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Core.Globalization.Async">
+			<HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Core.Settings">
+			<HintPath>$(TradosFolder)\Sdl.Core.Settings.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Desktop.IntegrationApi">
+			<HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
+			<HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Desktop.Platform.Controls">
+			<HintPath>$(TradosFolder)\Sdl.Desktop.Platform.Controls.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.FileTypeSupport.Framework.Core">
+			<HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
+			<HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.FileTypeSupport.Utilities.SdlXliffConvertor">
+			<HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Utilities.SdlXliffConvertor.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.ProjectAutomation.AutomaticTasks">
+			<HintPath>$(TradosFolder)\Sdl.ProjectAutomation.AutomaticTasks.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.ProjectAutomation.Core">
+			<HintPath>$(TradosFolder)\Sdl.ProjectAutomation.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.ProjectAutomation.FileBased">
+			<HintPath>$(TradosFolder)\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
+			<HintPath>$(TradosFolder)\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions">
+			<HintPath>$(TradosFolder)\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Versioning">
+			<HintPath>$(TradosFolder)\Sdl.Versioning.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.TellMe.ProviderApi">
+			<HintPath>$(TradosFolder)\Sdl.TellMe.ProviderApi.dll</HintPath>
+		</Reference>
+		<Reference Include="System.IO.Compression" />
+		<Reference Include="System.Data.DataSetExtensions" />
+		<Reference Include="Microsoft.CSharp" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Update="BatchTasks\ImportSettingsControl.cs">
+			<SubType>UserControl</SubType>
+		</Compile>
+		<Compile Update="BatchTasks\ExportSettingsControl.cs">
+			<SubType>UserControl</SubType>
+		</Compile>
+		<Compile Update="Controls\ProjectFileActivityViewControl.cs">
+			<SubType>UserControl</SubType>
+		</Compile>
+		<Compile Update="Controls\ProjectFilesViewControl.cs">
+			<SubType>UserControl</SubType>
+		</Compile>
+		<Compile Update="Controls\ProjectsNavigationViewControl.cs">
+			<SubType>UserControl</SubType>
+		</Compile>
+	</ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="Resources\DefaultLanguageMappings.xlsx" />
+	</ItemGroup>
+	<ItemGroup>
+		<Content Include="Resources\Download.ico" />
+		<Content Include="Resources\Refresh.ico" />
+		<Content Include="Resources\SourceCode.ico" />
+		<Content Include="Resources\TellmeDocumentation.ico" />
+		<Resource Include="ThirdParty\Rws.MultiSelectComboBox.dll" />
+		<Resource Include="Resources\LanguageMapping.ico" />
+		<Resource Include="Resources\Search.png" />
+		<EmbeddedResource Include="BatchTasks\Report.xsl" />
+		<Content Include="pluginpackage.manifest.xml">
+			<SubType>Designer</SubType>
+		</Content>
+		<Resource Include="Resources\Import.ico" />
+		<Resource Include="Resources\Remove-32.png" />
+		<Resource Include="Resources\invalid-32.png" />
+		<Resource Include="Resources\job_cancelling.gif" />
+		<Resource Include="Resources\job_completed.gif" />
+		<Resource Include="Resources\job_failed.gif" />
+		<Resource Include="Resources\job_running.gif" />
+		<Resource Include="Resources\job_scheduled.gif" />
+		<Resource Include="Resources\warning-32.png" />
+		<Resource Include="Resources\Exported.png" />
+		<Resource Include="Resources\Imported.png" />
+		<Resource Include="Resources\Project.ico" />
+		<Resource Include="Resources\Close.png" />
+		<Resource Include="Resources\Fie.png" />
+		<Resource Include="Resources\folder_add.png" />
+		<Resource Include="Resources\document_add.png" />
+		<Resource Include="Resources\Folder.png" />
+		<Resource Include="Resources\Export.ico" />
+		<Content Include="Resources\Icon.Jigsaw.ico" />
+		<Resource Include="Resources\Minus.png" />
+		<Resource Include="Resources\Plus.png" />
+		<Resource Include="Resources\xliffManager.ico" />
+		<Resource Include="Resources\xliffManager_2.ico" />
+		<Resource Include="Resources\xliffManager_3.ico" />
+		<Resource Include="Resources\ExportTo.ico" />
+		<Resource Include="Resources\ImportFrom.ico" />
+		<Resource Include="Resources\Checked.png" />
+		<Resource Include="Resources\ForumIcon.ico" />
+		<Resource Include="Resources\Question.ico" />
+		<Resource Include="Resources\Settings.ico" />
+		<Resource Include="Resources\TellMe.ico" />
+		<Resource Include="Resources\Warning.png" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Sdl.Core.PluginFramework">
+			<Version>2.1.0</Version>
+		</PackageReference>
+		<PackageReference Include="Sdl.Core.PluginFramework.Build">
+			<Version>18.0.1</Version>
+		</PackageReference>
+		<PackageReference Include="Trados.Community.Toolkit.Core">
+			<Version>6.0.2</Version>
+		</PackageReference>
+		<PackageReference Include="Trados.Community.Toolkit.LanguagePlatform">
+			<Version>6.0.2</Version>
+		</PackageReference>
+	</ItemGroup>
+	<PropertyGroup>
+		<CreatePluginPackage>true</CreatePluginPackage>
+	</PropertyGroup>
+	<PropertyGroup>
+		<SignAssembly>true</SignAssembly>
+	</PropertyGroup>
+	<PropertyGroup>
+		<AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
+	</PropertyGroup>
 </Project>
