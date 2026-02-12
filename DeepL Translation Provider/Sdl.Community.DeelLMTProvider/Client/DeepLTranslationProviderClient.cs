@@ -127,8 +127,8 @@ namespace Sdl.Community.DeepLMTProvider.Client
                     TagHandling = deepLSettings.TagHandling == TagFormat.None ? null : deepLSettings.TagHandling.ToString().ToLower(),
                     SplittingSentenceHandling = deepLSettings.SplitSentencesHandling.GetApiValue(),
                     IgnoreTags = deepLSettings.IgnoreTags,
-                    ModelType = deepLSettings.ModelType.ToString().ToLower()
-
+                    ModelType = deepLSettings.ModelType.ToString().ToLower(),
+                    TagHandlingVersion = "v2"
                 };
 
                 var requestJson = JsonConvert.SerializeObject(
