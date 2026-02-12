@@ -32,5 +32,8 @@ namespace Sdl.Community.DeepLMTProvider.Model
         
         [JsonProperty("model_type")]
         public string ModelType { get; set; }
+
+        [JsonProperty("tag_handling_version")]
+        public string TagHandlingVersion { get; set; }
     }
 }
