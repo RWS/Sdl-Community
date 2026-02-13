@@ -14,8 +14,6 @@ namespace Sdl.Community.DeepLMTProvider.Client
 {
     public class DeepLGlossaryClient : IDeepLGlossaryClient
     {
-        
-
         public async Task<ActionResult<GlossaryInfo>> DeleteGlossary(string apiKey, string glossaryId)
         {
             var request = new HttpRequestMessage

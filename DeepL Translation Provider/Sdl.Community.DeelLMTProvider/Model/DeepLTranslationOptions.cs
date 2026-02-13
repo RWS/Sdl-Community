@@ -69,5 +69,6 @@ namespace Sdl.Community.DeepLMTProvider.Model
         public string SplitSentenceHandlingParameter { get; set; }
 
         public Uri Uri { get; set; }
+        public string StyleId { get; set; }
     }
 }

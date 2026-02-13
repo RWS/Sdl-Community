@@ -5,9 +5,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 
-namespace Sdl.Community.DeepLMTProvider.Service
+namespace Sdl.Community.DeepLMTProvider.Client
 {
-    public static class LanguageService
+    public static class LanguageClient
     {
 
         public static List<SupportedLanguage> AllSupportedSourceLanguages { get; set; } =

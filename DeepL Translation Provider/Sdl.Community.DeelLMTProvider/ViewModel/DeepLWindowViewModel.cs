@@ -12,7 +12,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Runtime.CompilerServices;
-using System.ServiceModel.PeerResolvers;
+using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Input;
@@ -21,19 +21,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 {
     public class DeepLWindowViewModel : ViewModel
     {
-        private string _apiKey;
-        private string _apiKeyValidationMessage;
-        private string _apiVersion;
-        private List<string> _ignoreTags;
-        private ObservableCollection<LanguagePairOptions> _languagePairSettings = new();
-        private bool _preserveFormatting;
-        private bool _sendPlainText;
-        private bool _resendDraft;
-        private TagFormat _tagType;
-        private SplitSentences _splitSentencesType;
-        private string _validationMessages;
-        private ModelType _modelType;
-
         public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, IDeepLGlossaryClient glossaryClient, IMessageService messageService)
         {
             IsTellMeAction = true;
@@ -55,7 +42,8 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
             Options = deepLTranslationOptions;
 
-            SetSettingsOnWindow(null);
+            LoadCredentialSettings(null);
+            LoadStyleSettings();
             LoadLanguagePairSettings();
         }
 
@@ -77,20 +65,29 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             IgnoreTags = deepLTranslationOptions.IgnoreTagsParameter;
             ModelType = deepLTranslationOptions.ModelType;
 
+            
             PasswordChangedTimer.Elapsed += OnPasswordChanged;
 
-            SetSettingsOnWindow(credentialStore);
+            LoadCredentialSettings(credentialStore);
+            LoadStyleSettings();
             //DeepLTranslationProviderClient.ApiKeyChanged += Dispatcher_LoadLanguagePairSettings;
+        }
+
+        private async Task LoadStyleSettings()
+        {
+            if (ApiKey is null) return;
+            Styles = await StyleClient.GetStyles(ApiKey).ConfigureAwait(false);
+            SelectedStyle = Styles.FirstOrDefault(s => s.ID == Options.StyleId);
         }
 
         public event Action ManageGlossaries;
 
         public string ApiKey
         {
-            get => _apiKey;
+            get;
             set
             {
-                SetField(ref _apiKey, value?.Trim());
+                SetField(ref field, value?.Trim());
                 PasswordChangedTimer.Enabled = true;
             }
         }
@@ -99,20 +96,20 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         public string ApiKeyValidationMessage
         {
-            get => _apiKeyValidationMessage;
+            get;
             set
             {
-                SetField(ref _apiKeyValidationMessage, value);
+                SetField(ref field, value);
                 OnPropertyChanged(nameof(OkCommand));
             }
         }
 
         public string ApiVersion
         {
-            get => _apiVersion;
+            get;
             set
             {
-                SetField(ref _apiVersion, value);
+                SetField(ref field, value);
                 OnPasswordChanged(null, null);
             }
         }
@@ -121,71 +118,83 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         public List<string> IgnoreTags
         {
-            get => _ignoreTags;
-            set => SetField(ref _ignoreTags, value);
+            get;
+            set => SetField(ref field, value);
         }
 
         public ObservableCollection<LanguagePairOptions> LanguagePairOptions
         {
-            get => _languagePairSettings;
-            set => SetField(ref _languagePairSettings, value);
-        }
+            get;
+            set => SetField(ref field, value);
+        } = new();
 
         public ICommand ManageGlossariesCommand => new ParameterlessCommand(() => ManageGlossaries?.Invoke(), () => ApiKeyValidationMessage == null);
+
+        public ModelType ModelType
+        {
+            get;
+            set => SetField(ref field, value);
+        }
 
         public ICommand OkCommand => new ParameterlessCommand(Save, () => ApiKeyValidationMessage == null);
         public DeepLTranslationOptions Options { get; set; }
 
         public bool PreserveFormatting
         {
-            get => _preserveFormatting;
-            set => SetField(ref _preserveFormatting, value);
+            get;
+            set => SetField(ref field, value);
+        }
+
+        public bool ResendDraft
+        {
+            get;
+            set
+            {
+                SetField(ref field, value);
+            }
+        }
+
+        public DeepLStyle SelectedStyle
+        {
+            get;
+            set => SetField(ref field, value);
         }
 
         public bool SendPlainText
         {
-            get => _sendPlainText;
-            set => SetField(ref _sendPlainText, value);
+            get;
+            set => SetField(ref field, value);
         }
 
-        public bool ResendDraft 
+        public SplitSentences SplitSentencesType
         {
-            get => _resendDraft;
-            set
-            {
-                SetField(ref _resendDraft, value);
-            } 
+            get;
+            set => SetField(ref field, value);
         }
 
+        public List<DeepLStyle> Styles
+        {
+            get;
+            set => SetField(ref field, value);
+        } = [];
 
         public TagFormat TagType
         {
-            get => _tagType; // Add a method here to update the splitsentencestype
+            get;
+            // Add a method here to update the splitsentencestype
             set
             {
-                SetField(ref _tagType, value);
+                SetField(ref field, value);
                 SplitSentencesType = GetDefaultSplitSentences(value);
             }
-        }
-        
-        public ModelType ModelType
-        {
-            get => _modelType;
-            set => SetField(ref _modelType, value);
-        }
-
-        public SplitSentences SplitSentencesType 
-        {
-            get => _splitSentencesType; 
-            set => SetField(ref _splitSentencesType, value); 
         }
 
         public string Title { get; set; } = "DeepL Translation Provider";
 
         public string ValidationMessages
         {
-            get => _validationMessages;
-            set => SetField(ref _validationMessages, value);
+            get;
+            set => SetField(ref field, value);
         }
 
         private IDeepLGlossaryClient GlossaryClient { get; set; }
@@ -277,6 +286,11 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         private void Dispatcher_LoadLanguagePairSettings() =>
                     Application.Current.Dispatcher.Invoke(LoadLanguagePairSettings);
 
+        private SplitSentences GetDefaultSplitSentences(TagFormat tagFormat)
+        => tagFormat == TagFormat.None
+            ? SplitSentences.Default
+            : SplitSentences.NoNewlines;
+
         private void HandleError(string message, [CallerMemberName] string failingMethod = null)
         {
             ValidationMessages = message;
@@ -287,6 +301,8 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             DeepLTranslationProviderClient.ApiVersion = ApiVersion;
             DeepLTranslationProviderClient.ApiKey = ApiKey;
             GlossaryClient.ApiVersion = ApiVersion;
+
+            LoadStyleSettings();
 
             SetApiKeyValidityLabel();
             Dispatcher_LoadLanguagePairSettings();
@@ -308,6 +324,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             Options.ApiVersion = ApiVersion;
             Options.IgnoreTagsParameter = IgnoreTags;
             Options.ModelType = ModelType;
+            Options.StyleId = SelectedStyle?.ID;
 
             var glossaryIds = Options.LanguagePairOptions.ToDictionary(
                 lpo => (lpo.LanguagePair.SourceCulture.Name, lpo.LanguagePair.TargetCulture.Name),
@@ -342,12 +359,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             SetValidationBlockMessage(PluginResources.ApiKeyIsRequired_ValidationBlockMessage);
         }
 
-        private SplitSentences GetDefaultSplitSentences(TagFormat tagFormat)
-        => tagFormat == TagFormat.None
-            ? SplitSentences.Default
-            : SplitSentences.NoNewlines;
-
-        private void SetSettingsOnWindow(TranslationProviderCredential credentialStore)
+        private void LoadCredentialSettings(TranslationProviderCredential credentialStore)
         {
             if (IsTellMeAction)
             {

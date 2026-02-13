@@ -235,7 +235,8 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                     _options.SplitSentencesHandling,
                     _options.PreserveFormatting,
                     _options.IgnoreTagsParameter,
-                    _options.ModelType));
+                    _options.ModelType,
+                    _options.StyleId));
 
         private List<PreTranslateSegment> TranslateSegments(List<PreTranslateSegment> preTranslateSegments)
         {
