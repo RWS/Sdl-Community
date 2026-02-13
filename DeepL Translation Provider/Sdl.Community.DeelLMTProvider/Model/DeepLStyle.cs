@@ -13,5 +13,6 @@ namespace Sdl.Community.DeepLMTProvider.Model
         [JsonProperty("style_id")]
         public string ID { get; set; }
         public string Name { get; set; }
+        public string Language { get; set; }
     }
 }

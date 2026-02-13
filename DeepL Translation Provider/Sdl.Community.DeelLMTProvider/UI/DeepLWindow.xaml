@@ -225,21 +225,7 @@
                                          HorizontalAlignment="Right" />
                             </StackPanel>
 
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Style"
-                                       Margin="12 0 0 5" />
-                                <ComboBox Margin="5 0 0 0"
-                                          Height="20"
-                                          SelectedItem="{Binding SelectedStyle}"
-                                          ItemsSource="{Binding Styles}">
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Name}" />
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                </ComboBox>
-                            </StackPanel>
-
+                        
                         </StackPanel>
                         <StackPanel Margin="5 5 0 5">
 
@@ -340,6 +326,7 @@
                                     </ComboBox.Style>
                                 </ComboBox>
                                 <TextBlock Text="No glossary available"
+                                           VerticalAlignment="Center"
                                            HorizontalAlignment="Center">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock"
@@ -360,6 +347,58 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
+                
+                <DataGridTemplateColumn Header="Style"
+                                        SortMemberPath="Name"
+                                        Width="*">
+
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <ComboBox ItemsSource="{Binding Styles}"
+                                          Cursor="Hand"
+                                          HorizontalContentAlignment="Center"
+                                          SelectedItem="{Binding SelectedStyle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                          DisplayMemberPath="Name">
+                                    <ComboBox.Style>
+                                        <Style TargetType="ComboBox"
+                                               BasedOn="{StaticResource {x:Type ComboBox}}">
+                                            <Setter Property="Visibility"
+                                                    Value="Visible" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Styles.Count}"
+                                                             Value="0">
+                                                    <Setter Property="Visibility"
+                                                            Value="Collapsed" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ComboBox.Style>
+                                </ComboBox>
+                                <TextBlock Text="No style available"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock"
+                                               BasedOn="{StaticResource {x:Type TextBlock}}">
+                                            <Setter Property="Visibility"
+                                                    Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Styles.Count}"
+                                                             Value="0">
+                                                    <Setter Property="Visibility"
+                                                            Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+
             </DataGrid.Columns>
         </DataGrid>
 

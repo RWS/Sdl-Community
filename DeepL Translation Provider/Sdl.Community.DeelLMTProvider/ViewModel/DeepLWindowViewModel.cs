@@ -9,6 +9,7 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Runtime.CompilerServices;
@@ -43,7 +44,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             Options = deepLTranslationOptions;
 
             LoadCredentialSettings(null);
-            LoadStyleSettings();
             LoadLanguagePairSettings();
         }
 
@@ -65,19 +65,10 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             IgnoreTags = deepLTranslationOptions.IgnoreTagsParameter;
             ModelType = deepLTranslationOptions.ModelType;
 
-            
             PasswordChangedTimer.Elapsed += OnPasswordChanged;
 
             LoadCredentialSettings(credentialStore);
-            LoadStyleSettings();
             //DeepLTranslationProviderClient.ApiKeyChanged += Dispatcher_LoadLanguagePairSettings;
-        }
-
-        private async Task LoadStyleSettings()
-        {
-            if (ApiKey is null) return;
-            Styles = await StyleClient.GetStyles(ApiKey).ConfigureAwait(false);
-            SelectedStyle = Styles.FirstOrDefault(s => s.ID == Options.StyleId);
         }
 
         public event Action ManageGlossaries;
@@ -137,6 +128,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         }
 
         public ICommand OkCommand => new ParameterlessCommand(Save, () => ApiKeyValidationMessage == null);
+
         public DeepLTranslationOptions Options { get; set; }
 
         public bool PreserveFormatting
@@ -154,12 +146,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             }
         }
 
-        public DeepLStyle SelectedStyle
-        {
-            get;
-            set => SetField(ref field, value);
-        }
-
         public bool SendPlainText
         {
             get;
@@ -171,12 +157,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             get;
             set => SetField(ref field, value);
         }
-
-        public List<DeepLStyle> Styles
-        {
-            get;
-            set => SetField(ref field, value);
-        } = [];
 
         public TagFormat TagType
         {
@@ -198,11 +178,8 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         }
 
         private IDeepLGlossaryClient GlossaryClient { get; set; }
-
         private bool IsTellMeAction { get; }
-
         private LanguagePair[] LanguagePairs { get; }
-
         private IMessageService MessageService { get; }
 
         private Timer PasswordChangedTimer { get; } = new()
@@ -211,10 +188,13 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             AutoReset = false
         };
 
-        public async void LoadLanguagePairSettings()
+        private List<DeepLStyle> AllStyles { get; set; } = [];
+
+        public async Task LoadLanguagePairSettings()
         {
             ValidationMessages = null;
             List<GlossaryInfo> glossaries = [];
+            AllStyles = [];
 
             if (DeepLTranslationProviderClient.IsApiKeyValidResponse.IsSuccessStatusCode)
             {
@@ -225,6 +205,8 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                     HandleError(message);
                     glossaries = [];
                 }
+
+                await LoadStyles();
             }
 
             glossaries?.Add(GlossaryInfo.NoGlossary);
@@ -238,13 +220,29 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                     Options.LanguagePairOptions?.FirstOrDefault(lpo => lpo.LanguagePair.Equals(languagePair));
 
                 var selectedGlossary = GetSelectedGlossaryFromSavedSetting(glossaries, languageSavedOptions, sourceLangCode, targetLangCode);
+                var selectedStyle = AllStyles.FirstOrDefault(s => s.ID == languageSavedOptions?.SelectedStyle?.ID);
+
+                var currentLanguageGlossaries = glossaries?.Where(g =>
+                    g.SourceLanguage == sourceLangCode && g.TargetLanguage == targetLangCode ||
+                    g.Name == PluginResources.NoGlossary).ToList();
+
+
+                var targetCulture = new CultureInfo(languagePair.TargetCulture);
+                var ietfLanguageTag = targetCulture.IetfLanguageTag.ToLowerInvariant();
+                var twoLetterIso = targetCulture.TwoLetterISOLanguageName.ToLowerInvariant();
+
+                var currentLanguageStyles = AllStyles.Where(style =>
+                    style.Language == ietfLanguageTag || style.Language == twoLetterIso).ToList();
 
                 var newLanguagePairOptions = new LanguagePairOptions
                 {
                     Formality = languageSavedOptions?.Formality ?? Formality.Default,
-                    Glossaries = glossaries?.Where(g => g.SourceLanguage == sourceLangCode && g.TargetLanguage == targetLangCode || g.Name == PluginResources.NoGlossary).ToList(),
+                    Glossaries =
+                        currentLanguageGlossaries,
                     SelectedGlossary = selectedGlossary,
-                    LanguagePair = languagePair
+                    LanguagePair = languagePair,
+                    SelectedStyle = selectedStyle,
+                    Styles = currentLanguageStyles
                 };
 
                 var oldLanguagePairOption = LanguagePairOptions.FirstOrDefault(lpo => lpo.LanguagePair.Equals(languagePair));
@@ -296,13 +294,30 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             ValidationMessages = message;
         }
 
+        private void LoadCredentialSettings(TranslationProviderCredential credentialStore)
+        {
+            if (IsTellMeAction)
+            {
+                ApiKeyBoxEnabled = false;
+            }
+            else
+            {
+                ApiKeyBoxEnabled = true;
+                ApiKey = credentialStore?.Credential;
+                Options.ApiKey = ApiKey;
+            }
+        }
+
+        private async Task LoadStyles()
+        {
+            AllStyles = await StyleClient.GetStyles(ApiKey).ConfigureAwait(false) ?? [];
+        }
+
         private void OnPasswordChanged(object sender, EventArgs e)
         {
             DeepLTranslationProviderClient.ApiVersion = ApiVersion;
             DeepLTranslationProviderClient.ApiKey = ApiKey;
             GlossaryClient.ApiVersion = ApiVersion;
-
-            LoadStyleSettings();
 
             SetApiKeyValidityLabel();
             Dispatcher_LoadLanguagePairSettings();
@@ -324,7 +339,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             Options.ApiVersion = ApiVersion;
             Options.IgnoreTagsParameter = IgnoreTags;
             Options.ModelType = ModelType;
-            Options.StyleId = SelectedStyle?.ID;
 
             var glossaryIds = Options.LanguagePairOptions.ToDictionary(
                 lpo => (lpo.LanguagePair.SourceCulture.Name, lpo.LanguagePair.TargetCulture.Name),
@@ -357,20 +371,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             }
 
             SetValidationBlockMessage(PluginResources.ApiKeyIsRequired_ValidationBlockMessage);
-        }
-
-        private void LoadCredentialSettings(TranslationProviderCredential credentialStore)
-        {
-            if (IsTellMeAction)
-            {
-                ApiKeyBoxEnabled = false;
-            }
-            else
-            {
-                ApiKeyBoxEnabled = true;
-                ApiKey = credentialStore?.Credential;
-                Options.ApiKey = ApiKey;
-            }
         }
 
         private void SetValidationBlockMessage(string message = null)
