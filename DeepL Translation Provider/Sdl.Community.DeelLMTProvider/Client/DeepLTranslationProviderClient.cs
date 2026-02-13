@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using NLog;
 using Sdl.Community.DeepLMTProvider.Model;
+using Sdl.Community.DeepLMTProvider.Service;
 using Sdl.LanguagePlatform.Core;
 using System;
 using System.Collections.Generic;
@@ -52,8 +52,8 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
         private Dictionary<string, List<string>> ChineseMappings { get; set; } = new()
         {
-            ["ZH-HANS"] = new List<string> { "ZH-CN", "ZH-SG", "ZH-HANS-HK", "ZH-HANS-MO" },
-            ["ZH-HANT"] = new List<string> { "ZH-TW", "ZH-HK", "ZH-MO" }
+            ["ZH-HANS"] = ["ZH-CN", "ZH-SG", "ZH-HANS-HK", "ZH-HANS-MO"],
+            ["ZH-HANT"] = ["ZH-TW", "ZH-HK", "ZH-MO"]
         };
 
         private List<string> SupportedSourceLanguages =>
@@ -64,9 +64,9 @@ namespace Sdl.Community.DeepLMTProvider.Client
             var supportedLanguages = new List<string>();
             try
             {
-                var response = GetSupportedLanguages("source", apiKey);
-                supportedLanguages = JArray.Parse(response)
-                    .Select(item => item["language"].ToString().ToUpperInvariant()).ToList();
+                var response = LanguageService.GetSupportedLanguages("source", apiKey, ChosenBaseUrl);
+                supportedLanguages = response
+                    .Select(item => item.Language.ToUpperInvariant()).ToList();
             }
             catch (Exception ex)
             {
@@ -81,11 +81,11 @@ namespace Sdl.Community.DeepLMTProvider.Client
             var supportedLanguages = new Dictionary<string, bool>();
             try
             {
-                var response = GetSupportedLanguages("target", apiKey);
+                var response = LanguageService.GetSupportedLanguages("target", apiKey, ChosenBaseUrl);
                 supportedLanguages =
-                    JArray.Parse(response).ToDictionary(
-                        item => item["language"].ToString().ToUpperInvariant(),
-                        item => bool.Parse(item["supports_formality"].ToString()));
+                    response.ToDictionary(
+                        item => item.Language.ToUpperInvariant(),
+                        item => item.SupportsFormality);
             }
             catch (Exception ex)
             {
@@ -176,17 +176,6 @@ namespace Sdl.Community.DeepLMTProvider.Client
             return translatedText;
         }
 
-        private static string GetSupportedLanguages(string type, string apiKey)
-        {
-            var content = new StringContent($"type={type}" + $"&auth_key={apiKey}", Encoding.UTF8,
-                "application/x-www-form-urlencoded");
-
-            var response = AppInitializer.Client.PostAsync($"{ChosenBaseUrl}/languages", content).Result;
-            response.EnsureSuccessStatusCode();
-
-            return response.Content?.ReadAsStringAsync().Result;
-        }
-
         private static HttpResponseMessage IsValidApiKey(string apiKey)
         {
             return AppInitializer.Client.GetAsync($"{ChosenBaseUrl}/usage?auth_key={apiKey}").Result;
@@ -237,16 +226,12 @@ namespace Sdl.Community.DeepLMTProvider.Client
             var ietfLanguageTag = culture.IetfLanguageTag.ToUpperInvariant();
             if (isTarget && ietfLanguageTag.Contains("ZH")) return GetChineseFlavour(ietfLanguageTag);
 
-            if (languageList != null && languageList.Any())
-            {
-                var twoLetterIso = culture.TwoLetterISOLanguageName.ToUpperInvariant();
+            if (languageList == null || !languageList.Any()) return string.Empty;
 
-                var selectedTargetLanguage = languageList.FirstOrDefault(tl => tl == ietfLanguageTag) ?? languageList.FirstOrDefault(tl => tl == twoLetterIso);
+            var twoLetterIso = culture.TwoLetterISOLanguageName.ToUpperInvariant();
 
-                return selectedTargetLanguage ?? (languageList.Any(tl => tl.Contains(twoLetterIso)) ? twoLetterIso : null);
-            }
-
-            return string.Empty;
+            var selectedTargetLanguage = languageList.FirstOrDefault(tl => tl == ietfLanguageTag) ?? languageList.FirstOrDefault(tl => tl == twoLetterIso);
+            return selectedTargetLanguage ?? (languageList.Any(tl => tl.Contains(twoLetterIso)) ? twoLetterIso : null);
         }
     }
 }
