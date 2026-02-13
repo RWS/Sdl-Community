@@ -17,9 +17,6 @@ namespace Sdl.Community.DeepLMTProvider.Client
     public class DeepLTranslationProviderClient
     {
         private static readonly Logger Logger = Log.GetLogger(nameof(DeepLTranslationProviderClient));
-        private static string _apiKey;
-
-        private List<string> _supportedSourceLanguages;
 
         public DeepLTranslationProviderClient(string key)
         {
@@ -31,10 +28,10 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
         public static string ApiKey
         {
-            get => _apiKey;
+            get;
             set
             {
-                _apiKey = value;
+                field = value;
                 OnApiKeyChanged();
             }
         }
@@ -56,7 +53,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
         };
 
         private List<string> SupportedSourceLanguages =>
-                    _supportedSourceLanguages ??= GetSupportedSourceLanguages(ApiKey);
+                    field ??= GetSupportedSourceLanguages(ApiKey);
 
         public static List<string> GetSupportedSourceLanguages(string apiKey)
         {

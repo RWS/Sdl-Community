@@ -7,8 +7,6 @@ namespace Sdl.Community.DeepLMTProvider.Model
     public class GlossaryEntry : ViewModel.ViewModel, IDataErrorInfo
     {
         private readonly Dictionary<string, string> _validationErrors = new();
-        private string _sourceTerm;
-        private string _targetTerm;
 
         public string Error => _validationErrors.Count > 0 ? string.Join("\n", _validationErrors.Values) : null;
 
@@ -17,18 +15,18 @@ namespace Sdl.Community.DeepLMTProvider.Model
         [Required(ErrorMessage = "Source term required.")]
         public string SourceTerm
         {
-            get => _sourceTerm;
+            get;
             set
             {
-                SetField(ref _sourceTerm, value);
+                SetField(ref field, value);
             }
         }
 
         [Required(ErrorMessage = "Target term required.")]
         public string TargetTerm
         {
-            get => _targetTerm;
-            set => SetField(ref _targetTerm, value);
+            get;
+            set => SetField(ref field, value);
         }
 
         public string this[string columnName]
