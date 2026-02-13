@@ -2,7 +2,6 @@
 using Newtonsoft.Json.Serialization;
 using NLog;
 using Sdl.Community.DeepLMTProvider.Model;
-using Sdl.Community.DeepLMTProvider.Service;
 using Sdl.LanguagePlatform.Core;
 using System;
 using System.Collections.Generic;
@@ -18,9 +17,6 @@ namespace Sdl.Community.DeepLMTProvider.Client
     public class DeepLTranslationProviderClient
     {
         private static readonly Logger Logger = Log.GetLogger(nameof(DeepLTranslationProviderClient));
-        private static string _apiKey;
-
-        private List<string> _supportedSourceLanguages;
 
         public DeepLTranslationProviderClient(string key)
         {
@@ -32,10 +28,10 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
         public static string ApiKey
         {
-            get => _apiKey;
+            get;
             set
             {
-                _apiKey = value;
+                field = value;
                 OnApiKeyChanged();
             }
         }
@@ -57,14 +53,14 @@ namespace Sdl.Community.DeepLMTProvider.Client
         };
 
         private List<string> SupportedSourceLanguages =>
-                    _supportedSourceLanguages ??= GetSupportedSourceLanguages(ApiKey);
+                    field ??= GetSupportedSourceLanguages(ApiKey);
 
         public static List<string> GetSupportedSourceLanguages(string apiKey)
         {
             var supportedLanguages = new List<string>();
             try
             {
-                var response = LanguageService.GetSupportedLanguages("source", apiKey, ChosenBaseUrl);
+                var response = LanguageClient.GetSupportedLanguages("source", apiKey, ChosenBaseUrl);
                 supportedLanguages = response
                     .Select(item => item.Language.ToUpperInvariant()).ToList();
             }
@@ -81,7 +77,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
             var supportedLanguages = new Dictionary<string, bool>();
             try
             {
-                var response = LanguageService.GetSupportedLanguages("target", apiKey, ChosenBaseUrl);
+                var response = LanguageClient.GetSupportedLanguages("target", apiKey, ChosenBaseUrl);
                 supportedLanguages =
                     response.ToDictionary(
                         item => item.Language.ToUpperInvariant(),
@@ -128,7 +124,8 @@ namespace Sdl.Community.DeepLMTProvider.Client
                     SplittingSentenceHandling = deepLSettings.SplitSentencesHandling.GetApiValue(),
                     IgnoreTags = deepLSettings.IgnoreTags,
                     ModelType = deepLSettings.ModelType.ToString().ToLower(),
-                    TagHandlingVersion = "v2"
+                    TagHandlingVersion = "v2",
+                    StyleId = deepLSettings.StyleId
                 };
 
                 var requestJson = JsonConvert.SerializeObject(

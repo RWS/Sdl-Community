@@ -1,31 +1,40 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Sdl.LanguagePlatform.Core;
+using System.Collections.Generic;
 
 namespace Sdl.Community.DeepLMTProvider.Model
 {
-	public class LanguagePairOptions : ViewModel.ViewModel
-	{
-		private Formality _formality;
-		private GlossaryInfo _selectedGlossary;
+    public class LanguagePairOptions : ViewModel.ViewModel
+    {
+        public Formality Formality
+        {
+            get;
+            set => SetField(ref field, value);
+        }
 
-		public Formality Formality
-		{
-			get => _formality;
-			set => SetField(ref _formality, value);
-		}
+        [JsonIgnore]
+        public List<GlossaryInfo> Glossaries { get; set; }
 
-		[JsonIgnore]
-		public List<GlossaryInfo> Glossaries { get; set; }
-
-        public override string ToString() => $"{nameof(LanguagePairOptions)}";
+        public LanguagePair LanguagePair { get; set; }
 
         public GlossaryInfo SelectedGlossary
-		{
-			get => _selectedGlossary;
-			set => SetField(ref _selectedGlossary, value);
-		}
+        {
+            get;
+            set => SetField(ref field, value);
+        }
 
-		public LanguagePair LanguagePair { get; set; }
-	}
+        public DeepLStyle SelectedStyle
+        {
+            get;
+            set => SetField(ref field, value);
+        }
+
+        public List<DeepLStyle> Styles
+        {
+            get;
+            set => SetField(ref field, value);
+        } = [];
+
+        public override string ToString() => $"{nameof(LanguagePairOptions)}";
+    }
 }
