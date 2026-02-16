@@ -14,7 +14,6 @@ namespace Sdl.Community.DeepLMTProvider.Model
         public List<LanguagePairOptions> LanguagePairOptions { get; set; }
         public Dictionary<string, string> LanguagesSupported { get; set; } = new();
 
-        public ModelType ModelType { get; set; }
 
         public bool PreserveFormatting { get; set; }
 

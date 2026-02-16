@@ -15,8 +15,7 @@
         d:DataContext="{d:DesignInstance Type=viewModel:DeepLWindowViewModel}"
         Icon="../Resources/deepLIcon.ico"
         WindowStyle="None"
-        Width="610"
-        MaxWidth="610"
+        Width="850"
         Height="700"
         AllowsTransparency="False"
         WindowStartupLocation="CenterScreen"
@@ -178,16 +177,7 @@
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Model type"
                                        Margin="12 0 0 5" />
-                                <ComboBox Margin="5 0 0 0"
-                                          Height="20"
-                                          SelectedItem="{Binding ModelType}"
-                                          ItemsSource="{Binding Source={StaticResource ModelTypeProvider}}">
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock ToolTip="{Binding Converter={StaticResource ModelTypeToDescriptionConverter }}" Text="{Binding Converter={StaticResource ModelTypeToFriendlyNameConverter}}" />
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                </ComboBox>
+                               
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal">
@@ -343,6 +333,30 @@
                                         </Style>
                                     </TextBlock.Style>
                                 </TextBlock>
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                
+                <DataGridTemplateColumn Header="Model type"
+                                        SortMemberPath="Name"
+                                        Width="*">
+
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <ComboBox Cursor="Hand"
+                                          HorizontalContentAlignment="Center"
+                                          SelectedItem="{Binding ModelType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                          ItemsSource="{Binding Source={StaticResource ModelTypeProvider}}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock ToolTip="{Binding Converter={StaticResource ModelTypeToDescriptionConverter }}"
+                                                       Text="{Binding Converter={StaticResource ModelTypeToFriendlyNameConverter}}" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                                
                             </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

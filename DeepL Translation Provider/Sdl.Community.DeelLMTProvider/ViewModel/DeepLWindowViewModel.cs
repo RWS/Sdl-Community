@@ -39,7 +39,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             PreserveFormatting = deepLTranslationOptions.PreserveFormatting;
             ApiVersion = deepLTranslationOptions.ApiVersion;
             IgnoreTags = deepLTranslationOptions.IgnoreTagsParameter;
-            ModelType = deepLTranslationOptions.ModelType;
 
             Options = deepLTranslationOptions;
 
@@ -63,7 +62,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             SplitSentencesType = deepLTranslationOptions.SplitSentenceHandling;
             ApiVersion = deepLTranslationOptions.ApiVersion;
             IgnoreTags = deepLTranslationOptions.IgnoreTagsParameter;
-            ModelType = deepLTranslationOptions.ModelType;
 
             PasswordChangedTimer.Elapsed += OnPasswordChanged;
 
@@ -121,12 +119,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         public ICommand ManageGlossariesCommand => new ParameterlessCommand(() => ManageGlossaries?.Invoke(), () => ApiKeyValidationMessage == null);
 
-        public ModelType ModelType
-        {
-            get;
-            set => SetField(ref field, value);
-        }
-
+        
         public ICommand OkCommand => new ParameterlessCommand(Save, () => ApiKeyValidationMessage == null);
 
         public DeepLTranslationOptions Options { get; set; }
@@ -231,7 +224,8 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                     SelectedGlossary = selectedGlossary,
                     LanguagePair = languagePair,
                     SelectedStyle = selectedStyle,
-                    Styles = currentLanguageStyles
+                    Styles = currentLanguageStyles,
+                    ModelType = languageSavedOptions?.ModelType ?? ModelType.Prefer_Quality_Optimized
                 };
 
                 var oldLanguagePairOption = LanguagePairOptions.FirstOrDefault(lpo => lpo.LanguagePair.Equals(languagePair));
@@ -343,7 +337,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             Options.SplitSentenceHandling = SplitSentencesType;
             Options.ApiVersion = ApiVersion;
             Options.IgnoreTagsParameter = IgnoreTags;
-            Options.ModelType = ModelType;
 
             var glossaryIds = Options.LanguagePairOptions.ToDictionary(
                 lpo => (lpo.LanguagePair.SourceCulture.Name, lpo.LanguagePair.TargetCulture.Name),

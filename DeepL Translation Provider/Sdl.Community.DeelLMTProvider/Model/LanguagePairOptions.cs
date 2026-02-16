@@ -29,11 +29,18 @@ namespace Sdl.Community.DeepLMTProvider.Model
             set => SetField(ref field, value);
         }
 
+        [JsonIgnore]
         public List<DeepLStyle> Styles
         {
             get;
             set => SetField(ref field, value);
         } = [];
+
+        public ModelType ModelType
+        {
+            get;
+            set => SetField(ref field, value);
+        }
 
         public override string ToString() => $"{nameof(LanguagePairOptions)}";
     }
