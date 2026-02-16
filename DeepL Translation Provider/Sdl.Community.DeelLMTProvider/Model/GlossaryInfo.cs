@@ -6,6 +6,9 @@ namespace Sdl.Community.DeepLMTProvider.Model
     {
         [JsonIgnore]
         public static GlossaryInfo NoGlossary { get; } = new() { Name = PluginResources.NoGlossary };
+        
+        [JsonIgnore]
+        public static GlossaryInfo NotSupported { get; } = new() { Name = PluginResources.GlossariesNotSupported };
 
         [JsonProperty("glossary_id")]
         public string Id { get; set; }

@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Serialization;
 using NLog;
 using Sdl.Community.DeepLMTProvider.Model;
+using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using System;
 using System.Collections.Generic;
@@ -42,6 +43,8 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
         private static string ChosenBaseUrl => ApiVersion?.Contains("V1") ?? true ? Constants.BaseUrlV1 : Constants.BaseUrlV2;
 
+        private static List<string> SupportedSourceLanguages { get; set; }
+        private static Dictionary<string, bool> SupportedSourceLanguagesAndFormalities { get; set; }
         private static List<string> SupportedTargetLanguages { get; set; }
 
         private static Dictionary<string, bool> SupportedTargetLanguagesAndFormalities { get; set; }
@@ -52,17 +55,16 @@ namespace Sdl.Community.DeepLMTProvider.Client
             ["ZH-HANT"] = ["ZH-TW", "ZH-HK", "ZH-MO"]
         };
 
-        private List<string> SupportedSourceLanguages =>
-                    field ??= GetSupportedSourceLanguages(ApiKey);
-
-        public static List<string> GetSupportedSourceLanguages(string apiKey)
+        public static Dictionary<string, bool> GetSupportedSourceLanguages(string apiKey)
         {
-            var supportedLanguages = new List<string>();
+            var supportedLanguages = new Dictionary<string, bool>();
             try
             {
                 var response = LanguageClient.GetSupportedLanguages("source", apiKey, ChosenBaseUrl);
-                supportedLanguages = response
-                    .Select(item => item.Language.ToUpperInvariant()).ToList();
+                supportedLanguages =
+                    response.ToDictionary(
+                        item => item.Language.ToUpperInvariant(),
+                        item => item.SupportsOptions);
             }
             catch (Exception ex)
             {
@@ -81,7 +83,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
                 supportedLanguages =
                     response.ToDictionary(
                         item => item.Language.ToUpperInvariant(),
-                        item => item.SupportsFormality);
+                        item => item.SupportsOptions);
             }
             catch (Exception ex)
             {
@@ -89,6 +91,32 @@ namespace Sdl.Community.DeepLMTProvider.Client
             }
 
             return supportedLanguages;
+        }
+
+        public static bool SupportsFormality(CultureCode cultureCode)
+        {
+            if (!SupportedTargetLanguagesAndFormalities.TryGetValue(
+                    cultureCode.RegionNeutralName.ToUpper(), out var supportsOptions))
+                SupportedTargetLanguagesAndFormalities.TryGetValue(cultureCode.ToString().ToUpper(),
+                    out supportsOptions);
+            return supportsOptions;
+        }
+
+        public static bool SupportsModelType(LanguagePair languagePair)
+        {
+            if (!SupportedTargetLanguagesAndFormalities.TryGetValue(
+                    languagePair.TargetCulture.RegionNeutralName.ToUpper(), out var supportsModelType))
+                SupportedTargetLanguagesAndFormalities.TryGetValue(languagePair.TargetCulture.ToString().ToUpper(),
+                    out supportsModelType);
+
+            if (!supportsModelType) return false;
+
+            if (!SupportedSourceLanguagesAndFormalities.TryGetValue(
+                    languagePair.SourceCulture.RegionNeutralName.ToUpper(), out supportsModelType))
+                SupportedSourceLanguagesAndFormalities.TryGetValue(languagePair.SourceCulture.ToString().ToUpper(),
+                    out supportsModelType);
+
+            return supportsModelType;
         }
 
         public bool IsLanguagePairSupported(CultureInfo sourceCulture, CultureInfo targetCulture)
@@ -104,20 +132,25 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
         public string Translate(LanguagePair languageDirection, string sourceText, DeepLSettings deepLSettings)
         {
-            deepLSettings.Formality = GetFormality(languageDirection, deepLSettings.Formality);
-
             var targetLanguage = GetLanguage(languageDirection.TargetCulture, SupportedTargetLanguages, true);
             var sourceLanguage = GetLanguage(languageDirection.SourceCulture, SupportedSourceLanguages);
             var translatedText = string.Empty;
 
             try
             {
+                var modelType = deepLSettings.ModelType == ModelType.Not_Supported
+                    ? ModelType.Quality_Optimized.ToString().ToLower()
+                    : deepLSettings.ModelType.ToString().ToLower();
+                
                 var deeplRequestParameters = new DeeplRequestParameters
                 {
                     Text = [sourceText],
                     SourceLanguage = sourceLanguage,
                     TargetLanguage = targetLanguage,
-                    Formality = deepLSettings.Formality.ToString().ToLower(),
+                    Formality =
+                        deepLSettings.Formality == Formality.Not_Supported
+                            ? null
+                            : deepLSettings.Formality.ToString().ToLower(),
                     GlossaryId = deepLSettings.GlossaryId,
                     PreserveFormatting = deepLSettings.PreserveFormatting,
                     TagHandling =
@@ -126,7 +159,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
                             : deepLSettings.TagHandling.ToString().ToLower(),
                     SplittingSentenceHandling = deepLSettings.SplitSentencesHandling.GetApiValue(),
                     IgnoreTags = deepLSettings.IgnoreTags,
-                    ModelType = deepLSettings.ModelType.ToString().ToLower(),
+                    ModelType = modelType,
                     TagHandlingVersion = "v2",
                     StyleId = deepLSettings.StyleId
                 };
@@ -194,6 +227,9 @@ namespace Sdl.Community.DeepLMTProvider.Client
                 return;
             }
 
+            SupportedSourceLanguagesAndFormalities = GetSupportedSourceLanguages(ApiKey);
+            SupportedSourceLanguages = SupportedSourceLanguagesAndFormalities.Keys.ToList();
+
             SupportedTargetLanguagesAndFormalities = GetSupportedTargetLanguages(ApiKey);
             SupportedTargetLanguages = SupportedTargetLanguagesAndFormalities.Keys.ToList();
 
@@ -203,20 +239,6 @@ namespace Sdl.Community.DeepLMTProvider.Client
         private string GetChineseFlavour(string languageName)
         {
             return ChineseMappings.FirstOrDefault(m => m.Value.Contains(languageName)).Key;
-        }
-
-        private Formality GetFormality(LanguagePair languageDirection, Formality formality)
-        {
-            if (!SupportedTargetLanguagesAndFormalities.TryGetValue(
-                            languageDirection.TargetCulture.RegionNeutralName.ToUpper(), out var supportsFormality))
-            {
-                SupportedTargetLanguagesAndFormalities.TryGetValue(languageDirection.TargetCulture.ToString().ToUpper(),
-                    out supportsFormality);
-            }
-
-            return supportsFormality
-                ? formality
-                : Formality.Default;
         }
 
         // Get the target language based on availability in DeepL; if we have a flavour use that, otherwise use general culture of that flavour (two letter iso) if available, otherwise return null

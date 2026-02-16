@@ -10,13 +10,20 @@ namespace Sdl.Community.DeepLMTProvider.Model
 		Less,
 		More,
         Prefer_Less,
-        Prefer_More
+        Prefer_More,
+        Not_Supported
 	}
 
 	public static class FormalityEnumHelper
 	{
-		public static IEnumerable<Formality> Values =>
-            Enum.GetValues(typeof(Formality))
-                .Cast<Formality>();
+		public static IEnumerable<Formality> Values
+        {
+            get
+            {
+                var values = Enum.GetValues(typeof(Formality));
+                return values
+                    .Cast<Formality>().Take(values.Length - 1);
+            }
+        }
     }
 }

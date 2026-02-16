@@ -9,141 +9,139 @@ namespace Sdl.Community.DeepLMTProvider.Client
 {
     public static class LanguageClient
     {
-
         public static List<SupportedLanguage> AllSupportedSourceLanguages { get; set; } =
         [
-            new() { Language = "ACE", Name = "Acehnese", SupportsFormality = false },
-            new() { Language = "AF", Name = "Afrikaans", SupportsFormality = false },
-            new() { Language = "AN", Name = "Aragonese", SupportsFormality = false },
-            new() { Language = "AR", Name = "Arabic", SupportsFormality = true },
-            new() { Language = "AS", Name = "Assamese", SupportsFormality = false },
-            new() { Language = "AY", Name = "Aymara", SupportsFormality = false },
-            new() { Language = "AZ", Name = "Azerbaijani", SupportsFormality = false },
-            new() { Language = "BA", Name = "Bashkir", SupportsFormality = false },
-            new() { Language = "BE", Name = "Belarusian", SupportsFormality = false },
-            new() { Language = "BG", Name = "Bulgarian", SupportsFormality = true },
-            new() { Language = "BHO", Name = "Bhojpuri", SupportsFormality = false },
-            new() { Language = "BN", Name = "Bengali", SupportsFormality = false },
-            new() { Language = "BR", Name = "Breton", SupportsFormality = false },
-            new() { Language = "BS", Name = "Bosnian", SupportsFormality = false },
-            new() { Language = "CA", Name = "Catalan", SupportsFormality = false },
-            new() { Language = "CEB", Name = "Cebuano", SupportsFormality = false },
-            new() { Language = "CKB", Name = "Kurdish (Sorani)", SupportsFormality = false },
-            new() { Language = "CS", Name = "Czech", SupportsFormality = true },
-            new() { Language = "CY", Name = "Welsh", SupportsFormality = false },
-            new() { Language = "DA", Name = "Danish", SupportsFormality = true },
-            new() { Language = "DE", Name = "German", SupportsFormality = true },
-            new() { Language = "EL", Name = "Greek", SupportsFormality = true },
-            new() { Language = "EN", Name = "English (all English variants)", SupportsFormality = true },
-            new() { Language = "EO", Name = "Esperanto", SupportsFormality = false },
-            new() { Language = "ES", Name = "Spanish (all Spanish variants)", SupportsFormality = true },
-            new() { Language = "ET", Name = "Estonian", SupportsFormality = true },
-            new() { Language = "EU", Name = "Basque", SupportsFormality = false },
-            new() { Language = "FA", Name = "Persian", SupportsFormality = false },
-            new() { Language = "FI", Name = "Finnish", SupportsFormality = true },
-            new() { Language = "FR", Name = "French", SupportsFormality = true },
-            new() { Language = "GA", Name = "Irish", SupportsFormality = false },
-            new() { Language = "GL", Name = "Galician", SupportsFormality = false },
-            new() { Language = "GN", Name = "Guarani", SupportsFormality = false },
-            new() { Language = "GOM", Name = "Konkani", SupportsFormality = false },
-            new() { Language = "GU", Name = "Gujarati", SupportsFormality = false },
-            new() { Language = "HA", Name = "Hausa", SupportsFormality = false },
-            new() { Language = "HE", Name = "Hebrew", SupportsFormality = true },
-            new() { Language = "HI", Name = "Hindi", SupportsFormality = false },
-            new() { Language = "HR", Name = "Croatian", SupportsFormality = false },
-            new() { Language = "HT", Name = "Haitian Creole", SupportsFormality = false },
-            new() { Language = "HU", Name = "Hungarian", SupportsFormality = true },
-            new() { Language = "HY", Name = "Armenian", SupportsFormality = false },
-            new() { Language = "ID", Name = "Indonesian", SupportsFormality = true },
-            new() { Language = "IG", Name = "Igbo", SupportsFormality = false },
-            new() { Language = "IS", Name = "Icelandic", SupportsFormality = false },
-            new() { Language = "IT", Name = "Italian", SupportsFormality = true },
-            new() { Language = "JA", Name = "Japanese", SupportsFormality = true },
-            new() { Language = "JV", Name = "Javanese", SupportsFormality = false },
-            new() { Language = "KA", Name = "Georgian", SupportsFormality = false },
-            new() { Language = "KK", Name = "Kazakh", SupportsFormality = false },
-            new() { Language = "KMR", Name = "Kurdish (Kurmanji)", SupportsFormality = false },
-            new() { Language = "KO", Name = "Korean", SupportsFormality = true },
-            new() { Language = "KY", Name = "Kyrgyz", SupportsFormality = false },
-            new() { Language = "LA", Name = "Latin", SupportsFormality = false },
-            new() { Language = "LB", Name = "Luxembourgish", SupportsFormality = false },
-            new() { Language = "LMO", Name = "Lombard", SupportsFormality = false },
-            new() { Language = "LN", Name = "Lingala", SupportsFormality = false },
-            new() { Language = "LT", Name = "Lithuanian", SupportsFormality = true },
-            new() { Language = "LV", Name = "Latvian", SupportsFormality = true },
-            new() { Language = "MAI", Name = "Maithili", SupportsFormality = false },
-            new() { Language = "MG", Name = "Malagasy", SupportsFormality = false },
-            new() { Language = "MI", Name = "Maori", SupportsFormality = false },
-            new() { Language = "MK", Name = "Macedonian", SupportsFormality = false },
-            new() { Language = "ML", Name = "Malayalam", SupportsFormality = false },
-            new() { Language = "MN", Name = "Mongolian", SupportsFormality = false },
-            new() { Language = "MR", Name = "Marathi", SupportsFormality = false },
-            new() { Language = "MS", Name = "Malay", SupportsFormality = false },
-            new() { Language = "MT", Name = "Maltese", SupportsFormality = false },
-            new() { Language = "MY", Name = "Burmese", SupportsFormality = false },
-            new() { Language = "NB", Name = "Norwegian Bokmål", SupportsFormality = true },
-            new() { Language = "NE", Name = "Nepali", SupportsFormality = false },
-            new() { Language = "NL", Name = "Dutch", SupportsFormality = true },
-            new() { Language = "OC", Name = "Occitan", SupportsFormality = false },
-            new() { Language = "OM", Name = "Oromo", SupportsFormality = false },
-            new() { Language = "PA", Name = "Punjabi", SupportsFormality = false },
-            new() { Language = "PAG", Name = "Pangasinan", SupportsFormality = false },
-            new() { Language = "PAM", Name = "Kapampangan", SupportsFormality = false },
-            new() { Language = "PL", Name = "Polish", SupportsFormality = true },
-            new() { Language = "PRS", Name = "Dari", SupportsFormality = false },
-            new() { Language = "PS", Name = "Pashto", SupportsFormality = false },
-            new() { Language = "PT", Name = "Portuguese (all Portuguese variants)", SupportsFormality = true },
-            new() { Language = "QU", Name = "Quechua", SupportsFormality = false },
-            new() { Language = "RO", Name = "Romanian", SupportsFormality = true },
-            new() { Language = "RU", Name = "Russian", SupportsFormality = true },
-            new() { Language = "SA", Name = "Sanskrit", SupportsFormality = false },
-            new() { Language = "SCN", Name = "Sicilian", SupportsFormality = false },
-            new() { Language = "SK", Name = "Slovak", SupportsFormality = true },
-            new() { Language = "SL", Name = "Slovenian", SupportsFormality = true },
-            new() { Language = "SQ", Name = "Albanian", SupportsFormality = false },
-            new() { Language = "SR", Name = "Serbian", SupportsFormality = false },
-            new() { Language = "ST", Name = "Sesotho", SupportsFormality = false },
-            new() { Language = "SU", Name = "Sundanese", SupportsFormality = false },
-            new() { Language = "SV", Name = "Swedish", SupportsFormality = true },
-            new() { Language = "SW", Name = "Swahili", SupportsFormality = false },
-            new() { Language = "TA", Name = "Tamil", SupportsFormality = false },
-            new() { Language = "TE", Name = "Telugu", SupportsFormality = false },
-            new() { Language = "TG", Name = "Tajik", SupportsFormality = false },
-            new() { Language = "TH", Name = "Thai", SupportsFormality = true },
-            new() { Language = "TK", Name = "Turkmen", SupportsFormality = false },
-            new() { Language = "TL", Name = "Tagalog", SupportsFormality = false },
-            new() { Language = "TN", Name = "Tswana", SupportsFormality = false },
-            new() { Language = "TR", Name = "Turkish", SupportsFormality = true },
-            new() { Language = "TS", Name = "Tsonga", SupportsFormality = false },
-            new() { Language = "TT", Name = "Tatar", SupportsFormality = false },
-            new() { Language = "UK", Name = "Ukrainian", SupportsFormality = true },
-            new() { Language = "UR", Name = "Urdu", SupportsFormality = false },
-            new() { Language = "UZ", Name = "Uzbek", SupportsFormality = false },
-            new() { Language = "VI", Name = "Vietnamese", SupportsFormality = true },
-            new() { Language = "WO", Name = "Wolof", SupportsFormality = false },
-            new() { Language = "XH", Name = "Xhosa", SupportsFormality = false },
-            new() { Language = "YI", Name = "Yiddish", SupportsFormality = false },
-            new() { Language = "YUE", Name = "Cantonese", SupportsFormality = false },
-            new() { Language = "ZH", Name = "Chinese (all Chinese variants)", SupportsFormality = true },
-            new() { Language = "ZU", Name = "Zulu", SupportsFormality = false }
+            new() { Language = "ACE", Name = "Acehnese", SupportsOptions = false },
+            new() { Language = "AF", Name = "Afrikaans", SupportsOptions = false },
+            new() { Language = "AN", Name = "Aragonese", SupportsOptions = false },
+            new() { Language = "AR", Name = "Arabic", SupportsOptions = true },
+            new() { Language = "AS", Name = "Assamese", SupportsOptions = false },
+            new() { Language = "AY", Name = "Aymara", SupportsOptions = false },
+            new() { Language = "AZ", Name = "Azerbaijani", SupportsOptions = false },
+            new() { Language = "BA", Name = "Bashkir", SupportsOptions = false },
+            new() { Language = "BE", Name = "Belarusian", SupportsOptions = false },
+            new() { Language = "BG", Name = "Bulgarian", SupportsOptions = true },
+            new() { Language = "BHO", Name = "Bhojpuri", SupportsOptions = false },
+            new() { Language = "BN", Name = "Bengali", SupportsOptions = false },
+            new() { Language = "BR", Name = "Breton", SupportsOptions = false },
+            new() { Language = "BS", Name = "Bosnian", SupportsOptions = false },
+            new() { Language = "CA", Name = "Catalan", SupportsOptions = false },
+            new() { Language = "CEB", Name = "Cebuano", SupportsOptions = false },
+            new() { Language = "CKB", Name = "Kurdish (Sorani)", SupportsOptions = false },
+            new() { Language = "CS", Name = "Czech", SupportsOptions = true },
+            new() { Language = "CY", Name = "Welsh", SupportsOptions = false },
+            new() { Language = "DA", Name = "Danish", SupportsOptions = true },
+            new() { Language = "DE", Name = "German", SupportsOptions = true },
+            new() { Language = "EL", Name = "Greek", SupportsOptions = true },
+            new() { Language = "EN", Name = "English (all English variants)", SupportsOptions = true },
+            new() { Language = "EO", Name = "Esperanto", SupportsOptions = false },
+            new() { Language = "ES", Name = "Spanish (all Spanish variants)", SupportsOptions = true },
+            new() { Language = "ET", Name = "Estonian", SupportsOptions = true },
+            new() { Language = "EU", Name = "Basque", SupportsOptions = false },
+            new() { Language = "FA", Name = "Persian", SupportsOptions = false },
+            new() { Language = "FI", Name = "Finnish", SupportsOptions = true },
+            new() { Language = "FR", Name = "French", SupportsOptions = true },
+            new() { Language = "GA", Name = "Irish", SupportsOptions = false },
+            new() { Language = "GL", Name = "Galician", SupportsOptions = false },
+            new() { Language = "GN", Name = "Guarani", SupportsOptions = false },
+            new() { Language = "GOM", Name = "Konkani", SupportsOptions = false },
+            new() { Language = "GU", Name = "Gujarati", SupportsOptions = false },
+            new() { Language = "HA", Name = "Hausa", SupportsOptions = false },
+            new() { Language = "HE", Name = "Hebrew", SupportsOptions = true },
+            new() { Language = "HI", Name = "Hindi", SupportsOptions = false },
+            new() { Language = "HR", Name = "Croatian", SupportsOptions = false },
+            new() { Language = "HT", Name = "Haitian Creole", SupportsOptions = false },
+            new() { Language = "HU", Name = "Hungarian", SupportsOptions = true },
+            new() { Language = "HY", Name = "Armenian", SupportsOptions = false },
+            new() { Language = "ID", Name = "Indonesian", SupportsOptions = true },
+            new() { Language = "IG", Name = "Igbo", SupportsOptions = false },
+            new() { Language = "IS", Name = "Icelandic", SupportsOptions = false },
+            new() { Language = "IT", Name = "Italian", SupportsOptions = true },
+            new() { Language = "JA", Name = "Japanese", SupportsOptions = true },
+            new() { Language = "JV", Name = "Javanese", SupportsOptions = false },
+            new() { Language = "KA", Name = "Georgian", SupportsOptions = false },
+            new() { Language = "KK", Name = "Kazakh", SupportsOptions = false },
+            new() { Language = "KMR", Name = "Kurdish (Kurmanji)", SupportsOptions = false },
+            new() { Language = "KO", Name = "Korean", SupportsOptions = true },
+            new() { Language = "KY", Name = "Kyrgyz", SupportsOptions = false },
+            new() { Language = "LA", Name = "Latin", SupportsOptions = false },
+            new() { Language = "LB", Name = "Luxembourgish", SupportsOptions = false },
+            new() { Language = "LMO", Name = "Lombard", SupportsOptions = false },
+            new() { Language = "LN", Name = "Lingala", SupportsOptions = false },
+            new() { Language = "LT", Name = "Lithuanian", SupportsOptions = true },
+            new() { Language = "LV", Name = "Latvian", SupportsOptions = true },
+            new() { Language = "MAI", Name = "Maithili", SupportsOptions = false },
+            new() { Language = "MG", Name = "Malagasy", SupportsOptions = false },
+            new() { Language = "MI", Name = "Maori", SupportsOptions = false },
+            new() { Language = "MK", Name = "Macedonian", SupportsOptions = false },
+            new() { Language = "ML", Name = "Malayalam", SupportsOptions = false },
+            new() { Language = "MN", Name = "Mongolian", SupportsOptions = false },
+            new() { Language = "MR", Name = "Marathi", SupportsOptions = false },
+            new() { Language = "MS", Name = "Malay", SupportsOptions = false },
+            new() { Language = "MT", Name = "Maltese", SupportsOptions = false },
+            new() { Language = "MY", Name = "Burmese", SupportsOptions = false },
+            new() { Language = "NB", Name = "Norwegian Bokmål", SupportsOptions = true },
+            new() { Language = "NE", Name = "Nepali", SupportsOptions = false },
+            new() { Language = "NL", Name = "Dutch", SupportsOptions = true },
+            new() { Language = "OC", Name = "Occitan", SupportsOptions = false },
+            new() { Language = "OM", Name = "Oromo", SupportsOptions = false },
+            new() { Language = "PA", Name = "Punjabi", SupportsOptions = false },
+            new() { Language = "PAG", Name = "Pangasinan", SupportsOptions = false },
+            new() { Language = "PAM", Name = "Kapampangan", SupportsOptions = false },
+            new() { Language = "PL", Name = "Polish", SupportsOptions = true },
+            new() { Language = "PRS", Name = "Dari", SupportsOptions = false },
+            new() { Language = "PS", Name = "Pashto", SupportsOptions = false },
+            new() { Language = "PT", Name = "Portuguese (all Portuguese variants)", SupportsOptions = true },
+            new() { Language = "QU", Name = "Quechua", SupportsOptions = false },
+            new() { Language = "RO", Name = "Romanian", SupportsOptions = true },
+            new() { Language = "RU", Name = "Russian", SupportsOptions = true },
+            new() { Language = "SA", Name = "Sanskrit", SupportsOptions = false },
+            new() { Language = "SCN", Name = "Sicilian", SupportsOptions = false },
+            new() { Language = "SK", Name = "Slovak", SupportsOptions = true },
+            new() { Language = "SL", Name = "Slovenian", SupportsOptions = true },
+            new() { Language = "SQ", Name = "Albanian", SupportsOptions = false },
+            new() { Language = "SR", Name = "Serbian", SupportsOptions = false },
+            new() { Language = "ST", Name = "Sesotho", SupportsOptions = false },
+            new() { Language = "SU", Name = "Sundanese", SupportsOptions = false },
+            new() { Language = "SV", Name = "Swedish", SupportsOptions = true },
+            new() { Language = "SW", Name = "Swahili", SupportsOptions = false },
+            new() { Language = "TA", Name = "Tamil", SupportsOptions = false },
+            new() { Language = "TE", Name = "Telugu", SupportsOptions = false },
+            new() { Language = "TG", Name = "Tajik", SupportsOptions = false },
+            new() { Language = "TH", Name = "Thai", SupportsOptions = true },
+            new() { Language = "TK", Name = "Turkmen", SupportsOptions = false },
+            new() { Language = "TL", Name = "Tagalog", SupportsOptions = false },
+            new() { Language = "TN", Name = "Tswana", SupportsOptions = false },
+            new() { Language = "TR", Name = "Turkish", SupportsOptions = true },
+            new() { Language = "TS", Name = "Tsonga", SupportsOptions = false },
+            new() { Language = "TT", Name = "Tatar", SupportsOptions = false },
+            new() { Language = "UK", Name = "Ukrainian", SupportsOptions = true },
+            new() { Language = "UR", Name = "Urdu", SupportsOptions = false },
+            new() { Language = "UZ", Name = "Uzbek", SupportsOptions = false },
+            new() { Language = "VI", Name = "Vietnamese", SupportsOptions = true },
+            new() { Language = "WO", Name = "Wolof", SupportsOptions = false },
+            new() { Language = "XH", Name = "Xhosa", SupportsOptions = false },
+            new() { Language = "YI", Name = "Yiddish", SupportsOptions = false },
+            new() { Language = "YUE", Name = "Cantonese", SupportsOptions = false },
+            new() { Language = "ZH", Name = "Chinese (all Chinese variants)", SupportsOptions = true },
+            new() { Language = "ZU", Name = "Zulu", SupportsOptions = false }
         ];
 
         public static List<SupportedLanguage> SupportedLanguagesVariants { get; } =
         [
-            new() { Language = "EN-GB", Name = "English (British)", SupportsFormality = true },
-            new() { Language = "EN-US", Name = "English (American)", SupportsFormality = true },
-            new() { Language = "ES-419", Name = "Spanish (Latin American)", SupportsFormality = true },
-            new() { Language = "PT-BR", Name = "Portuguese (Brazilian)", SupportsFormality = true },
+            new() { Language = "EN-GB", Name = "English (British)", SupportsOptions = true },
+            new() { Language = "EN-US", Name = "English (American)", SupportsOptions = true },
+            new() { Language = "ES-419", Name = "Spanish (Latin American)", SupportsOptions = true },
+            new() { Language = "PT-BR", Name = "Portuguese (Brazilian)", SupportsOptions = true },
             new()
             {
                 Language = "PT-PT",
                 Name = "Portuguese (all Portuguese variants excluding Brazilian Portuguese)",
-                SupportsFormality = true
+                SupportsOptions = true
             },
-            new() { Language = "ZH-HANS", Name = "Chinese (simplified)", SupportsFormality = true },
-            new() { Language = "ZH-HANT", Name = "Chinese (traditional)", SupportsFormality = true }
+            new() { Language = "ZH-HANS", Name = "Chinese (simplified)", SupportsOptions = true },
+            new() { Language = "ZH-HANT", Name = "Chinese (traditional)", SupportsOptions = true }
         ];
-
 
         public static List<SupportedLanguage> GetSupportedLanguages(string type, string apiKey, string chosenBaseUrl)
         {
@@ -153,23 +151,29 @@ namespace Sdl.Community.DeepLMTProvider.Client
             var response = AppInitializer.Client.PostAsync($"{chosenBaseUrl}/languages", content).Result;
             response.EnsureSuccessStatusCode();
 
-            var supportedLanguages = JsonConvert.DeserializeObject<List<SupportedLanguage>>(response.Content?.ReadAsStringAsync().Result ?? "[]");
+            var supportedLanguages = GetHardcodedSupportedLanguages(type);
 
-            //TODO: Remove this class and related properties when DeepL fixes the "/languages" endpoint
-            AddListOfSupportedLanguagesNotInTheApiResponse(ref supportedLanguages, type);
+            var apiResponseLanguages = JsonConvert.DeserializeObject<List<SupportedLanguage>>(response.Content?.ReadAsStringAsync().Result ?? "[]");
+            AddLanguages(ref supportedLanguages, apiResponseLanguages);
 
             return supportedLanguages;
         }
 
-        private static void AddListOfSupportedLanguagesNotInTheApiResponse(ref List<SupportedLanguage> supportedLanguages, string type)
+        private static List<SupportedLanguage> GetHardcodedSupportedLanguages(string type)
         {
-            supportedLanguages.AddRange(AllSupportedSourceLanguages);
-            if (type == "target") supportedLanguages.AddRange(SupportedLanguagesVariants);
+            //TODO: Remove this method and related properties when DeepL fixes the "/languages" endpoint
+            var supportedLanguages = AllSupportedSourceLanguages.ToList();
+            if (type == "target") AddLanguages(ref supportedLanguages, SupportedLanguagesVariants);
+            return supportedLanguages;
+        }
 
-            supportedLanguages = supportedLanguages
-                .GroupBy(l => l.Language.Trim().ToUpperInvariant())
-                .Select(g => g.First())
-                .ToList();
+        private static void AddLanguages(ref List<SupportedLanguage> currentLanguages, List<SupportedLanguage> newLanguages)
+        {
+            foreach (var newLanguage in newLanguages)
+            {
+                if (currentLanguages.Any(l => l.Language == newLanguage.Language)) continue;
+                currentLanguages.Add(newLanguage);
+            }
         }
     }
 }

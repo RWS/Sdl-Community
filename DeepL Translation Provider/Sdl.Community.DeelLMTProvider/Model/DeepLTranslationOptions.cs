@@ -22,7 +22,6 @@ namespace Sdl.Community.DeepLMTProvider.Model
         public bool SendPlainText { get; set; }
         public SplitSentences SplitSentenceHandling { get; set; } = SplitSentences.Default;
 
-        public string StyleId { get; set; }
         public TagFormat TagHandling { get; set; }
         public Uri Uri { get; set; }
     }

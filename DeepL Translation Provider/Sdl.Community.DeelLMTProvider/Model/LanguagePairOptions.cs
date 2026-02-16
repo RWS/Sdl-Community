@@ -17,6 +17,12 @@ namespace Sdl.Community.DeepLMTProvider.Model
 
         public LanguagePair LanguagePair { get; set; }
 
+        public ModelType ModelType
+        {
+            get;
+            set => SetField(ref field, value);
+        }
+
         public GlossaryInfo SelectedGlossary
         {
             get;
@@ -35,12 +41,6 @@ namespace Sdl.Community.DeepLMTProvider.Model
             get;
             set => SetField(ref field, value);
         } = [];
-
-        public ModelType ModelType
-        {
-            get;
-            set => SetField(ref field, value);
-        }
 
         public override string ToString() => $"{nameof(LanguagePairOptions)}";
     }

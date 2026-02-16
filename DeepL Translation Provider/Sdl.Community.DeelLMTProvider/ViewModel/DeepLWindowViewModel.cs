@@ -193,6 +193,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                 allStyles = await GetStyles();
             }
 
+            if (ApiKey is null) return;
             foreach (var languagePair in LanguagePairs)
             {
                 var sourceLangCode = languagePair.GetSourceLanguageCode();
@@ -201,31 +202,41 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                 var languageSavedOptions =
                     Options.LanguagePairOptions?.FirstOrDefault(lpo => lpo.LanguagePair.Equals(languagePair));
 
-                var selectedGlossary = GetSelectedGlossaryFromSavedSetting(glossaries, languageSavedOptions, sourceLangCode, targetLangCode);
-                var selectedStyle = allStyles.FirstOrDefault(s => s.ID == languageSavedOptions?.SelectedStyle?.ID);
+
 
                 var currentLanguageGlossaries = glossaries?.Where(g =>
                     g.SourceLanguage == sourceLangCode && g.TargetLanguage == targetLangCode ||
                     g.Name == PluginResources.NoGlossary).ToList();
 
-                var targetCulture = new CultureInfo(languagePair.TargetCulture);
-                var ietfLanguageTag = targetCulture.IetfLanguageTag.ToLowerInvariant();
-                var twoLetterIso = targetCulture.TwoLetterISOLanguageName.ToLowerInvariant();
+                var selectedGlossary = await GlossaryClient.SupportsGlossaries(languagePair, ApiKey)
+                    ? GetSelectedGlossaryFromSavedSetting(currentLanguageGlossaries, languageSavedOptions, sourceLangCode,
+                        targetLangCode)
+                    : GlossaryInfo.NotSupported;
 
                 var currentLanguageStyles = allStyles.Where(style =>
-                    style.Language == ietfLanguageTag || style.Language == twoLetterIso ||
-                    style.Name == PluginResources.NoStyle).ToList();
+                        languagePair.TargetCulture.Equivalent(style.Language) || style.Name == PluginResources.NoStyle)
+                    .ToList();
+
+                var selectedStyle = currentLanguageStyles.FirstOrDefault(s => s.ID == languageSavedOptions?.SelectedStyle?.ID);
+
+                var formality = DeepLTranslationProviderClient.SupportsFormality(languagePair.TargetCulture)
+                    ? languageSavedOptions?.Formality ?? Formality.Default
+                    : Formality.Not_Supported;
+
+                var modelType = DeepLTranslationProviderClient.SupportsModelType(languagePair)
+                    ? languageSavedOptions?.ModelType ?? ModelType.Prefer_Quality_Optimized
+                    : ModelType.Not_Supported;
 
                 var newLanguagePairOptions = new LanguagePairOptions
                 {
-                    Formality = languageSavedOptions?.Formality ?? Formality.Default,
+                    Formality = formality,
                     Glossaries =
                         currentLanguageGlossaries,
                     SelectedGlossary = selectedGlossary,
                     LanguagePair = languagePair,
                     SelectedStyle = selectedStyle,
                     Styles = currentLanguageStyles,
-                    ModelType = languageSavedOptions?.ModelType ?? ModelType.Prefer_Quality_Optimized
+                    ModelType = modelType
                 };
 
                 var oldLanguagePairOption = LanguagePairOptions.FirstOrDefault(lpo => lpo.LanguagePair.Equals(languagePair));
