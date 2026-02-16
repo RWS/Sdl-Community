@@ -233,4 +233,7 @@ The formatting aspects affected by this setting include:
   <data name="NoStyle" xml:space="preserve">
     <value>No style</value>
   </data>
+  <data name="GlossariesNotSupported" xml:space="preserve">
+    <value>Not supported</value>
+  </data>
 </root>
