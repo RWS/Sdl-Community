@@ -14,5 +14,7 @@ namespace Sdl.Community.DeepLMTProvider.Model
         public string ID { get; set; }
         public string Name { get; set; }
         public string Language { get; set; }
+        [JsonIgnore] 
+        public static DeepLStyle NoStyle { get; set; } = new() { Name = PluginResources.NoStyle };
     }
 }

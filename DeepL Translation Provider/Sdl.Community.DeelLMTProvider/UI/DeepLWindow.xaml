@@ -367,7 +367,7 @@
                                                     Value="Visible" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding Styles.Count}"
-                                                             Value="0">
+                                                             Value="1">
                                                     <Setter Property="Visibility"
                                                             Value="Collapsed" />
                                                 </DataTrigger>
@@ -385,7 +385,7 @@
                                                     Value="Collapsed" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding Styles.Count}"
-                                                             Value="0">
+                                                             Value="1">
                                                     <Setter Property="Visibility"
                                                             Value="Visible" />
                                                 </DataTrigger>
