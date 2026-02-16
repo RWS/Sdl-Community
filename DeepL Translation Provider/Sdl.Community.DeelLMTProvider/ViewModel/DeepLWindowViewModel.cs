@@ -188,28 +188,17 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             AutoReset = false
         };
 
-        private List<DeepLStyle> AllStyles { get; set; } = [];
-
         public async Task LoadLanguagePairSettings()
         {
             ValidationMessages = null;
             List<GlossaryInfo> glossaries = [];
-            AllStyles = [];
+            List<DeepLStyle> allStyles = [];
 
             if (DeepLTranslationProviderClient.IsApiKeyValidResponse.IsSuccessStatusCode)
             {
-                (var success, glossaries, var message) =
-                    await GlossaryClient.GetGlossaries(DeepLTranslationProviderClient.ApiKey);
-                if (!success)
-                {
-                    HandleError(message);
-                    glossaries = [];
-                }
-
-                await LoadStyles();
+                glossaries = await GetGlossaries();
+                allStyles = await GetStyles();
             }
-
-            glossaries?.Add(GlossaryInfo.NoGlossary);
 
             foreach (var languagePair in LanguagePairs)
             {
@@ -220,19 +209,19 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                     Options.LanguagePairOptions?.FirstOrDefault(lpo => lpo.LanguagePair.Equals(languagePair));
 
                 var selectedGlossary = GetSelectedGlossaryFromSavedSetting(glossaries, languageSavedOptions, sourceLangCode, targetLangCode);
-                var selectedStyle = AllStyles.FirstOrDefault(s => s.ID == languageSavedOptions?.SelectedStyle?.ID);
+                var selectedStyle = allStyles.FirstOrDefault(s => s.ID == languageSavedOptions?.SelectedStyle?.ID);
 
                 var currentLanguageGlossaries = glossaries?.Where(g =>
                     g.SourceLanguage == sourceLangCode && g.TargetLanguage == targetLangCode ||
                     g.Name == PluginResources.NoGlossary).ToList();
 
-
                 var targetCulture = new CultureInfo(languagePair.TargetCulture);
                 var ietfLanguageTag = targetCulture.IetfLanguageTag.ToLowerInvariant();
                 var twoLetterIso = targetCulture.TwoLetterISOLanguageName.ToLowerInvariant();
 
-                var currentLanguageStyles = AllStyles.Where(style =>
-                    style.Language == ietfLanguageTag || style.Language == twoLetterIso).ToList();
+                var currentLanguageStyles = allStyles.Where(style =>
+                    style.Language == ietfLanguageTag || style.Language == twoLetterIso ||
+                    style.Name == PluginResources.NoStyle).ToList();
 
                 var newLanguagePairOptions = new LanguagePairOptions
                 {
@@ -289,6 +278,27 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             ? SplitSentences.Default
             : SplitSentences.NoNewlines;
 
+        private async Task<List<GlossaryInfo>> GetGlossaries()
+        {
+            var (success, glossaries, message) =
+                await GlossaryClient.GetGlossaries(DeepLTranslationProviderClient.ApiKey);
+            if (!success)
+            {
+                HandleError(message);
+                glossaries = [];
+            }
+
+            glossaries?.Add(GlossaryInfo.NoGlossary);
+            return glossaries;
+        }
+
+        private async Task<List<DeepLStyle>> GetStyles()
+        {
+            var styles =  await StyleClient.GetStyles(ApiKey).ConfigureAwait(false) ?? [];
+            styles.Add(DeepLStyle.NoStyle);
+            return styles;
+        }
+
         private void HandleError(string message, [CallerMemberName] string failingMethod = null)
         {
             ValidationMessages = message;
@@ -306,11 +316,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                 ApiKey = credentialStore?.Credential;
                 Options.ApiKey = ApiKey;
             }
-        }
-
-        private async Task LoadStyles()
-        {
-            AllStyles = await StyleClient.GetStyles(ApiKey).ConfigureAwait(false) ?? [];
         }
 
         private void OnPasswordChanged(object sender, EventArgs e)

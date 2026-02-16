@@ -230,4 +230,7 @@ The formatting aspects affected by this setting include:
   <data name="ResendDraft_Tooltip" xml:space="preserve">
     <value>Determines whether the translation engine resends previously translated but unconfirmed segments for translation whenever you revisit them.</value>
   </data>
+  <data name="NoStyle" xml:space="preserve">
+    <value>No style</value>
+  </data>
 </root>
