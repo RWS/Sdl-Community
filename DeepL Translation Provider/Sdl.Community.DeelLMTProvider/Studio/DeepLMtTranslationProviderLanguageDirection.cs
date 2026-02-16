@@ -232,7 +232,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                     _languagePairOptions?.Formality ?? Formality.Default,
                     _languagePairOptions?.SelectedGlossary.Id,
                     _options.TagHandling,
-                    _options.SplitSentencesHandling,
+                    _options.SplitSentenceHandling,
                     _options.PreserveFormatting,
                     _options.IgnoreTagsParameter,
                     _options.ModelType,

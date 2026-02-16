@@ -120,7 +120,10 @@ namespace Sdl.Community.DeepLMTProvider.Client
                     Formality = deepLSettings.Formality.ToString().ToLower(),
                     GlossaryId = deepLSettings.GlossaryId,
                     PreserveFormatting = deepLSettings.PreserveFormatting,
-                    TagHandling = deepLSettings.TagHandling == TagFormat.None ? null : deepLSettings.TagHandling.ToString().ToLower(),
+                    TagHandling =
+                        deepLSettings.TagHandling == TagFormat.None
+                            ? null
+                            : deepLSettings.TagHandling.ToString().ToLower(),
                     SplittingSentenceHandling = deepLSettings.SplitSentencesHandling.GetApiValue(),
                     IgnoreTags = deepLSettings.IgnoreTags,
                     ModelType = deepLSettings.ModelType.ToString().ToLower(),

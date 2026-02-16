@@ -35,7 +35,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             SendPlainText = deepLTranslationOptions.SendPlainText;
             ResendDraft = deepLTranslationOptions.ResendDraft;
             TagType = deepLTranslationOptions.TagHandling;
-            SplitSentencesType = deepLTranslationOptions.SplitSentencesHandling;
+            SplitSentencesType = deepLTranslationOptions.SplitSentenceHandling;
             PreserveFormatting = deepLTranslationOptions.PreserveFormatting;
             ApiVersion = deepLTranslationOptions.ApiVersion;
             IgnoreTags = deepLTranslationOptions.IgnoreTagsParameter;
@@ -60,7 +60,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             ResendDraft = deepLTranslationOptions.ResendDraft;
             PreserveFormatting = deepLTranslationOptions.PreserveFormatting;
             TagType = deepLTranslationOptions.TagHandling;
-            SplitSentencesType = deepLTranslationOptions.SplitSentencesHandling;
+            SplitSentencesType = deepLTranslationOptions.SplitSentenceHandling;
             ApiVersion = deepLTranslationOptions.ApiVersion;
             IgnoreTags = deepLTranslationOptions.IgnoreTagsParameter;
             ModelType = deepLTranslationOptions.ModelType;
@@ -340,7 +340,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             Options.LanguagePairOptions = [.. LanguagePairOptions];
             Options.PreserveFormatting = PreserveFormatting;
             Options.TagHandling = TagType;
-            Options.SplitSentencesHandling = SplitSentencesType;
+            Options.SplitSentenceHandling = SplitSentencesType;
             Options.ApiVersion = ApiVersion;
             Options.IgnoreTagsParameter = IgnoreTags;
             Options.ModelType = ModelType;
