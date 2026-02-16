@@ -1,5 +1,6 @@
 ﻿using Sdl.Community.DeepLMTProvider.Extensions;
 using Sdl.Community.DeepLMTProvider.Model;
+using Sdl.LanguagePlatform.Core;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -19,5 +20,6 @@ namespace Sdl.Community.DeepLMTProvider.Interface
 
         Task<ActionResult<GlossaryInfo>> UpdateGlossary(Glossary glossary, string glossaryId, string apiKey);
         string ApiVersion { get; set; }
+        Task<bool> SupportsGlossaries(LanguagePair languagePair, string apiKey);
     }
 }

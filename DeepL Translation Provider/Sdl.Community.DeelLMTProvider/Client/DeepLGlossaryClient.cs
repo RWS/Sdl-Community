@@ -3,8 +3,11 @@ using Newtonsoft.Json.Linq;
 using Sdl.Community.DeepLMTProvider.Extensions;
 using Sdl.Community.DeepLMTProvider.Interface;
 using Sdl.Community.DeepLMTProvider.Model;
+using Sdl.Core.Globalization;
+using Sdl.LanguagePlatform.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -165,5 +168,20 @@ namespace Sdl.Community.DeepLMTProvider.Client
         }
 
         public string ApiVersion { get; set; }
+
+        private bool SupportsGlossaries(CultureCode culture, List<string> languages) =>
+            languages.Any(culture.Equivalent);
+
+        public async Task<bool> SupportsGlossaries(LanguagePair languagePair, string apiKey)
+        {
+            var (_, lps, _) = await GetGlossarySupportedLanguagePairs(apiKey, false);
+
+            var sourceLanguages = lps.Select(lp => lp.SourceLanguage).Distinct().ToList();
+            var targetLanguages = lps.Select(lp => lp.TargetLanguage).Distinct().ToList();
+
+            return SupportsGlossaries(languagePair.SourceCulture, sourceLanguages) &&
+                   SupportsGlossaries(languagePair.TargetCulture, targetLanguages);
+        }
+
     }
 }
