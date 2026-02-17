@@ -41,6 +41,12 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
         public static HttpResponseMessage IsApiKeyValidResponse { get; private set; }
 
+        private static Dictionary<string, List<string>> ChineseMappings { get; set; } = new()
+        {
+            ["ZH-HANS"] = ["ZH-CN", "ZH-SG", "ZH-HANS-HK", "ZH-HANS-MO"],
+            ["ZH-HANT"] = ["ZH-TW", "ZH-HK", "ZH-MO"]
+        };
+
         private static string ChosenBaseUrl => ApiVersion?.Contains("V1") ?? true ? Constants.BaseUrlV1 : Constants.BaseUrlV2;
 
         private static List<string> SupportedSourceLanguages { get; set; }
@@ -48,12 +54,6 @@ namespace Sdl.Community.DeepLMTProvider.Client
         private static List<string> SupportedTargetLanguages { get; set; }
 
         private static Dictionary<string, bool> SupportedTargetLanguagesAndFormalities { get; set; }
-
-        private Dictionary<string, List<string>> ChineseMappings { get; set; } = new()
-        {
-            ["ZH-HANS"] = ["ZH-CN", "ZH-SG", "ZH-HANS-HK", "ZH-HANS-MO"],
-            ["ZH-HANT"] = ["ZH-TW", "ZH-HK", "ZH-MO"]
-        };
 
         public static Dictionary<string, bool> GetSupportedSourceLanguages(string apiKey)
         {
@@ -95,28 +95,19 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
         public static bool SupportsFormality(CultureCode cultureCode)
         {
-            if (!SupportedTargetLanguagesAndFormalities.TryGetValue(
-                    cultureCode.RegionNeutralName.ToUpper(), out var supportsOptions))
-                SupportedTargetLanguagesAndFormalities.TryGetValue(cultureCode.ToString().ToUpper(),
-                    out supportsOptions);
-            return supportsOptions;
+            var targetLanguage = GetLanguage(cultureCode, SupportedTargetLanguages, true);
+            return SupportedTargetLanguagesAndFormalities.TryGetValue(
+                targetLanguage, out var supportsOptions) && supportsOptions;
         }
 
         public static bool SupportsModelType(LanguagePair languagePair)
         {
-            if (!SupportedTargetLanguagesAndFormalities.TryGetValue(
-                    languagePair.TargetCulture.RegionNeutralName.ToUpper(), out var supportsModelType))
-                SupportedTargetLanguagesAndFormalities.TryGetValue(languagePair.TargetCulture.ToString().ToUpper(),
-                    out supportsModelType);
+            var sourceLanguage = GetLanguage(languagePair.SourceCulture, SupportedSourceLanguages);
+            var targetLanguage = GetLanguage(languagePair.TargetCulture, SupportedTargetLanguages, true);
 
-            if (!supportsModelType) return false;
-
-            if (!SupportedSourceLanguagesAndFormalities.TryGetValue(
-                    languagePair.SourceCulture.RegionNeutralName.ToUpper(), out supportsModelType))
-                SupportedSourceLanguagesAndFormalities.TryGetValue(languagePair.SourceCulture.ToString().ToUpper(),
-                    out supportsModelType);
-
-            return supportsModelType;
+            return SupportedSourceLanguagesAndFormalities.TryGetValue(
+                sourceLanguage, out var supportsOptions) && SupportedTargetLanguagesAndFormalities.TryGetValue(
+                targetLanguage, out supportsOptions) && supportsOptions;
         }
 
         public bool IsLanguagePairSupported(CultureInfo sourceCulture, CultureInfo targetCulture)
@@ -141,7 +132,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
                 var modelType = deepLSettings.ModelType == ModelType.Not_Supported
                     ? ModelType.Quality_Optimized.ToString().ToLower()
                     : deepLSettings.ModelType.ToString().ToLower();
-                
+
                 var deeplRequestParameters = new DeeplRequestParameters
                 {
                     Text = [sourceText],
@@ -160,29 +151,10 @@ namespace Sdl.Community.DeepLMTProvider.Client
                     SplittingSentenceHandling = deepLSettings.SplitSentencesHandling.GetApiValue(),
                     IgnoreTags = deepLSettings.IgnoreTags,
                     ModelType = modelType,
-                    TagHandlingVersion = "v2",
                     StyleId = deepLSettings.StyleId
                 };
 
-                var requestJson = JsonConvert.SerializeObject(
-                    deeplRequestParameters,
-                    new JsonSerializerSettings
-                    {
-                        NullValueHandling = NullValueHandling.Ignore,
-                        ContractResolver = new CamelCasePropertyNamesContractResolver()
-                    });
-
-                var content = new StringContent(requestJson, Encoding.UTF8, "application/json");
-
-                var request = new HttpRequestMessage
-                {
-                    Content = content,
-                    Method = HttpMethod.Post,
-                    RequestUri = new Uri($"{ChosenBaseUrl}/translate")
-                };
-                request.Headers.Authorization = new AuthenticationHeaderValue("DeepL-Auth-Key", ApiKey);
-
-                var response = AppInitializer.Client.SendAsync(request).Result;
+                var response = Translate(deeplRequestParameters);
                 response.EnsureSuccessStatusCode();
 
                 var translationResponse = response.Content?.ReadAsStringAsync().Result;
@@ -207,6 +179,28 @@ namespace Sdl.Community.DeepLMTProvider.Client
             }
 
             return translatedText;
+        }
+
+        private static string GetChineseFlavour(string languageName)
+        {
+            return ChineseMappings.FirstOrDefault(m => m.Value.Contains(languageName)).Key;
+        }
+
+        // Get the target language based on availability in DeepL; if we have a flavour use that, otherwise use general culture of that flavour (two letter iso) if available, otherwise return null
+        // (e.g. for Portuguese, the leftLanguageTag (pt-PT or pt-BR) should be used, so the translations will correspond to the specific language flavor)
+        private static string GetLanguage(CultureInfo culture, List<string> languageList, bool isTarget = false)
+        {
+            var ietfLanguageTag = culture.IetfLanguageTag.ToUpperInvariant();
+            if (isTarget && ietfLanguageTag.Contains("ZH"))
+                return GetChineseFlavour(ietfLanguageTag);
+
+            if (languageList == null || !languageList.Any())
+                return string.Empty;
+
+            var twoLetterIso = culture.TwoLetterISOLanguageName.ToUpperInvariant();
+
+            var selectedTargetLanguage = languageList.FirstOrDefault(tl => tl == ietfLanguageTag) ?? languageList.FirstOrDefault(tl => tl == twoLetterIso);
+            return selectedTargetLanguage ?? (languageList.Any(tl => tl.Contains(twoLetterIso)) ? twoLetterIso : null);
         }
 
         private static HttpResponseMessage IsValidApiKey(string apiKey)
@@ -236,24 +230,45 @@ namespace Sdl.Community.DeepLMTProvider.Client
             ApiKeyChanged?.Invoke();
         }
 
-        private string GetChineseFlavour(string languageName)
+        private static bool Test(string modelType, string sourceLanguage, string targetLanguage)
         {
-            return ChineseMappings.FirstOrDefault(m => m.Value.Contains(languageName)).Key;
+            return Translate(
+                    new()
+                    {
+                        Text = ["test"],
+                        ModelType = modelType,
+                        SourceLanguage = sourceLanguage,
+                        TargetLanguage = targetLanguage,
+                        TagHandlingVersion = "v2"
+                    }
+                )
+                .IsSuccessStatusCode;
         }
 
-        // Get the target language based on availability in DeepL; if we have a flavour use that, otherwise use general culture of that flavour (two letter iso) if available, otherwise return null
-        // (e.g. for Portuguese, the leftLanguageTag (pt-PT or pt-BR) should be used, so the translations will correspond to the specific language flavor)
-        private string GetLanguage(CultureInfo culture, List<string> languageList, bool isTarget = false)
+        private static HttpResponseMessage Translate(DeeplRequestParameters deeplRequestParameters)
         {
-            var ietfLanguageTag = culture.IetfLanguageTag.ToUpperInvariant();
-            if (isTarget && ietfLanguageTag.Contains("ZH")) return GetChineseFlavour(ietfLanguageTag);
+            deeplRequestParameters.TagHandlingVersion =
+                deeplRequestParameters.ModelType == "latency_optimized" ? "v1" : "v2";
+            var requestJson = JsonConvert.SerializeObject(
+                deeplRequestParameters,
+                new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore,
+                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                });
 
-            if (languageList == null || !languageList.Any()) return string.Empty;
+            var content = new StringContent(requestJson, Encoding.UTF8, "application/json");
 
-            var twoLetterIso = culture.TwoLetterISOLanguageName.ToUpperInvariant();
+            var request = new HttpRequestMessage
+            {
+                Content = content,
+                Method = HttpMethod.Post,
+                RequestUri = new Uri($"{ChosenBaseUrl}/translate")
+            };
+            request.Headers.Authorization = new AuthenticationHeaderValue("DeepL-Auth-Key", ApiKey);
 
-            var selectedTargetLanguage = languageList.FirstOrDefault(tl => tl == ietfLanguageTag) ?? languageList.FirstOrDefault(tl => tl == twoLetterIso);
-            return selectedTargetLanguage ?? (languageList.Any(tl => tl.Contains(twoLetterIso)) ? twoLetterIso : null);
+            var response = AppInitializer.Client.SendAsync(request).Result;
+            return response;
         }
     }
 }
