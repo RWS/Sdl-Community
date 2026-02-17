@@ -168,12 +168,7 @@
                                       IsChecked="{Binding ResendDraft}"
                                       Content="Resend Draft" />
 
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Model type"
-                                       Margin="12 0 0 5" />
-
-                            </StackPanel>
-
+                           
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Tag handling"
                                        Margin="12 0 0 5" />
