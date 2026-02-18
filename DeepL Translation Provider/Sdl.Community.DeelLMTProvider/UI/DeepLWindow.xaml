@@ -394,7 +394,7 @@
                                         </Style>
                                     </ComboBox.Style>
                                 </ComboBox>
-                                <TextBlock Text="Not supported"
+                                <TextBlock Text="Quality optimized"
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Center">
                                     <TextBlock.Style>

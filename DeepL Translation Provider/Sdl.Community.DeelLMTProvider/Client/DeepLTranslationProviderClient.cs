@@ -55,6 +55,23 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
         private static Dictionary<string, bool> SupportedTargetLanguagesAndFormalities { get; set; }
 
+        // Get the target language based on availability in DeepL; if we have a flavour use that, otherwise use general culture of that flavour (two letter iso) if available, otherwise return null
+        // (e.g. for Portuguese, the leftLanguageTag (pt-PT or pt-BR) should be used, so the translations will correspond to the specific language flavor)
+        public static string GetLanguage(CultureInfo culture, List<string> languageList, bool isTarget = false)
+        {
+            var ietfLanguageTag = culture.IetfLanguageTag.ToUpperInvariant();
+            if (isTarget && ietfLanguageTag.Contains("ZH"))
+                return GetChineseFlavour(ietfLanguageTag);
+
+            if (languageList == null || !languageList.Any())
+                return string.Empty;
+
+            var twoLetterIso = culture.TwoLetterISOLanguageName.ToUpperInvariant();
+
+            var selectedTargetLanguage = languageList.FirstOrDefault(tl => tl == ietfLanguageTag) ?? languageList.FirstOrDefault(tl => tl == twoLetterIso);
+            return selectedTargetLanguage ?? (languageList.Any(tl => tl.Contains(twoLetterIso)) ? twoLetterIso : null);
+        }
+
         public static Dictionary<string, bool> GetSupportedSourceLanguages(string apiKey)
         {
             var supportedLanguages = new Dictionary<string, bool>();
@@ -93,14 +110,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
             return supportedLanguages;
         }
 
-        public static bool SupportsFormality(CultureCode cultureCode)
-        {
-            var targetLanguage = GetLanguage(cultureCode, SupportedTargetLanguages, true);
-            return SupportedTargetLanguagesAndFormalities.TryGetValue(
-                targetLanguage, out var supportsOptions) && supportsOptions;
-        }
-
-        public static bool SupportsModelType(LanguagePair languagePair)
+        public static bool SupportsAllModelTypes(LanguagePair languagePair)
         {
             var sourceLanguage = GetLanguage(languagePair.SourceCulture, SupportedSourceLanguages);
             var targetLanguage = GetLanguage(languagePair.TargetCulture, SupportedTargetLanguages, true);
@@ -108,6 +118,13 @@ namespace Sdl.Community.DeepLMTProvider.Client
             return SupportedSourceLanguagesAndFormalities.TryGetValue(
                 sourceLanguage, out var supportsOptions) && SupportedTargetLanguagesAndFormalities.TryGetValue(
                 targetLanguage, out supportsOptions) && supportsOptions;
+        }
+
+        public static bool SupportsFormality(CultureCode cultureCode)
+        {
+            var targetLanguage = GetLanguage(cultureCode, SupportedTargetLanguages, true);
+            return SupportedTargetLanguagesAndFormalities.TryGetValue(
+                targetLanguage, out var supportsOptions) && supportsOptions;
         }
 
         public bool IsLanguagePairSupported(CultureInfo sourceCulture, CultureInfo targetCulture)
@@ -133,21 +150,23 @@ namespace Sdl.Community.DeepLMTProvider.Client
                     ? ModelType.Quality_Optimized.ToString().ToLower()
                     : deepLSettings.ModelType.ToString().ToLower();
 
+                var tagHandling = deepLSettings.TagHandling == TagFormat.None
+                    ? null
+                    : deepLSettings.TagHandling.ToString().ToLower();
+
+                var formality = deepLSettings.Formality == Formality.Not_Supported
+                    ? null
+                    : deepLSettings.Formality.ToString().ToLower();
+
                 var deeplRequestParameters = new DeeplRequestParameters
                 {
                     Text = [sourceText],
                     SourceLanguage = sourceLanguage,
                     TargetLanguage = targetLanguage,
-                    Formality =
-                        deepLSettings.Formality == Formality.Not_Supported
-                            ? null
-                            : deepLSettings.Formality.ToString().ToLower(),
+                    Formality = formality,
                     GlossaryId = deepLSettings.GlossaryId,
                     PreserveFormatting = deepLSettings.PreserveFormatting,
-                    TagHandling =
-                        deepLSettings.TagHandling == TagFormat.None
-                            ? null
-                            : deepLSettings.TagHandling.ToString().ToLower(),
+                    TagHandling = tagHandling,
                     SplittingSentenceHandling = deepLSettings.SplitSentencesHandling.GetApiValue(),
                     IgnoreTags = deepLSettings.IgnoreTags,
                     ModelType = modelType,
@@ -186,23 +205,6 @@ namespace Sdl.Community.DeepLMTProvider.Client
             return ChineseMappings.FirstOrDefault(m => m.Value.Contains(languageName)).Key;
         }
 
-        // Get the target language based on availability in DeepL; if we have a flavour use that, otherwise use general culture of that flavour (two letter iso) if available, otherwise return null
-        // (e.g. for Portuguese, the leftLanguageTag (pt-PT or pt-BR) should be used, so the translations will correspond to the specific language flavor)
-        private static string GetLanguage(CultureInfo culture, List<string> languageList, bool isTarget = false)
-        {
-            var ietfLanguageTag = culture.IetfLanguageTag.ToUpperInvariant();
-            if (isTarget && ietfLanguageTag.Contains("ZH"))
-                return GetChineseFlavour(ietfLanguageTag);
-
-            if (languageList == null || !languageList.Any())
-                return string.Empty;
-
-            var twoLetterIso = culture.TwoLetterISOLanguageName.ToUpperInvariant();
-
-            var selectedTargetLanguage = languageList.FirstOrDefault(tl => tl == ietfLanguageTag) ?? languageList.FirstOrDefault(tl => tl == twoLetterIso);
-            return selectedTargetLanguage ?? (languageList.Any(tl => tl.Contains(twoLetterIso)) ? twoLetterIso : null);
-        }
-
         private static HttpResponseMessage IsValidApiKey(string apiKey)
         {
             return AppInitializer.Client.GetAsync($"{ChosenBaseUrl}/usage?auth_key={apiKey}").Result;
@@ -228,21 +230,6 @@ namespace Sdl.Community.DeepLMTProvider.Client
             SupportedTargetLanguages = SupportedTargetLanguagesAndFormalities.Keys.ToList();
 
             ApiKeyChanged?.Invoke();
-        }
-
-        private static bool Test(string modelType, string sourceLanguage, string targetLanguage)
-        {
-            return Translate(
-                    new()
-                    {
-                        Text = ["test"],
-                        ModelType = modelType,
-                        SourceLanguage = sourceLanguage,
-                        TargetLanguage = targetLanguage,
-                        TagHandlingVersion = "v2"
-                    }
-                )
-                .IsSuccessStatusCode;
         }
 
         private static HttpResponseMessage Translate(DeeplRequestParameters deeplRequestParameters)
