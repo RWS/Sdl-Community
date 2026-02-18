@@ -196,25 +196,24 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             if (ApiKey is null) return;
             foreach (var languagePair in LanguagePairs)
             {
-                var sourceLangCode = languagePair.GetSourceLanguageCode();
-                var targetLangCode = languagePair.GetTargetLanguageCode();
+                var sourceLangCode = languagePair.SourceCulture.RegionNeutralName.ToLowerInvariant();
+                var targetLangCode = languagePair.TargetCulture.RegionNeutralName.ToLowerInvariant();
 
                 var languageSavedOptions =
                     Options.LanguagePairOptions?.FirstOrDefault(lpo => lpo.LanguagePair.Equals(languagePair));
-
-
 
                 var currentLanguageGlossaries = glossaries?.Where(g =>
                     g.SourceLanguage == sourceLangCode && g.TargetLanguage == targetLangCode ||
                     g.Name == PluginResources.NoGlossary).ToList();
 
-                var selectedGlossary = await GlossaryClient.SupportsGlossaries(languagePair, ApiKey)
-                    ? GetSelectedGlossaryFromSavedSetting(currentLanguageGlossaries, languageSavedOptions, sourceLangCode,
+                var selectedGlossary = currentLanguageGlossaries is not null
+                    ? GetSelectedGlossaryFromSavedSetting(currentLanguageGlossaries, languageSavedOptions,
+                        sourceLangCode,
                         targetLangCode)
                     : GlossaryInfo.NotSupported;
 
                 var currentLanguageStyles = allStyles.Where(style =>
-                        languagePair.TargetCulture.Equivalent(style.Language) || style.Name == PluginResources.NoStyle)
+                        targetLangCode == style.Language?.ToLowerInvariant() || style.Name == PluginResources.NoStyle)
                     .ToList();
 
                 var selectedStyle = currentLanguageStyles.FirstOrDefault(s => s.ID == languageSavedOptions?.SelectedStyle?.ID);
@@ -223,15 +222,14 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                     ? languageSavedOptions?.Formality ?? Formality.Default
                     : Formality.Not_Supported;
 
-                var modelType = DeepLTranslationProviderClient.SupportsModelType(languagePair)
+                var modelType = DeepLTranslationProviderClient.SupportsAllModelTypes(languagePair)
                     ? languageSavedOptions?.ModelType ?? ModelType.Prefer_Quality_Optimized
                     : ModelType.Not_Supported;
 
                 var newLanguagePairOptions = new LanguagePairOptions
                 {
                     Formality = formality,
-                    Glossaries =
-                        currentLanguageGlossaries,
+                    Glossaries = currentLanguageGlossaries,
                     SelectedGlossary = selectedGlossary,
                     LanguagePair = languagePair,
                     SelectedStyle = selectedStyle,
