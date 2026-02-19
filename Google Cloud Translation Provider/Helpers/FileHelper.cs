@@ -1,16 +1,20 @@
-﻿using System;
+﻿using GoogleCloudTranslationProvider.Models;
+using Newtonsoft.Json;
+using NLog;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
-using GoogleCloudTranslationProvider.Models;
-using Newtonsoft.Json;
 
 namespace GoogleCloudTranslationProvider.Helpers
 {
     public static class FileHelper
     {
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
         public static string ShortenFilePath(this string filePath)
         {
             var lastDirectory = Path.GetFileName(Path.GetDirectoryName(filePath));
@@ -151,8 +155,13 @@ namespace GoogleCloudTranslationProvider.Helpers
             try
             {
                 var jsonContentDictionary = new Dictionary<string, string>();
-                
-                var serviceAccountResponse = JsonConvert.DeserializeObject<JsonResonseServiceAccount>(jsonContent);
+
+                var settings = new JsonSerializerSettings
+                {
+                    Culture = CultureInfo.InvariantCulture 
+                };
+
+                var serviceAccountResponse = JsonConvert.DeserializeObject<JsonResonseServiceAccount>(jsonContent, settings);
                 jsonContentDictionary.Add("type", serviceAccountResponse.Type);
                 jsonContentDictionary.Add("project_id", serviceAccountResponse.ProjectId);
                 jsonContentDictionary.Add("private_key_id", serviceAccountResponse.PrivateKeyId);
@@ -176,8 +185,9 @@ namespace GoogleCloudTranslationProvider.Helpers
                 var difference = fileKeys.Count > jsonContentDictionary.Count ? "more" : "less";
                 return (success, string.Format(PluginResources.FileValidation_JsonFileFields, difference));
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.Error($"Failed to parse JSON content: {ex}");
                 return (false, PluginResources.FileValidation_ReadingJsonFailed);
             }
         }
