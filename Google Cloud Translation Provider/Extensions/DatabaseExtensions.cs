@@ -69,7 +69,7 @@ public static class DatabaseExtensions
             .Where(language => IsValidLanguage(translationOptions.SelectedGoogleVersion, language))
             .Select(language => new LanguageMapping
             {
-                Name = language.CultureInfo.DisplayName,
+                Name = language.CultureInfo.EnglishName, // ✅ Always English, locale-independent
                 LanguageCode = language.GoogleLanguageCode
             })
             .Union(CreateChineseMapping())
@@ -78,23 +78,30 @@ public static class DatabaseExtensions
 
     private static List<LanguageMapping> CreateChineseMapping()
     {
-        var tradosChinese = LanguageRegistryApi.Instance.GetAllLanguages().Where(x => x.EnglishName.StartsWith("Chinese")).ToList();
+        var tradosChinese = LanguageRegistryApi.Instance
+            .GetAllLanguages()
+            .Where(x => x.EnglishName.StartsWith("Chinese"))
+            .ToList();
+
         var chineseLanguageMapping = new List<LanguageMapping>();
         foreach (var language in tradosChinese)
         {
             var regex = new Regex(@"^(.*?)\s*(?:\((.*?)\))?$");
-            var match = regex.Match(language.DisplayName);
+            var match = regex.Match(language.EnglishName);
 
             var languageName = match.Groups[1].Value;
             var languageRegion = match.Groups[2].Success ? match.Groups[2].Value : null;
 
             if (chineseLanguageMapping.Any(x => x.Name == languageName && x.Region == languageRegion)
-             || languageRegion is null)
+                || languageRegion is null)
             {
                 continue;
             }
 
-            var languageCode = languageRegion.StartsWith("Simplified") ? $"zh-CN" : languageRegion.StartsWith("Traditional") ? "zh-TW" : "zh";
+            var languageCode = languageRegion.StartsWith("Simplified") ? "zh-CN"
+                : languageRegion.StartsWith("Traditional") ? "zh-TW"
+                : "zh";
+
             chineseLanguageMapping.Add(new LanguageMapping
             {
                 Name = languageName,
@@ -119,27 +126,20 @@ public static class DatabaseExtensions
 
     private static bool IsValidLanguage(ApiVersion apiVersion, object targetLanguage)
     {
-        // Some languages are duplicates, which may cause issues when creating the database.
-        // Ignore them or handle them as a special case if they at least have different regions.
-
-        // Unknown languages are not added to the database.
-        // Only be available when retrieving the V3 supported languages and creating a CultureInfo object using their code,
-        // for example: new CultureInfo("xx-XX").
-
-        // Chinese languages will be handled differently due to their language codes and the presence
-        // of both traditional and simplified variations.
-        // Here we can also find some duplicates.
         return apiVersion switch
         {
             ApiVersion.V2 when targetLanguage is V2LanguageModel v2Language =>
-              !(v2Language.LanguageCode == "zh"
-             || v2Language.LanguageCode == "iw"
-             || v2Language.LanguageCode == "jw"
-             || v2Language.LanguageName.StartsWith("Chinese")),
+                !(v2Language.LanguageCode == "zh"
+                  || v2Language.LanguageCode == "iw"
+                  || v2Language.LanguageCode == "jw"
+                  || v2Language.LanguageName.StartsWith("Chinese")),
+
             ApiVersion.V3 when targetLanguage is V3LanguageModel v3Language =>
-              !(v3Language.CultureInfo.DisplayName.StartsWith("Unknown")
-             || v3Language.CultureInfo.DisplayName.StartsWith("Chinese")
-             || v3Language.GoogleLanguageCode == "ckb"),
+                // ✅ Use EnglishName - locale-independent
+                !(v3Language.CultureInfo.EnglishName.StartsWith("Unknown")
+                  || v3Language.CultureInfo.EnglishName.StartsWith("Chinese")
+                  || v3Language.GoogleLanguageCode == "ckb"),
+
             _ => false
         };
     }

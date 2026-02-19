@@ -4,6 +4,7 @@ using GoogleCloudTranslationProvider.GoogleAPI;
 using GoogleCloudTranslationProvider.Helpers;
 using GoogleCloudTranslationProvider.Interfaces;
 using GoogleCloudTranslationProvider.Models;
+using NLog;
 using Sdl.LanguagePlatform.Core;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace GoogleCloudTranslationProvider.ViewModel;
 
 public class ProviderViewModel : BaseViewModel, IProviderControlViewModel
 {
+    private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
     private const string DummyLocation = "gctp-sdl";
     private readonly IOpenFileDialogService _openFileDialogService;
     private readonly ITranslationOptions _options;
@@ -487,9 +489,15 @@ public class ProviderViewModel : BaseViewModel, IProviderControlViewModel
             var sourceCode = currentPair.SourceCulture.GetLanguageCode(ApiVersion.V3);
             var targetCode = currentPair.TargetCulture.GetLanguageCode(ApiVersion.V3);
 
+            if (string.IsNullOrEmpty(sourceCode) || string.IsNullOrEmpty(targetCode))
+            {
+                _logger.Warn($"Could not resolve language codes for pair: " +
+                             $"{currentPair.SourceCultureName} -> {currentPair.TargetCultureName}");
+            }
+
             var mapping = new LanguagePairResources()
             {
-                DisplayName = $"{sourceCultureInfo.DisplayName} - {targetCultureInfo.DisplayName}",
+                DisplayName = $"{sourceCultureInfo.EnglishName} - {targetCultureInfo.EnglishName}",
                 LanguagePair = currentPair,
                 AvailableGlossaries = V3ResourceManager.GetPairGlossaries(currentPair, availableGlossaries),
                 AvailableModels = V3ResourceManager.GetPairModels(currentPair, availableCustomModels),
