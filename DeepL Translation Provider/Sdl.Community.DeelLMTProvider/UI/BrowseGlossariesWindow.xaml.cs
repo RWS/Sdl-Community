@@ -15,9 +15,6 @@ namespace Sdl.Community.DeepLMTProvider.UI
 {
     public partial class BrowseGlossariesWindow : INotifyPropertyChanged
     {
-        private ObservableCollection<GlossaryItem> _glossaries = new();
-        private bool _isEditing;
-
         public BrowseGlossariesWindow(List<string> supportedLanguages, IBrowseDialog openFileDialog, IGlossarySniffer glossarySniffer)
         {
             Glossaries.CollectionChanged += Glossaries_CollectionChanged;
@@ -44,16 +41,16 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
         public ObservableCollection<GlossaryItem> Glossaries
         {
-            get => _glossaries;
-            set => SetField(ref _glossaries, value);
-        }
+            get;
+            set => SetField(ref field, value);
+        } = new();
 
         public bool IsEditing
         {
-            get => _isEditing;
+            get;
             set
             {
-                SetField(ref _isEditing, value);
+                SetField(ref field, value);
                 EditButton.Content = value ? "Done" : "Edit";
             }
         }

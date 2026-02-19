@@ -10,9 +10,6 @@
 
         }
 
-        private string _sourceLanguage;
-        private string _targetLanguage;
-        private string _name;
         public string Path { get; set; }
 
         public string Delimiter { get; set; }
@@ -21,20 +18,20 @@
 
         public string Name
         {
-            get => _name;
-            set => SetField(ref _name, value);
+            get;
+            set => SetField(ref field, value);
         }
 
         public string SourceLanguage
         {
-            get => _sourceLanguage;
-            set => SetField(ref _sourceLanguage, value);
+            get;
+            set => SetField(ref field, value);
         }
 
         public string TargetLanguage
         {
-            get => _targetLanguage;
-            set => SetField(ref _targetLanguage, value);
+            get;
+            set => SetField(ref field, value);
         }
     }
 }

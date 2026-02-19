@@ -19,7 +19,7 @@ namespace Sdl.Community.DeepLMTProvider {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class PluginResources {
@@ -185,6 +185,15 @@ namespace Sdl.Community.DeepLMTProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not supported.
+        /// </summary>
+        public static string GlossariesNotSupported {
+            get {
+                return ResourceManager.GetString("GlossariesNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap Information {
@@ -200,6 +209,15 @@ namespace Sdl.Community.DeepLMTProvider {
         public static string NoGlossary {
             get {
                 return ResourceManager.GetString("NoGlossary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No style.
+        /// </summary>
+        public static string NoStyle {
+            get {
+                return ResourceManager.GetString("NoStyle", resourceCulture);
             }
         }
         
