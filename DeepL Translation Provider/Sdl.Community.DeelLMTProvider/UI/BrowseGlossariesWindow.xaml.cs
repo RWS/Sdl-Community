@@ -91,7 +91,7 @@ namespace Sdl.Community.DeepLMTProvider.UI
             if (Glossaries.Any(g => g.Path == fn)) return;
 
             var newGlossaryItem = new GlossaryItem(fn);
-            var fnLower = fn.ToLower();
+            var fnLower = fn.ToLowerInvariant();
             if (fnLower.Contains(".csv"))
             {
                 var metadata = GlossarySniffer.GetGlossaryFileMetadata(fn, SupportedLanguages);

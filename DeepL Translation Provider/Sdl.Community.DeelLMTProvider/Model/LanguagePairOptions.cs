@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Sdl.LanguagePlatform.Core;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Sdl.Community.DeepLMTProvider.Model
 {
@@ -20,7 +21,12 @@ namespace Sdl.Community.DeepLMTProvider.Model
         public ModelType ModelType
         {
             get;
-            set => SetField(ref field, value);
+            set
+            {
+                if (!SetField(ref field, value)) return;
+                if (value == ModelType.Latency_Optimized)
+                    SelectedStyle = Styles.FirstOrDefault(s => s.Name == PluginResources.NoStyle);
+            }
         }
 
         public GlossaryInfo SelectedGlossary
@@ -32,7 +38,12 @@ namespace Sdl.Community.DeepLMTProvider.Model
         public DeepLStyle SelectedStyle
         {
             get;
-            set => SetField(ref field, value);
+            set
+            {
+                if (!SetField(ref field, value)) return;
+                if (value.Name != PluginResources.NoStyle)
+                    ModelType = ModelType.Quality_Optimized;
+            }
         }
 
         [JsonIgnore]
