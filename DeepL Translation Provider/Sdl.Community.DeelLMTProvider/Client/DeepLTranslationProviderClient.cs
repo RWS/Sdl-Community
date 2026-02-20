@@ -147,16 +147,16 @@ namespace Sdl.Community.DeepLMTProvider.Client
             try
             {
                 var modelType = deepLSettings.ModelType == ModelType.Not_Supported
-                    ? ModelType.Quality_Optimized.ToString().ToLower()
-                    : deepLSettings.ModelType.ToString().ToLower();
+                    ? ModelType.Quality_Optimized.ToString().ToLowerInvariant()
+                    : deepLSettings.ModelType.ToString().ToLowerInvariant();
 
                 var tagHandling = deepLSettings.TagHandling == TagFormat.None
                     ? null
-                    : deepLSettings.TagHandling.ToString().ToLower();
+                    : deepLSettings.TagHandling.ToString().ToLowerInvariant();
 
                 var formality = deepLSettings.Formality == Formality.Not_Supported
                     ? null
-                    : deepLSettings.Formality.ToString().ToLower();
+                    : deepLSettings.Formality.ToString().ToLowerInvariant();
 
                 var deeplRequestParameters = new DeeplRequestParameters
                 {
@@ -170,8 +170,11 @@ namespace Sdl.Community.DeepLMTProvider.Client
                     SplittingSentenceHandling = deepLSettings.SplitSentencesHandling.GetApiValue(),
                     IgnoreTags = deepLSettings.IgnoreTags,
                     ModelType = modelType,
-                    StyleId = deepLSettings.StyleId
+                    StyleId = deepLSettings.StyleId,
+                    TagHandlingVersion = "v2"
                 };
+
+                ApplyDeepLRestrictions(deeplRequestParameters);
 
                 var response = Translate(deeplRequestParameters);
                 response.EnsureSuccessStatusCode();
@@ -198,6 +201,12 @@ namespace Sdl.Community.DeepLMTProvider.Client
             }
 
             return translatedText;
+        }
+
+        private static void ApplyDeepLRestrictions(DeeplRequestParameters deeplRequestParameters)
+        {
+            deeplRequestParameters.TagHandlingVersion =
+                deeplRequestParameters.ModelType == "latency_optimized" ? "v1" : "v2";
         }
 
         private static string GetChineseFlavour(string languageName)
@@ -234,8 +243,6 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
         private static HttpResponseMessage Translate(DeeplRequestParameters deeplRequestParameters)
         {
-            deeplRequestParameters.TagHandlingVersion =
-                deeplRequestParameters.ModelType == "latency_optimized" ? "v1" : "v2";
             var requestJson = JsonConvert.SerializeObject(
                 deeplRequestParameters,
                 new JsonSerializerSettings
