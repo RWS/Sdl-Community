@@ -1,10 +1,10 @@
 steps:
 - task: PowerShell@2
-  displayName: 'set x86path'
+  displayName: 'Set x64path'
   inputs:
     targetType: 'inline'
     script: |
-      Write-Host "##vso[task.setvariable variable=x86path;]${Env:ProgramFiles(x86)}"
+      Write-Host "##vso[task.setvariable variable=x64path]${Env:ProgramW6432}"
 
 - task: DownloadPipelineArtifact@2
   displayName: 'Download Trados Studio Binaries Pipeline Artifact'
@@ -14,7 +14,7 @@ steps:
     definition: '1258'
     artifactName: 'binaries'
     buildVersionToDownload: 'latestFromBranch'
-    targetPath: '$(X86PATH)\Trados\Trados Studio\$(StudioProductIdentifier)'
+    targetPath: '$(x64path)\Trados\Trados Studio\$(StudioProductIdentifier)'
     runBranch: '$(StudioBranch)'
     tags: 'Package'
 
