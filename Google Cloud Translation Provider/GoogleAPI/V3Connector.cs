@@ -38,8 +38,25 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
         {
             try
             {
-                Environment.SetEnvironmentVariable(Constants.GoogleApiEnvironmentVariableName, _options.JsonFilePath);
-                _translationServiceClient = TranslationServiceClient.Create();
+                // Validate the file exists before setting env var
+                if (string.IsNullOrWhiteSpace(_options.JsonFilePath) ||
+                    !System.IO.File.Exists(_options.JsonFilePath))
+                {
+                    throw new System.IO.FileNotFoundException(
+                        $"Google credentials JSON file not found: '{_options.JsonFilePath}'");
+                }
+
+                Environment.SetEnvironmentVariable(
+                    Constants.GoogleApiEnvironmentVariableName,
+                    _options.JsonFilePath,
+                    EnvironmentVariableTarget.Process); // ✅ Explicit scope
+
+                var builder = new TranslationServiceClientBuilder
+                {
+                    CredentialsPath = _options.JsonFilePath  // ✅ Belt AND suspenders
+                };
+
+                _translationServiceClient = builder.Build();
             }
             catch (Exception e)
             {
@@ -252,46 +269,91 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 
         public async Task<List<CombinedModel>> GetProjectCustomModels()
         {
-            var client = await AutoMlClient.CreateAsync();
-            var parent = new LocationName(_options.ProjectId, _options.ProjectLocation);
-
             var combinedModels = new List<CombinedModel>();
 
-            // Get models
-            var autoMlModels = client.ListModels(parent);
-            foreach (var autoMlModel in autoMlModels)
+            try
             {
-                var model = new CombinedModel
+                var clientBuilder = new AutoMlClientBuilder
                 {
-                    Dataset = autoMlModel.DatasetId,
-                    DisplayName = autoMlModel.DisplayName,
-                    Name = autoMlModel.ModelName.ToString(),
-                    SourceLanguageCode = autoMlModel.TranslationModelMetadata?.SourceLanguageCode,
-                    TargetLanguageCode = autoMlModel.TranslationModelMetadata?.TargetLanguageCode
+                    CredentialsPath = _options.JsonFilePath
                 };
 
-                var existingModel = combinedModels.FirstOrDefault(a =>
-                    a.Name == model.Name);
-                if (existingModel == null)
+                var client = await clientBuilder.BuildAsync();
+
+                // ✅ AutoML only supports us-central1 or eu
+                // It cannot use whatever ProjectLocation the user configured
+                var autoMlLocation = GetAutoMlLocation(_options.ProjectLocation);
+                var parent = new LocationName(_options.ProjectId, autoMlLocation);
+
+                var autoMlModels = client.ListModels(parent);
+                foreach (var autoMlModel in autoMlModels)
                 {
-                    combinedModels.Add(model);
+                    var model = new CombinedModel
+                    {
+                        Dataset = autoMlModel.DatasetId,
+                        DisplayName = autoMlModel.DisplayName,
+                        Name = autoMlModel.ModelName.ToString(),
+                        SourceLanguageCode = autoMlModel.TranslationModelMetadata?.SourceLanguageCode,
+                        TargetLanguageCode = autoMlModel.TranslationModelMetadata?.TargetLanguageCode
+                    };
+
+                    if (!combinedModels.Any(a => a.Name == model.Name))
+                    {
+                        combinedModels.Add(model);
+                    }
                 }
             }
-
-            // Add V3 translation models while checking for duplicates
-            var v3Models = await GetV3TranslationModelsAsync();
-            
-            foreach (var model in v3Models)
+            catch (Grpc.Core.RpcException ex)
+                when (ex.StatusCode == Grpc.Core.StatusCode.PermissionDenied)
             {
-                var existingModel = combinedModels.FirstOrDefault(a => 
-                    a.Name == model.Name);
-                if (existingModel == null)
-                {
-                    combinedModels.Add(model);
-                }
+                _logger.Warn($"{MethodBase.GetCurrentMethod().Name}: AutoML access denied. " +
+                             $"Service account may lack AutoML Viewer role. " +
+                             $"AutoML models will be skipped. Detail: {ex.Message}");
+            }
+            catch (Grpc.Core.RpcException ex)
+                when (ex.StatusCode == Grpc.Core.StatusCode.InvalidArgument)
+            {
+                // ✅ Catch location mismatch gracefully
+                _logger.Warn($"{MethodBase.GetCurrentMethod().Name}: AutoML location invalid. " +
+                             $"AutoML models will be skipped. Detail: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"{MethodBase.GetCurrentMethod().Name} AutoML: {ex}");
             }
 
-            return combinedModels.ToList();
+            // V3 Translation models
+            try
+            {
+                var v3Models = await GetV3TranslationModelsAsync();
+                if (v3Models != null)
+                {
+                    foreach (var model in v3Models.Where(model =>
+                             !combinedModels.Any(a => a.Name == model.Name)))
+                    {
+                        combinedModels.Add(model);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"{MethodBase.GetCurrentMethod().Name} V3Models: {ex}");
+            }
+
+            return combinedModels;
+        }
+
+        /// <summary>
+        /// AutoML only supports us-central1 or eu regardless of 
+        /// what Translation API location the user has configured.
+        /// </summary>
+        private string GetAutoMlLocation(string projectLocation)
+        {
+            return projectLocation?.ToLowerInvariant() switch
+            {
+                var loc when loc != null && loc.StartsWith("eu") => "eu",
+                _ => "us-central1"  // default fallback for global, us, or anything else
+            };
         }
 
         private string SetCustomModel(CultureInfo sourceLanguage, CultureInfo targetLanguage)
