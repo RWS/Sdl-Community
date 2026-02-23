@@ -4,6 +4,9 @@ namespace Sdl.Community.DeepLMTProvider.Model
 {
     public class GlossaryInfo : ViewModel.ViewModel
     {
+        private bool _isChecked;
+        private string _name;
+
         [JsonIgnore]
         public static GlossaryInfo NoGlossary { get; } = new() { Name = PluginResources.NoGlossary };
         
@@ -15,14 +18,14 @@ namespace Sdl.Community.DeepLMTProvider.Model
 
         public bool IsChecked
         {
-            get;
-            set => SetField(ref field, value);
+            get => _isChecked;
+            set => SetField(ref _isChecked, value);
         }
 
         public string Name
         {
-            get;
-            set => SetField(ref field, value);
+            get => _name;
+            set => SetField(ref _name, value);
         }
 
         [JsonProperty("source_lang")]

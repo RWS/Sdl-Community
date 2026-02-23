@@ -19,6 +19,11 @@ namespace Sdl.Community.DeepLMTProvider.UI
     public partial class EditGlossaryWindow : INotifyPropertyChanged
 
     {
+        private string _filterQuery;
+        private ObservableCollection<GlossaryEntry> _glossaryEntries;
+        private string _glossaryName;
+        private bool _isEditing;
+
         public EditGlossaryWindow(List<GlossaryEntry> glossaryEntries,
             string glossaryName)
         {
@@ -36,39 +41,39 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
         public string FilterQuery
         {
-            get;
+            get => _filterQuery;
             set
             {
-                SetField(ref field, value);
+                SetField(ref _filterQuery, value);
                 Filter();
             }
         }
 
         public ObservableCollection<GlossaryEntry> GlossaryEntries
         {
-            get;
+            get => _glossaryEntries;
             set
             {
-                SetField(ref field, value);
+                SetField(ref _glossaryEntries, value);
 
-                field.CollectionChanged += GlossaryEntries_CollectionChanged;
-                field.ForEach(ge => ge.PropertyChanged += (_, _) => GlossaryEntries_CollectionChanged(null, null));
+                _glossaryEntries.CollectionChanged += GlossaryEntries_CollectionChanged;
+                _glossaryEntries.ForEach(ge => ge.PropertyChanged += (_, _) => GlossaryEntries_CollectionChanged(null, null));
                 GlossaryEntries_CollectionChanged(null, null);
             }
         }
 
         public string GlossaryName
         {
-            get;
-            set => SetField(ref field, value);
+            get => _glossaryName;
+            set => SetField(ref _glossaryName, value);
         }
 
         public bool IsEditing
         {
-            get;
+            get => _isEditing;
             set
             {
-                SetField(ref field, value);
+                SetField(ref _isEditing, value);
 
                 ApplyEditModeUiChanges(value);
 

@@ -7,10 +7,16 @@ namespace Sdl.Community.DeepLMTProvider.Model
 {
     public class LanguagePairOptions : ViewModel.ViewModel
     {
+        private Formality _formality;
+        private ModelType _modelType;
+        private GlossaryInfo _selectedGlossary;
+        private DeepLStyle _selectedStyle;
+        private List<DeepLStyle> _styles = [];
+
         public Formality Formality
         {
-            get;
-            set => SetField(ref field, value);
+            get => _formality;
+            set => SetField(ref _formality, value);
         }
 
         [JsonIgnore]
@@ -20,10 +26,10 @@ namespace Sdl.Community.DeepLMTProvider.Model
 
         public ModelType ModelType
         {
-            get;
+            get => _modelType;
             set
             {
-                if (!SetField(ref field, value)) return;
+                if (!SetField(ref _modelType, value)) return;
                 if (value == ModelType.Latency_Optimized)
                     SelectedStyle = Styles.FirstOrDefault(s => s.Name == PluginResources.NoStyle);
             }
@@ -31,16 +37,16 @@ namespace Sdl.Community.DeepLMTProvider.Model
 
         public GlossaryInfo SelectedGlossary
         {
-            get;
-            set => SetField(ref field, value);
+            get => _selectedGlossary;
+            set => SetField(ref _selectedGlossary, value);
         }
 
         public DeepLStyle SelectedStyle
         {
-            get;
+            get => _selectedStyle;
             set
             {
-                if (!SetField(ref field, value)) return;
+                if (!SetField(ref _selectedStyle, value)) return;
                 if (value.Name != PluginResources.NoStyle)
                     ModelType = ModelType.Quality_Optimized;
             }
@@ -49,9 +55,9 @@ namespace Sdl.Community.DeepLMTProvider.Model
         [JsonIgnore]
         public List<DeepLStyle> Styles
         {
-            get;
-            set => SetField(ref field, value);
-        } = [];
+            get => _styles;
+            set => SetField(ref _styles, value);
+        }
 
         public override string ToString() => $"{nameof(LanguagePairOptions)}";
     }
