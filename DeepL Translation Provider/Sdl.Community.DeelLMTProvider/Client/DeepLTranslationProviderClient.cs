@@ -18,6 +18,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
     public class DeepLTranslationProviderClient
     {
         private static readonly Logger Logger = Log.GetLogger(nameof(DeepLTranslationProviderClient));
+        private static string _apiKey;
 
         public DeepLTranslationProviderClient(string key)
         {
@@ -29,10 +30,10 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
         public static string ApiKey
         {
-            get;
+            get => _apiKey;
             set
             {
-                field = value;
+                _apiKey = value;
                 OnApiKeyChanged();
             }
         }

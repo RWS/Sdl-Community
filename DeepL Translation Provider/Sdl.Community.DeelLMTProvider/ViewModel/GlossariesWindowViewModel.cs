@@ -18,6 +18,12 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 {
     public class GlossariesWindowViewModel : ViewModel
     {
+        private string _filterQuery;
+        private ObservableCollection<GlossaryInfo> _glossaries;
+        private bool _isLoading;
+        private GlossaryInfo _selectedGlossary;
+        private GlossaryLanguagePair _selectedLanguagePair;
+
         public GlossariesWindowViewModel(
             IDeepLGlossaryClient deepLGlossaryClient,
             IMessageService messageService,
@@ -54,20 +60,20 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         public string FilterQuery
         {
-            get;
+            get => _filterQuery;
             set
             {
-                SetField(ref field, value);
+                SetField(ref _filterQuery, value);
                 FilterByQuery(value);
             }
         }
 
         public ObservableCollection<GlossaryInfo> Glossaries
         {
-            get;
+            get => _glossaries;
             set
             {
-                SetField(ref field, value);
+                SetField(ref _glossaries, value);
                 value.ForEach(gi => gi.PropertyChanged += (_, args) =>
                 {
                     if (args.PropertyName == nameof(GlossaryInfo.IsChecked)) OnPropertyChanged(nameof(IsCheckAll));
@@ -87,22 +93,22 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         public bool IsLoading
         {
-            get;
-            set => SetField(ref field, value);
+            get => _isLoading;
+            set => SetField(ref _isLoading, value);
         }
 
         public GlossaryInfo SelectedGlossary
         {
-            get;
-            set => SetField(ref field, value);
+            get => _selectedGlossary;
+            set => SetField(ref _selectedGlossary, value);
         }
 
         public GlossaryLanguagePair SelectedLanguagePair
         {
-            get;
+            get => _selectedLanguagePair;
             set
             {
-                SetField(ref field, value);
+                SetField(ref _selectedLanguagePair, value);
                 Filter(value);
             }
         }

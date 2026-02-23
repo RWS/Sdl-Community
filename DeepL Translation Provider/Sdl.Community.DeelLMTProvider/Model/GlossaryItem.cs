@@ -2,6 +2,10 @@
 {
     public class GlossaryItem : ViewModel.ViewModel
     {
+        private string _name;
+        private string _sourceLanguage;
+        private string _targetLanguage;
+
         public GlossaryItem(string path)
         {
             Path = path;
@@ -18,20 +22,20 @@
 
         public string Name
         {
-            get;
-            set => SetField(ref field, value);
+            get => _name;
+            set => SetField(ref _name, value);
         }
 
         public string SourceLanguage
         {
-            get;
-            set => SetField(ref field, value);
+            get => _sourceLanguage;
+            set => SetField(ref _sourceLanguage, value);
         }
 
         public string TargetLanguage
         {
-            get;
-            set => SetField(ref field, value);
+            get => _targetLanguage;
+            set => SetField(ref _targetLanguage, value);
         }
     }
 }

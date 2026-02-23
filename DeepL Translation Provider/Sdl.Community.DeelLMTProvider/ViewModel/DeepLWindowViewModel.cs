@@ -22,6 +22,18 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 {
     public class DeepLWindowViewModel : ViewModel
     {
+        private string _apiKey;
+        private string _apiKeyValidationMessage;
+        private string _apiVersion;
+        private List<string> _ignoreTags;
+        private ObservableCollection<LanguagePairOptions> _languagePairOptions = new();
+        private bool _preserveFormatting;
+        private bool _resendDraft;
+        private bool _sendPlainText;
+        private SplitSentences _splitSentencesType;
+        private TagFormat _tagType;
+        private string _validationMessages;
+
         public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, IDeepLGlossaryClient glossaryClient, IMessageService messageService)
         {
             IsTellMeAction = true;
@@ -73,10 +85,10 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         public string ApiKey
         {
-            get;
+            get => _apiKey;
             set
             {
-                SetField(ref field, value?.Trim());
+                SetField(ref _apiKey, value?.Trim());
                 PasswordChangedTimer.Enabled = true;
             }
         }
@@ -85,20 +97,20 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         public string ApiKeyValidationMessage
         {
-            get;
+            get => _apiKeyValidationMessage;
             set
             {
-                SetField(ref field, value);
+                SetField(ref _apiKeyValidationMessage, value);
                 OnPropertyChanged(nameof(OkCommand));
             }
         }
 
         public string ApiVersion
         {
-            get;
+            get => _apiVersion;
             set
             {
-                SetField(ref field, value);
+                SetField(ref _apiVersion, value);
                 OnPasswordChanged(null, null);
             }
         }
@@ -107,15 +119,15 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         public List<string> IgnoreTags
         {
-            get;
-            set => SetField(ref field, value);
+            get => _ignoreTags;
+            set => SetField(ref _ignoreTags, value);
         }
 
         public ObservableCollection<LanguagePairOptions> LanguagePairOptions
         {
-            get;
-            set => SetField(ref field, value);
-        } = new();
+            get => _languagePairOptions;
+            set => SetField(ref _languagePairOptions, value);
+        }
 
         public ICommand ManageGlossariesCommand => new ParameterlessCommand(() => ManageGlossaries?.Invoke(), () => ApiKeyValidationMessage == null);
 
@@ -126,38 +138,35 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         public bool PreserveFormatting
         {
-            get;
-            set => SetField(ref field, value);
+            get => _preserveFormatting;
+            set => SetField(ref _preserveFormatting, value);
         }
 
         public bool ResendDraft
         {
-            get;
-            set
-            {
-                SetField(ref field, value);
-            }
+            get => _resendDraft;
+            set => SetField(ref _resendDraft, value);
         }
 
         public bool SendPlainText
         {
-            get;
-            set => SetField(ref field, value);
+            get => _sendPlainText;
+            set => SetField(ref _sendPlainText, value);
         }
 
         public SplitSentences SplitSentencesType
         {
-            get;
-            set => SetField(ref field, value);
+            get => _splitSentencesType;
+            set => SetField(ref _splitSentencesType, value);
         }
 
         public TagFormat TagType
         {
-            get;
+            get => _tagType;
             // Add a method here to update the splitsentencestype
             set
             {
-                SetField(ref field, value);
+                SetField(ref _tagType, value);
                 SplitSentencesType = GetDefaultSplitSentences(value);
             }
         }
@@ -166,8 +175,8 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         public string ValidationMessages
         {
-            get;
-            set => SetField(ref field, value);
+            get => _validationMessages;
+            set => SetField(ref _validationMessages, value);
         }
 
         private IDeepLGlossaryClient GlossaryClient { get; set; }
