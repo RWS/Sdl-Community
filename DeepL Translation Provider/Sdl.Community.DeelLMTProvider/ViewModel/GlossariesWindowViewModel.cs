@@ -271,7 +271,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                 (success, var entries, var message) = await DeepLGlossaryClient.RetrieveGlossaryEntries(selectedGlossary.Id, DeepLTranslationProviderClient.ApiKey);
                 if (HandleErrorIfFound(success, message)) continue;
 
-                (success, _, message) = GlossaryReaderWriterService.WriteGlossary(new Glossary { Entries = entries }, format, $"{folderPath}\\{selectedGlossary.Name}.{parameter.ToString().ToLower()}");
+                (success, _, message) = GlossaryReaderWriterService.WriteGlossary(new Glossary { Entries = entries }, format, $"{folderPath}\\{selectedGlossary.Name}.{parameter.ToString().ToLowerInvariant()}");
                 if (HandleErrorIfFound(success, message)) return;
 
                 ProcessStarter.StartInFileExplorer(folderPath);
@@ -298,7 +298,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
             collectionView.Filter = null;
             collectionView.Filter = glossary =>
-                ((GlossaryInfo)glossary).Name.ToLower().Contains(value.ToLower());
+                ((GlossaryInfo)glossary).Name.ToLowerInvariant().Contains(value.ToLowerInvariant());
         }
 
         private bool HandleErrorIfFound(bool success, string message, [CallerMemberName] string failingMethod = null)
