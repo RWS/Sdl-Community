@@ -7,12 +7,16 @@ using GoogleCloudTranslationProvider.GoogleAPI;
 using GoogleCloudTranslationProvider.Interfaces;
 using GoogleCloudTranslationProvider.Models;
 using LanguageMappingProvider;
+using NLog;
 using Sdl.Core.Globalization.LanguageRegistry;
 
 namespace GoogleCloudTranslationProvider.Extensions;
 
 public static class DatabaseExtensions
 {
+    private static LanguageMappingDatabase _v3DatabaseCache;
+    private static LanguageMappingDatabase _v2DatabaseCache;
+
     public static List<LanguageMapping> GetGoogleDefaultMapping(ITranslationOptions translationOptions)
     {
         var databaseFilePath = GetDatabaseFilePath(translationOptions.SelectedGoogleVersion);
@@ -31,12 +35,32 @@ public static class DatabaseExtensions
 
     public static LanguageMappingDatabase CreateDatabase(ITranslationOptions translationOptions)
     {
-        var languageMappings = CreateLanguageMappings(translationOptions);
-        var database = translationOptions.SelectedGoogleVersion == ApiVersion.V2
-                     ? Constants.Database_PluginName_V2
-                     : Constants.Database_PluginName_V3;
+        var isV3 = translationOptions.SelectedGoogleVersion == ApiVersion.V3;
 
-        return new LanguageMappingDatabase(database, languageMappings);
+        // ✅ Return cached instance if already built
+        if (isV3 && _v3DatabaseCache is not null) return _v3DatabaseCache;
+        if (!isV3 && _v2DatabaseCache is not null) return _v2DatabaseCache;
+
+        var languageMappings = CreateLanguageMappings(translationOptions);
+
+        // Deduplicate before passing to LanguageMappingDatabase
+        var deduplicated = languageMappings
+            .GroupBy(x => new { x.Name, x.Region })
+            .Select(g => g.OrderByDescending(x => !string.IsNullOrEmpty(x.Region))
+                .First())
+            .ToList();
+
+        var databaseName = isV3
+            ? Constants.Database_PluginName_V3
+            : Constants.Database_PluginName_V2;
+
+        var database = new LanguageMappingDatabase(databaseName, deduplicated);
+
+        // Cache it
+        if (isV3) _v3DatabaseCache = database;
+        else _v2DatabaseCache = database;
+
+        return database;
     }
 
     private static List<LanguageMapping> CreateDatabase(ITranslationOptions translationOptions, Func<ITranslationOptions, List<LanguageMapping>> createDatabaseFunc)
@@ -49,30 +73,51 @@ public static class DatabaseExtensions
     {
         var v2Languages = translationOptions.V2SupportedLanguages;
 
-        return v2Languages
+        var mainMappings = v2Languages
             .Where(language => IsValidLanguage(translationOptions.SelectedGoogleVersion, language))
             .Select(language => ParseLanguageMapping(language.LanguageName, language.LanguageCode))
-            .Union(CreateChineseMapping())
+            .ToList();
+
+        var chineseMappings = CreateChineseMapping();
+
+        // ✅ Same deduplication strategy
+        return mainMappings
+            .Union(chineseMappings)
+            .GroupBy(x => new { x.Name, x.Region })
+            .Select(g => g.OrderByDescending(x => !string.IsNullOrEmpty(x.Region))
+                .First())
             .ToList();
     }
 
     private static List<LanguageMapping> CreateV3Database(ITranslationOptions translationOptions)
     {
-        if (translationOptions.V3SupportedLanguages is null || !translationOptions.V3SupportedLanguages.Any())
+        if (translationOptions.V3SupportedLanguages is null
+            || !translationOptions.V3SupportedLanguages.Any())
         {
             var v3Connector = new V3Connector(translationOptions);
             translationOptions.V3SupportedLanguages = v3Connector.GetLanguages();
         }
 
         var v3Languages = translationOptions.V3SupportedLanguages;
-        return v3Languages
+
+        var mainMappings = v3Languages
             .Where(language => IsValidLanguage(translationOptions.SelectedGoogleVersion, language))
             .Select(language => new LanguageMapping
             {
-                Name = language.CultureInfo.EnglishName, // ✅ Always English, locale-independent
+                Name = language.CultureInfo.EnglishName,
                 LanguageCode = language.GoogleLanguageCode
             })
-            .Union(CreateChineseMapping())
+            .ToList();
+
+        var chineseMappings = CreateChineseMapping();
+
+        // ✅ Merge with explicit deduplication — Chinese entries win over any 
+        // generic entries since they have proper Region set
+        return mainMappings
+            .Union(chineseMappings)
+            .GroupBy(x => new { x.Name, x.Region })
+            .Select(g => g.OrderByDescending(x => !string.IsNullOrEmpty(x.Region))
+                .First())  // prefer entries with Region set
             .ToList();
     }
 

@@ -360,35 +360,50 @@ public class ProviderViewModel : BaseViewModel, IProviderControlViewModel
     private void InitializeComponent()
     {
         GoogleApiVersions = new List<GoogleApiVersion>
+    {
+        new GoogleApiVersion
         {
-            new GoogleApiVersion
-            {
-                Name = PluginResources.GoogleApiVersionV2Description,
-                Version = ApiVersion.V2
-            },
-            new GoogleApiVersion
-            {
-                Name = PluginResources.GoogleApiVersionV3Description,
-                Version = ApiVersion.V3
-            },
-        };
+            Name    = PluginResources.GoogleApiVersionV2Description,
+            Version = ApiVersion.V2
+        },
+        new GoogleApiVersion
+        {
+            Name    = PluginResources.GoogleApiVersionV3Description,
+            Version = ApiVersion.V3
+        },
+    };
 
         PersistGoogleKey = _options.PersistGoogleKey;
         ApiKey = PersistGoogleKey || _editProvider ? _options.ApiKey : string.Empty;
         JsonFilePath = _options.JsonFilePath;
         VisibleJsonPath = JsonFilePath.ShortenFilePath();
         ProjectId = _options.ProjectId;
-        ProjectLocation = _options.ProjectLocation;
 
-        SelectedGoogleApiVersion = GoogleApiVersions.FirstOrDefault(v => v.Version.Equals(_options.SelectedGoogleVersion))
-                                ?? GoogleApiVersions.First(x => x.Version == ApiVersion.V2);
-        if (!string.IsNullOrEmpty(_projectLocation))
-            Locations = V3ResourceManager.GetLocations(new TranslationOptions
+        // ✅ Step 1: Set version first — needed by CreateV3Database
+        SelectedGoogleApiVersion = GoogleApiVersions
+            .FirstOrDefault(v => v.Version.Equals(_options.SelectedGoogleVersion))
+            ?? GoogleApiVersions.First(x => x.Version == ApiVersion.V2);
+
+        // ✅ Step 2: Populate Locations before setting ProjectLocation
+        // so the ComboBox has items ready when ProjectLocation triggers
+        // GetProjectResources() via the property setter
+        if (!string.IsNullOrEmpty(_options.ProjectLocation))
+        {
+            var locations = V3ResourceManager.GetLocations(new TranslationOptions
             {
-                ProjectId = _projectId,
-                JsonFilePath = _jsonFilePath,
+                ProjectId = _options.ProjectId,
+                JsonFilePath = _options.JsonFilePath,
                 ProjectLocation = DummyLocation
             });
+
+            // GetLocations returns null on success (no unsupported location error)
+            // In that case seed the list with the saved location so ComboBox isn't empty
+            Locations = locations ?? new List<string> { _options.ProjectLocation };
+        }
+
+        // ✅ Step 3: NOW set ProjectLocation — triggers GetProjectResources()
+        // at this point: SelectedGoogleApiVersion ✓, Locations ✓
+        ProjectLocation = _options.ProjectLocation;
 
         if (LanguageMappingPairs is not null && LanguageMappingPairs.Any())
             ProjectResourcesLoaded = true;
@@ -464,10 +479,10 @@ public class ProviderViewModel : BaseViewModel, IProviderControlViewModel
 
     private async void GetProjectResources()
     {
-        if (string.IsNullOrEmpty(_projectLocation) || _projectLocation.Equals(DummyLocation))
+        if (string.IsNullOrEmpty(_projectLocation)
+            || _projectLocation.Equals(DummyLocation))
             return;
 
-        var pairMapping = new List<LanguagePairResources>();
         var tempOptions = new TranslationOptions
         {
             ProjectId = _projectId,
@@ -476,28 +491,54 @@ public class ProviderViewModel : BaseViewModel, IProviderControlViewModel
             SelectedGoogleVersion = ApiVersion.V3
         };
 
+        // ✅ Step 1: Create DB FIRST — must exist before GetLanguageCode is called
         CreateV3Database(tempOptions);
+
+        // ✅ Step 2: Verify DB was actually created before proceeding
+        var dbPath = string.Format(Constants.DatabaseFilePath, Constants.Database_PluginName_V3);
+        if (!File.Exists(dbPath))
+        {
+            _logger.Error($"GetProjectResources: Database was not created at '{dbPath}'. " +
+                          $"Cannot build language mapping pairs.");
+            return;
+        }
+
+        // Step 3: Now safe to fetch resources and resolve language codes
+        var pairMapping = new List<LanguagePairResources>();
         var availableGlossaries = V3ResourceManager.GetGlossaries(tempOptions);
         var availableCustomModels = await V3ResourceManager.GetCustomModelsAsync(tempOptions);
+
+        _logger.Info($"GetProjectResources: Processing {_languagePairs.Count()} pairs");
+
         for (var i = 0; i < _languagePairs.Count(); i++)
         {
             var currentPair = _languagePairs.ElementAt(i);
-
-            var sourceCultureInfo = new CultureInfo(currentPair.SourceCultureName);
-            var targetCultureInfo = new CultureInfo(currentPair.TargetCultureName);
-
             var sourceCode = currentPair.SourceCulture.GetLanguageCode(ApiVersion.V3);
             var targetCode = currentPair.TargetCulture.GetLanguageCode(ApiVersion.V3);
 
+            _logger.Info($"Pair [{i}]: {currentPair.SourceCultureName} → " +
+                         $"{currentPair.TargetCultureName} | " +
+                         $"Codes: '{sourceCode}' → '{targetCode}'");
+
+            
+
+            // ✅ Log so you can see exactly what's resolving on his machine
+            _logger.Info($"Pair [{i}]: {currentPair.SourceCultureName} → {currentPair.TargetCultureName} " +
+                         $"| Codes: '{sourceCode}' → '{targetCode}'");
+
             if (string.IsNullOrEmpty(sourceCode) || string.IsNullOrEmpty(targetCode))
             {
-                _logger.Warn($"Could not resolve language codes for pair: " +
-                             $"{currentPair.SourceCultureName} -> {currentPair.TargetCultureName}");
+                _logger.Warn($"GetProjectResources: Empty language code for pair " +
+                             $"{currentPair.SourceCultureName} → {currentPair.TargetCultureName}. " +
+                             $"DB lookup failed — database may not exist or language not found.");
             }
+
+            var sourceCultureName = GetCultureDisplayName(currentPair.SourceCultureName);
+            var targetCultureName = GetCultureDisplayName(currentPair.TargetCultureName);
 
             var mapping = new LanguagePairResources()
             {
-                DisplayName = $"{sourceCultureInfo.EnglishName} - {targetCultureInfo.EnglishName}",
+                DisplayName = $"{sourceCultureName} - {targetCultureName}",
                 LanguagePair = currentPair,
                 AvailableGlossaries = V3ResourceManager.GetPairGlossaries(currentPair, availableGlossaries),
                 AvailableModels = V3ResourceManager.GetPairModels(currentPair, availableCustomModels),
@@ -526,6 +567,23 @@ public class ProviderViewModel : BaseViewModel, IProviderControlViewModel
 
         LanguageMappingPairs = pairMapping;
         ProjectResourcesLoaded = true;
+
+        _logger.Info($"GetProjectResources: Completed with {pairMapping.Count} mapped pairs");
+    }
+
+    private static string GetCultureDisplayName(string cultureName)
+    {
+        try
+        {
+            return new CultureInfo(cultureName).EnglishName;
+        }
+        catch (CultureNotFoundException)
+        {
+            _logger.Warn($"GetCultureDisplayName: Culture '{cultureName}' " +
+                      $"not recognized by OS — falling back to raw name. " +
+                      $"This may occur on Windows Server with limited culture support.");
+            return cultureName; // graceful fallback to raw string
+        }
     }
 
     private void OpenLocalPath(object parameter)
@@ -558,15 +616,35 @@ public class ProviderViewModel : BaseViewModel, IProviderControlViewModel
 
     private void CreateV3Database(TranslationOptions translationOptions)
     {
-        if (File.Exists(string.Format(Constants.DatabaseFilePath, Constants.Database_PluginName_V3)))
-            return;
+        var dbFilePath = string.Format(
+            Constants.DatabaseFilePath,
+            Constants.Database_PluginName_V3);
 
-        translationOptions.SelectedGoogleVersion = SelectedGoogleApiVersion.Version;
-        translationOptions.ProjectLocation = ProjectLocation;
-        translationOptions.LanguageMappingPairs = LanguageMappingPairs;
+        try
+        {
+            // ✅ Use what was passed in — don't rely on VM properties
+            // that may not be initialized yet during startup
+            translationOptions.SelectedGoogleVersion = ApiVersion.V3;
+            translationOptions.ProjectLocation = translationOptions.ProjectLocation
+                                                 ?? _projectLocation;
+            translationOptions.LanguageMappingPairs = translationOptions.LanguageMappingPairs
+                                                      ?? LanguageMappingPairs
+                                                      ?? new List<LanguagePairResources>();
 
-        _ = DatabaseExtensions.CreateDatabase(translationOptions);
-        LanguageMappingLoaded?.Invoke(this, EventArgs.Empty);
+            var db = DatabaseExtensions.CreateDatabase(translationOptions);
+            if (db is null)
+            {
+                _logger.Warn("CreateV3Database: Database creation returned null");
+                return;
+            }
+
+            _logger.Info($"CreateV3Database: Database created/updated successfully");
+            LanguageMappingLoaded?.Invoke(this, EventArgs.Empty);
+        }
+        catch (Exception ex)
+        {
+            _logger.Error($"CreateV3Database failed: {ex}");
+        }
     }
 
     public void UpdateLanguageMapping()
