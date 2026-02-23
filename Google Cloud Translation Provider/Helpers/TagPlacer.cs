@@ -45,53 +45,45 @@ namespace GoogleCloudTranslationProvider.Helpers
 			return new Segment();
 		}
 
-		private Segment TryGetTaggedSegment(string returnedText)
-		{
-			_returnedText = _htmlUtil.HtmlDecode(returnedText);
-			var segment = new Segment();
-			var targetElements = GetTargetElements();
-			for (var i = 0; i < targetElements.Length; i++)
-			{
-				var text = targetElements[i];
-				if (_tagsDictionary.ContainsKey(text))
-				{
-					AddTagPadding(segment, text);
-					continue;
-				}
+        private Segment TryGetTaggedSegment(string returnedText)
+        {
+            // Simple decode only - no HTML tag repair needed
+            _returnedText = _htmlUtil.HtmlDecode(returnedText);
 
-				if (text.Trim().Length > 0)
-				{
-					segment.Add(text.Trim());
-				}
-			}
+            var segment = new Segment();
+            var targetElements = GetTargetElements();
 
-			return segment;
-		}
+            for (var i = 0; i < targetElements.Length; i++)
+            {
+                var text = targetElements[i];
+                if (_tagsDictionary.ContainsKey(text))
+                {
+                    AddTagPadding(segment, text);
+                    continue;
+                }
 
-		private string[] GetTargetElements()
-		{
-			const string SimplePattern = "0tg[0-9]*";
-			const string SimpleTagRegex = $@"(<{SimplePattern}\>)|(<\/{SimplePattern}\>)|(\<{SimplePattern}/\>)";
+                if (text.Trim().Length > 0)
+                {
+                    segment.Add(text.Trim());
+                }
+            }
 
-			const string GuidPattern = "0tg[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}";
-			const string GuidTagIdRegex = $@"(<{GuidPattern}/>)|(<\\/{GuidPattern}\\>)|(<{GuidPattern}>)";
+            return segment;
+        }
 
-			const string AlphanumericPattern = "0tgpt[0-9]*";
-			const string AlphanumericTagRegex = $@"(<{AlphanumericPattern}\>)|(<\/{AlphanumericPattern}\>)|(\<{AlphanumericPattern}/\>)";
 
-			const string DecimalsPattern = @"0tg[0-9,\.]*";
-			const string DecimalsTagRegex = $@"(<{DecimalsPattern}\>)|(<\/{DecimalsPattern}\>)|(\<{DecimalsPattern}/\>)";
+        private string[] GetTargetElements()
+        {
+            // Match [[s...]], [[e...]], [[x...]] patterns
+            const string BracketTagRegex = @"(\[\[[sex][^\]]*\]\])";
 
-			var translation = _returnedText;
-			translation = MarkTags(translation, SimpleTagRegex);
-			translation = MarkTags(translation, GuidTagIdRegex);
-			translation = MarkTags(translation, AlphanumericTagRegex);
-			translation = MarkTags(translation, DecimalsTagRegex);
+            var translation = _returnedText;
+            translation = MarkTags(translation, BracketTagRegex);
 
-			return translation.Split(new[] { "```" }, StringSplitOptions.None);
-		}
+            return translation.Split(new[] { "```" }, StringSplitOptions.None);
+        }
 
-		private string MarkTags(string translation, string pattern)
+        private string MarkTags(string translation, string pattern)
 		{
 			try
 			{
@@ -189,25 +181,26 @@ namespace GoogleCloudTranslationProvider.Helpers
 			});
 		}
 
-		private string ConvertTagToString()
-		{
-			if (GetCorrespondingTag(_currentTag.SdlTag.TagID) is not TagInfo tagInfo)
-			{
-				return string.Empty;
-			}
+        private string ConvertTagToString()
+        {
+            if (GetCorrespondingTag(_currentTag.SdlTag.TagID) is not TagInfo tagInfo)
+            {
+                return string.Empty;
+            }
 
-			return _currentTag.SdlTag.Type switch
-			{ // Undefined, UnmatchedStart, UnmatchedEnd ?
-				TagType.Start => $"<0tg{tagInfo.TagId}>",
-				TagType.End => $"</0tg{tagInfo.TagId}>",
-				TagType.Standalone => $"<0tg{tagInfo.TagId}/>",
-				TagType.TextPlaceholder => $"<0tg{tagInfo.TagId}/>",
-				TagType.LockedContent => $"<0tg{tagInfo.TagId}/>",
-				_ => string.Empty,
-			};
-		}
+            // Use double-bracket format that Google won't treat as HTML
+            return _currentTag.SdlTag.Type switch
+            {
+                TagType.Start => $"[[s{tagInfo.TagId}]]",
+                TagType.End => $"[[e{tagInfo.TagId}]]",
+                TagType.Standalone => $"[[x{tagInfo.TagId}]]",
+                TagType.TextPlaceholder => $"[[x{tagInfo.TagId}]]",
+                TagType.LockedContent => $"[[x{tagInfo.TagId}]]",
+                _ => string.Empty,
+            };
+        }
 
-		private TagInfo GetCorrespondingTag(string tagId)
+        private TagInfo GetCorrespondingTag(string tagId)
 		{
 			return _tagsInfo.FirstOrDefault(t => t.TagId.Equals(tagId));
 		}

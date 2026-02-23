@@ -89,7 +89,7 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
         }
 
         var tagplacer = new TagPlacer(newSegment, _htmlUtil);
-        var translatedText = Lookup(tagplacer.PreparedSourceText, _translationOptions, "html");
+        var translatedText = Lookup(tagplacer.PreparedSourceText, _translationOptions, "text");
         translation = tagplacer.GetTaggedSegment(translatedText).Duplicate();
         if (_translationOptions.UsePostEdit)
         {
