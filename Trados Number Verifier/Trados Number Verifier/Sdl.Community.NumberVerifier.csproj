@@ -4,7 +4,7 @@
 		<TargetFramework>net48</TargetFramework>
         <PlatformTarget>x64</PlatformTarget>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19\Plugins</PluginDeploymentPath>
+		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19beta\Plugins</PluginDeploymentPath>
 		<CreatePluginPackage>true</CreatePluginPackage>
 		<AssemblyOriginatorKeyFile>..\..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
 		<TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19</TradosFolder>

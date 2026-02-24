@@ -8,7 +8,7 @@
     <AssemblyName>Reports.Viewer.Plus</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19</TradosFolder>
-    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19\Plugins</PluginDeploymentPath>
+    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19beta\Plugins</PluginDeploymentPath>
     <CefSharpAnyCpuSupport>true</CefSharpAnyCpuSupport>
     <CefSharpBuildAction>Content</CefSharpBuildAction>
     <UseWindowsForms>true</UseWindowsForms>

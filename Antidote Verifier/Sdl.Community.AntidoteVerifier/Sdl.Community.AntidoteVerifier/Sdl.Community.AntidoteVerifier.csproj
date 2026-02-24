@@ -3,7 +3,7 @@
     <TargetFramework>net48</TargetFramework>
         <PlatformTarget>x64</PlatformTarget>
     <OutputType>Library</OutputType>
-    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19\Plugins</PluginDeploymentPath>
+    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19beta\Plugins</PluginDeploymentPath>
     <TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19</TradosFolder>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
