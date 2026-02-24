@@ -1,4 +1,11 @@
 steps:
+- task: PythonScript@0
+  inputs:
+    scriptSource: filePath
+    scriptPath: build/PythonScripts/pluginRename.py
+  env:
+    PLUGIN_FOLDER_PATH: '$(PluginPath)'
+
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
   inputs:
