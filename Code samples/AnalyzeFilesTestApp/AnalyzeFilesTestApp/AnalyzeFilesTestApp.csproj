@@ -34,7 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19</TradosFolder>
+    <TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19Beta</TradosFolder>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Sdl.Core.Globalization">

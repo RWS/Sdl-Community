@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19</TradosFolder>
+		<TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19Beta</TradosFolder>
 
 		<Company>RWS</Company>
 		<Authors>Trados AppStore Team</Authors>

@@ -42,7 +42,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
-    <TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19</TradosFolder>
+    <TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19Beta</TradosFolder>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>

@@ -6,7 +6,7 @@
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<LangVersion>latest</LangVersion>
 		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19beta\Plugins</PluginDeploymentPath>
-		<TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19</TradosFolder>
+		<TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19Beta</TradosFolder>
 	</PropertyGroup>
 	<ItemGroup>
 	  <None Remove="Resources\ProjectTemplate.ico" />
