@@ -1,14 +1,14 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2026
   paths:
     include:
      - XML Reader/*
 pr:
   branches:
     include:
-     - master
+     - Studio_2026
   paths:
     include:
      - XML Reader/*

@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2026
   paths:
     include:
      - SDLXLIFF to Legacy Converter/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - Studio_2026
   paths:
     include:
      - SDLXLIFF to Legacy Converter/*

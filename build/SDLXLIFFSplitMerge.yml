@@ -2,7 +2,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2026
   paths:
     include:
      - SDLXLIFFSplitMerge/*
@@ -10,7 +10,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - Studio_2026
   paths:
     include:
      - SDLXLIFFSplitMerge/*
