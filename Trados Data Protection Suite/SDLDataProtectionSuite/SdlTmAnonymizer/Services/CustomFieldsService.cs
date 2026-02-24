@@ -195,7 +195,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 			return updatedCount;
 		}
 
-		private int UpdateCustomFields(ProgressDialogContext context, ILocalTranslationMemory tm, List<TmTranslationUnit> units)
+		private int UpdateCustomFields(ProgressDialogContext context, FileBasedTranslationMemory tm, List<TmTranslationUnit> units)
 		{
 			var updatedCount = 0;
 
