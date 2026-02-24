@@ -9,5 +9,5 @@ steps:
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
   inputs:
-    artifactName: drop
-    pathToPublish: '$(pathToPublish)'
+    artifactName: Plugin
+    pathToPublish: '$(PluginPath)'
