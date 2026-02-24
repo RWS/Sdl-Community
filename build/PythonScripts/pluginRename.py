@@ -53,8 +53,8 @@ def rename_sdlplugin_by_plugin_name(plugin_path):
 
     new_plugin_path = os.path.join(os.path.dirname(plugin_path), f"{plugin_name}.sdlplugin")
 
-    if os.path.exists(new_plugin_path):
-        raise FileExistsError(f"Target file already exists: {new_plugin_path}")
+    #if os.path.exists(new_plugin_path):
+    #    raise FileExistsError(f"Target file already exists: {new_plugin_path}")
 
     os.rename(plugin_path, new_plugin_path)
 
