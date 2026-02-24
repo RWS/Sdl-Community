@@ -4,9 +4,9 @@
 		<TargetFramework>net48</TargetFramework>
         <PlatformTarget>x64</PlatformTarget>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19</TradosFolder>
+		<TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19Beta</TradosFolder>
 		<MultiTermFolder>$(MSBuildProgramFiles32)\Trados\MultiTerm\MultiTerm18</MultiTermFolder>
-		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19\Plugins</PluginDeploymentPath>
+		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19beta\Plugins</PluginDeploymentPath>
 		<CreatePluginPackage>true</CreatePluginPackage>
 	</PropertyGroup>
 	<ItemGroup>

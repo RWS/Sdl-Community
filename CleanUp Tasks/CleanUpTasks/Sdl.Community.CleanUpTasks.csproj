@@ -11,8 +11,8 @@
     <RootNamespace>SDLCommunityCleanUpTasks</RootNamespace>
     <AssemblyName>SDLCommunityCleanUpTasks</AssemblyName>
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
-	  <TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19</TradosFolder>
-    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19\Plugins</PluginDeploymentPath>
+	  <TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19Beta</TradosFolder>
+    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19beta\Plugins</PluginDeploymentPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>

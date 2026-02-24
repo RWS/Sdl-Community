@@ -7,8 +7,8 @@
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<LangVersion>latest</LangVersion>
 		<UseWPF>true</UseWPF>
-		<TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19</TradosFolder>
-		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19\Plugins</PluginDeploymentPath>
+		<TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19Beta</TradosFolder>
+		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19beta\Plugins</PluginDeploymentPath>
 	</PropertyGroup>
 
 	<ItemGroup>

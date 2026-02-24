@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - Studio_2026
   paths:
     include:
      - Hunspell Dictionary Manager/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master_UpdateSigning
+     - Studio_2026_UpdateSigning
   paths:
     include:
      - Hunspell Dictionary Manager/*
