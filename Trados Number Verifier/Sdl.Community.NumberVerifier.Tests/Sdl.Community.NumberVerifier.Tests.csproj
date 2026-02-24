@@ -4,7 +4,7 @@
 		<TargetFramework>net48</TargetFramework>
         <PlatformTarget>x64</PlatformTarget>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19Beta</TradosFolder>
+		<TradosFolder>$(ProgramW6432)\Trados\Trados Studio\Studio19Beta</TradosFolder>
 		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
   <ItemGroup>

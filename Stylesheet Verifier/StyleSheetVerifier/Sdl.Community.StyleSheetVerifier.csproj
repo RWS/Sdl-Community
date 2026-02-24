@@ -18,7 +18,7 @@
     <AssemblyOriginatorKeyFile>..\..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19Beta</TradosFolder>
+    <TradosFolder>$(ProgramW6432)\Trados\Trados Studio\Studio19Beta</TradosFolder>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>
   <ItemGroup>

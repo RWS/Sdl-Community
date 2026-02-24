@@ -5,7 +5,7 @@
         <PlatformTarget>x64</PlatformTarget>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19beta\Plugins</PluginDeploymentPath>
-		<TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19Beta</TradosFolder>
+		<TradosFolder>$(ProgramW6432)\Trados\Trados Studio\Studio19Beta</TradosFolder>
 		<MultiTermFolder>$(MSBuildProgramFiles32)\Trados\MultiTerm\MultiTerm18</MultiTermFolder>
 		<CreatePluginPackage>true</CreatePluginPackage>
 		<UseWPF>true</UseWPF>

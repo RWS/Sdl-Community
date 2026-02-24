@@ -14,7 +14,7 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
     <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19beta\Plugins</PluginDeploymentPath>
-    <TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19Beta</TradosFolder>
+    <TradosFolder>$(ProgramW6432)\Trados\Trados Studio\Studio19Beta</TradosFolder>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationFramework.Aero" />
