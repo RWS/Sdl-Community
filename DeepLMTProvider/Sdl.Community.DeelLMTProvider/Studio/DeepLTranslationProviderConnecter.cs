@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
@@ -110,11 +111,18 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 												$"&target_lang={targetLanguage}" +
 												$"&formality={formality.ToString().ToLower()}" +
 												"&preserve_formatting=1" +
-												"&tag_handling=xml" +
-												$"&auth_key={ApiKey}",
+												"&tag_handling=xml",
 					Encoding.UTF8, "application/x-www-form-urlencoded");
 
-				var response = AppInitializer.Client.PostAsync("https://api.deepl.com/v1/translate", content).Result;
+
+				var request = new HttpRequestMessage
+				{
+					Content = content,
+					Method = HttpMethod.Post,
+					RequestUri = new Uri("https://api.deepl.com/v1/translate"),
+					Headers = { { "Authorization", $"DeepL-Auth-Key {ApiKey}" } }
+				};
+				var response = AppInitializer.Client.SendAsync(request).Result;
 				response.EnsureSuccessStatusCode();
 
 				var translationResponse = response.Content?.ReadAsStringAsync().Result;
