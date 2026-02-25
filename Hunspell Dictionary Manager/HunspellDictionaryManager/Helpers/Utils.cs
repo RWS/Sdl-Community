@@ -22,7 +22,7 @@ namespace Sdl.Community.HunspellDictionaryManager.Helpers
 		}
 
         /// <summary>
-        /// Get installed version for Studio 2024
+        /// Get installed version for Studio 2026
         /// </summary>
         /// <returns></returns>
         public static string GetInstalledStudioPath()
@@ -35,7 +35,7 @@ namespace Sdl.Community.HunspellDictionaryManager.Helpers
 					return studio.InstallPath;
 				}
 
-				MessageBox.Show(Constants.Studio2024ErrorMessage, Constants.InformativeMessage, MessageBoxButton.OK, MessageBoxImage.Error);
+				MessageBox.Show(Constants.Studio2026ErrorMessage, Constants.InformativeMessage, MessageBoxButton.OK, MessageBoxImage.Error);
 			}
 			catch (Exception ex)
 			{

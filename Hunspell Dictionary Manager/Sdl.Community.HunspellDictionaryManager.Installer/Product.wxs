@@ -2,40 +2,39 @@
 <?include Defines.wxi ?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 	<Product  Id="*" Name="Hunspell Dictionary Manager 2026" Language="1033" Version="$(var.productVersion)" Manufacturer="Trados AppStore Team"  UpgradeCode="$(var.upgradeCode)">
-    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
-    <Icon Id="icon.ico" SourceFile="$(var.ProjectDir)icon.ico" />
-    <Property Id="ARPPRODUCTICON" Value="icon.ico" />
+		<Icon Id="icon.ico" SourceFile="$(var.ProjectDir)icon.ico" />
+		<Property Id="ARPPRODUCTICON" Value="icon.ico" />
 
-    <Property Id="WIXUI_INSTALLDIR" Value="HunspellDictionaryManager" />
-    <!--bellow line describes the UI of the Wix installer which does not include the possibility to select an installation path-->
-    <UIRef Id="WixUI_Minimal_OX"/>
+		<Property Id="WIXUI_INSTALLDIR" Value="HunspellDictionaryManager" />
+		<!--bellow line describes the UI of the Wix installer which does not include the possibility to select an installation path-->
+		<UIRef Id="WixUI_Minimal_OX"/>
 
-    <MajorUpgrade Schedule="afterInstallInitialize" DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit."/>
-    <MediaTemplate EmbedCab="yes"/>
+		<MajorUpgrade Schedule="afterInstallInitialize" DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit."/>
+		<MediaTemplate EmbedCab="yes"/>
 
-    <!-- Compoments needed for the installation - by defining the below components, installer knows to install the application to Desktop and Program Data. -->
-    <Feature Id="ProductFeature" Title="Sdl.Community.HunspellDictionaryManager.Installer" Level="1">
-      <ComponentGroupRef Id="ProductComponents" />
-      <ComponentGroupRef Id="Dependencies" />
-	  <ComponentRef Id='TradosApplicationProgramDataShortcut' />
-	  <ComponentRef Id='BetaTradosApplicationProgramDataShortcut' />
-	  <ComponentRef Id='SDLTradosApplicationProgramDataShortcut' />
-	  <ComponentRef Id='ApplicationShortcutDesktop' />
-    </Feature>
-  </Product>
+		<!-- Compoments needed for the installation - by defining the below components, installer knows to install the application to Desktop and Program Data. -->
+		<Feature Id="ProductFeature" Title="Sdl.Community.HunspellDictionaryManager.Installer" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+			<ComponentGroupRef Id="Dependencies" />
+			<ComponentRef Id='TradosApplicationProgramDataShortcut' />
+			<ComponentRef Id='BetaTradosApplicationProgramDataShortcut' />
+			<ComponentRef Id='ApplicationShortcutDesktop' />
+		</Feature>
+	</Product>
 
-  <!-- Create shortcut to the Desktop directory. Use .exe from the INSTALLFOLDER where the application together with all 
+	<!-- Create shortcut to the Desktop directory. Use .exe from the INSTALLFOLDER where the application together with all 
 	.dll dependecies will be installed. INSTALLFOLDER is the location provided by user when running .msi file -->
-  <Fragment>
-    <DirectoryRef Id="DesktopFolder">
-      <Component Id="ApplicationShortcutDesktop" Guid="E35C5279-5050-4BE6-A871-CA341D323CD7">
-        <Shortcut Id="ApplicationDesktopShortcut" Name="Hunspell Dictionary Manager 2026" Icon="icon.ico" Description="Hunspell Dictionary Manager for Trados Studio 2026" Target="[HunspellDictionaryManager]Sdl.Community.HunspellDictionaryManager.exe" WorkingDirectory="HunspellDictionaryManager" />
-        <RemoveFolder Id="RemoveDesktopFolder" Directory="DesktopFolder" On="uninstall" />
-        <RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.HunspellDictionaryManager" Name="installed" Type="integer" Value="1" KeyPath="yes" />
-      </Component>
-    </DirectoryRef>
-  </Fragment>
+	<Fragment>
+		<DirectoryRef Id="DesktopFolder">
+			<Component Id="ApplicationShortcutDesktop" Guid="E35C5279-5050-4BE6-A871-CA341D323CD7">
+				<Shortcut Id="ApplicationDesktopShortcut" Name="Hunspell Dictionary Manager 2026" Icon="icon.ico" Description="Hunspell Dictionary Manager for Trados Studio 2026" Target="[HunspellDictionaryManager]Sdl.Community.HunspellDictionaryManager.exe" WorkingDirectory="HunspellDictionaryManager" />
+				<RemoveFolder Id="RemoveDesktopFolder" Directory="DesktopFolder" On="uninstall" />
+				<RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.HunspellDictionaryManager" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+			</Component>
+		</DirectoryRef>
+	</Fragment>
 
 	<!-- Create shortcut to the SDLTradosStudio2026Apps directory. Use .exe from the INSTALLFOLDER where the application together with all 
 	.dll dependecies will be installed. INSTALLFOLDER is the location provided by user when running .msi file -->
@@ -48,7 +47,7 @@
 			</Component>
 		</DirectoryRef>
 	</Fragment>
-  <Fragment>
+	<Fragment>
 		<DirectoryRef Id="BetaTradosStudio2026Apps">
 			<Component Id="BetaTradosApplicationProgramDataShortcut" Guid="75EBEB36-7D1F-4212-9625-3622D4196472">
 				<Shortcut Id="BetaTradosApplicationProgDataShortcut" Name="Hunspell Dictionary Manager 2026" Icon="icon.ico" Description="Hunspell Dictionary Manager for Trados Studio 2026" Target="[HunspellDictionaryManager]\Sdl.Community.HunspellDictionaryManager.exe" WorkingDirectory="HunspellDictionaryManager" />
@@ -57,75 +56,66 @@
 			</Component>
 		</DirectoryRef>
 	</Fragment>
-		<Fragment>
-		<DirectoryRef Id="SDLTradosStudio2026Apps">
-			<Component Id="SDLTradosApplicationProgramDataShortcut" Guid="F009F106-2FFE-49F4-A0FA-4A611D241BD8">
-				<Shortcut Id="SDLApplicationProgDataShortcut" Name="Hunspell Dictionary Manager 2026" Icon="icon.ico" Description="Hunspell Dictionary Manager for Trados Studio 2026" Target="[HunspellDictionaryManager]\Sdl.Community.HunspellDictionaryManager.exe" WorkingDirectory="HunspellDictionaryManager" />
-				<RemoveFolder Id="RemoveSDLTradosStudio2026Apps" Directory="SDLTradosStudio2026Apps" On="uninstall" />
-				<RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.SDLHunspellDictionaryManagerShortcut" Name="installed" Type="integer" Value="1" KeyPath="yes" />
-			</Component>
-		</DirectoryRef>
-	</Fragment>
 	
-  <Fragment>
-    <Directory Id="TARGETDIR" Name="SourceDir">
-      <!-- Define location where the app will be installed, Hunspell folder -->
-      <Directory Id="ProgramFilesFolder">
-        <Directory Id="Trados" Name="Trados" >
-          <Directory Id="HunspellDictionaryManager" Name="Hunspell Dictionary Manager" >
-            <Directory Id="Hunspell" Name="Hunspell"/>
-          </Directory>
-        </Directory>
-      </Directory>
-      <!-- Define location where the shortcut will be added: in our case, folder TradosStudio2026Apps is defined to C:\ProgramData\Microsoft\Windows\Start Menu\Programs\ path.
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<!-- Define location where the app will be installed, Hunspell folder -->
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="Trados" Name="Trados" >
+					<Directory Id="HunspellDictionaryManager" Name="Hunspell Dictionary Manager" >
+						<Directory Id="Hunspell" Name="Hunspell"/>
+					</Directory>
+				</Directory>
+			</Directory>
+			<!-- Define location where the shortcut will be added: in our case, folder TradosStudio2026Apps is defined to C:\ProgramData\Microsoft\Windows\Start Menu\Programs\ path.
 			 Way to construct the path where the shortcut will be added -->
 			<Directory Id="ProgramMenuFolder"  Name="All Programs folder">
 				<Directory Id="TradosStudio2026Apps" Name="Trados Studio 2026 Apps" />
-				<Directory Id="SDLTradosStudio2026Apps" Name="SDL Trados Studio 2026 Apps" />
 				<Directory Id="BetaTradosStudio2026Apps" Name="Trados Studio 2026 Beta Apps" />
 			</Directory>
 
 			<!-- Define location where the shortcut will be added: in our case: Desktop -->
-      <Directory Id="DesktopFolder" Name="Desktop" />
-    </Directory>
-  </Fragment>
+			<Directory Id="DesktopFolder" Name="Desktop" />
+		</Directory>
+	</Fragment>
 
-  <Fragment>
-	  <ComponentGroup Id="Dependencies" Directory="HunspellDictionaryManager">
-		  
-		  <Component Id="NLog.dll" Guid="*">
-			  <File Id="NLog.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\NLog.dll"></File>
-		  </Component>
-		  
-		  <Component Id="Newtonsoft.Json.dll" Guid="*">
-			  <File Id="Newtonsoft.Json.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\Newtonsoft.Json.dll"></File>
-		  </Component>
+	<Fragment>
+		<ComponentGroup Id="Dependencies" Directory="HunspellDictionaryManager">
 
-		  <Component Id="Sdl.Versioning.dll" Guid="*">
-			  <File Id="Sdl.Versioning.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\Sdl.Versioning.dll"></File>
-		  </Component> 
-		  
-		  <Component Id="Sdl.Desktop.Platform.Styles.dll" Guid="*">
-			  <File Id="Sdl.Desktop.Platform.Styles.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\Sdl.Desktop.Platform.Styles.dll"></File>
-		  </Component>
-		  
-		  <Component Id="Sdl.Core.Globalization.dll" Guid="*">
-			  <File Id="Sdl.Core.Globalization.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\Sdl.Core.Globalization.dll"></File>
-		  </Component>
-				
+			<Component Id="NLog.dll" Guid="*">
+				<File Id="NLog.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\NLog.dll"></File>
+			</Component>
+
+			<Component Id="Newtonsoft.Json.dll" Guid="*">
+				<File Id="Newtonsoft.Json.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\Newtonsoft.Json.dll"></File>
+			</Component>
+
+			<Component Id="Sdl.Versioning.dll" Guid="*">
+				<File Id="Sdl.Versioning.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\Sdl.Versioning.dll"></File>
+			</Component>
+
+			<Component Id="Sdl.Desktop.Platform.Styles.dll" Guid="*">
+				<File Id="Sdl.Desktop.Platform.Styles.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\Sdl.Desktop.Platform.Styles.dll"></File>
+			</Component>
+
+			<Component Id="Sdl.Core.Globalization.dll" Guid="*">
+				<File Id="Sdl.Core.Globalization.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\Sdl.Core.Globalization.dll"></File>
+			</Component>
+
 			<Component Id="Sdl.Core.Globalization.Async.dll" Guid="*">
-			  <File Id="Sdl.Core.Globalization.Async.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\Sdl.Core.Globalization.Async.dll"></File>
-		  </Component>
-	  </ComponentGroup>
-  </Fragment>
+				<File Id="Sdl.Core.Globalization.Async.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\Sdl.Core.Globalization.Async.dll"></File>
+			</Component>
+		</ComponentGroup>
+	</Fragment>
 
-  <!-- .exe and .dll's which are installed to selected location when user is running the .msi file-->
-  <Fragment>
-    <ComponentGroup Id="ProductComponents" Directory="HunspellDictionaryManager">
-      <Component Id="Sdl.Community.HunspellDictionaryManager">
-        <File Id="Sdl.Community.HunspellDictionaryManager.exe" Name="Sdl.Community.HunspellDictionaryManager.exe" Source="$(var.BuildOutputPath)\Sdl.Community.HunspellDictionaryManager.exe" KeyPath="yes" />
-      </Component>
+	<!-- .exe and .dll's which are installed to selected location when user is running the .msi file-->
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="HunspellDictionaryManager">
+			<Component Id="Sdl.Community.HunspellDictionaryManager">
+				<File Id="Sdl.Community.HunspellDictionaryManager.exe" Name="Sdl.Community.HunspellDictionaryManager.exe" Source="$(var.BuildOutputPath)\Sdl.Community.HunspellDictionaryManager.exe" KeyPath="yes" />
+			</Component>
 
-    </ComponentGroup>
-  </Fragment>
+		</ComponentGroup>
+	</Fragment>
 </Wix>

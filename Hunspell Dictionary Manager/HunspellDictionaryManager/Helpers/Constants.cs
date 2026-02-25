@@ -5,8 +5,8 @@ namespace Sdl.Community.HunspellDictionaryManager.Helpers
 	public static class Constants
 	{
 		public static readonly string BackupFolderPath = string.Format(@"C:\Users\{0}\AppData\Roaming\Trados AppStore", Environment.UserName);
-		public static readonly string Backup2024HunspellDicFolderPath = @"HunspellDictionaryManager\Studio2024\HunspellDictionaries";
-		public static readonly string Restore2024HunspellDicFolderPath = @"HunspellDictionaryManager\Studio2024\RestoreHunspellDictionaries";
+		public static readonly string Backup2026HunspellDicFolderPath = @"HunspellDictionaryManager\Studio2026\HunspellDictionaries";
+		public static readonly string Restore2026HunspellDicFolderPath = @"HunspellDictionaryManager\Studio2026\RestoreHunspellDictionaries";
 
 		public static readonly string HunspellDictionaries = "HunspellDictionaries";
 
@@ -17,7 +17,7 @@ namespace Sdl.Community.HunspellDictionaryManager.Helpers
 		public static readonly string ConfigFileName = "spellcheckmanager_config.xml";
 
 		public static readonly string HelpLink = "https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/3316/hunspell-dictionary-manager";
-		public static readonly string Studio2024ErrorMessage = "Application error occured: Studio 2024 needs to be installed!";
+		public static readonly string Studio2026ErrorMessage = "Application error occured: Studio 2026 needs to be installed!";
 
 		public static readonly string InformativeMessage = "Informative message";
 		public static readonly string SuccessfullCreateMessage = "Dictionary language was successfully created!";
