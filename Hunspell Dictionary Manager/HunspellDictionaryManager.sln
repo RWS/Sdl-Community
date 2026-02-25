@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30225.117
+# Visual Studio Version 18
+VisualStudioVersion = 18.2.11415.280 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.HunspellDictionaryManager", "HunspellDictionaryManager\Sdl.Community.HunspellDictionaryManager.csproj", "{D42381E5-30F4-4915-AEA1-72D8110E20C1}"
 EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Sdl.Community.HunspellDictionaryManager.Installer", "Sdl.Community.HunspellDictionaryManager.Installer\Sdl.Community.HunspellDictionaryManager.Installer.wixproj", "{680A51B9-3B9C-4022-A7A5-F2AA309FE967}"
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Sdl.Community.HunspellDictionaryManager.Installer", "Sdl.Community.HunspellDictionaryManager.Installer\Sdl.Community.HunspellDictionaryManager.Installer.wixproj", "{BA98AC17-29F3-4664-BAD9-A02C569BC558}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,13 +23,13 @@ Global
 		{D42381E5-30F4-4915-AEA1-72D8110E20C1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D42381E5-30F4-4915-AEA1-72D8110E20C1}.Release|x86.ActiveCfg = Release|Any CPU
 		{D42381E5-30F4-4915-AEA1-72D8110E20C1}.Release|x86.Build.0 = Release|Any CPU
-		{680A51B9-3B9C-4022-A7A5-F2AA309FE967}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{680A51B9-3B9C-4022-A7A5-F2AA309FE967}.Debug|Any CPU.Build.0 = Debug|x86
-		{680A51B9-3B9C-4022-A7A5-F2AA309FE967}.Debug|x86.ActiveCfg = Debug|x86
-		{680A51B9-3B9C-4022-A7A5-F2AA309FE967}.Debug|x86.Build.0 = Debug|x86
-		{680A51B9-3B9C-4022-A7A5-F2AA309FE967}.Release|Any CPU.ActiveCfg = Release|x86
-		{680A51B9-3B9C-4022-A7A5-F2AA309FE967}.Release|x86.ActiveCfg = Release|x86
-		{680A51B9-3B9C-4022-A7A5-F2AA309FE967}.Release|x86.Build.0 = Release|x86
+		{BA98AC17-29F3-4664-BAD9-A02C569BC558}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{BA98AC17-29F3-4664-BAD9-A02C569BC558}.Debug|Any CPU.Build.0 = Debug|x86
+		{BA98AC17-29F3-4664-BAD9-A02C569BC558}.Debug|x86.ActiveCfg = Debug|x86
+		{BA98AC17-29F3-4664-BAD9-A02C569BC558}.Debug|x86.Build.0 = Debug|x86
+		{BA98AC17-29F3-4664-BAD9-A02C569BC558}.Release|Any CPU.ActiveCfg = Release|x86
+		{BA98AC17-29F3-4664-BAD9-A02C569BC558}.Release|x86.ActiveCfg = Release|x86
+		{BA98AC17-29F3-4664-BAD9-A02C569BC558}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

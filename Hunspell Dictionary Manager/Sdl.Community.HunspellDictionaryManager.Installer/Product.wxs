@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?include Defines.wxi ?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Product  Id="*" Name="Hunspell Dictionary Manager 2024" Language="1033" Version="$(var.productVersion)" Manufacturer="Trados AppStore Team"  UpgradeCode="$(var.upgradeCode)">
+	<Product  Id="*" Name="Hunspell Dictionary Manager 2026" Language="1033" Version="$(var.productVersion)" Manufacturer="Trados AppStore Team"  UpgradeCode="$(var.upgradeCode)">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
     <Icon Id="icon.ico" SourceFile="$(var.ProjectDir)icon.ico" />
@@ -30,38 +30,38 @@
   <Fragment>
     <DirectoryRef Id="DesktopFolder">
       <Component Id="ApplicationShortcutDesktop" Guid="E35C5279-5050-4BE6-A871-CA341D323CD7">
-        <Shortcut Id="ApplicationDesktopShortcut" Name="Hunspell Dictionary Manager 2024" Icon="icon.ico" Description="Hunspell Dictionary Manager for Trados Studio 2024" Target="[HunspellDictionaryManager]Sdl.Community.HunspellDictionaryManager.exe" WorkingDirectory="HunspellDictionaryManager" />
+        <Shortcut Id="ApplicationDesktopShortcut" Name="Hunspell Dictionary Manager 2026" Icon="icon.ico" Description="Hunspell Dictionary Manager for Trados Studio 2026" Target="[HunspellDictionaryManager]Sdl.Community.HunspellDictionaryManager.exe" WorkingDirectory="HunspellDictionaryManager" />
         <RemoveFolder Id="RemoveDesktopFolder" Directory="DesktopFolder" On="uninstall" />
         <RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.HunspellDictionaryManager" Name="installed" Type="integer" Value="1" KeyPath="yes" />
       </Component>
     </DirectoryRef>
   </Fragment>
 
-	<!-- Create shortcut to the SDLTradosStudio2024Apps directory. Use .exe from the INSTALLFOLDER where the application together with all 
+	<!-- Create shortcut to the SDLTradosStudio2026Apps directory. Use .exe from the INSTALLFOLDER where the application together with all 
 	.dll dependecies will be installed. INSTALLFOLDER is the location provided by user when running .msi file -->
 	<Fragment>
-		<DirectoryRef Id="TradosStudio2024Apps">
+		<DirectoryRef Id="TradosStudio2026Apps">
 			<Component Id="TradosApplicationProgramDataShortcut" Guid="31E97AFA-DFAB-43A9-81E0-C122DC1C9391">
-				<Shortcut Id="TradosApplicationProgDataShortcut" Name="Hunspell Dictionary Manager 2024" Icon="icon.ico" Description="Hunspell Dictionary Manager for Trados Studio 2024" Target="[HunspellDictionaryManager]\Sdl.Community.HunspellDictionaryManager.exe" WorkingDirectory="HunspellDictionaryManager" />
-				<RemoveFolder Id="RemoveTradosStudio2024Apps" Directory="TradosStudio2024Apps" On="uninstall" />
+				<Shortcut Id="TradosApplicationProgDataShortcut" Name="Hunspell Dictionary Manager 2026" Icon="icon.ico" Description="Hunspell Dictionary Manager for Trados Studio 2026" Target="[HunspellDictionaryManager]\Sdl.Community.HunspellDictionaryManager.exe" WorkingDirectory="HunspellDictionaryManager" />
+				<RemoveFolder Id="RemoveTradosStudio2026Apps" Directory="TradosStudio2026Apps" On="uninstall" />
 				<RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.TradosHunspellDictionaryManagerShortcut" Name="installed" Type="integer" Value="1" KeyPath="yes" />
 			</Component>
 		</DirectoryRef>
 	</Fragment>
   <Fragment>
-		<DirectoryRef Id="BetaTradosStudio2024Apps">
+		<DirectoryRef Id="BetaTradosStudio2026Apps">
 			<Component Id="BetaTradosApplicationProgramDataShortcut" Guid="75EBEB36-7D1F-4212-9625-3622D4196472">
-				<Shortcut Id="BetaTradosApplicationProgDataShortcut" Name="Hunspell Dictionary Manager 2024" Icon="icon.ico" Description="Hunspell Dictionary Manager for Trados Studio 2024" Target="[HunspellDictionaryManager]\Sdl.Community.HunspellDictionaryManager.exe" WorkingDirectory="HunspellDictionaryManager" />
-				<RemoveFolder Id="RemoveBetaTradosStudio2024Apps" Directory="BetaTradosStudio2024Apps" On="uninstall" />
+				<Shortcut Id="BetaTradosApplicationProgDataShortcut" Name="Hunspell Dictionary Manager 2026" Icon="icon.ico" Description="Hunspell Dictionary Manager for Trados Studio 2026" Target="[HunspellDictionaryManager]\Sdl.Community.HunspellDictionaryManager.exe" WorkingDirectory="HunspellDictionaryManager" />
+				<RemoveFolder Id="RemoveBetaTradosStudio2026Apps" Directory="BetaTradosStudio2026Apps" On="uninstall" />
 				<RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.BetaTradosHunspellDictionaryManagerShortcut" Name="installed" Type="integer" Value="1" KeyPath="yes" />
 			</Component>
 		</DirectoryRef>
 	</Fragment>
 		<Fragment>
-		<DirectoryRef Id="SDLTradosStudio2024Apps">
+		<DirectoryRef Id="SDLTradosStudio2026Apps">
 			<Component Id="SDLTradosApplicationProgramDataShortcut" Guid="F009F106-2FFE-49F4-A0FA-4A611D241BD8">
-				<Shortcut Id="SDLApplicationProgDataShortcut" Name="Hunspell Dictionary Manager 2024" Icon="icon.ico" Description="Hunspell Dictionary Manager for Trados Studio 2024" Target="[HunspellDictionaryManager]\Sdl.Community.HunspellDictionaryManager.exe" WorkingDirectory="HunspellDictionaryManager" />
-				<RemoveFolder Id="RemoveSDLTradosStudio2024Apps" Directory="SDLTradosStudio2024Apps" On="uninstall" />
+				<Shortcut Id="SDLApplicationProgDataShortcut" Name="Hunspell Dictionary Manager 2026" Icon="icon.ico" Description="Hunspell Dictionary Manager for Trados Studio 2026" Target="[HunspellDictionaryManager]\Sdl.Community.HunspellDictionaryManager.exe" WorkingDirectory="HunspellDictionaryManager" />
+				<RemoveFolder Id="RemoveSDLTradosStudio2026Apps" Directory="SDLTradosStudio2026Apps" On="uninstall" />
 				<RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.SDLHunspellDictionaryManagerShortcut" Name="installed" Type="integer" Value="1" KeyPath="yes" />
 			</Component>
 		</DirectoryRef>
@@ -77,12 +77,12 @@
           </Directory>
         </Directory>
       </Directory>
-      <!-- Define location where the shortcut will be added: in our case, folder TradosStudio2024Apps is defined to C:\ProgramData\Microsoft\Windows\Start Menu\Programs\ path.
+      <!-- Define location where the shortcut will be added: in our case, folder TradosStudio2026Apps is defined to C:\ProgramData\Microsoft\Windows\Start Menu\Programs\ path.
 			 Way to construct the path where the shortcut will be added -->
 			<Directory Id="ProgramMenuFolder"  Name="All Programs folder">
-				<Directory Id="TradosStudio2024Apps" Name="Trados Studio 2024 Apps" />
-				<Directory Id="SDLTradosStudio2024Apps" Name="SDL Trados Studio 2024 Apps" />
-				<Directory Id="BetaTradosStudio2024Apps" Name="Trados Studio 2024 Beta Apps" />
+				<Directory Id="TradosStudio2026Apps" Name="Trados Studio 2026 Apps" />
+				<Directory Id="SDLTradosStudio2026Apps" Name="SDL Trados Studio 2026 Apps" />
+				<Directory Id="BetaTradosStudio2026Apps" Name="Trados Studio 2026 Beta Apps" />
 			</Directory>
 
 			<!-- Define location where the shortcut will be added: in our case: Desktop -->
@@ -95,6 +95,10 @@
 		  
 		  <Component Id="NLog.dll" Guid="*">
 			  <File Id="NLog.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\NLog.dll"></File>
+		  </Component>
+		  
+		  <Component Id="Newtonsoft.Json.dll" Guid="*">
+			  <File Id="Newtonsoft.Json.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\Newtonsoft.Json.dll"></File>
 		  </Component>
 
 		  <Component Id="Sdl.Versioning.dll" Guid="*">
