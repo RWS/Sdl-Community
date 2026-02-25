@@ -12,6 +12,7 @@
 		<ApplicationIcon>Resources\h_icon.ico</ApplicationIcon>
 		<OutputType>WinExe</OutputType>
 		<PlatformTarget>x64</PlatformTarget>
+		<AssemblyName>HunspellDictionaryManager</AssemblyName>
 	</PropertyGroup>
 	<ItemGroup>
 		<Reference Include="NLog">

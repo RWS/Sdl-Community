@@ -29,7 +29,7 @@
 	<Fragment>
 		<DirectoryRef Id="DesktopFolder">
 			<Component Id="ApplicationShortcutDesktop" Guid="E35C5279-5050-4BE6-A871-CA341D323CD7">
-				<Shortcut Id="ApplicationDesktopShortcut" Name="Hunspell Dictionary Manager 2026" Icon="icon.ico" Description="Hunspell Dictionary Manager for Trados Studio 2026" Target="[HunspellDictionaryManager]Sdl.Community.HunspellDictionaryManager.exe" WorkingDirectory="HunspellDictionaryManager" />
+				<Shortcut Id="ApplicationDesktopShortcut" Name="Hunspell Dictionary Manager 2026" Icon="icon.ico" Description="Hunspell Dictionary Manager for Trados Studio 2026" Target="[HunspellDictionaryManager]HunspellDictionaryManager.exe" WorkingDirectory="HunspellDictionaryManager" />
 				<RemoveFolder Id="RemoveDesktopFolder" Directory="DesktopFolder" On="uninstall" />
 				<RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.HunspellDictionaryManager" Name="installed" Type="integer" Value="1" KeyPath="yes" />
 			</Component>
@@ -41,7 +41,7 @@
 	<Fragment>
 		<DirectoryRef Id="TradosStudio2026Apps">
 			<Component Id="TradosApplicationProgramDataShortcut" Guid="31E97AFA-DFAB-43A9-81E0-C122DC1C9391">
-				<Shortcut Id="TradosApplicationProgDataShortcut" Name="Hunspell Dictionary Manager 2026" Icon="icon.ico" Description="Hunspell Dictionary Manager for Trados Studio 2026" Target="[HunspellDictionaryManager]\Sdl.Community.HunspellDictionaryManager.exe" WorkingDirectory="HunspellDictionaryManager" />
+				<Shortcut Id="TradosApplicationProgDataShortcut" Name="Hunspell Dictionary Manager 2026" Icon="icon.ico" Description="Hunspell Dictionary Manager for Trados Studio 2026" Target="[HunspellDictionaryManager]\HunspellDictionaryManager.exe" WorkingDirectory="HunspellDictionaryManager" />
 				<RemoveFolder Id="RemoveTradosStudio2026Apps" Directory="TradosStudio2026Apps" On="uninstall" />
 				<RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.TradosHunspellDictionaryManagerShortcut" Name="installed" Type="integer" Value="1" KeyPath="yes" />
 			</Component>
@@ -50,7 +50,7 @@
 	<Fragment>
 		<DirectoryRef Id="BetaTradosStudio2026Apps">
 			<Component Id="BetaTradosApplicationProgramDataShortcut" Guid="75EBEB36-7D1F-4212-9625-3622D4196472">
-				<Shortcut Id="BetaTradosApplicationProgDataShortcut" Name="Hunspell Dictionary Manager 2026" Icon="icon.ico" Description="Hunspell Dictionary Manager for Trados Studio 2026" Target="[HunspellDictionaryManager]\Sdl.Community.HunspellDictionaryManager.exe" WorkingDirectory="HunspellDictionaryManager" />
+				<Shortcut Id="BetaTradosApplicationProgDataShortcut" Name="Hunspell Dictionary Manager 2026" Icon="icon.ico" Description="Hunspell Dictionary Manager for Trados Studio 2026" Target="[HunspellDictionaryManager]\HunspellDictionaryManager.exe" WorkingDirectory="HunspellDictionaryManager" />
 				<RemoveFolder Id="RemoveBetaTradosStudio2026Apps" Directory="BetaTradosStudio2026Apps" On="uninstall" />
 				<RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.BetaTradosHunspellDictionaryManagerShortcut" Name="installed" Type="integer" Value="1" KeyPath="yes" />
 			</Component>
@@ -113,7 +113,7 @@
 	<Fragment>
 		<ComponentGroup Id="ProductComponents" Directory="HunspellDictionaryManager">
 			<Component Id="Sdl.Community.HunspellDictionaryManager">
-				<File Id="Sdl.Community.HunspellDictionaryManager.exe" Name="Sdl.Community.HunspellDictionaryManager.exe" Source="$(var.BuildOutputPath)\Sdl.Community.HunspellDictionaryManager.exe" KeyPath="yes" />
+				<File Id="HunspellDictionaryManager.exe" Name="HunspellDictionaryManager.exe" Source="$(var.BuildOutputPath)\HunspellDictionaryManager.exe" KeyPath="yes" />
 			</Component>
 
 		</ComponentGroup>

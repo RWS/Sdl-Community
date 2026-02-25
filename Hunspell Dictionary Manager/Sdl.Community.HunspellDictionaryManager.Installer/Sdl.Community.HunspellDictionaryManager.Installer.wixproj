@@ -6,9 +6,9 @@
     <ProductVersion>3.10</ProductVersion>
     <ProjectGuid>BA98AC17-29F3-4664-BAD9-A02C569BC558</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>Sdl.Community.HunspellDictionaryManager.Installer</OutputName>
-	<Name>Sdl.Community.HunspellDictionaryManager.Installer</Name>
-	<DefineConstants>BuildOutputPath=..\HunspellDictionaryManager\bin\$(Configuration)</DefineConstants>
+    <OutputName>HunspellDictionaryManager.Installer</OutputName>
+    <Name>Sdl.Community.HunspellDictionaryManager.Installer</Name>
+    <DefineConstants>BuildOutputPath=..\HunspellDictionaryManager\bin\$(Configuration)</DefineConstants>
     <OutputType>Package</OutputType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
