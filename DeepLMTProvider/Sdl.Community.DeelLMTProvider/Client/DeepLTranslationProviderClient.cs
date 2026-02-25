@@ -169,10 +169,15 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
         private static string GetSupportedLanguages(string type, string apiKey)
         {
-            var content = new StringContent($"type={type}" + $"&auth_key={apiKey}", Encoding.UTF8,
-                "application/x-www-form-urlencoded");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.deepl.com/v1/languages?type={type}")
+            {
+                Headers =
+                {
+                    { "Authorization", $"DeepL-Auth-Key {apiKey}" },
+                }
+            };
 
-            var response = AppInitializer.Client.PostAsync("https://api.deepl.com/v1/languages", content).Result;
+            var response = AppInitializer.Client.SendAsync(request).Result;
             response.EnsureSuccessStatusCode();
 
             return response.Content?.ReadAsStringAsync().Result;
