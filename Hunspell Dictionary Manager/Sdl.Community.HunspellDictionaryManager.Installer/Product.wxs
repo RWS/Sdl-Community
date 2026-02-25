@@ -2,7 +2,7 @@
 <?include Defines.wxi ?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 	<Product  Id="*" Name="Hunspell Dictionary Manager 2026" Language="1033" Version="$(var.productVersion)" Manufacturer="Trados AppStore Team"  UpgradeCode="$(var.upgradeCode)">
-		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="x64"/>
 
 		<Icon Id="icon.ico" SourceFile="$(var.ProjectDir)icon.ico" />
 		<Property Id="ARPPRODUCTICON" Value="icon.ico" />
@@ -61,7 +61,7 @@
 	<Fragment>
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<!-- Define location where the app will be installed, Hunspell folder -->
-			<Directory Id="ProgramFilesFolder">
+			<Directory Id="ProgramFiles64Folder">
 				<Directory Id="Trados" Name="Trados" >
 					<Directory Id="HunspellDictionaryManager" Name="Hunspell Dictionary Manager" >
 						<Directory Id="Hunspell" Name="Hunspell"/>
@@ -83,27 +83,27 @@
 	<Fragment>
 		<ComponentGroup Id="Dependencies" Directory="HunspellDictionaryManager">
 
-			<Component Id="NLog.dll" Guid="*">
+			<Component Id="NLog.dll" Guid="*" Win64="yes">
 				<File Id="NLog.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\NLog.dll"></File>
 			</Component>
 
-			<Component Id="Newtonsoft.Json.dll" Guid="*">
+			<Component Id="Newtonsoft.Json.dll" Guid="*" Win64="yes">
 				<File Id="Newtonsoft.Json.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\Newtonsoft.Json.dll"></File>
 			</Component>
 
-			<Component Id="Sdl.Versioning.dll" Guid="*">
+			<Component Id="Sdl.Versioning.dll" Guid="*" Win64="yes">
 				<File Id="Sdl.Versioning.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\Sdl.Versioning.dll"></File>
 			</Component>
 
-			<Component Id="Sdl.Desktop.Platform.Styles.dll" Guid="*">
+			<Component Id="Sdl.Desktop.Platform.Styles.dll" Guid="*" Win64="yes">
 				<File Id="Sdl.Desktop.Platform.Styles.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\Sdl.Desktop.Platform.Styles.dll"></File>
 			</Component>
 
-			<Component Id="Sdl.Core.Globalization.dll" Guid="*">
+			<Component Id="Sdl.Core.Globalization.dll" Guid="*" Win64="yes">
 				<File Id="Sdl.Core.Globalization.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\Sdl.Core.Globalization.dll"></File>
 			</Component>
 
-			<Component Id="Sdl.Core.Globalization.Async.dll" Guid="*">
+			<Component Id="Sdl.Core.Globalization.Async.dll" Guid="*" Win64="yes">
 				<File Id="Sdl.Core.Globalization.Async.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\Sdl.Core.Globalization.Async.dll"></File>
 			</Component>
 		</ComponentGroup>
@@ -112,7 +112,7 @@
 	<!-- .exe and .dll's which are installed to selected location when user is running the .msi file-->
 	<Fragment>
 		<ComponentGroup Id="ProductComponents" Directory="HunspellDictionaryManager">
-			<Component Id="Sdl.Community.HunspellDictionaryManager">
+			<Component Id="Sdl.Community.HunspellDictionaryManager" Win64="yes">
 				<File Id="HunspellDictionaryManager.exe" Name="HunspellDictionaryManager.exe" Source="$(var.BuildOutputPath)\HunspellDictionaryManager.exe" KeyPath="yes" />
 			</Component>
 

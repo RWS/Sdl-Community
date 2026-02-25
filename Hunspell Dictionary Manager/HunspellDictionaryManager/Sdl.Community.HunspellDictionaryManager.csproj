@@ -6,8 +6,6 @@
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<UseWPF>true</UseWPF>
 		<TargetFramework>net48</TargetFramework>
-	</PropertyGroup>
-	<PropertyGroup>
 		<TradosFolder>$(ProgramW6432)\Trados\Trados Studio\Studio19Beta</TradosFolder>
 		<ApplicationIcon>Resources\h_icon.ico</ApplicationIcon>
 		<OutputType>WinExe</OutputType>
