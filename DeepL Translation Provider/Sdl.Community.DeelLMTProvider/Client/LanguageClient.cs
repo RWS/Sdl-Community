@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Sdl.Community.DeepLMTProvider.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -145,10 +146,17 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
         public static List<SupportedLanguage> GetSupportedLanguages(string type, string apiKey, string chosenBaseUrl)
         {
-            var content = new StringContent($"type={type}" + $"&auth_key={apiKey}", Encoding.UTF8,
-                "application/x-www-form-urlencoded");
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri($"{chosenBaseUrl}/languages?type={type}"),
+                Headers =
+                {
+                    { "Authorization", $"DeepL-Auth-Key {apiKey}" },
+                }
+            };
 
-            var response = AppInitializer.Client.PostAsync($"{chosenBaseUrl}/languages", content).Result;
+            var response = AppInitializer.Client.SendAsync(request).Result;
             response.EnsureSuccessStatusCode();
 
             var supportedLanguages = GetHardcodedSupportedLanguages(type);
