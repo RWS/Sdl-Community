@@ -1,6 +1,4 @@
-﻿using System.IO;
-using System.Linq;
-using CaptureQARuleState.Components.Report_Extender;
+﻿using CaptureQARuleState.Components.Report_Extender;
 using CaptureQARuleState.Components.SegmentMetadata_Provider;
 using CaptureQARuleState.Components.SettingsProvider;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
@@ -8,6 +6,8 @@ using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.ProjectAutomation.FileBased.Reports.Operations;
+using System.IO;
+using System.Linq;
 
 namespace CaptureQARuleState.BatchTasks;
 
@@ -19,6 +19,8 @@ namespace CaptureQARuleState.BatchTasks;
 [RequiresSettings(typeof(VerifyFilesExtendedSettings), typeof(VerifyFilesExtendedSettingsPage))]
 public class VerifyFilesExtended : AbstractFileContentProcessingAutomaticTask
 {
+    public ContentVerifier ContentVerifier { get; set; } = new();
+    public string XmlString { get; set; }
     private ReportExtender ReportExtender { get; } = new();
     private SegmentMetadataProvider SegmentMetadataProvider { get; set; } = new();
     private VerifyFilesExtendedSettings Settings { get; set; }
@@ -26,31 +28,22 @@ public class VerifyFilesExtended : AbstractFileContentProcessingAutomaticTask
 
     public override void TaskComplete()
     {
-        var xmlString = GetOriginalVerificationReport();
-        var extendedReport = ReportExtender.CreateReport(xmlString);
+        //var xmlString = GetOriginalVerificationReport();
+        var extendedReport = ReportExtender.CreateReport(XmlString);
 
         AddProjectFilesTotal(extendedReport);
-        if (Settings.IncludeVerificationDetails) AddActiveQaProviders(extendedReport);
+        if (Settings.IncludeVerificationDetails)
+            AddActiveQaProviders(extendedReport);
         AddMetadataToSegments(extendedReport);
         ApplySettings(extendedReport);
 
         CreateReport(extendedReport);
     }
 
-    private void AddProjectFilesTotal(IExtendedReport extendedReport)
-    {
-        var projectFilesTotal = Project.GetTargetLanguageFiles().Length;
-        extendedReport.AddProjectFilesTotal(projectFilesTotal);
-    }
-
-    private void ApplySettings(IExtendedReport extendedReport)
-    {
-        var statuses = Settings.ReportStatuses;
-        extendedReport.FilterMessages(statuses);
-    }
-
     protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
-    { }
+    {
+        multiFileConverter.AddBilingualProcessor(ContentVerifier);
+    }
 
     protected override void OnInitializeTask()
     {
@@ -62,6 +55,8 @@ public class VerifyFilesExtended : AbstractFileContentProcessingAutomaticTask
 
         Project.UpdateSettings(settingsBundle);
         Project.Save();
+
+        XmlString = GetOriginalVerificationReport();
     }
 
     private void AddActiveQaProviders(IExtendedReport extendedReport)
@@ -81,6 +76,18 @@ public class VerifyFilesExtended : AbstractFileContentProcessingAutomaticTask
         }
     }
 
+    private void AddProjectFilesTotal(IExtendedReport extendedReport)
+    {
+        var projectFilesTotal = Project.GetTargetLanguageFiles().Length;
+        extendedReport.AddProjectFilesTotal(projectFilesTotal);
+    }
+
+    private void ApplySettings(IExtendedReport extendedReport)
+    {
+        var statuses = Settings.ReportStatuses;
+        extendedReport.FilterMessages(statuses);
+    }
+
     private void CreateReport(IExtendedReport extendedReport)
     {
         var extendedReportXmlString = extendedReport.GetExtendedReportXmlString();
@@ -94,9 +101,10 @@ public class VerifyFilesExtended : AbstractFileContentProcessingAutomaticTask
 
     private string GetOriginalVerificationReport()
     {
-
-
         var result = Project.RunAutomaticTask(TaskFiles.GetIds(), AutomaticTaskTemplateIds.VerifyFiles);
+
+        ContentVerifier.Messages = result.Messages;
+
         var reportId = result.Reports.First().Id;
 
         var reportFilePath = $"{Path.Combine(Path.GetTempPath(), Path.GetRandomFileName())}.xml";
