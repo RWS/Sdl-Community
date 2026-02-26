@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CaptureQARuleState {
+namespace VerifyFilesAuditReport {
     using System;
     
     
@@ -19,7 +19,7 @@ namespace CaptureQARuleState {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class PluginResources {
@@ -39,7 +39,7 @@ namespace CaptureQARuleState {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CaptureQARuleState.PluginResources", typeof(PluginResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("VerifyFilesAuditReport.PluginResources", typeof(PluginResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,7 +61,7 @@ namespace CaptureQARuleState {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Capture QA Rule State Description.
+        ///   Looks up a localized string similar to Verify Files – Audit Report.
         /// </summary>
         public static string BatchTaskDescription {
             get {
@@ -70,7 +70,7 @@ namespace CaptureQARuleState {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Capture QA Rule State.
+        ///   Looks up a localized string similar to Verify Files – Audit Report.
         /// </summary>
         public static string BatchTaskName {
             get {
@@ -89,7 +89,7 @@ namespace CaptureQARuleState {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to CaptureQARuleState.
+        ///   Looks up a localized string similar to Verify Files – Audit Report.
         /// </summary>
         public static string Plugin_Name {
             get {

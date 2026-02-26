@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\QATracker\QATracker.csproj" />
+    <ProjectReference Include="..\CaptureQARuleState\VerifyFilesAuditReport.csproj" />
   </ItemGroup>
 
   <ItemGroup>

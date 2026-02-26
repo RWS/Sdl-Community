@@ -118,17 +118,17 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BatchTaskDescription" xml:space="preserve">
-    <value>Capture QA Rule State Description</value>
+    <value>Verify Files – Audit Report</value>
   </data>
   <data name="BatchTaskName" xml:space="preserve">
-    <value>Capture QA Rule State</value>
+    <value>Verify Files – Audit Report</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="CreateReport" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\CreateReport.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Plugin_Name" xml:space="preserve">
-    <value>CaptureQARuleState</value>
+    <value>Verify Files – Audit Report</value>
   </data>
   <data name="VerificationReport_Errors" xml:space="preserve">
     <value>Errors:</value>

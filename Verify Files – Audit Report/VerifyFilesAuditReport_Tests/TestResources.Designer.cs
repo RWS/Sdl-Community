@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CaptureQARuleState_Tests {
+namespace VerifyFilesAuditReport_Tests {
     using System;
     
     
@@ -19,7 +19,7 @@ namespace CaptureQARuleState_Tests {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class TestResources {
@@ -39,7 +39,7 @@ namespace CaptureQARuleState_Tests {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CaptureQARuleState_Tests.TestResources", typeof(TestResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("VerifyFilesAuditReport_Tests.TestResources", typeof(TestResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,14 +61,14 @@ namespace CaptureQARuleState_Tests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-16&quot;?&gt;
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; ?&gt;
         ///&lt;VerificationSettings xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; Name=&quot;QA Verification Settings&quot;&gt;
         ///  &lt;Settings Name=&quot;Segments Verification&quot;&gt;
         ///    &lt;Setting Name=&quot;Check for forgotten and empty translations&quot;&gt;True&lt;/Setting&gt;
         ///    &lt;Setting Name=&quot;Source and target are identical&quot;&gt;False&lt;/Setting&gt;
         ///    &lt;Setting Name=&quot;Ignore tags&quot;&gt;False&lt;/Setting&gt;
         ///    &lt;Setting Name=&quot;Ignore case&quot;&gt;False&lt;/Setting&gt;
-        ///    &lt;Setting Name=&quot;Shorter  [rest of string was truncated]&quot;;.
+        ///    &lt;Setting Name=&quot;Shorter by (%)&quot;&gt;False&lt;/Se [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string DefaultQaVerifierSettings {
             get {
@@ -77,10 +77,10 @@ namespace CaptureQARuleState_Tests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; ?&gt;
         ///&lt;xsl:stylesheet
-        ///    version=&quot;1.0&quot;
-        ///    xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot;&gt;
+        ///    xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot;
+        ///    version=&quot;1.0&quot;&gt;
         ///
         ///	&lt;xsl:output method=&quot;html&quot; indent=&quot;yes&quot;/&gt;
         ///
@@ -89,10 +89,15 @@ namespace CaptureQARuleState_Tests {
         ///			&lt;head&gt;
         ///				&lt;style&gt;
         ///					body { font-family: Arial, sans-serif; margin: 20px; }
-        ///					h1 { font-size: 1.5em; margin-bottom: 0.5em; }
-        ///					h2 { font-size: 1.2em; margin-top: 1em; }
-        ///					table { border-collapse: collapse; width: 100%; margin-top: 0.5em; }
-        ///					th, td { border: 1px solid #ccc [rest of string was truncated]&quot;;.
+        ///					ul { list-style: none; margin: 0; padding: 0; }
+        ///					li { margin: 4px 0; }
+        ///					.toggle {
+        ///					cursor: pointer;
+        ///					font-weight: bold;
+        ///					display: inline-block;
+        ///					width: 12px;
+        ///					text-align: center;
+        ///					use [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string DefaultSettingsStyle {
             get {
