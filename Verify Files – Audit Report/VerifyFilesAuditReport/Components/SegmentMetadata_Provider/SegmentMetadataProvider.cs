@@ -1,12 +1,12 @@
-﻿using CaptureQARuleState.BatchTasks;
-using CaptureQARuleState.Components.SegmentMetadata_Provider.Model;
-using Sdl.ProjectAutomation.Core;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using Sdl.ProjectAutomation.Core;
+using VerifyFilesAuditReport.BatchTasks;
+using VerifyFilesAuditReport.Components.SegmentMetadata_Provider.Model;
 
-namespace CaptureQARuleState.Components.SegmentMetadata_Provider;
+namespace VerifyFilesAuditReport.Components.SegmentMetadata_Provider;
 
 public class SegmentMetadataProvider
 {

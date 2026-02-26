@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using CaptureQARuleState.Components.SettingsProvider.Model;
-using CaptureQARuleState.Components.SettingsProvider.Verifiers.BaseClass;
-using CaptureQARuleState.Components.SettingsProvider.Verifiers.Interface;
-using CaptureQARuleState.Extension;
+using VerifyFilesAuditReport.Components.SettingsProvider.Model;
+using VerifyFilesAuditReport.Components.SettingsProvider.Verifiers.BaseClass;
+using VerifyFilesAuditReport.Components.SettingsProvider.Verifiers.Interface;
+using VerifyFilesAuditReport.Extension;
 
-namespace CaptureQARuleState.Components.SettingsProvider.Verifiers
+namespace VerifyFilesAuditReport.Components.SettingsProvider.Verifiers
 {
     public class QaVerificationSettings : VerificationSettings, IVerificationSettings
     {

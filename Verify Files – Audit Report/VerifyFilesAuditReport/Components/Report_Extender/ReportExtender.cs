@@ -1,4 +1,4 @@
-﻿namespace CaptureQARuleState.Components.Report_Extender;
+﻿namespace VerifyFilesAuditReport.Components.Report_Extender;
 
 public class ReportExtender
 {

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using CaptureQARuleState.Components.SettingsProvider.Verifiers.BaseClass;
-using CaptureQARuleState.Components.SettingsProvider.Verifiers.Interface;
+using VerifyFilesAuditReport.Components.SettingsProvider.Verifiers.BaseClass;
+using VerifyFilesAuditReport.Components.SettingsProvider.Verifiers.Interface;
 
-namespace CaptureQARuleState.Components.SettingsProvider.Verifiers
+namespace VerifyFilesAuditReport.Components.SettingsProvider.Verifiers
 {
     public class TagVerificationSettings : VerificationSettings, IVerificationSettings
     {

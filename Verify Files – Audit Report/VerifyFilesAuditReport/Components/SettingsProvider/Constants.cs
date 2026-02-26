@@ -1,4 +1,4 @@
-﻿namespace CaptureQARuleState.Components.SettingsProvider
+﻿namespace VerifyFilesAuditReport.Components.SettingsProvider
 {
     public class Constants
     {

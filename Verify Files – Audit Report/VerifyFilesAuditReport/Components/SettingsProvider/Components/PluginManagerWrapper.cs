@@ -2,7 +2,7 @@
 using System.Linq;
 using Sdl.Core.PluginFramework;
 
-namespace CaptureQARuleState.Components.SettingsProvider.Components
+namespace VerifyFilesAuditReport.Components.SettingsProvider.Components
 {
     public static class PluginManagerWrapper
     {

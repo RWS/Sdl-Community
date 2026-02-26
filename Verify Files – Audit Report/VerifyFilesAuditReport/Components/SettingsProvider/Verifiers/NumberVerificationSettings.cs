@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using CaptureQARuleState.Components.SettingsProvider.Model;
-using CaptureQARuleState.Components.SettingsProvider.Verifiers.BaseClass;
-using CaptureQARuleState.Components.SettingsProvider.Verifiers.Interface;
+using VerifyFilesAuditReport.Components.SettingsProvider.Model;
+using VerifyFilesAuditReport.Components.SettingsProvider.Verifiers.BaseClass;
+using VerifyFilesAuditReport.Components.SettingsProvider.Verifiers.Interface;
 
-namespace CaptureQARuleState.Components.SettingsProvider.Verifiers;
+namespace VerifyFilesAuditReport.Components.SettingsProvider.Verifiers;
 
 internal class NumberVerificationSettings : VerificationSettings, IVerificationSettings
 {

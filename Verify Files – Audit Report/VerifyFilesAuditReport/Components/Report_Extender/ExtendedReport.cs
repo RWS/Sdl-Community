@@ -4,10 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
-using CaptureQARuleState.Components.SegmentMetadata_Provider.Model;
-using CaptureQARuleState.Components.SettingsProvider.Model;
+using VerifyFilesAuditReport.Components.SegmentMetadata_Provider.Model;
+using VerifyFilesAuditReport.Components.SettingsProvider.Model;
 
-namespace CaptureQARuleState.Components.Report_Extender;
+namespace VerifyFilesAuditReport.Components.Report_Extender;
 
 public class ExtendedReport(string originalXmlString) : IExtendedReport
 {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace CaptureQARuleState.Components.SettingsProvider.Model;
+namespace VerifyFilesAuditReport.Components.SettingsProvider.Model;
 
 [XmlRoot("VerificationSettings")]
 public class VerificationSettingsTreeNode

@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 
-namespace CaptureQARuleState.BatchTasks.UI
+namespace VerifyFilesAuditReport.BatchTasks.UI
 {
     public class UiHelper
     {

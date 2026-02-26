@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using CaptureQARuleState.Components.SettingsProvider.Model;
+using VerifyFilesAuditReport.Components.SettingsProvider.Model;
 
-namespace CaptureQARuleState.Components.SettingsProvider.Verifiers.Interface
+namespace VerifyFilesAuditReport.Components.SettingsProvider.Verifiers.Interface
 {
     public interface IVerificationSettings
     {

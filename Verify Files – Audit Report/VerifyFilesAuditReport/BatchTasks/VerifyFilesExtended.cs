@@ -1,15 +1,15 @@
-﻿using CaptureQARuleState.Components.Report_Extender;
-using CaptureQARuleState.Components.SegmentMetadata_Provider;
-using CaptureQARuleState.Components.SettingsProvider;
+﻿using System.IO;
+using System.Linq;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.ProjectAutomation.FileBased.Reports.Operations;
-using System.IO;
-using System.Linq;
+using VerifyFilesAuditReport.Components.Report_Extender;
+using VerifyFilesAuditReport.Components.SegmentMetadata_Provider;
+using VerifyFilesAuditReport.Components.SettingsProvider;
 
-namespace CaptureQARuleState.BatchTasks;
+namespace VerifyFilesAuditReport.BatchTasks;
 
 [AutomaticTask(nameof(VerifyFilesExtended),
     "BatchTaskName",

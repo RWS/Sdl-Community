@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Sdl.Core.Settings;
 
-namespace CaptureQARuleState.BatchTasks
+namespace VerifyFilesAuditReport.BatchTasks
 {
     public class VerifyFilesExtendedSettings : SettingsGroup
     {

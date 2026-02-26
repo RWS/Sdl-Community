@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CaptureQARuleState.BatchTasks
+namespace VerifyFilesAuditReport.BatchTasks
 {
     public class Constants
     {

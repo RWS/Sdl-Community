@@ -1,9 +1,9 @@
-﻿using Sdl.FileTypeSupport.Framework.BilingualApi;
+﻿using System;
+using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.ProjectAutomation.Core;
-using System;
 
-namespace CaptureQARuleState.BatchTasks;
+namespace VerifyFilesAuditReport.BatchTasks;
 
 public class ContentVerifier : AbstractBilingualContentProcessor
 {

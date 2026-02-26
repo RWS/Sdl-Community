@@ -1,13 +1,13 @@
-﻿using CaptureQARuleState.BatchTasks.UI;
-using CaptureQARuleState.Components.SegmentMetadata_Provider;
-using CaptureQARuleState.Components.SegmentMetadata_Provider.Model;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Sdl.Core.Settings;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-using System.Collections.Generic;
-using System.Linq;
+using VerifyFilesAuditReport.BatchTasks.UI;
+using VerifyFilesAuditReport.Components.SegmentMetadata_Provider;
+using VerifyFilesAuditReport.Components.SegmentMetadata_Provider.Model;
 
-namespace CaptureQARuleState.BatchTasks
+namespace VerifyFilesAuditReport.BatchTasks
 {
     public class VerifyFilesExtendedSettingsPage : DefaultSettingsPage<VerifyFilesExtendedSettingsView, VerifyFilesExtendedSettings>
     {

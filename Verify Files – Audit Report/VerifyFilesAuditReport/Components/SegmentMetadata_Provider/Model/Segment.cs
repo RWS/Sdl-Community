@@ -1,4 +1,4 @@
-﻿namespace CaptureQARuleState.Components.SegmentMetadata_Provider.Model
+﻿namespace VerifyFilesAuditReport.Components.SegmentMetadata_Provider.Model
 {
     public class Segment
     {

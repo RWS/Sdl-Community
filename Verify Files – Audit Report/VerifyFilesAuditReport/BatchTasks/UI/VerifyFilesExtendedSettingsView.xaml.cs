@@ -3,11 +3,11 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
-using CaptureQARuleState.BatchTasks.Extension;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Interfaces;
+using VerifyFilesAuditReport.BatchTasks.Extension;
 
-namespace CaptureQARuleState.BatchTasks.UI
+namespace VerifyFilesAuditReport.BatchTasks.UI
 {
     /// <summary>
     /// Interaction logic for VerifyFilesExtendedSettings.xaml

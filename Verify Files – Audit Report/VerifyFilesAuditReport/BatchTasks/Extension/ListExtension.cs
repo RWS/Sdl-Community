@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CaptureQARuleState.BatchTasks.Extension;
+namespace VerifyFilesAuditReport.BatchTasks.Extension;
 
 public static class ListExtension
 {

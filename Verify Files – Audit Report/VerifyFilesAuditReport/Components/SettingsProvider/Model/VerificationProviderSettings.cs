@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CaptureQARuleState.Components.SettingsProvider.Model;
+namespace VerifyFilesAuditReport.Components.SettingsProvider.Model;
 
 public class VerificationProviderSettings
 {

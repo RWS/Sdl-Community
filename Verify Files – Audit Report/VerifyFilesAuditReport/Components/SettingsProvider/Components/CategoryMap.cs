@@ -1,7 +1,7 @@
-﻿using CaptureQARuleState.Components.SettingsProvider.Verifiers;
-using CaptureQARuleState.Components.SettingsProvider.Verifiers.Interface;
+﻿using VerifyFilesAuditReport.Components.SettingsProvider.Verifiers;
+using VerifyFilesAuditReport.Components.SettingsProvider.Verifiers.Interface;
 
-namespace CaptureQARuleState.Components.SettingsProvider.Components
+namespace VerifyFilesAuditReport.Components.SettingsProvider.Components
 {
     public static class CategoryMap
     {

@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using CaptureQARuleState.Components.SettingsProvider.Components;
-using CaptureQARuleState.Components.SettingsProvider.Model;
 using Sdl.Core.Globalization;
 using Sdl.ProjectAutomation.Core;
+using VerifyFilesAuditReport.Components.SettingsProvider.Components;
+using VerifyFilesAuditReport.Components.SettingsProvider.Model;
 
-namespace CaptureQARuleState.Components.SettingsProvider;
+namespace VerifyFilesAuditReport.Components.SettingsProvider;
 
 public class VerificationSettingsDataProvider
 {

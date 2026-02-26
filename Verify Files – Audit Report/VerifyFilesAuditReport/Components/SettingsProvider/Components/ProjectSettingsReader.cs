@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using Sdl.Core.Globalization;
 using Sdl.ProjectAutomation.Core;
 
-namespace CaptureQARuleState.Components.SettingsProvider.Components
+namespace VerifyFilesAuditReport.Components.SettingsProvider.Components
 {
     public class ProjectSettingsReader
     {

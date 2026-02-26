@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using CaptureQARuleState.Components.SettingsProvider.Model;
-using CaptureQARuleState.Extension;
+using VerifyFilesAuditReport.Components.SettingsProvider.Model;
+using VerifyFilesAuditReport.Extension;
 
-namespace CaptureQARuleState.Components.SettingsProvider.Verifiers.BaseClass
+namespace VerifyFilesAuditReport.Components.SettingsProvider.Verifiers.BaseClass
 {
     public class VerificationSettings : VerificationSettingsTreeNode
     {
