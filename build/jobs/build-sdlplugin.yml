@@ -16,7 +16,7 @@ steps:
     buildVersionToDownload: 'latestFromBranch'
     targetPath: '$(X86PATH)\Trados\Trados Studio\$(StudioProductIdentifier)'
     runBranch: '$(StudioBranch)'
-    tags: 'Package'
+    tags: 'TradosStudio2024SR1_18.1.2'
 
 
 - task: NuGetToolInstaller@1
