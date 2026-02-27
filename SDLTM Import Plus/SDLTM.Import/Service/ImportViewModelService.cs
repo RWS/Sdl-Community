@@ -97,7 +97,8 @@ namespace SDLTM.Import.Service
 		/// </summary>
 		private List<FileDetails> GetFilesForIncludeVariants(List<FileDetails> filesList, CultureInfo sourceLanguage,
 			CultureInfo targetLanguage)
-		{
+        {
+            filesList = filesList.Where(f => f.TargetLanguage is not null).ToList();
 			var filesCollection = filesList.Where(f =>
 				f.SourceLanguage.TwoLetterISOLanguageName.Equals(sourceLanguage.TwoLetterISOLanguageName) &&
 				f.TargetLanguage.TwoLetterISOLanguageName.Equals(targetLanguage.TwoLetterISOLanguageName));

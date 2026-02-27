@@ -203,5 +203,6 @@
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 </Project>
