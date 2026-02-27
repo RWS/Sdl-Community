@@ -1,13 +1,14 @@
-﻿using System.IO;
-using System.Linq;
-using Sdl.FileTypeSupport.Framework.IntegrationApi;
+﻿using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.ProjectAutomation.FileBased.Reports.Operations;
+using System.IO;
+using System.Linq;
 using VerifyFilesAuditReport.Components.Report_Extender;
 using VerifyFilesAuditReport.Components.SegmentMetadata_Provider;
 using VerifyFilesAuditReport.Components.SettingsProvider;
+using Task = System.Threading.Tasks.Task;
 
 namespace VerifyFilesAuditReport.BatchTasks;
 
@@ -26,9 +27,11 @@ public class VerifyFilesExtended : AbstractFileContentProcessingAutomaticTask
     private VerifyFilesExtendedSettings Settings { get; set; }
     private VerificationSettingsDataProvider VerificationSettingsDataProvider { get; set; } = new();
 
-    public override void TaskComplete()
+    public async override void TaskComplete()
     {
-        //var xmlString = GetOriginalVerificationReport();
+        while (!Signal.Finished) await Task.Delay(500);
+
+        Signal.Reset();
         var extendedReport = ReportExtender.CreateReport(XmlString);
 
         AddProjectFilesTotal(extendedReport);
@@ -56,7 +59,7 @@ public class VerifyFilesExtended : AbstractFileContentProcessingAutomaticTask
         Project.UpdateSettings(settingsBundle);
         Project.Save();
 
-        XmlString = GetOriginalVerificationReport();
+        SetOriginalVerificationReport();
     }
 
     private void AddActiveQaProviders(IExtendedReport extendedReport)
@@ -99,20 +102,27 @@ public class VerifyFilesExtended : AbstractFileContentProcessingAutomaticTask
             CreateReport("Capture QA Rule State", "Capture QA Rule State", extendedReportXmlString);
     }
 
-    private string GetOriginalVerificationReport()
+    private void SetOriginalVerificationReport()
     {
-        var result = Project.RunAutomaticTask(TaskFiles.GetIds(), AutomaticTaskTemplateIds.VerifyFiles);
+        AutomaticTask result = null;
+        Task.Run(() =>
+        {
+            result = Project.RunAutomaticTask
+            (
+                TaskFiles.GetIds(),
+                AutomaticTaskTemplateIds.VerifyFiles,
+                (_, _) => { }, (_, args) => Signal.SendMessage(args.Message)
+            );
 
-        ContentVerifier.Messages = result.Messages;
+            var reportId = result.Reports.First().Id;
 
-        var reportId = result.Reports.First().Id;
+            var reportFilePath = $"{Path.Combine(Path.GetTempPath(), Path.GetRandomFileName())}.xml";
+            Project.SaveTaskReportAs(reportId, reportFilePath, ReportFormat.Xml);
 
-        var reportFilePath = $"{Path.Combine(Path.GetTempPath(), Path.GetRandomFileName())}.xml";
-        Project.SaveTaskReportAs(reportId, reportFilePath, ReportFormat.Xml);
+            new ProjectReportsOperations((FileBasedProject)Project).RemoveReports([reportId]);
 
-        new ProjectReportsOperations((FileBasedProject)Project).RemoveReports([reportId]);
-
-        var xmlString = File.ReadAllText(reportFilePath);
-        return xmlString;
+            XmlString = File.ReadAllText(reportFilePath);
+            Signal.Finished = true;
+        });
     }
 }

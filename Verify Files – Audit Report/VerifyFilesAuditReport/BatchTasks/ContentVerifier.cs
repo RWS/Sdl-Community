@@ -1,24 +1,24 @@
-﻿using System;
-using Sdl.FileTypeSupport.Framework.BilingualApi;
+﻿using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.ProjectAutomation.Core;
+using System;
 
 namespace VerifyFilesAuditReport.BatchTasks;
 
 public class ContentVerifier : AbstractBilingualContentProcessor
 {
-    public ExecutionMessage[] Messages { get; set; }
-
-    private bool BeenThereDoneThat { get; set; }
-
-    public override void FileComplete()
+    public override void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
     {
-        if (BeenThereDoneThat) return;
-        foreach (var executionMessage in Messages)
-            ReportMessage(executionMessage.Source, executionMessage.ProjectFileName,
-                GetErrorLevel(executionMessage.Level), executionMessage.Message, executionMessage.ProjectFileName);
-
-        BeenThereDoneThat = true;
+        if (paragraphUnit.IsStructure)
+            return;
+        foreach (var _ in paragraphUnit.SegmentPairs)
+        {
+            var message = Signal.GetMessage();
+            if (message is null)
+                return;
+            ReportMessage(message.Source, message.ProjectFileName,
+                GetErrorLevel(message.Level), message.Message, message.ProjectFileName);
+        }
     }
 
     private ErrorLevel GetErrorLevel(MessageLevel executionMessageLevel)
