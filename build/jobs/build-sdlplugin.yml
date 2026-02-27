@@ -13,7 +13,8 @@ steps:
     project: 'TradosStudio'
     definition: '1258'
     artifactName: 'binaries'
-    buildVersionToDownload: 'latestFromBranch'
+    buildVersionToDownload: 'specific'
+    runId: 326039
     targetPath: '$(x64path)\Trados\Trados Studio\$(StudioProductIdentifier)'
     runBranch: '$(StudioBranch)'
     tags: 'Package'
