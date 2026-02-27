@@ -6,5 +6,5 @@
 		Verify Files – Audit Report is a Trados Studio plugin designed to enhance verification reporting by offering complete visibility into the active QA configuration at the time of execution.  It summarizes all QA categories, checks, and sub-options that were enabled—whether or not issues were detected.  Developed for project managers, linguists, and compliance teams in regulated industries, it provides the detailed QA evidence required for auditing and quality assurance, reducing reliance on external tools such as Xbench.
 	</Description>
 	<Author></Author>
-	<RequiredProduct name="TradosStudio" minversion="18.1" maxversion="18.1.9"/>
+	<RequiredProduct name="TradosStudio" minversion="18.0" maxversion="18.1.9"/>
 </PluginPackage>
