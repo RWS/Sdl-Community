@@ -1,0 +1,81 @@
+<?xml version="1.0" ?>
+<VerificationSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="QA Verification Settings">
+  <Settings Name="Segments Verification">
+    <Setting Name="Check for forgotten and empty translations">True</Setting>
+    <Setting Name="Source and target are identical">False</Setting>
+    <Setting Name="Ignore tags">False</Setting>
+    <Setting Name="Ignore case">False</Setting>
+    <Setting Name="Shorter by (%)">False</Setting>
+    <Setting Name="Longer by (%)">False</Setting>
+    <Setting Name="Ignore segments with fewer than # words">2</Setting>
+    <Setting Name="Based on words">True</Setting>
+    <Setting Name="Based on characters">True</Setting>
+    <Setting Name="Check for forbidden characters">False</Setting>
+  </Settings>
+  <Settings Name="Segments to Exclude">
+    <Setting Name="Exclude PerfectMatch and Context Match units">True</Setting>
+    <Setting Name="Exclude exact matches">False</Setting>
+    <Setting Name="Exclude fuzzy matches down to">False</Setting>
+    <Setting Name="Exclude new translations">False</Setting>
+    <Setting Name="Exclude repetitions">False</Setting>
+    <Setting Name="Exclude confirmed translations">False</Setting>
+    <Setting Name="Exclude locked segments">True</Setting>
+    <Setting Name="Exclude target segment identical to source">False</Setting>
+    <Setting Name="Check only segments which are in following contexts">False</Setting>
+    <Setting Name="Apply exclusion list to search for not translated segments">False</Setting>
+    <Setting Name="Apply exclusion list to search for target segments identical to source">False</Setting>
+    <Setting Name="Ignore case">False</Setting>
+    <Setting Name="Exclusions use regular expressions">False</Setting>
+    <Setting Name="Report all non-excluded segments">False</Setting>
+  </Settings>
+  <Settings Name="Inconsistencies">
+    <Setting Name="Check for inconsistent translations">False</Setting>
+    <Setting Name="Ignore tags">False</Setting>
+    <Setting Name="Ignore case inconsistencies">False</Setting>
+    <Setting Name="Check for repeated words in target">False</Setting>
+    <Setting Name="Ignore numbers">False</Setting>
+    <Setting Name="Ignore case repeated words">False</Setting>
+    <Setting Name="Check for unedited fuzzy matches">False</Setting>
+    <Setting Name="Confirmed segments only">True</Setting>
+    <Setting Name="All segments">False</Setting>
+    <Setting Name="Only check if match scores below">False</Setting>
+  </Settings>
+  <Settings Name="Punctuation">
+    <Setting Name="Check source and target end in same punctuation">False</Setting>
+    <Setting Name="Check spanish punctuation">False</Setting>
+    <Setting Name="Check unintentional spaces before">False</Setting>
+    <Setting Name="French compliant check">False</Setting>
+    <Setting Name="Check for multiple spaces">False</Setting>
+    <Setting Name="Check for multiple dots">False</Setting>
+    <Setting Name="Ignore ellipsis dots">False</Setting>
+    <Setting Name="Check for extra space at end of target segment">False</Setting>
+    <Setting Name="Check capitalization of initial letters">False</Setting>
+    <Setting Name="Check consistency of global capitalization">False</Setting>
+    <Setting Name="Check brackets">False</Setting>
+  </Settings>
+  <Settings Name="Numbers">
+    <Setting Name="Check numbers">False</Setting>
+    <Setting Name="Check dates">False</Setting>
+    <Setting Name="Check times">False</Setting>
+    <Setting Name="Check measurements and currencies">False</Setting>
+  </Settings>
+  <Settings Name="Word List">
+    <Setting Name="Check word list">False</Setting>
+    <Setting Name="Ignore case">False</Setting>
+    <Setting Name="Search whole words only">False</Setting>
+  </Settings>
+  <Settings Name="Regular Expressions">
+    <Setting Name="Search regular expressions">False</Setting>
+    <Setting Name="Ignore case">False</Setting>
+  </Settings>
+  <Settings Name="Trademark Check">
+    <Setting Name="Check trademark characters">False</Setting>
+  </Settings>
+  <Settings Name="Length Verification">
+    <Setting Name="Check length limitation">True</Setting>
+    <Setting Name="Check if target segments are within file specific limits">True</Setting>
+    <Setting Name="Check if target segments are longer than character count">50</Setting>
+    <Setting Name="Check all segment contexts">True</Setting>
+    <Setting Name="Check the following contexts only"></Setting>
+  </Settings>
+</VerificationSettings>
