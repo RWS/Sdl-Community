@@ -514,7 +514,9 @@ namespace Sdl.Community.Qualitivity.Tracking
 
 			var parser = new ContentGenerator();
 
-			foreach (var segPair in doc.SegmentPairs)
+            var segmentPairs = doc.SegmentPairs.GroupBy(sp => sp.GetProjectFile().Id.ToString())
+                .FirstOrDefault(g => g.Key == fileId);
+			foreach (var segPair in segmentPairs)
 			{
 				if (segPair.GetProjectFile().Id.ToString() != fileId) continue;
 				if (segPair.Properties.TranslationOrigin == null) continue;
@@ -945,7 +947,8 @@ namespace Sdl.Community.Qualitivity.Tracking
 			var documentTotalSignOffRejectedOriginal = 0;
 			var documentTotalSignedOffOriginal = 0;
 
-			foreach (var segPair in doc.SegmentPairs)
+            var segmentPairs = doc.SegmentPairs.Where(sp => sp.GetProjectFile().Id.ToString() == fileId);
+            foreach (var segPair in segmentPairs)
 			{
 				if (segPair.GetProjectFile().Id.ToString() != fileId) continue;
 				switch (segPair.Properties.ConfirmationLevel)

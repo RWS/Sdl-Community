@@ -11,7 +11,7 @@ namespace System
 	{
 		internal const string AssemblyProduct = "Qualitivity";
 		internal const string AssemblyVersion = "7.0.0.0";
-		internal const string AssemblyFileVersion = "7.0.0.1";
+		internal const string AssemblyFileVersion = "7.0.1.2";
 		internal const bool ComVisible = false;
 	}
 }
