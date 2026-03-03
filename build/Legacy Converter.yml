@@ -24,7 +24,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: solution
-  value : '**/Sdl.Community.LegacyConverter.sln'
+  value : '**/Sdl.Community.XliffToLegacyConverter.sln'
 - name: pathToPublish
   value: '$(PluginPath)\Sdl.Community.XliffToLegacyConverter.sdlplugin'
 
