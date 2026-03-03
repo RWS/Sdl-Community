@@ -520,6 +520,26 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap language_weaver_logo {
+            get {
+                object obj = ResourceManager.GetObject("language_weaver_logo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon LanguageWeaver_MainIcon {
+            get {
+                object obj = ResourceManager.GetObject("LanguageWeaver_MainIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Language Weaver Cloud.
         /// </summary>
         public static string LCCloud_ShortName {
@@ -708,6 +728,36 @@ namespace LanguageWeaverProvider {
         public static string Loading_LMP_RestoreDefaults {
             get {
                 return ResourceManager.GetString("Loading_LMP_RestoreDefaults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon lw_logo_main {
+            get {
+                object obj = ResourceManager.GetObject("lw_logo_main", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap lw_logo_main16 {
+            get {
+                object obj = ResourceManager.GetObject("lw_logo_main16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon lw_logo_mainIcon {
+            get {
+                object obj = ResourceManager.GetObject("lw_logo_mainIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         

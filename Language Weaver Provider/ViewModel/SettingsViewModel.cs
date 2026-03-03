@@ -5,6 +5,7 @@ using LanguageWeaverProvider.Extensions;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using Microsoft.Win32;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 
 namespace LanguageWeaverProvider.ViewModel
 {
@@ -22,14 +23,16 @@ namespace LanguageWeaverProvider.ViewModel
 		string _preLookupFilePath;
 		string _postLookupFilePath;
 
-		public SettingsViewModel(ITranslationOptions translationOptions)
+        private readonly ITranslationOptions _translationOptions;
+
+        public SettingsViewModel(ITranslationOptions translationOptions)
 		{
 			TranslationOptions = translationOptions;
 			InitializeCommands();
 			SetSettings();
 		}
 
-		public ITranslationOptions TranslationOptions { get; private set; }
+        public ITranslationOptions TranslationOptions { get; private set; }
 
 		public bool IncludeTags
 		{
@@ -123,13 +126,18 @@ namespace LanguageWeaverProvider.ViewModel
 
 		public ICommand BackCommand { get; private set; }
 
+        public ICommand CloseCommand { get; private set; }
+
+        public ICommand SaveCommand { get; private set; }
+
 		public ICommand ClearCommand { get; private set; }
 
 		public ICommand BrowseFileCommand { get; private set; }
 
 		public event EventHandler BackCommandExecuted;
+        public event LanguageWeaverProvider.ViewModel.PairMappingViewModel.CloseWindowEventRaiser CloseEventRaised;
 
-		public bool SettingsAreValid()
+        public bool SettingsAreValid()
 		{
 			return CustomNameIsValid();
 		}
@@ -162,7 +170,8 @@ namespace LanguageWeaverProvider.ViewModel
 			BackCommand = new RelayCommand(Back);
 			ClearCommand = new RelayCommand(Clear);
 			BrowseFileCommand = new RelayCommand(BrowseFile);
-		}
+            CloseCommand = new RelayCommand(Close);
+        }
 
 		private void SetSettings()
 		{
@@ -208,6 +217,11 @@ namespace LanguageWeaverProvider.ViewModel
 					break;
 			}
 		}
+
+        private void Close(object parameter)
+        {
+            CloseEventRaised?.Invoke();
+        }
 
 		private void BrowseFile(object parameter)
 		{

@@ -85,19 +85,12 @@ namespace LanguageWeaverProvider
                 false => JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState).ProviderName
             };
 
-            var images = translationProviderUri.AbsoluteUri switch
-            {
-                Constants.CloudFullScheme => (PluginResources.lwLogo_Cloud_Icon, PluginResources.lwLogo_Cloud16),
-                Constants.EdgeFullScheme => (PluginResources.lwLogo_Edge_Icon, PluginResources.lwLogo_Edge16),
-                _ => throw new ArgumentException("Unsupported PluginVersion value"),
-            };
-
             return new TranslationProviderDisplayInfo()
             {
                 Name = pluginName,
                 TooltipText = pluginName,
-                TranslationProviderIcon = images.Item1,
-                SearchResultImage = images.Item2
+                TranslationProviderIcon = PluginResources.LanguageWeaver_MainIcon,
+                SearchResultImage = PluginResources.lw_logo_main16
             };
         }
         public bool SupportsTranslationProviderUri(Uri translationProviderUri)
