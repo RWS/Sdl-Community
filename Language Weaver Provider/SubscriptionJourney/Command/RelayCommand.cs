@@ -1,0 +1,36 @@
+﻿using System;
+using System.Windows.Input;
+
+namespace LanguageWeaverProvider.SubscriptionJourney.Command
+{
+    public class RelayCommand : ICommand
+    {
+        private readonly Action<object> execute;
+        private readonly Predicate<object> canExecute;
+
+        public RelayCommand(Action<object> action) : this(action, null) { }
+
+        public RelayCommand(Action<object> action, Predicate<object> predicate)
+        {
+            execute = action;
+            canExecute = predicate;
+        }
+
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
+
+        public bool CanExecute(object parameter)
+        {
+            return canExecute is null || canExecute(parameter);
+        }
+
+        public void Execute(object parameter)
+        {
+            execute(parameter);
+        }
+    }
+
+}
