@@ -64,8 +64,8 @@
 
 			<Image Grid.Row="0"
 				   Grid.ColumnSpan="2"
-				   Source="pack://application:,,,/LanguageWeaverProvider;component/Resources/lwHeader_Main.png"
-				   Width="600"
+				   Source="pack://application:,,,/LanguageWeaverProvider;component/Resources/LW_Logo_Brand.png"
+                   Height="80"
 				   Margin="0 16 0 0" />
 
 			<TextBlock Grid.Row="1"

@@ -62,21 +62,8 @@
 	  <None Remove="Resources\Information.png" />
 	  <None Remove="Resources\LanguageWeaver_MainIcon.ico" />
 	  <None Remove="Resources\language_weaver_logo.png" />
-	  <None Remove="Resources\lwHeader_Cloud.png" />
-	  <None Remove="Resources\lwHeader_Edge.png" />
-	  <None Remove="Resources\lwHeader_Main.png" />
-	  <None Remove="Resources\lwLogo_Cloud.png" />
-	  <None Remove="Resources\lwLogo_Cloud16.png" />
-	  <None Remove="Resources\lwLogo_Cloud32.png" />
-	  <None Remove="Resources\lwLogo_Edge.png" />
-	  <None Remove="Resources\lwLogo_Edge16.png" />
-	  <None Remove="Resources\lwLogo_Edge32.png" />
-	  <None Remove="Resources\lwLogo_Main.png" />
-	  <None Remove="Resources\lwLogo_Main16.png" />
-	  <None Remove="Resources\lwLogo_Main32.png" />
-	  <None Remove="Resources\lw_logo_main.ico" />
+	  <None Remove="Resources\LW_Logo_Brand.png" />
 	  <None Remove="Resources\lw_logo_main16.png" />
-	  <None Remove="Resources\lw_logo_mainIcon.ico" />
 	  <None Remove="Resources\Report.xsl" />
 	</ItemGroup>
 	
@@ -198,21 +185,8 @@
 	  <Resource Include="Resources\Feedback_Default.png" />
 	  <Resource Include="Resources\Feedback_Notification.png" />
 	  <Resource Include="Resources\Information.png" />
-	  <Resource Include="Resources\lwHeader_Cloud.png" />
-	  <Resource Include="Resources\lwHeader_Edge.png" />
-	  <Resource Include="Resources\lwHeader_Main.png" />
-	  <Resource Include="Resources\lwLogo_Cloud.png" />
-	  <Resource Include="Resources\lwLogo_Cloud16.png" />
-	  <Resource Include="Resources\lwLogo_Cloud32.png" />
-	  <Resource Include="Resources\lwLogo_Edge.png" />
-	  <Resource Include="Resources\lwLogo_Edge16.png" />
-	  <Resource Include="Resources\lwLogo_Edge32.png" />
-	  <Resource Include="Resources\lwLogo_Main.png" />
-	  <Resource Include="Resources\lwLogo_Main16.png" />
-	  <Resource Include="Resources\lwLogo_Main32.png" />
-	  <Resource Include="Resources\lw_logo_main.ico" />
+	  <Resource Include="Resources\LW_Logo_Brand.png" />
 	  <Resource Include="Resources\lw_logo_main16.png" />
-	  <Resource Include="Resources\lw_logo_mainIcon.ico" />
 	  <Resource Include="Style\Buttons.xaml" />
 	</ItemGroup>
 

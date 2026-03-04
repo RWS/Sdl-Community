@@ -383,12 +383,7 @@ namespace LanguageWeaverProvider.ViewModel
 
 		private void SetHeader()
 		{
-			HeaderImagePath = _translationOptions.PluginVersion switch
-			{
-				PluginVersion.LanguageWeaverCloud => "pack://application:,,,/LanguageWeaverProvider;component/Resources/language_weaver_logo.png",
-				PluginVersion.LanguageWeaverEdge => "pack://application:,,,/LanguageWeaverProvider;component/Resources/language_weaver_logo.png",
-				_ => "pack://application:,,,/LanguageWeaverProvider;component/Resources/language_weaver_logo.png"
-            };
+            HeaderImagePath = "pack://application:,,,/LanguageWeaverProvider;component/Resources/LW_Logo_Brand.png";
 		}
 	}
 }

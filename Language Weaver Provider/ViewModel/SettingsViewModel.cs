@@ -23,8 +23,6 @@ namespace LanguageWeaverProvider.ViewModel
 		string _preLookupFilePath;
 		string _postLookupFilePath;
 
-        private readonly ITranslationOptions _translationOptions;
-
         public SettingsViewModel(ITranslationOptions translationOptions)
 		{
 			TranslationOptions = translationOptions;
@@ -170,6 +168,7 @@ namespace LanguageWeaverProvider.ViewModel
 			BackCommand = new RelayCommand(Back);
 			ClearCommand = new RelayCommand(Clear);
 			BrowseFileCommand = new RelayCommand(BrowseFile);
+            SaveCommand = new RelayCommand(SaveChanges);
             CloseCommand = new RelayCommand(Close);
         }
 
@@ -253,6 +252,19 @@ namespace LanguageWeaverProvider.ViewModel
 					break;
 			}
 		}
+
+        private void SaveChanges(object parameter)
+        {
+            TranslationOptions.ProviderSettings.AutosendFeedback = AutosendFeedback;
+            TranslationOptions.ProviderSettings.ResendDrafts = ResendDrafts;
+            TranslationOptions.ProviderSettings.IncludeTags = IncludeTags;
+            TranslationOptions.ProviderSettings.UseCustomName = UseCustomName;
+            TranslationOptions.ProviderSettings.CustomName = CustomName;
+            TranslationOptions.ProviderSettings.UsePrelookup = UsePreLookup;
+            TranslationOptions.ProviderSettings.UsePostLookup = UsePostLookup;
+            TranslationOptions.ProviderSettings.PreLookupFilePath = PreLookupFilePath;
+            TranslationOptions.ProviderSettings.PostLookupFilePath = PostLookupFilePath;
+        }
 
 		private void ValidateLookupFile(string filePath, string propertyName)
 		{
