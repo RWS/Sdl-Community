@@ -14,7 +14,7 @@ steps:
     definition: '1258'
     artifactName: 'binaries'
     buildVersionToDownload: 'specific'
-    runId: 327978
+    runId: 327978   # this id will download TradosStudio2026Release_Beta_19.0.0.1638
     targetPath: '$(x64path)\Trados\Trados Studio\$(StudioProductIdentifier)'
     runBranch: '$(StudioBranch)'
     tags: 'Package'
