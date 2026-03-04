@@ -185,11 +185,12 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
         private static HttpResponseMessage IsValidApiKey(string apiKey)
         {
-            return AppInitializer.Client.GetAsync($"https://api.deepl.com/v1/usage?auth_key={apiKey}").Result;
+            return AppInitializer.Client.GetAsync($"https://api.deepl.com/v1/usage").Result;
         }
 
         private static void OnApiKeyChanged()
         {
+            AppInitializer.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("DeepL-Auth-Key", ApiKey);
             IsApiKeyValidResponse = IsValidApiKey(ApiKey);
 
             if (!IsApiKeyValidResponse.IsSuccessStatusCode)
