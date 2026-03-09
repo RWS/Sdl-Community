@@ -73,4 +73,4 @@ steps:
     displayName: 'Publish Artifact'
     inputs:
       artifactName: HunspellDictionaryManagerInstaller
-      pathToPublish: '$(Build.Repository.LocalPath)\Hunspell Dictionary Manager\HunspellDictionaryManager.Installer\bin\$(buildConfiguration)'
+      pathToPublish: '$(Build.Repository.LocalPath)\Hunspell Dictionary Manager\Sdl.Community.HunspellDictionaryManager.Installer\bin\$(buildConfiguration)'
