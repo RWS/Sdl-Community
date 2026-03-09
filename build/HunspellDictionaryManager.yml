@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - Studio_2026_UpdateSigning
+     - Studio_2026
   paths:
     include:
      - Hunspell Dictionary Manager/*
@@ -53,7 +53,7 @@ steps:
 
   - template: tasks/sign-artifacts/sign-single-artifact.yml
     parameters:
-       fileToSign: '$(Build.Repository.LocalPath)\Hunspell Dictionary Manager\HunspellDictionaryManager\bin\$(buildConfiguration)\Sdl.Community.HunspellDictionaryManager.exe'
+       fileToSign: '$(Build.Repository.LocalPath)\Hunspell Dictionary Manager\HunspellDictionaryManager\bin\$(buildConfiguration)\HunspellDictionaryManager.exe'
        description: 'HunspellDictionaryManager'
   - task: VSBuild@1
     inputs:
@@ -66,11 +66,11 @@ steps:
 
   - template: tasks/sign-artifacts/sign-single-artifact.yml
     parameters:
-     fileToSign: '$(Build.Repository.LocalPath)\Hunspell Dictionary Manager\Sdl.Community.HunspellDictionaryManager.Installer\bin\$(buildConfiguration)\Sdl.Community.HunspellDictionaryManager.Installer.msi'
+     fileToSign: '$(Build.Repository.LocalPath)\Hunspell Dictionary Manager\Sdl.Community.HunspellDictionaryManager.Installer\bin\$(buildConfiguration)\HunspellDictionaryManager.Installer.msi'
      description: 'HunspellDictionaryManager '
 
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifact'
     inputs:
       artifactName: HunspellDictionaryManagerInstaller
-      pathToPublish: '$(Build.Repository.LocalPath)\Hunspell Dictionary Manager\Sdl.Community.HunspellDictionaryManager.Installer\bin\$(buildConfiguration)'
+      pathToPublish: '$(Build.Repository.LocalPath)\Hunspell Dictionary Manager\HunspellDictionaryManager.Installer\bin\$(buildConfiguration)'
