@@ -2,8 +2,6 @@
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyProductAttribute("Qualitivity")]
-[assembly: AssemblyVersionAttribute("7.0.0.0")]
-[assembly: AssemblyFileVersionAttribute("7.0.0.1")]
 [assembly: ComVisibleAttribute(false)]
 namespace System
 {
@@ -11,7 +9,7 @@ namespace System
 	{
 		internal const string AssemblyProduct = "Qualitivity";
 		internal const string AssemblyVersion = "7.0.0.0";
-		internal const string AssemblyFileVersion = "7.0.1.2";
+		internal const string AssemblyFileVersion = "7.0.1.3";
 		internal const bool ComVisible = false;
 	}
 }

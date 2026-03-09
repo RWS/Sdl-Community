@@ -1665,7 +1665,7 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 
 		private void InitializeViewControl()
 		{
-
+			if (IsInitialized) return;
 			QualitivityViewTrackChangesController.ObjectListView = _viewContent.Value.objectListView1;
 
 			_viewContent.Value.olvColumn_activity_description.IsVisible = false;
