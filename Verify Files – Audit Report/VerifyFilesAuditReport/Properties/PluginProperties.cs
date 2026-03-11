@@ -1,3 +1,3 @@
 ﻿using Sdl.Core.PluginFramework;
 
-[assembly: Plugin("CaptureQARuleState")]
+[assembly: Plugin("Plugin_Name")]

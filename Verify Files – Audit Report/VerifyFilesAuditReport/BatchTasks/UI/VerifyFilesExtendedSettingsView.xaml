@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:verifyFilesAuditReport="clr-namespace:VerifyFilesAuditReport"
              Name="Root"
              DataContext="{Binding ElementName=Root}"
              mc:Ignorable="d"
@@ -19,7 +20,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <TextBlock Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}"
-                   Text="Capture QA Rule State" />
+                   Text="{x:Static verifyFilesAuditReport:PluginResources.Plugin_Name}" />
         <GroupBox Grid.Row="1"
                   Header="General">
             <StackPanel>
