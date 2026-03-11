@@ -35,7 +35,5 @@ variables:
   value: '$(PluginPath)\Sdl.Community.DeepLMTProvider.sdlplugin'
 
 steps:
-  - checkout: self
-  - checkout: AppStoreApplicationsRepo
   - template: build/jobs/build-sdlplugin.yml@AppStoreApplicationsRepo
   - template: build/jobs/publish-build-artifact-task.yml@AppStoreApplicationsRepo
