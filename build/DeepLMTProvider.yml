@@ -3,7 +3,7 @@ resources:
   - repository: AppStoreApplicationsRepo
     type: git
     name: AppStoreApplications/AppStoreApplications
-    ref: 'Studio_2026'
+    ref: 'Studio_2026_OneRepoToRullThemAll'
 
 trigger:
   branches:
@@ -24,7 +24,7 @@ pool:
   vmImage : '$(DefaultBuildVm)'
 
 variables:
-- template: jobs/branch-variables.yml
+- template: build/branch-variables.yml@AppStoreApplicationsRepo
 - name: buildPlatform
   value: 'Any CPU'
 - name: buildConfiguration
@@ -37,5 +37,5 @@ variables:
 steps:
   - checkout: self
   - checkout: AppStoreApplicationsRepo
-  - template: jobs/build-sdlplugin.yml
-  - template: jobs/publish-build-artifact-task.yml
+  - template: build/jobs/build-sdlplugin.yml@AppStoreApplicationsRepo
+  - template: build/jobs/publish-build-artifact-task.yml@AppStoreApplicationsRepo
