@@ -25,7 +25,7 @@ pool:
   vmImage : '$(DefaultBuildVm)'
 
 variables:
-- template: jobs/branch-variables.yml
+- template: build/branch-variables.yml@AppStoreApplicationsRepo
 - name: buildPlatform
   value: 'Any CPU'
 - name: buildConfiguration

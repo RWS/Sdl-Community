@@ -23,7 +23,7 @@ pr:
 
 variables: 
 - group: 'AutoHotKey Manager Sonar Version'
-- template: jobs/branch-variables.yml
+- template: build/branch-variables.yml@AppStoreApplicationsRepo
 - name: buildPlatform 
   value: 'Any CPU'
 - name: buildConfiguration
