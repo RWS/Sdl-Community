@@ -33,10 +33,10 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBoxResources.xaml" />
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/textblockresources.xaml" />
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ComboBoxResources.xaml" />
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/CheckBoxResources.xaml" />
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/LanguageWeaverProvider;component/Style/Buttons.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/LanguageWeaverProvider;component/Controls/ProgressIndicator.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/LanguageWeaverProvider;component/Controls/WatermarkTextBoxResources.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/LanguageWeaverProvider;component/Controls/WatermarkPasswordBoxResources.xaml" />
@@ -134,7 +134,7 @@
                                        FontWeight="Light" />
 							
                             <Button Content="{x:Static root:PluginResources.PairMappingView_Buttons_Refresh}"
-                                    Style="{StaticResource TransparentButtonStyle}"
+                                    Style="{StaticResource Sdl.Button.EmbeddedStyle}"
 									Command="{Binding ResetAndIdentifyPairsCommand}"
 									CommandParameter="{x:Static root:PluginResources.PairMappingView_Buttons_Refresh}"
 									AutomationProperties.HelpText="{x:Static root:PluginResources.PairMappingView_Buttons_Refresh_ToolTip}"
@@ -150,7 +150,7 @@
                                        FontWeight="Light" />
 
 							<Button Content="{x:Static root:PluginResources.PairMappingView_Buttons_Reset}"
-									Style="{StaticResource TransparentButtonStyle}"
+									Style="{StaticResource Sdl.Button.EmbeddedStyle}"
 									Command="{Binding ResetAndIdentifyPairsCommand}"
 									CommandParameter="{x:Static root:PluginResources.PairMappingView_Buttons_Reset}"
 									AutomationProperties.HelpText="{x:Static root:PluginResources.PairMappingView_Buttons_Reset_ToolTip}"
