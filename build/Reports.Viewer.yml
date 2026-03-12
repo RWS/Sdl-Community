@@ -1,3 +1,10 @@
+resources:
+  repositories:
+  - repository: AppStoreApplicationsRepo
+    type: git
+    name: AppStoreApplications/AppStoreApplications
+    ref: 'Studio_2026'
+
 trigger:
   branches:
     include:
@@ -31,43 +38,6 @@ variables:
 - name: outputpath
   value: '$(Build.Repository.LocalPath)\Reports Viewer Plus\Reports.Viewer\bin\$(buildConfiguration)\net48'
 steps:
-- task: PowerShell@2
-  displayName: 'set x86path'
-  inputs:
-    targetType: 'inline'
-    script: |
-      Write-Host "##vso[task.setvariable variable=x86path;]${Env:ProgramFiles(x86)}"
+  - template: build/jobs/build-sdlplugin.yml@AppStoreApplicationsRepo
+  - template: build/jobs/publish-build-artifact-task.yml@AppStoreApplicationsRepo
 
-- task: DownloadPipelineArtifact@2
-  displayName: 'Download Trados Studio Binaries Pipeline Artifact'
-  inputs:
-    buildType: 'specific'
-    project: 'TradosStudio'
-    definition: '1258'
-    artifactName: 'binaries'
-    buildVersionToDownload: 'latestFromBranch'
-    targetPath: '$(X86PATH)\Trados\Trados Studio\$(StudioProductIdentifier)'
-    runBranch: '$(StudioBranch)'
-    tags: 'Package'
-
-- task: NuGetToolInstaller@1
-  displayName: 'Use NuGet last version'
-
-- task: NuGetCommand@2
-  displayName: 'NuGet restore'
-  inputs:
-    restoreSolution: '$(solution)'
-    vstsFeed: 'af66e256-9c46-4fba-ad75-09bf110ec1cc'
-
-- template: tasks/sign-artifacts/prepare-plugin-signing.yml
-- task: VSBuild@1
-  inputs:
-    solution: '$(solution)'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-
-- template: tasks/sign-artifacts/sign-plugin.yml
-  parameters:
-    fileToSign: '$(pathToPublish)'
-
-- template: jobs/publish-build-artifact-task.yml

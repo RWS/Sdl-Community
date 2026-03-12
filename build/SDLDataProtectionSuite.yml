@@ -1,3 +1,10 @@
+resources:
+  repositories:
+  - repository: AppStoreApplicationsRepo
+    type: git
+    name: AppStoreApplications/AppStoreApplications
+    ref: 'Studio_2026'
+
 trigger:
   branches:
     include:
@@ -29,5 +36,6 @@ variables:
   value: '$(PluginPath)\Sdl.Community.SdlDataProtectionSuite.sdlplugin'
 
 steps:
-  - template: jobs/build-sdlplugin.yml
-  - template: jobs/publish-build-artifact-task.yml
+  - template: build/jobs/build-sdlplugin.yml@AppStoreApplicationsRepo
+  - template: build/jobs/publish-build-artifact-task.yml@AppStoreApplicationsRepo
+
