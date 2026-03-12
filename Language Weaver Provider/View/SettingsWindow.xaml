@@ -238,6 +238,9 @@
                             Style="{StaticResource Sdl.Button.PrimaryStyle}"
                             Content="OK"
                             Margin="16 0"
+                            IsDefault="True"
+                            Click="OkButton_OnClick"
+                            Command="{Binding SaveCommand}"
                             Cursor="Hand"
                             FontSize="11"
                             FontWeight="DemiBold"
@@ -246,9 +249,9 @@
 
                         </Button>
                         <Button 
-                            Command="{Binding CloseCommand}"
                             Style="{StaticResource Sdl.Button.SecondaryStyle}"
                             Content="Cancel"
+                            IsCancel="True"
                             Cursor="Hand"
                             FontSize="11"
                             FontWeight="DemiBold"

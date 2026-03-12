@@ -67,9 +67,7 @@
 			<converters:EmptyStringToVisibilityConverter x:Key="EmptyStringToVisibilityConverter" />
             <converters:EmptyCollectionToVisibilityConverter x:Key="EmptyCollectionToVisibilityConverter" />
 
-            <DataTemplate DataType="{x:Type viewModel:SettingsViewModel}">
-                <view:SettingsView />
-            </DataTemplate>
+            
 
         </ResourceDictionary>
     </Window.Resources>

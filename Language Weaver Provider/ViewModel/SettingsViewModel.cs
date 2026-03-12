@@ -124,7 +124,6 @@ namespace LanguageWeaverProvider.ViewModel
 
 		public ICommand BackCommand { get; private set; }
 
-        public ICommand CloseCommand { get; private set; }
 
         public ICommand SaveCommand { get; private set; }
 
@@ -133,7 +132,6 @@ namespace LanguageWeaverProvider.ViewModel
 		public ICommand BrowseFileCommand { get; private set; }
 
 		public event EventHandler BackCommandExecuted;
-        public event LanguageWeaverProvider.ViewModel.PairMappingViewModel.CloseWindowEventRaiser CloseEventRaised;
 
         public bool SettingsAreValid()
 		{
@@ -169,7 +167,6 @@ namespace LanguageWeaverProvider.ViewModel
 			ClearCommand = new RelayCommand(Clear);
 			BrowseFileCommand = new RelayCommand(BrowseFile);
             SaveCommand = new RelayCommand(SaveChanges);
-            CloseCommand = new RelayCommand(Close);
         }
 
 		private void SetSettings()
@@ -216,11 +213,6 @@ namespace LanguageWeaverProvider.ViewModel
 					break;
 			}
 		}
-
-        private void Close(object parameter)
-        {
-            CloseEventRaised?.Invoke();
-        }
 
 		private void BrowseFile(object parameter)
 		{

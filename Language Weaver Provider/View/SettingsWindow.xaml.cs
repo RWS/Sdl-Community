@@ -42,5 +42,10 @@ namespace LanguageWeaverProvider.View
             e.Cancel = true;
             AnimationsHelper.StartClosingWindowAnimation(this);
         }
+
+        private void OkButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            DialogResult = true;
+        }
     }
 }

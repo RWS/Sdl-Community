@@ -242,9 +242,8 @@ namespace LanguageWeaverProvider.ViewModel
             var settingsViewModel = new SettingsViewModel(_translationOptions);
 
             var settingsView = new SettingsWindow() { DataContext = settingsViewModel };
-            settingsViewModel.CloseEventRaised += settingsView.Close;
 
-            var dialog = settingsView.ShowDialog();
+            settingsView.ShowDialog();
         }
 
 
@@ -256,7 +255,7 @@ namespace LanguageWeaverProvider.ViewModel
 			var lmpView = new LanguageMappingProviderView() { DataContext = lmpViewModel };
 			lmpViewModel.CloseEventRaised += lmpView.Close;
 
-			var dialog = lmpView.ShowDialog();
+			lmpView.ShowDialog();
 		}
 
 		private void LanguageMappingUpdated(object sender, EventArgs e)
