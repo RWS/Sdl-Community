@@ -26,7 +26,7 @@ pool:
 
 variables:
 - group: 'SDLPLC Authenticode Credentials'
-- template: jobs/branch-variables.yml
+- template: build/branch-variables.yml@AppStoreApplicationsRepo
 - name: buildPlatform 
   value: 'Any CPU'
 - name: buildConfiguration
