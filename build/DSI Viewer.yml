@@ -1,3 +1,10 @@
+resources:
+  repositories:
+  - repository: AppStoreApplicationsRepo
+    type: git
+    name: AppStoreApplications/AppStoreApplications
+    ref: 'Studio_2026'
+
 trigger:
   branches:
     include:
@@ -43,8 +50,8 @@ steps:
       projectKey: $(SonarId)
       projectName: $(SonarName)
       projectVersion: $(ProjectVersion)
-
-  - template: jobs/build-sdlplugin.yml
+  - template: build/jobs/build-sdlplugin.yml@AppStoreApplicationsRepo
+  - template: build/jobs/publish-build-artifact-task.yml@AppStoreApplicationsRepo
   - task: SonarCloudAnalyze@3
     displayName: 'Run Code Analysis'
 
@@ -52,5 +59,3 @@ steps:
     inputs:
       pollingTimeoutSec: '300'
     displayName: 'Publish Quality Gate Result'
-
-  - template: jobs/publish-build-artifact-task.yml
