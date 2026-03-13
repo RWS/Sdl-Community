@@ -31,7 +31,7 @@ variables:
 - name: solution
   value: '**/VerifyFilesAuditReport.sln'
 - name : SonarID
-  value : Verify_Files–Audit_Report
+  value : Verify_Files_Audit_Report
 - name : SonarName
   value : 'Verify Files – Audit Report'
 - name : ProjectVersion
