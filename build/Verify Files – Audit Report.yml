@@ -1,0 +1,61 @@
+resources:
+  repositories:
+  - repository: AppStoreApplicationsRepo
+    type: git
+    name: AppStoreApplications/AppStoreApplications
+    ref: 'Studio_2026'
+
+trigger:
+  branches:
+    include:
+     - Studio_2026
+  paths:
+    include:
+     - Verify Files – Audit Report/*
+
+pr:
+  branches:
+    include:
+     - Studio_2026
+  paths:
+    include:
+     - Verify Files – Audit Report/*
+
+variables: 
+- group: 'Verify Files – Audit Report Sonar Version'
+- template: build/branch-variables.yml@AppStoreApplicationsRepo
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value: '**/VerifyFilesAuditReport.sln'
+- name : SonarID
+  value : Verify_Files–Audit_Report
+- name : SonarName
+  value : 'Verify Files – Audit Report'
+- name : ProjectVersion
+  value : $[counter(variables['Version.Patch'], 1)]
+
+pool:
+  vmImage: '$(DefaultBuildVm)'
+
+steps:
+  - task: SonarCloudPrepare@3
+    inputs:
+      SonarCloud: 'AppStorePlugins-ServiceConnection'
+      organization: 'sdl'
+      scannerMode: 'dotnet'
+      projectKey: $(SonarId)
+      projectName: $(SonarName)
+      projectVersion: $(ProjectVersion)
+  - template: build/jobs/build-sdlplugin.yml@AppStoreApplicationsRepo
+  - template: build/jobs/publish-build-artifact-task.yml@AppStoreApplicationsRepo
+  - task: SonarCloudAnalyze@3
+    displayName: 'Run Code Analysis'
+
+  - task: SonarCloudPublish@3
+    inputs:
+      pollingTimeoutSec: '300'
+    displayName: 'Publish Quality Gate Result'
+
