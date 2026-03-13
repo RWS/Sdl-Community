@@ -3,12 +3,12 @@ resources:
   - repository: AppStoreApplicationsRepo
     type: git
     name: AppStoreApplications/AppStoreApplications
-    ref: 'Studio_2026'
+    ref: 'master'
 
 trigger:
   branches:
     include:
-     - Studio_2026
+     - master
   paths:
     include:
      - Verify Files – Audit Report/*
@@ -16,7 +16,7 @@ trigger:
 pr:
   branches:
     include:
-     - Studio_2026
+     - master
   paths:
     include:
      - Verify Files – Audit Report/*
