@@ -22,7 +22,7 @@ namespace VerifyFilesAuditReport_Tests {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class TestResources {
+    public class TestResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace VerifyFilesAuditReport_Tests {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("VerifyFilesAuditReport_Tests.TestResources", typeof(TestResources).Assembly);
@@ -51,7 +51,7 @@ namespace VerifyFilesAuditReport_Tests {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -70,7 +70,7 @@ namespace VerifyFilesAuditReport_Tests {
         ///    &lt;Setting Name=&quot;Ignore case&quot;&gt;False&lt;/Setting&gt;
         ///    &lt;Setting Name=&quot;Shorter by (%)&quot;&gt;False&lt;/Se [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string DefaultQaVerifierSettings {
+        public static string DefaultQaVerifierSettings {
             get {
                 return ResourceManager.GetString("DefaultQaVerifierSettings", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace VerifyFilesAuditReport_Tests {
         ///					text-align: center;
         ///					use [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string DefaultSettingsStyle {
+        public static string DefaultSettingsStyle {
             get {
                 return ResourceManager.GetString("DefaultSettingsStyle", resourceCulture);
             }
@@ -116,7 +116,7 @@ namespace VerifyFilesAuditReport_Tests {
         ///    &lt;Setting Name=&quot;Spacing around tags&quot;&gt;True&lt;/Setting&gt;
         ///    &lt;Setting Name=&quot;Check for tag id mismatch&quot;&gt;Fa [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string DefaultTagVerifierSettings {
+        public static string DefaultTagVerifierSettings {
             get {
                 return ResourceManager.GetString("DefaultTagVerifierSettings", resourceCulture);
             }
@@ -131,7 +131,7 @@ namespace VerifyFilesAuditReport_Tests {
         ///    &lt;Setting Name=&quot;Check for terms without the target term equivalent&quot;&gt;False&lt;/Setting&gt;
         ///    &lt;Setting Name=&quot;E [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string DefaultTermVerifierSettings {
+        public static string DefaultTermVerifierSettings {
             get {
                 return ResourceManager.GetString("DefaultTermVerifierSettings", resourceCulture);
             }
