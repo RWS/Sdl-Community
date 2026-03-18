@@ -28,7 +28,7 @@ namespace LanguageWeaverProvider.Services
         {
             var parameters = new Dictionary<string, string>
             {
-				{ "client_id", "F4NpOGG1sBaEzk379M6ZxX3gGa0iH1Ff"},
+                { "client_id", "F4NpOGG1sBaEzk379M6ZxX3gGa0iH1Ff"},
                 { "grant_type", "refresh_token" },
                 { "refresh_token", translationOptions.AccessToken?.RefreshToken }
             };
@@ -45,7 +45,7 @@ namespace LanguageWeaverProvider.Services
                 var result = await new HttpClient().SendAsync(httpRequest);
 
                 var content = result.Content.ReadAsStringAsync().Result;
-                
+
                 if (!result.IsSuccessStatusCode)
                 {
                     return false;
@@ -202,7 +202,7 @@ namespace LanguageWeaverProvider.Services
         private static async Task<string> GetUserInfo(AccessToken accessToken, string requestUri, string property)
         {
             var response = await Service.SendRequest(HttpMethod.Get, requestUri, accessToken);
-            var accountId = await Service.DeserializeResponse<string>(response, property);
+            var accountId = await response.DeserializeResponse<string>(property);
             return accountId;
         }
 
@@ -222,24 +222,17 @@ namespace LanguageWeaverProvider.Services
 
             var requestUri = $"{accessToken.BaseUri}v4/accounts/{accessToken.AccountId}/{resourceRequested}";
             var response = await Service.SendRequest(HttpMethod.Get, requestUri, accessToken);
-            var languagePairs = await Service.DeserializeResponse<List<T>>(response, property);
+            var languagePairs = await response.DeserializeResponse<List<T>>(property);
             return languagePairs;
         }
 
         public static async Task<Xliff> Translate(AccessToken accessToken, PairMapping mappedPair, Xliff sourceXliff)
         {
-            try
-            {
-                var translationResponse = await SendTranslationRequest(accessToken, mappedPair, sourceXliff);
-                await WaitForTranslationCompletion(accessToken, translationResponse.RequestId);
-                var translation = await GetTranslationInfo<CloudTranslationResponse>(accessToken, translationResponse.RequestId, "content");
-                var translatedSegment = translation.Translation.First();
-                return Converter.ParseXliffString(translatedSegment);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            var translationResponse = await SendTranslationRequest(accessToken, mappedPair, sourceXliff);
+            await WaitForTranslationCompletion(accessToken, translationResponse.RequestId);
+            var translation = await GetTranslationInfo<CloudTranslationResponse>(accessToken, translationResponse.RequestId, "content");
+            var translatedSegment = translation.Translation.First();
+            return Converter.ParseXliffString(translatedSegment);
         }
 
         private static async Task<CloudTranslationRequestResponse> SendTranslationRequest(AccessToken accessToken, PairMapping mappedPair, Xliff sourceXliff)
@@ -249,7 +242,14 @@ namespace LanguageWeaverProvider.Services
             var translationRequestModelJson = JsonConvert.SerializeObject(translationRequestModel);
             var content = new StringContent(translationRequestModelJson, Encoding.UTF8, "application/json");
             var response = await Service.SendRequest(HttpMethod.Post, requestUri, accessToken, content);
-            var translationRequestResponse = await Service.DeserializeResponse<CloudTranslationRequestResponse>(response);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorResponse = await response.DeserializeResponse<List<LanguageWeaverErrorDetail>>();
+                throw new Exception($"{errorResponse[0].Code}: {errorResponse[0].Description}");
+            }
+
+            var translationRequestResponse = await response.DeserializeResponse<CloudTranslationRequestResponse>();
             return translationRequestResponse;
         }
 
@@ -312,7 +312,7 @@ namespace LanguageWeaverProvider.Services
             if (response.IsSuccessStatusCode)
                 return;
 
-            var error = await response.DeserializeResponse<CloudFeedbackErrorDetail>("errors", 0);
+            var error = await response.DeserializeResponse<LanguageWeaverErrorDetail>("errors", 0);
             throw new Exception($"Code {error.Code}: {error.Description}.");
         }
 
@@ -327,7 +327,7 @@ namespace LanguageWeaverProvider.Services
             if (response.IsSuccessStatusCode)
                 return JObject.Parse(await response.Content.ReadAsStringAsync())["feedbackId"]?.ToString();
 
-            var error = await response.DeserializeResponse<CloudFeedbackErrorDetail>("errors", 0);
+            var error = await response.DeserializeResponse<LanguageWeaverErrorDetail>("errors", 0);
             throw new Exception($"Code {error.Code}: {error.Description}.");
         }
 
