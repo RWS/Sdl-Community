@@ -147,7 +147,6 @@ namespace Sdl.Community.DeepLMTProvider.Client
                     Method = HttpMethod.Post,
                     RequestUri = new Uri($"{ChosenBaseUrl}/translate")
                 };
-                request.Headers.Authorization = new AuthenticationHeaderValue("DeepL-Auth-Key", ApiKey);
 
                 var response = AppInitializer.Client.SendAsync(request).Result;
                 response.EnsureSuccessStatusCode();
@@ -187,14 +186,16 @@ namespace Sdl.Community.DeepLMTProvider.Client
             return response.Content?.ReadAsStringAsync().Result;
         }
 
-        private static HttpResponseMessage IsValidApiKey(string apiKey)
+        private static HttpResponseMessage IsValidApiKey()
         {
-            return AppInitializer.Client.GetAsync($"{ChosenBaseUrl}/usage?auth_key={apiKey}").Result;
+            return AppInitializer.Client.GetAsync($"{ChosenBaseUrl}/usage").Result;
         }
 
         private static void OnApiKeyChanged()
         {
-            IsApiKeyValidResponse = IsValidApiKey(ApiKey);
+            IsApiKeyValidResponse = IsValidApiKey();
+            AppInitializer.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("DeepL-Auth-Key", ApiKey);
+
 
             if (!IsApiKeyValidResponse.IsSuccessStatusCode)
                 return;
