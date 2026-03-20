@@ -178,9 +178,12 @@ namespace Sdl.Community.DeepLMTProvider.Client
                 ApplyDeepLRestrictions(deeplRequestParameters);
 
                 var response = Translate(deeplRequestParameters);
-                response.EnsureSuccessStatusCode();
 
                 var translationResponse = response.Content?.ReadAsStringAsync().Result;
+
+                if (!response.IsSuccessStatusCode)
+                    throw new Exception(!string.IsNullOrWhiteSpace(translationResponse) ? translationResponse : response.ReasonPhrase);
+
                 var translatedObject = JsonConvert.DeserializeObject<TranslationResponse>(translationResponse);
 
                 if (translatedObject != null && translatedObject.Translations.Any())

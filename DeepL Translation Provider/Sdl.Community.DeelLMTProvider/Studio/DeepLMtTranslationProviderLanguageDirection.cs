@@ -263,6 +263,11 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 
                 return preTranslateSegments;
             }
+            catch (AggregateException e)
+            {
+                foreach (var innerEx in e.InnerExceptions) _logger.Error($"{innerEx.Message}\n {innerEx.StackTrace}");
+                throw new Exception(e.InnerExceptions[0].Message);
+            }
             catch (Exception e)
             {
                 _logger.Error($"{e.Message}\n {e.StackTrace}");
