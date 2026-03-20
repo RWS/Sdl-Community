@@ -255,13 +255,19 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                 {
                     if (segment == null) return;
 
-                    if (_options.ResendDraft || segment.TranslationUnit.ConfirmationLevel == ConfirmationLevel.Unspecified)
+                    if (_options.ResendDraft ||
+                        segment.TranslationUnit.ConfirmationLevel == ConfirmationLevel.Unspecified)
                     {
                         segment.PlainTranslation = LookupDeepL(segment.SourceText);
                     }
                 });
 
                 return preTranslateSegments;
+            }
+            catch (AggregateException e)
+            {
+                foreach (var innerEx in e.InnerExceptions) _logger.Error($"{innerEx.Message}\n {innerEx.StackTrace}");
+                throw new Exception(e.InnerExceptions[0].Message);
             }
             catch (Exception e)
             {
