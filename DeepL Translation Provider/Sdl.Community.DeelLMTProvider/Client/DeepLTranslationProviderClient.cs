@@ -197,6 +197,8 @@ namespace Sdl.Community.DeepLMTProvider.Client
                 {
                     Logger.Error(innerEx);
                 }
+
+                throw;
             }
             catch (Exception ex)
             {
