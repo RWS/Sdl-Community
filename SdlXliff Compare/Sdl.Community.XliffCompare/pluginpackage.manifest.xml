@@ -4,7 +4,7 @@
   <Version>5.0.0.1</Version>
   <Description>SDLXLIFF Compare is a compact and fast tool used for comparing SDLXLIFF files, or complete Projects, and then displaying the comparison results in an XML/HTML report.</Description>
   <Author>Trados AppStore Team</Author>
-  <RequiredProduct name="TradosStudio" minversion="19.0" maxversion="19.9" />
+  <RequiredProduct name="TradosStudio" minversion="19.0" maxversion="19.0.9" />
   <Include>
     <File>Sdl.Community.XliffCompare.Core.dll</File>
   </Include>

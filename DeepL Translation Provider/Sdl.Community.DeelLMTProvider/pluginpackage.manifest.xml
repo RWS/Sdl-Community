@@ -4,5 +4,5 @@
 	<Version>8.0.0.12</Version>
 	<Description>This plugin provides machine translation results from the DeepL Translator.</Description>
 	<Author>Trados AppStore Team</Author>
-	<RequiredProduct name="TradosStudio" minversion="19.0" maxversion="19.9" />
+	<RequiredProduct name="TradosStudio" minversion="19.0" maxversion="19.0.9" />
 </PluginPackage>

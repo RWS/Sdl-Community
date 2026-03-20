@@ -7,5 +7,5 @@
   <Include>
     <File>Sdl.Community.Toolkit.FileType.dll</File>
   </Include>
-	<RequiredProduct name="TradosStudio" minversion="19.0" maxversion="19.9"/>
+	<RequiredProduct name="TradosStudio" minversion="19.0" maxversion="19.0.9"/>
 </PluginPackage>

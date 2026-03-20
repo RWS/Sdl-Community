@@ -4,7 +4,7 @@
 	<Version>5.0.0.1</Version>
 	<Description>A pair of cleanup tasks that allows running batch tasks on source and target</Description>
 	<Author>Trados AppStore Team</Author>
-	<RequiredProduct name="TradosStudio" minversion="19.0" maxversion="19.9" />
+	<RequiredProduct name="TradosStudio" minversion="19.0" maxversion="19.0.9" />
 	<Include>
 		<File>Equin.ApplicationFramework.BindingListView.dll</File>
 		<File>Sdl.Community.CheckBoxComboBox.dll</File>
