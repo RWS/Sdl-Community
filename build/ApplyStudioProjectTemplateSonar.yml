@@ -5,13 +5,7 @@ resources:
     name: AppStoreApplications/AppStoreApplications
     ref: 'Studio_2026'
 
-trigger:
-  branches:
-    include:
-     - Studio_2026
-  paths:
-    include:
-     - Apply Studio Project Template/*
+trigger: none
 
 pr:
   branches:

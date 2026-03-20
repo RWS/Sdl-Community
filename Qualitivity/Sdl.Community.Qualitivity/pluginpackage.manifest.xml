@@ -1,6 +1,6 @@
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 	<PlugInName>Qualitivity</PlugInName>
-	<Version>7.0.1.3</Version>
+	<Version>7.0.2.0</Version>
 	<Description>Qualitivity</Description>
 	<Author>Trados AppStore Team</Author>
 	<Include>
@@ -17,5 +17,5 @@
 		<File>Trados.Community.Toolkit.Core.dll</File>
 		<File>System.Data.SQLite.dll</File>
 	</Include>
-	<RequiredProduct name="TradosStudio" minversion="19.0" maxversion="19.9" />
+	<RequiredProduct name="TradosStudio" minversion="19.0" maxversion="19.0.9" />
 </PluginPackage>

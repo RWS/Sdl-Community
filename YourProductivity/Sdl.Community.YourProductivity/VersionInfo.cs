@@ -1,4 +1,4 @@
-﻿// Version information for an assembly consists of the following four values:
+// Version information for an assembly consists of the following four values:
 //
 //      Major Version
 //      Minor Version 
@@ -11,4 +11,4 @@
 using System.Reflection;
 
 [assembly: AssemblyVersion("4.0.0.0")]
-[assembly: AssemblyFileVersion("4.1.0.0")]
+[assembly: AssemblyFileVersion("4.1.1.0")]
