@@ -240,39 +240,30 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 
         private List<PreTranslateSegment> TranslateSegments(List<PreTranslateSegment> preTranslateSegments)
         {
-            try
+            foreach (var segment in preTranslateSegments.Where(segment => segment != null))
             {
-                foreach (var segment in preTranslateSegments.Where(segment => segment != null))
+                var newSeg = segment.TranslationUnit.SourceSegment.Duplicate();
+                var sourceText = ApplyBeforeTranslationSettings(newSeg);
+                segment.SourceText = sourceText;
+            }
+
+            Parallel.ForEach(preTranslateSegments, segment =>
+            {
+                if (segment == null) return;
+
+                if (_options.ResendDraft ||
+                    segment.TranslationUnit.ConfirmationLevel == ConfirmationLevel.Unspecified)
                 {
-                    var newSeg = segment.TranslationUnit.SourceSegment.Duplicate();
-
-                    var sourceText = ApplyBeforeTranslationSettings(newSeg);
-
-                    segment.SourceText = sourceText;
-                }
-
-                Parallel.ForEach(preTranslateSegments, segment =>
-                {
-                    if (segment == null) return;
-
-                    if (_options.ResendDraft ||
-                        segment.TranslationUnit.ConfirmationLevel == ConfirmationLevel.Unspecified)
+                    try
                     {
                         segment.PlainTranslation = LookupDeepL(segment.SourceText);
                     }
-                });
-
-                return preTranslateSegments;
-            }
-            catch (AggregateException e)
-            {
-                foreach (var innerEx in e.InnerExceptions) _logger.Error($"{innerEx.Message}\n {innerEx.StackTrace}");
-                throw new Exception(e.InnerExceptions[0].Message);
-            }
-            catch (Exception e)
-            {
-                _logger.Error($"{e.Message}\n {e.StackTrace}");
-            }
+                    catch (Exception ex)
+                    {
+                        _logger.Error($"{ex.Message}\n {ex.StackTrace}");
+                    }
+                }
+            });
 
             return preTranslateSegments;
         }
