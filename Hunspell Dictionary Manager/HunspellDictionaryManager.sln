@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
 VisualStudioVersion = 18.2.11415.280 d18.0
@@ -6,6 +6,11 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.HunspellDictionaryManager", "HunspellDictionaryManager\Sdl.Community.HunspellDictionaryManager.csproj", "{D42381E5-30F4-4915-AEA1-72D8110E20C1}"
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Sdl.Community.HunspellDictionaryManager.Installer", "Sdl.Community.HunspellDictionaryManager.Installer\Sdl.Community.HunspellDictionaryManager.Installer.wixproj", "{BA98AC17-29F3-4664-BAD9-A02C569BC558}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D9996904-AB0F-4E96-A815-2685E20C187F}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
