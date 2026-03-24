@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net48</TargetFramework>
         <PlatformTarget>x64</PlatformTarget>
@@ -8,7 +8,6 @@
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<EmbeddedResourceUseDependentUponConvention>true</EmbeddedResourceUseDependentUponConvention>
 		<SignAssembly>true</SignAssembly>
-		<TradosFolder>$(ProgramW6432)\Trados\Trados Studio\Studio19Beta</TradosFolder>
 		<OutputType>Exe</OutputType>
 		<OutputPath>$(TradosFolder)\</OutputPath>
 		<PlatformTarget>x86</PlatformTarget>
