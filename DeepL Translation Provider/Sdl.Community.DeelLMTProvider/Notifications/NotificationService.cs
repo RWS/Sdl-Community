@@ -20,12 +20,6 @@ namespace Sdl.Community.DeepLMTProvider.Notifications
             Key = NotificationGroupKey,
             Title = NotificationGroupKey,
             Notifications = [],
-            IsActionVisible = true,
-            Action = new NotificationCommand(ClearNotificationGroupAction)
-            {
-                CommandToolTip = "Dismiss DeepL error messages",
-                CommandIcon = PluginResources.dismiss_icon
-            }
         };
 
         private static IStudioEventAggregator StudioEventAggregator
@@ -82,13 +76,6 @@ namespace Sdl.Community.DeepLMTProvider.Notifications
             NotificationGroup.Notifications.Remove(notififcation);
             StudioEventAggregator.Publish(
                 new RemoveStudioNotificationFromGroupEvent(NotificationGroupKey, notififcation.Id));
-        }
-
-        private static void ClearNotificationGroupAction()
-        {
-            ErrorMessages.Clear();
-            NotificationGroup.Notifications.Clear();
-            StudioEventAggregator.Publish(new RemoveStudioGroupNotificationEvent(NotificationGroupKey));
         }
 
         private static void ShowAllErrors(List<ErrorItem> errorMessages)
