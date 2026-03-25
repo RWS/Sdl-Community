@@ -196,7 +196,6 @@ namespace Sdl.Community.DeepLMTProvider.Client
             catch (Exception ex)
             {
                 if (ex is AggregateException aEx) ex = aEx.InnerException;
-                Logger.Error(ex);
                 errorMessage = ex?.Message;
             }
 

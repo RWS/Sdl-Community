@@ -269,13 +269,21 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                     });
             });
 
-            if (errorMessages.Any())
-            {
-                var errorItems = errorMessages.OrderBy(em=>em.Id).ToList();
-                NotificationService.Show(errorItems);
-            }
+            if (!errorMessages.Any())
+                return preTranslateSegments;
+
+            errorMessages = errorMessages.OrderBy(em => em.Id).ToList();
+
+            LogErrors(errorMessages);
+            NotificationService.Show(errorMessages);
 
             return  preTranslateSegments;
+        }
+
+        private void LogErrors(List<ErrorItem> errorMessages)
+        {
+            foreach (var errorMessage in errorMessages)
+                _logger.Error($"{errorMessage.Id}: {errorMessage.Message}");
         }
     }
 }
