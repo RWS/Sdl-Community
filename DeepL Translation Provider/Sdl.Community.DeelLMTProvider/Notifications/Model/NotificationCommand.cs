@@ -1,9 +1,8 @@
 ﻿using Sdl.Desktop.IntegrationApi.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 
-namespace Sdl.Community.DeepLMTProvider.Notifications
+namespace Sdl.Community.DeepLMTProvider.Notifications.Model
 {
     public class NotificationCommand(Action action) : IStudioNotificationCommand
     {

@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Sdl.Community.DeepLMTProvider.Notifications
+namespace Sdl.Community.DeepLMTProvider.Notifications.Model
 {
     public class Notification : IStudioNotification
     {

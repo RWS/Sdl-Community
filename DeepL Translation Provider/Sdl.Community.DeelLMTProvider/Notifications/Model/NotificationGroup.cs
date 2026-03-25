@@ -1,9 +1,7 @@
-﻿using Sdl.Community.DeepLMTProvider.Model;
-using Sdl.Desktop.IntegrationApi.Interfaces;
-using System.Collections.Generic;
+﻿using Sdl.Desktop.IntegrationApi.Interfaces;
 using System.Collections.ObjectModel;
 
-namespace Sdl.Community.DeepLMTProvider.Notifications
+namespace Sdl.Community.DeepLMTProvider.Notifications.Model
 {
     public class NotificationGroup : IStudioGroupNotification
     {
