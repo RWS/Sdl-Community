@@ -1,0 +1,54 @@
+﻿<Window x:Class="Sdl.Community.DeepLMTProvider.Notifications.Views.ErrorsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        x:Name="Root"
+        xmlns:local="clr-namespace:Sdl.Community.DeepLMTProvider.Notifications.Views"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterOwner"
+        Title=""
+        Icon="../../Resources/deepLIcon.ico"
+        Height="450"
+        Width="800">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/datagridresources.xaml" />
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/buttonresources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <DataGrid Grid.Row="1"
+                  BorderThickness="0.5"
+                  ItemsSource="{Binding ErrorMessages, ElementName=Root}"
+                  CanUserDeleteRows="False"
+                  Style="{StaticResource Sdl.DataGrid.GenericStyle}"
+                  AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Segment ID"
+                                    IsReadOnly="True"
+                                    Binding="{Binding Id}"
+                                    Width="*" />
+
+                <DataGridTextColumn Header="Message"
+                                    IsReadOnly="True"
+                                    Binding="{Binding Message}"
+                                    Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button Grid.Row="2"
+                Margin="10 20 0 0"
+                Height="25"
+                Style="{StaticResource Sdl.Button.GeneralStyle}"
+                HorizontalAlignment="Right"
+                IsCancel="True"
+                Content="Close" />
+    </Grid>
+</Window>

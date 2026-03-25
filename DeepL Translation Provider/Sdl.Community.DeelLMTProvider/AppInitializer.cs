@@ -1,5 +1,9 @@
-﻿using Sdl.Desktop.IntegrationApi;
+﻿using Sdl.Community.DeepLMTProvider.Notifications;
+using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.Desktop.IntegrationApi.Interfaces;
+using Sdl.Desktop.IntegrationApi.Notifications.Events;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System;
 using System.IO;
 using System.Net.Http;

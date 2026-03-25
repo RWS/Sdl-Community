@@ -3,6 +3,7 @@ using Sdl.Community.DeepLMTProvider.Client;
 using Sdl.Community.DeepLMTProvider.Extensions;
 using Sdl.Community.DeepLMTProvider.Helpers;
 using Sdl.Community.DeepLMTProvider.Model;
+using Sdl.Community.DeepLMTProvider.Notifications;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
@@ -226,7 +227,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             return resultsList;
         }
 
-        private string LookupDeepL(string sourceText) =>
+        private (string Translation, string ErrorMessage) LookupDeepL(string sourceText) =>
             _connecter.Translate(_languageDirection, sourceText,
                 new(
                     _languagePairOptions?.Formality ?? Formality.Default,
@@ -240,41 +241,36 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 
         private List<PreTranslateSegment> TranslateSegments(List<PreTranslateSegment> preTranslateSegments)
         {
-            try
+            foreach (var segment in preTranslateSegments.Where(segment => segment != null))
             {
-                foreach (var segment in preTranslateSegments.Where(segment => segment != null))
-                {
-                    var newSeg = segment.TranslationUnit.SourceSegment.Duplicate();
+                var newSeg = segment.TranslationUnit.SourceSegment.Duplicate();
 
-                    var sourceText = ApplyBeforeTranslationSettings(newSeg);
+                var sourceText = ApplyBeforeTranslationSettings(newSeg);
 
-                    segment.SourceText = sourceText;
-                }
+                segment.SourceText = sourceText;
+            }
 
-                Parallel.ForEach(preTranslateSegments, segment =>
-                {
-                    if (segment == null) return;
+            var errorMessages = new List<ErrorItem>();
+            Parallel.ForEach(preTranslateSegments, segment =>
+            {
+                if (segment == null) return;
 
-                    if (_options.ResendDraft ||
-                        segment.TranslationUnit.ConfirmationLevel == ConfirmationLevel.Unspecified)
+                if (!_options.ResendDraft &&
+                    segment.TranslationUnit.ConfirmationLevel != ConfirmationLevel.Unspecified) return;
+
+                //var (translation, errorMessage) = LookupDeepL(segment.SourceText);
+                var (translation, errorMessage) = ("Translation", "Error");
+                //segment.PlainTranslation = translation;
+                if (errorMessage is not null)
+                    errorMessages.Add(new ErrorItem
                     {
-                        segment.PlainTranslation = LookupDeepL(segment.SourceText);
-                    }
-                });
+                        Id = segment.TranslationUnit.DocumentSegmentPair.Properties.Id.ToString(),
+                        Message = errorMessage
+                    });
+            });
 
-                return preTranslateSegments;
-            }
-            catch (AggregateException e)
-            {
-                foreach (var innerEx in e.InnerExceptions) _logger.Error($"{innerEx.Message}\n {innerEx.StackTrace}");
-                throw new Exception(e.InnerExceptions[0].Message);
-            }
-            catch (Exception e)
-            {
-                _logger.Error($"{e.Message}\n {e.StackTrace}");
-            }
-
-            return preTranslateSegments;
+            if (errorMessages.Any()) NotificationService.Show(errorMessages);
+            return  preTranslateSegments;
         }
     }
 }
