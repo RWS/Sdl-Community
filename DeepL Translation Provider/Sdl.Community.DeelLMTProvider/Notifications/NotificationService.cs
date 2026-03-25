@@ -66,7 +66,7 @@ namespace Sdl.Community.DeepLMTProvider.Notifications
 
         private static void ShowAllErrors(List<ErrorItem> errorMessages, Notification notification)
         {
-            ClearNotificationAction(notification);
+            //ClearNotificationAction(notification);
             var messageService = new ErrorsWindow(errorMessages);
             messageService.ShowDialog();
         }

@@ -7,10 +7,14 @@
         xmlns:local="clr-namespace:Sdl.Community.DeepLMTProvider.Notifications.Views"
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
-        Title=""
+        Title="DeepL Translation Errors"
         Icon="../../Resources/deepLIcon.ico"
-        Height="450"
-        Width="800">
+        MinHeight="400"
+        Background="#f0f0f0"
+        MinWidth="600"
+        Height="400"
+        Width="600"
+        ResizeMode="CanResize">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -19,36 +23,111 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid Margin="10">
+    <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <DataGrid Grid.Row="1"
-                  BorderThickness="0.5"
-                  ItemsSource="{Binding ErrorMessages, ElementName=Root}"
-                  CanUserDeleteRows="False"
-                  Style="{StaticResource Sdl.DataGrid.GenericStyle}"
-                  AutoGenerateColumns="False">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Segment ID"
-                                    IsReadOnly="True"
-                                    Binding="{Binding Id}"
-                                    Width="*" />
 
-                <DataGridTextColumn Header="Message"
-                                    IsReadOnly="True"
-                                    Binding="{Binding Message}"
-                                    Width="*" />
-            </DataGrid.Columns>
-        </DataGrid>
-        <Button Grid.Row="2"
-                Margin="10 20 0 0"
-                Height="25"
-                Style="{StaticResource Sdl.Button.GeneralStyle}"
-                HorizontalAlignment="Right"
-                IsCancel="True"
-                Content="Close" />
+        <!-- Header Section -->
+        <Border Grid.Row="0"
+                Background="#F5F5F5"
+                BorderBrush="#E0E0E0"
+                BorderThickness="0,0,0,1"
+                Padding="20,15">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+
+
+                <StackPanel Grid.Column="1"
+                            VerticalAlignment="Center">
+                    <TextBlock Text="Translation Errors"
+                               FontSize="18"
+                               FontWeight="SemiBold"
+                               Foreground="#333333"
+                               Margin="0,0,0,2" />
+                    <TextBlock Text="The following errors occurred during translation processing"
+                               FontSize="12"
+                               Foreground="#666666" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Summary Section -->
+        <Border Grid.Row="1"
+                Background="#FFF9E6"
+                BorderBrush="#FFE082"
+                BorderThickness="0,0,0,1"
+                Padding="20,10">
+            <TextBlock Name="SummaryText"
+                       FontSize="12"
+                       Foreground="#E65100">
+                <TextBlock.Text>
+                    <Binding Path="ErrorMessages.Count"
+                             ElementName="Root"
+                             StringFormat="{}{0} error(s) found" />
+                </TextBlock.Text>
+            </TextBlock>
+        </Border>
+
+        <!-- Data Grid Section -->
+        
+            <DataGrid ItemsSource="{Binding ErrorMessages, ElementName=Root}"
+                      CanUserDeleteRows="False"
+                      Margin="10"
+                      Grid.Row="2"
+                      BorderBrush="LightGray"
+                      BorderThickness="0.5 0.7 0.6 0.6"
+                      CanUserAddRows="False"
+                      CanUserResizeRows="False"
+                      Style="{StaticResource Sdl.DataGrid.GenericStyle}"
+                      AutoGenerateColumns="False"
+                      GridLinesVisibility="Horizontal"
+                      HeadersVisibility="Column"
+                      SelectionMode="Single"
+                      SelectionUnit="FullRow"
+                      MouseDoubleClick="DataGrid_MouseDoubleClick">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Segment ID"
+                                        IsReadOnly="True"
+                                        Binding="{Binding Id}"
+                                        Width="150"
+                                        MinWidth="100">
+                       
+                        
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Header="Error Message"
+                                        IsReadOnly="True"
+                                        Binding="{Binding Message}"
+                                        Width="*"
+                                        MinWidth="300">
+                    
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+
+        <!-- Footer Section -->
+        <DockPanel Grid.Row="3"
+                   LastChildFill="False">
+            <Button Content="Export Errors"
+                    Margin="-5 0 0 0"
+                    DockPanel.Dock="Left"
+                    MinWidth="100"
+                    Style="{StaticResource Sdl.Button.EmbeddedStyle}"
+                    Click="ExportErrors_Click" />
+
+            <Button Content="Close"
+                    Margin="10 10 10 10"
+                    DockPanel.Dock="Right"
+                    Style="{StaticResource Sdl.Button.GeneralStyle}"
+                    IsCancel="True" />
+        </DockPanel>
     </Grid>
 </Window>
