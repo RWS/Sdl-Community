@@ -1,6 +1,5 @@
 ﻿using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.Community.DeepLMTProvider.Notifications.Views;
-using Sdl.Community.DeepLMTProvider.Service;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.Desktop.IntegrationApi.Notifications.Events;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -18,7 +17,13 @@ namespace Sdl.Community.DeepLMTProvider.Notifications
         {
             Key = NotificationGroupKey,
             Title = NotificationGroupKey,
-            Notifications = []
+            Notifications = [],
+            IsActionVisible = true,
+            Action = new NotificationCommand(ClearNotificationGroupAction)
+            {
+                CommandToolTip = "Dismiss DeepL error messages",
+                CommandIcon = PluginResources.dismiss_icon
+            }
         };
 
         private static IStudioEventAggregator StudioEventAggregator
@@ -37,18 +42,21 @@ namespace Sdl.Community.DeepLMTProvider.Notifications
         {
             var newGuid = Guid.NewGuid();
             var firstError = errorMessages.FirstOrDefault();
+            var singleError = errorMessages.Count == 1;
+            var title = singleError ? "Error" : "One or more errors occured";
             var notification = new Notification
             {
                 Id = newGuid,
                 AlwaysVisibleDetails = [$"Segment {firstError?.Id}: {firstError?.Message}"],
+                Title = title,
                 AllowsUserToDismiss = true,
-                IsLinkVisible = true
+                IsLinkVisible = !singleError,
             };
             notification.ClearNotificationAction = new NotificationCommand(() => ClearNotificationAction(notification));
             notification.LinkAction = new NotificationCommand(() => ShowAllErrors(errorMessages, notification))
             {
                 CommandText = "Show all errors",
-                CommandToolTip = "Show all errors"
+                CommandToolTip = "Show all errors",
             };
 
             NotificationGroup.Notifications.Add(notification);
@@ -62,6 +70,12 @@ namespace Sdl.Community.DeepLMTProvider.Notifications
             NotificationGroup.Notifications.Remove(notififcation);
             StudioEventAggregator.Publish(
                 new RemoveStudioNotificationFromGroupEvent(NotificationGroupKey, notififcation.Id));
+        }
+
+        private static void ClearNotificationGroupAction()
+        {
+            NotificationGroup.Notifications.Clear();
+            StudioEventAggregator.Publish(new RemoveStudioGroupNotificationEvent(NotificationGroupKey));
         }
 
         private static void ShowAllErrors(List<ErrorItem> errorMessages, Notification notification)

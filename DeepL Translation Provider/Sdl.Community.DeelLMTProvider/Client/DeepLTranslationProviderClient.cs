@@ -143,7 +143,6 @@ namespace Sdl.Community.DeepLMTProvider.Client
         {
             var targetLanguage = GetLanguage(languageDirection.TargetCulture, SupportedTargetLanguages, true);
             var sourceLanguage = GetLanguage(languageDirection.SourceCulture, SupportedSourceLanguages);
-            var translatedText = string.Empty;
 
             string errorMessage = null;
             try
