@@ -80,8 +80,14 @@ namespace Sdl.Community.DeepLMTProvider.Notifications
 
         private static void ShowAllErrors(List<ErrorItem> errorMessages, Notification notification)
         {
-            //ClearNotificationAction(notification);
-            var messageService = new ErrorsWindow(errorMessages);
+            // Sanitize error messages to prevent null key exceptions in DataGrid
+            var sanitizedErrorMessages = errorMessages?.Select(error => new ErrorItem
+            {
+                Id = error?.Id ?? "N/A", // Provide default value for null Ids
+                Message = error?.Message ?? "N/A" // Provide default value for null Messages
+            }).ToList() ?? new List<ErrorItem>();
+
+            var messageService = new ErrorsWindow(sanitizedErrorMessages);
             messageService.ShowDialog();
         }
     }

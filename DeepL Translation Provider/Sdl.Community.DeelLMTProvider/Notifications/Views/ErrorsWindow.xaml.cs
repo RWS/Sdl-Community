@@ -1,11 +1,11 @@
-﻿using Sdl.Community.DeepLMTProvider.Model;
+﻿using Microsoft.Win32;
+using Sdl.Community.DeepLMTProvider.Model;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
-using Microsoft.Win32;
 
 namespace Sdl.Community.DeepLMTProvider.Notifications.Views
 {
@@ -24,17 +24,19 @@ namespace Sdl.Community.DeepLMTProvider.Notifications.Views
 
         private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (sender is System.Windows.Controls.DataGrid dataGrid && dataGrid.SelectedItem is ErrorItem selectedError)
-            {
-                var detailsMessage = $"Error Details:\n\n" +
-                                     $"Segment ID: {selectedError.Id ?? "N/A"}\n\n" +
-                                     $"Error Message:\n{selectedError.Message ?? "N/A"}";
+            if (sender is not System.Windows.Controls.DataGrid { SelectedItem: ErrorItem selectedError }) return;
 
-                MessageBox.Show(detailsMessage, 
-                               "Error Details", 
-                               MessageBoxButton.OK, 
-                               MessageBoxImage.Information);
-            }
+            var detailsMessage = $"{selectedError.Message ?? "N/A"}";
+
+            var caption = !string.IsNullOrWhiteSpace(selectedError.Id)
+                ? $"Segment {selectedError.Id} errors"
+                : "Errors";
+
+            var errorDetailsWindow = new ErrorDetailsWindow(caption, detailsMessage)
+            {
+                Owner = this
+            };
+            errorDetailsWindow.ShowDialog();
         }
 
         private void ExportErrors_Click(object sender, RoutedEventArgs e)
@@ -51,16 +53,16 @@ namespace Sdl.Community.DeepLMTProvider.Notifications.Views
                 try
                 {
                     ExportErrorsToFile(saveFileDialog.FileName);
-                    MessageBox.Show($"Errors exported successfully to:\n{saveFileDialog.FileName}", 
-                                    "Export Complete", 
-                                    MessageBoxButton.OK, 
+                    MessageBox.Show($"Errors exported successfully to:\n{saveFileDialog.FileName}",
+                                    "Export Complete",
+                                    MessageBoxButton.OK,
                                     MessageBoxImage.Information);
                 }
                 catch (System.Exception ex)
                 {
-                    MessageBox.Show($"Failed to export errors:\n{ex.Message}", 
-                                    "Export Error", 
-                                    MessageBoxButton.OK, 
+                    MessageBox.Show($"Failed to export errors:\n{ex.Message}",
+                                    "Export Error",
+                                    MessageBoxButton.OK,
                                     MessageBoxImage.Error);
                 }
             }
