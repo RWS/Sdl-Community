@@ -25,17 +25,17 @@ namespace Sdl.Community.DeepLMTProvider.Notifications.Views
         private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (sender is not System.Windows.Controls.DataGrid { SelectedItem: ErrorItem selectedError }) return;
+            ShowError(selectedError);
+        }
 
+        public static void ShowError(ErrorItem selectedError)
+        {
             var detailsMessage = $"{selectedError.Message ?? "N/A"}";
 
-            var caption = !string.IsNullOrWhiteSpace(selectedError.Id)
-                ? $"Segment {selectedError.Id} errors"
-                : "Errors";
+            var caption = $"Segment {selectedError.Id} errors";
+                
 
-            var errorDetailsWindow = new ErrorDetailsWindow(caption, detailsMessage)
-            {
-                Owner = this
-            };
+            var errorDetailsWindow = new ErrorDetailsWindow(caption, detailsMessage);
             errorDetailsWindow.ShowDialog();
         }
 

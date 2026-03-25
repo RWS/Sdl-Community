@@ -13,6 +13,8 @@ namespace Sdl.Community.DeepLMTProvider.Notifications
     {
         public static string NotificationGroupKey = $"{PluginResources.Plugin_Name} pre-translate task errors";
 
+        public static List<ErrorItem> ErrorMessages { get; set; } = [];
+
         private static NotificationGroup NotificationGroup { get; } = new()
         {
             Key = NotificationGroupKey,
@@ -40,9 +42,10 @@ namespace Sdl.Community.DeepLMTProvider.Notifications
 
         public static void Show(List<ErrorItem> errorMessages)
         {
+            ErrorMessages.AddRange(errorMessages);
             var newGuid = Guid.NewGuid();
-            var firstError = errorMessages.FirstOrDefault();
-            var singleError = errorMessages.Count == 1;
+            var firstError = errorMessages.LastOrDefault();
+            var singleError = ErrorMessages.Count == 1;
             var title = singleError ? "Error" : "One or more errors occured";
             var notification = new Notification
             {
@@ -50,16 +53,24 @@ namespace Sdl.Community.DeepLMTProvider.Notifications
                 AlwaysVisibleDetails = [$"Segment {firstError?.Id}: {firstError?.Message}"],
                 Title = title,
                 AllowsUserToDismiss = true,
-                IsLinkVisible = !singleError,
+                IsLinkVisible = true,
             };
-            notification.ClearNotificationAction = new NotificationCommand(() => ClearNotificationAction(notification));
-            notification.LinkAction = new NotificationCommand(() => ShowAllErrors(errorMessages, notification))
+            notification.ClearNotificationAction = new NotificationCommand(() => ClearNotificationAction(notification))
             {
-                CommandText = "Show all errors",
-                CommandToolTip = "Show all errors",
+                CommandToolTip = "Dismiss DeepL error messages",
+            };
+            var linkAction = new NotificationCommand(
+                singleError
+                    ? () => ShowErrorDetails(errorMessages.FirstOrDefault())
+                    : () => ShowAllErrors(ErrorMessages))
+            {
+                CommandText = "Show more",
+                CommandToolTip = "Show more",
             };
 
-            NotificationGroup.Notifications.Add(notification);
+            notification.LinkAction = linkAction;
+
+            NotificationGroup.Notifications = [notification];
 
             AddStudioGroupNotificationEvent groupEvent = new(NotificationGroup);
             StudioEventAggregator?.Publish(groupEvent);
@@ -67,6 +78,7 @@ namespace Sdl.Community.DeepLMTProvider.Notifications
 
         private static void ClearNotificationAction(Notification notififcation)
         {
+            ErrorMessages.Clear();
             NotificationGroup.Notifications.Remove(notififcation);
             StudioEventAggregator.Publish(
                 new RemoveStudioNotificationFromGroupEvent(NotificationGroupKey, notififcation.Id));
@@ -74,21 +86,23 @@ namespace Sdl.Community.DeepLMTProvider.Notifications
 
         private static void ClearNotificationGroupAction()
         {
+            ErrorMessages.Clear();
             NotificationGroup.Notifications.Clear();
             StudioEventAggregator.Publish(new RemoveStudioGroupNotificationEvent(NotificationGroupKey));
         }
 
-        private static void ShowAllErrors(List<ErrorItem> errorMessages, Notification notification)
+        private static void ShowAllErrors(List<ErrorItem> errorMessages)
         {
-            // Sanitize error messages to prevent null key exceptions in DataGrid
             var sanitizedErrorMessages = errorMessages?.Select(error => new ErrorItem
             {
-                Id = error?.Id ?? "N/A", // Provide default value for null Ids
-                Message = error?.Message ?? "N/A" // Provide default value for null Messages
-            }).ToList() ?? new List<ErrorItem>();
+                Id = error.Id,
+                Message = error.Message ?? "N/A"
+            }).ToList() ?? [];
 
             var messageService = new ErrorsWindow(sanitizedErrorMessages);
             messageService.ShowDialog();
         }
+
+        private static void ShowErrorDetails(ErrorItem error) => ErrorsWindow.ShowError(error);
     }
 }

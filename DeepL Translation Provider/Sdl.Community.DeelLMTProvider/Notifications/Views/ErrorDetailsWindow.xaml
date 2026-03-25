@@ -41,7 +41,7 @@
                     <!-- Error Text -->
                     <ScrollViewer Grid.Column="1"
                                   VerticalScrollBarVisibility="Auto" 
-                                  HorizontalScrollBarVisibility="Auto">
+                                  HorizontalScrollBarVisibility="Disabled">
                         <TextBlock Text="{Binding ErrorMessage}" 
                                    TextWrapping="Wrap"
                                    FontFamily="Segoe UI"

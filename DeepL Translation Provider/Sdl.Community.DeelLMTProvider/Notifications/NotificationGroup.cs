@@ -1,4 +1,6 @@
-﻿using Sdl.Desktop.IntegrationApi.Interfaces;
+﻿using Sdl.Community.DeepLMTProvider.Model;
+using Sdl.Desktop.IntegrationApi.Interfaces;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace Sdl.Community.DeepLMTProvider.Notifications

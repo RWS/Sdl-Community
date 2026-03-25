@@ -12,7 +12,6 @@ namespace Sdl.Community.DeepLMTProvider.Notifications
         public Icon CommandIcon { get; set; }
         public string CommandText { get; set; }
         public string CommandToolTip { get; set; }
-        public List<string> ErrorMessages { get; set; }
         private Action Action { get; } = action;
 
         public bool CanExecute(object parameter) => true;

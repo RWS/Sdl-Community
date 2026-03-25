@@ -82,6 +82,7 @@
                       CanUserDeleteRows="False"
                       Margin="10"
                       Grid.Row="2"
+                      CanUserSortColumns="True"
                       BorderBrush="LightGray"
                       BorderThickness="0.5 0.7 0.6 0.6"
                       CanUserAddRows="False"

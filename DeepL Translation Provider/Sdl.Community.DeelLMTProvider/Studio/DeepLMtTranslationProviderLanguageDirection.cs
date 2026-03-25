@@ -259,17 +259,22 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                     segment.TranslationUnit.ConfirmationLevel != ConfirmationLevel.Unspecified) return;
 
                 //var (translation, errorMessage) = LookupDeepL(segment.SourceText);
-                var (translation, errorMessage) = ("Translation", "Error");
+                var (translation, errorMessage) = ("", "LookupDeepL(segment.SourceText)LookupDeepL(segment.SourceText)LookupDeepL(segment.SourceText)LookupDeepL(segment.SourceText)LookupDeepL(segment.SourceText)LookupDeepL(segment.SourceText)LookupDeepL(segment.SourceText)");
                 //segment.PlainTranslation = translation;
                 if (errorMessage is not null)
                     errorMessages.Add(new ErrorItem
                     {
-                        Id = segment.TranslationUnit.DocumentSegmentPair.Properties.Id.ToString(),
+                        Id = int.Parse(segment.TranslationUnit.DocumentSegmentPair.Properties.Id.ToString()),
                         Message = errorMessage
                     });
             });
 
-            if (errorMessages.Any()) NotificationService.Show(errorMessages);
+            if (errorMessages.Any())
+            {
+                var errorItems = errorMessages.OrderBy(em=>em.Id).ToList();
+                NotificationService.Show(errorItems);
+            }
+
             return  preTranslateSegments;
         }
     }
