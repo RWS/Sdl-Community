@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 
-namespace Sdl.Community.DeepLMTProvider.Notifications.Views
+namespace Sdl.Community.DeepLMTProvider.Notifications.UI
 {
     /// <summary>
     /// Interaction logic for ErrorDetailsWindow.xaml

@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Input;
 
-namespace Sdl.Community.DeepLMTProvider.Notifications.Views
+namespace Sdl.Community.DeepLMTProvider.Notifications.UI
 {
     /// <summary>
     /// Interaction logic for ErrorsWindow.xaml

@@ -1,5 +1,5 @@
 ﻿using Sdl.Community.DeepLMTProvider.Model;
-using Sdl.Community.DeepLMTProvider.Notifications.Views;
+using Sdl.Community.DeepLMTProvider.Notifications.UI;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.Desktop.IntegrationApi.Notifications.Events;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
