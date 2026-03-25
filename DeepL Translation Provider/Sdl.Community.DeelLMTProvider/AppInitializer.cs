@@ -16,7 +16,7 @@ namespace Sdl.Community.DeepLMTProvider
         {
             Client.Timeout = TimeSpan.FromMinutes(5);
             var pluginVersion = GetPluginVersion();
-            Client.DefaultRequestHeaders.Add("Trace-ID", $"Trados Studio 2022 /plugin {pluginVersion}");
+            Client.DefaultRequestHeaders.Add("Trace-ID", $"Trados Studio 2026 /plugin {pluginVersion}");
         }
 
         private static string GetPluginVersion()

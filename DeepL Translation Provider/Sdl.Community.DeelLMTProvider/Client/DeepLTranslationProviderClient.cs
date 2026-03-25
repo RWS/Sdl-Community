@@ -139,12 +139,12 @@ namespace Sdl.Community.DeepLMTProvider.Client
             return !string.IsNullOrEmpty(supportedSourceLanguage) && !string.IsNullOrEmpty(supportedTargetLanguage);
         }
 
-        public string Translate(LanguagePair languageDirection, string sourceText, DeepLSettings deepLSettings)
+        public (string Translation, string ErrorMessage) Translate(LanguagePair languageDirection, string sourceText, DeepLSettings deepLSettings)
         {
             var targetLanguage = GetLanguage(languageDirection.TargetCulture, SupportedTargetLanguages, true);
             var sourceLanguage = GetLanguage(languageDirection.SourceCulture, SupportedSourceLanguages);
-            var translatedText = string.Empty;
 
+            string errorMessage = null;
             try
             {
                 var modelType = deepLSettings.ModelType == ModelType.Not_Supported
@@ -182,29 +182,24 @@ namespace Sdl.Community.DeepLMTProvider.Client
                 var translationResponse = response.Content?.ReadAsStringAsync().Result;
 
                 if (!response.IsSuccessStatusCode)
-                    throw new Exception(!string.IsNullOrWhiteSpace(translationResponse) ? translationResponse : response.ReasonPhrase);
+                    return
+                    (
+                        null,
+                        !string.IsNullOrWhiteSpace(translationResponse) ? translationResponse : response.ReasonPhrase
+                    );
 
                 var translatedObject = JsonConvert.DeserializeObject<TranslationResponse>(translationResponse);
 
                 if (translatedObject != null && translatedObject.Translations.Any())
-                {
-                    translatedText = translatedObject.Translations[0].Text;
-                }
-            }
-            catch (AggregateException aEx)
-            {
-                foreach (var innerEx in aEx.InnerExceptions)
-                {
-                    Logger.Error(innerEx);
-                }
+                    return (translatedObject.Translations[0].Text, null);
             }
             catch (Exception ex)
             {
-                Logger.Error(ex);
-                throw;
+                if (ex is AggregateException aEx) ex = aEx.InnerException;
+                errorMessage = ex?.Message;
             }
 
-            return translatedText;
+            return (null, errorMessage);
         }
 
         private static void ApplyDeepLRestrictions(DeeplRequestParameters deeplRequestParameters)
