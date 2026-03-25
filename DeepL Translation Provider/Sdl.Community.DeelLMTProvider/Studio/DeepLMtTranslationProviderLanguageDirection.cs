@@ -258,9 +258,8 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                 if (!_options.ResendDraft &&
                     segment.TranslationUnit.ConfirmationLevel != ConfirmationLevel.Unspecified) return;
 
-                //var (translation, errorMessage) = LookupDeepL(segment.SourceText);
-                var (translation, errorMessage) = ("", "LookupDeepL(segment.SourceText)LookupDeepL(segment.SourceText)LookupDeepL(segment.SourceText)LookupDeepL(segment.SourceText)LookupDeepL(segment.SourceText)LookupDeepL(segment.SourceText)LookupDeepL(segment.SourceText)");
-                //segment.PlainTranslation = translation;
+                var (translation, errorMessage) = LookupDeepL(segment.SourceText);
+                segment.PlainTranslation = translation;
                 if (errorMessage is not null)
                     errorMessages.Add(new ErrorItem
                     {
