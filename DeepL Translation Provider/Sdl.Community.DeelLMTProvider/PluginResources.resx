@@ -236,4 +236,7 @@ The formatting aspects affected by this setting include:
   <data name="GlossariesNotSupported" xml:space="preserve">
     <value>Not supported</value>
   </data>
+  <data name="dismiss_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\dismiss_icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
