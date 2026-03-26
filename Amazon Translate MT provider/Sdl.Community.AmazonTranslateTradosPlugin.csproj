@@ -86,7 +86,7 @@
 		</Content>
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="AWSSDK.Translate" Version="4.0.0.4" />
+		<PackageReference Include="AWSSDK.Translate" Version="4.0.1.18" />
 		<PackageReference Include="Sdl.Core.PluginFramework">
 			<Version>2.1.0</Version>
 		</PackageReference>
