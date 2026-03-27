@@ -312,30 +312,41 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                 return;
 
             var validationErrors = new List<string>();
+            var validationInfos = new List<string>(); // For informational messages about language fallbacks
             var languagePair = options.LanguagePair;
 
             try
             {
-                // Get DeepL language codes (uppercase format)
-                var sourceLanguageCode = GetDeepLLanguageCode(languagePair.SourceCulture);
-                var targetLanguageCode = GetDeepLLanguageCode(languagePair.TargetCulture);
+                // Get DeepL language codes with fallback information - pass source/target info
+                var (sourceLanguageCode, isSourceFallback, sourceFallbackMessage) = GetDeepLLanguageCodeWithFallbackInfo(languagePair.SourceCulture, isSourceLanguage: true);
+                var (targetLanguageCode, isTargetFallback, targetFallbackMessage) = GetDeepLLanguageCodeWithFallbackInfo(languagePair.TargetCulture, isSourceLanguage: false);
 
-                // Validate source language support
+                // Add fallback information messages
+                if (isSourceFallback && !string.IsNullOrEmpty(sourceFallbackMessage))
+                {
+                    validationInfos.Add($"ℹ️ {sourceFallbackMessage}");
+                }
+                if (isTargetFallback && !string.IsNullOrEmpty(targetFallbackMessage))
+                {
+                    validationInfos.Add($"ℹ️ {targetFallbackMessage}");
+                }
+
+                // Validate source language support for translate_text product
                 var isSourceSupported = await LanguageClientV3.IsLanguageSupportedAsync(
-                    sourceLanguageCode, "source", ApiKey, Constants.BaseUrlV3);
+                    sourceLanguageCode, "source", ApiKey, Constants.BaseUrlV3, "translate_text");
 
                 if (!isSourceSupported)
                 {
-                    validationErrors.Add($"Source language '{languagePair.SourceCulture}' ({sourceLanguageCode}) is not supported by DeepL V3 API.");
+                    validationErrors.Add($"Source language '{languagePair.SourceCulture}' ({sourceLanguageCode}) is not supported by DeepL V3 API for text translation.");
                 }
 
-                // Validate target language support  
+                // Validate target language support for translate_text product
                 var isTargetSupported = await LanguageClientV3.IsLanguageSupportedAsync(
-                    targetLanguageCode, "target", ApiKey, Constants.BaseUrlV3);
+                    targetLanguageCode, "target", ApiKey, Constants.BaseUrlV3, "translate_text");
 
                 if (!isTargetSupported)
                 {
-                    validationErrors.Add($"Target language '{languagePair.TargetCulture}' ({targetLanguageCode}) is not supported by DeepL V3 API.");
+                    validationErrors.Add($"Target language '{languagePair.TargetCulture}' ({targetLanguageCode}) is not supported by DeepL V3 API for text translation.");
                 }
 
                 // If both languages are supported, validate specific settings
@@ -343,20 +354,26 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                 {
                     await ValidateLanguageSpecificSettings(options, sourceLanguageCode, targetLanguageCode, validationErrors);
                 }
+
+                // Combine validation errors and info messages
+                var allMessages = new List<string>();
+                allMessages.AddRange(validationInfos); // Add info messages first
+                allMessages.AddRange(validationErrors); // Then add errors
+
+                // Store validation results
+                if (allMessages.Any())
+                {
+                    _languagePairValidationErrors[languagePair] = allMessages;
+                }
+                else
+                {
+                    _languagePairValidationErrors.Remove(languagePair);
+                }
             }
             catch (Exception ex)
             {
                 validationErrors.Add($"Unable to validate language pair settings: {ex.Message}");
-            }
-
-            // Store validation results
-            if (validationErrors.Any())
-            {
                 _languagePairValidationErrors[languagePair] = validationErrors;
-            }
-            else
-            {
-                _languagePairValidationErrors.Remove(languagePair);
             }
         }
 
@@ -364,26 +381,30 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         {
             try
             {
-                // Get target language metadata to check formality support
-                var targetLanguageMetadata = await LanguageClientV3.GetLanguageMetadataAsync(
-                    targetLanguageCode, "target", ApiKey, Constants.BaseUrlV3);
+                System.Diagnostics.Debug.WriteLine($"[DeepL Validation] Validating source: '{sourceLanguageCode}', target: '{targetLanguageCode}'");
+
+                // Get target language metadata to check formality support for translate_text
+                var targetLanguageInfo = await LanguageClientV3.GetLanguageV3InfoAsync(
+                    targetLanguageCode, "translate_text", ApiKey, Constants.BaseUrlV3);
 
                 // Validate formality setting
                 if (options.Formality != Formality.Not_Supported && options.Formality != Formality.Default)
                 {
-                    if (targetLanguageMetadata?.SupportsOptions != true)
+                    if (targetLanguageInfo?.Features?.Contains("formality") != true)
                     {
                         validationErrors.Add($"Formality settings are not supported for target language '{options.LanguagePair.TargetCulture}' in DeepL V3 API.");
                     }
                 }
 
-                // Validate model type setting
+                // Validate model type setting (check if advanced features are supported)
                 if (options.ModelType != ModelType.Not_Supported && options.ModelType != ModelType.Prefer_Quality_Optimized)
                 {
-                    var sourceLanguageMetadata = await LanguageClientV3.GetLanguageMetadataAsync(
-                        sourceLanguageCode, "source", ApiKey, Constants.BaseUrlV3);
+                    var sourceLanguageInfo = await LanguageClientV3.GetLanguageV3InfoAsync(
+                        sourceLanguageCode, "translate_text", ApiKey, Constants.BaseUrlV3);
 
-                    if (sourceLanguageMetadata?.SupportsOptions != true || targetLanguageMetadata?.SupportsOptions != true)
+                    // Check if either source or target doesn't support advanced features like tag_handling
+                    if (sourceLanguageInfo?.Features?.Contains("tag_handling") != true || 
+                        targetLanguageInfo?.Features?.Contains("tag_handling") != true)
                     {
                         validationErrors.Add($"Advanced model types are not supported for this language pair in DeepL V3 API. Only quality-optimized models are available.");
                     }
@@ -394,37 +415,75 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                     options.SelectedGlossary.Name != PluginResources.NoGlossary && 
                     options.SelectedGlossary != GlossaryInfo.NotSupported)
                 {
-                    // Check if glossaries are supported for this language pair
-                    if (targetLanguageMetadata?.SupportsOptions != true)
+                    // Check if glossaries are supported for this language pair using the glossary product
+                    var sourceGlossaryInfo = await LanguageClientV3.GetLanguageV3InfoAsync(
+                        sourceLanguageCode, "glossary", ApiKey, Constants.BaseUrlV3);
+                    var targetGlossaryInfo = await LanguageClientV3.GetLanguageV3InfoAsync(
+                        targetLanguageCode, "glossary", ApiKey, Constants.BaseUrlV3);
+
+                    if (!sourceGlossaryInfo?.UsableAsSource == true || !targetGlossaryInfo?.UsableAsTarget == true)
                     {
-                        validationErrors.Add($"Glossaries are not supported for target language '{options.LanguagePair.TargetCulture}' in DeepL V3 API.");
+                        validationErrors.Add($"Glossaries are not supported for this language pair '{options.LanguagePair.SourceCulture}' → '{options.LanguagePair.TargetCulture}' in DeepL V3 API.");
                     }
                 }
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"[DeepL Validation] Error validating language codes '{sourceLanguageCode}' / '{targetLanguageCode}': {ex.Message}");
                 validationErrors.Add($"Unable to validate language-specific settings: {ex.Message}");
             }
         }
 
-        private string GetDeepLLanguageCode(Sdl.Core.Globalization.CultureCode cultureCode)
+        private (string languageCode, bool isFallback, string fallbackMessage) GetDeepLLanguageCodeWithFallbackInfo(Sdl.Core.Globalization.CultureCode cultureCode, bool isSourceLanguage = false)
         {
             // Convert culture code to DeepL language code format  
             var cultureName = cultureCode.Name.ToUpperInvariant();
-            var regionNeutralName = cultureCode.RegionNeutralName.ToUpperInvariant();
+            var regionNeutralName = cultureCode.RegionNeutralName.ToLowerInvariant(); // DeepL typically uses lowercase
 
-            // Handle specific language variants that DeepL recognizes
-            return cultureName switch
+            // For source languages, DeepL V3 API often only supports generic language codes
+            // For target languages, it supports specific variants
+            var (result, isFallback, fallbackMessage) = cultureName switch
             {
-                "EN-US" => "EN-US",
-                "EN-GB" => "EN-GB", 
-                "PT-BR" => "PT-BR",
-                "PT-PT" => "PT-PT",
-                "ES-419" => "ES-419",
-                "ZH-CN" or "ZH-HANS" => "ZH-HANS",
-                "ZH-TW" or "ZH-HANT" => "ZH-HANT",
-                _ => regionNeutralName
+                // English variants - only supported as target languages
+                "EN-US" when !isSourceLanguage => ("en-US", false, null),
+                "EN-GB" when !isSourceLanguage => ("en-GB", false, null),
+                "EN-US" or "EN-GB" when isSourceLanguage => 
+                    ("en", true, $"English variant '{cultureName}' will use generic 'en' for source language (variants only supported as target)"),
+
+                // Portuguese variants - only supported as target languages
+                "PT-BR" when !isSourceLanguage => ("pt-BR", false, null),
+                "PT-PT" when !isSourceLanguage => ("pt-PT", false, null),
+                "PT-BR" or "PT-PT" when isSourceLanguage => 
+                    ("pt", true, $"Portuguese variant '{cultureName}' will use generic 'pt' for source language (variants only supported as target)"),
+
+                // Spanish variants
+                "ES-419" when !isSourceLanguage => ("es-419", false, null),
+                "ES-419" when isSourceLanguage => 
+                    ("es", true, "Latin American Spanish (es-419) will use generic Spanish (es) for source language"),
+
+                // Chinese variants - only supported as target languages
+                "ZH-CN" or "ZH-HANS" when !isSourceLanguage => ("zh-Hans", false, null),
+                "ZH-TW" or "ZH-HANT" when !isSourceLanguage => ("zh-Hant", false, null),
+                "ZH-CN" or "ZH-HANS" or "ZH-TW" or "ZH-HANT" when isSourceLanguage => 
+                    ("zh", true, $"Chinese variant '{cultureName}' will use generic 'zh' for source language (variants only supported as target)"),
+
+                // For regional variants that don't have specific DeepL support, fall back to generic
+                _ when cultureName != regionNeutralName.ToUpperInvariant() => 
+                    (regionNeutralName, true, $"Regional variant '{cultureCode.Name}' will use generic '{regionNeutralName}' language code"),
+
+                // Generic languages use as-is
+                _ => (regionNeutralName, false, null)
             };
+
+            // Debug logging to help identify conversion issues
+            System.Diagnostics.Debug.WriteLine($"[DeepL] Converting culture '{cultureCode.Name}' (regionNeutral: '{cultureCode.RegionNeutralName}') to DeepL code: '{result}' (fallback: {isFallback}, isSource: {isSourceLanguage})");
+
+            return (result, isFallback, fallbackMessage);
+        }
+
+        private string GetDeepLLanguageCode(Sdl.Core.Globalization.CultureCode cultureCode, bool isSourceLanguage = false)
+        {
+            return GetDeepLLanguageCodeWithFallbackInfo(cultureCode, isSourceLanguage).languageCode;
         }
 
         private void UpdateValidationMessages()
@@ -436,19 +495,45 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             }
 
             var messageBuilder = new StringBuilder();
-            messageBuilder.AppendLine("⚠️ Language Pair Compatibility Issues:");
+
+            // Check if we have any actual errors (not just informational messages)
+            bool hasActualErrors = _languagePairValidationErrors.Values
+                .Any(messages => messages.Any(msg => !msg.StartsWith("ℹ️")));
+
+            if (hasActualErrors)
+            {
+                messageBuilder.AppendLine("⚠️ Language Pair Compatibility Issues:");
+            }
+            else
+            {
+                messageBuilder.AppendLine("ℹ️ Language Configuration Information:");
+            }
+
             messageBuilder.AppendLine();
 
             foreach (var kvp in _languagePairValidationErrors)
             {
                 var languagePair = kvp.Key;
-                var errors = kvp.Value;
+                var messages = kvp.Value;
 
                 messageBuilder.AppendLine($"• {languagePair.SourceCulture} → {languagePair.TargetCulture}:");
-                foreach (var error in errors)
+
+                // Separate info messages from errors
+                var infoMessages = messages.Where(msg => msg.StartsWith("ℹ️")).ToList();
+                var errorMessages = messages.Where(msg => !msg.StartsWith("ℹ️")).ToList();
+
+                // Display info messages first
+                foreach (var info in infoMessages)
+                {
+                    messageBuilder.AppendLine($"  {info}");
+                }
+
+                // Then display errors
+                foreach (var error in errorMessages)
                 {
                     messageBuilder.AppendLine($"  - {error}");
                 }
+
                 messageBuilder.AppendLine();
             }
 
