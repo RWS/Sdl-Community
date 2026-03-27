@@ -251,11 +251,9 @@ namespace Sdl.Community.DeepLMTProvider.Client
                     ContractResolver = new CamelCasePropertyNamesContractResolver()
                 });
 
-            var content = new StringContent(requestJson, Encoding.UTF8, "application/json");
-
             var request = new HttpRequestMessage
             {
-                Content = content,
+                Content = new StringContent(requestJson, Encoding.UTF8, "application/json"),
                 Method = HttpMethod.Post,
                 RequestUri = new Uri($"{ChosenBaseUrl}/translate")
             };
