@@ -16,42 +16,17 @@ pr:
      - Multilingual Excel FileType/*
 
 variables: 
-- group: 'MultilingualExcelFileTypeSonarVersion'
 - template: build/branch-variables.yml@AppStoreApplicationsRepo
 - name: buildPlatform 
   value: 'Any CPU'
 - name: buildConfiguration
   value: 'Release'
-- name: pathToPublish
-  value: '$(PluginPath)\Multilingual.Excel.FileType.sdlplugin'
 - name: solution
   value: '**/Multilingual.Excel.FileType.sln'
-- name : SonarID
-  value : Multilingual_Excel_File_Type
-- name : SonarName
-  value : 'Multilingual_Excel_File_Type'
-- name : ProjectVersion
-  value : $[counter(variables['Version.Patch'], 1)]
 
 pool:
   vmImage: '$(DefaultBuildVm)'
 
 steps:
-  - task: SonarCloudPrepare@3
-    inputs:
-      SonarCloud: 'AppStorePlugins-ServiceConnection'
-      organization: 'sdl'
-      scannerMode: 'dotnet'
-      projectKey: $(SonarId)
-      projectName: $(SonarName)
-      projectVersion: $(ProjectVersion)
   - template: build/jobs/build-sdlplugin.yml@AppStoreApplicationsRepo
   - template: build/jobs/publish-build-artifact-task.yml@AppStoreApplicationsRepo
-  - task: SonarCloudAnalyze@3
-    displayName: 'Run Code Analysis'
-
-  - task: SonarCloudPublish@3
-    inputs:
-      pollingTimeoutSec: '300'
-    displayName: 'Publish Quality Gate Result'
-
