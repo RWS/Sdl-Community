@@ -16,42 +16,16 @@ pr:
      - Language Weaver Provider/*
 
 variables: 
-- group: 'LanguageWeaver Version'
 - template: build/branch-variables.yml@AppStoreApplicationsRepo
 - name: buildPlatform 
   value: 'Any CPU'
 - name: buildConfiguration
   value: 'Release'
 - name: pathToPublish
-  value: '$(PluginPath)\LanguageWeaverProvider.sdlplugin'
-- name: solution
-  value: '**/LanguageWeaverProvider.sln'
-- name : SonarID
-  value : DeveloperExperience_LanguageWeaver
-- name : SonarName
-  value : 'Language Weaver Provider'
-- name : ProjectVersion
-  value : $[counter(variables['Version.Patch'], 1)]
 
 pool:
   vmImage: '$(DefaultBuildVm)'
 
 steps:
-  - task: SonarCloudPrepare@3
-    inputs:
-      SonarCloud: 'AppStorePlugins-ServiceConnection'
-      organization: 'sdl'
-      scannerMode: 'dotnet'
-      projectKey: $(SonarId)
-      projectName: $(SonarName)
-      projectVersion: $(ProjectVersion)
   - template: build/jobs/build-sdlplugin.yml@AppStoreApplicationsRepo
   - template: build/jobs/publish-build-artifact-task.yml@AppStoreApplicationsRepo
-  - task: SonarCloudAnalyze@3
-    displayName: 'Run Code Analysis'
-
-  - task: SonarCloudPublish@3
-    inputs:
-      pollingTimeoutSec: '300'
-    displayName: 'Publish Quality Gate Result'
-
