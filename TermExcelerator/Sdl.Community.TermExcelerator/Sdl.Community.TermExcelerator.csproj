@@ -4,7 +4,6 @@
 		<TargetFramework>net48</TargetFramework>
         <PlatformTarget>x64</PlatformTarget>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19beta</TradosFolder>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19beta\Plugins</PluginDeploymentPath>
 		<UseWPF>true</UseWPF>

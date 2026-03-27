@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.902
@@ -6,6 +6,11 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.GoogleApiValidator", "GoogleApiValidator\Sdl.Community.GoogleApiValidator.csproj", "{2DBA4D93-BCE3-4BDC-A020-757D707F68CF}"
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "GoogleApiValidator.Setup", "GoogleApiValidator.Setup\GoogleApiValidator.Setup.wixproj", "{AE5CC0E0-1F4F-4850-924A-879B959D1FB0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{83715433-1306-4961-9FD7-E4A344407E96}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2035
@@ -8,6 +8,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.ProjectTerms.Controls", "Sdl.Community.ProjectTerms.Controls\Sdl.Community.ProjectTerms.Controls.csproj", "{154A450E-3D19-42D3-AE88-E059729F647D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.ProjectTerms.Telemetry", "Sdl.Community.ProjectTerms.Telemetry\Sdl.Community.ProjectTerms.Telemetry.csproj", "{51E1B5AE-EB8D-4507-BCF1-CB3A2B7F1C41}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{662B24AA-BECF-4803-93A9-7689CF3E67F4}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

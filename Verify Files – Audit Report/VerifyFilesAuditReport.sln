@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
 VisualStudioVersion = 18.2.11415.280 d18.0
@@ -6,6 +6,11 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VerifyFilesAuditReport", "VerifyFilesAuditReport\VerifyFilesAuditReport.csproj", "{05BC1B65-1A18-46D6-9B93-8B61F61C2A56}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VerifyFilesAuditReport_Tests", "VerifyFilesAuditReport_Tests\VerifyFilesAuditReport_Tests.csproj", "{A1538D36-B176-48ED-88A5-7F7CE87FE3DC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9CCDB4DB-B290-43E1-A3A4-D8EE84275F49}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
