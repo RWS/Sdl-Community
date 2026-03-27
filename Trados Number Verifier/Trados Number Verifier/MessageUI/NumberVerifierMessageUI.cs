@@ -57,15 +57,10 @@ namespace Sdl.Community.Extended.MessageUI
 			var sourceText = new StringBuilder();
 			var targetText = new StringBuilder();
 
-			foreach (var item in targetSegment?.AllSubItems)
-			{
-				targetText.AppendFormat($"{item.ToString()} ");
-			}			
-			foreach (var item in sourceSegment?.AllSubItems)
-			{
-				sourceText.AppendFormat($"{item.ToString()} ");
-			}
-			target_richTextBox.Text = targetText.ToString();
+			foreach (var item in targetSegment.AllSubItems) targetText.Append($"{item} ");			
+            foreach (var item in sourceSegment.AllSubItems) sourceText.Append($"{item} ");
+
+            target_richTextBox.Text = targetText.ToString();
 			source_richTextBox.Text = sourceText.ToString();
 
 			_hasSegmentChanged = false;
