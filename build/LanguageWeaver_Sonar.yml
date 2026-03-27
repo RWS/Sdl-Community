@@ -22,6 +22,8 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: pathToPublish
+- name: solution
+  value: '**/LanguageWeaverProvider.sln'
 
 pool:
   vmImage: '$(DefaultBuildVm)'
