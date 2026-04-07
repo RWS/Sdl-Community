@@ -83,16 +83,6 @@ namespace Sdl.Community.DeepLMTProvider.Model
             set => SetField(ref field, value);
         } = true;
 
-        /// <summary>
-        /// Indicates whether this language pair supports styles in DeepL V3 API
-        /// </summary>
-        [JsonIgnore]
-        public bool SupportsStyles
-        {
-            get;
-            set => SetField(ref field, value);
-        } = true;
-
         public override string ToString() => $"{nameof(LanguagePairOptions)}";
 
         public IReadOnlyList<string> Apply(LanguagePairValidationResult result)
@@ -122,13 +112,6 @@ namespace Sdl.Community.DeepLMTProvider.Model
                 resetMessages.Add($"Glossaries are not supported for this language pair '{LanguagePair.SourceCulture}' → '{LanguagePair.TargetCulture}' - reset to no glossary.");
             }
 
-            SupportsStyles = result.SupportsStyles;
-            if (!result.SupportsStyles && SelectedStyle != null && SelectedStyle.Name != PluginResources.NoStyle)
-            {
-                SelectedStyle = Styles?.FirstOrDefault(s => s.Name == PluginResources.NoStyle);
-                resetMessages.Add($"Styles are not supported for target language '{LanguagePair.TargetCulture}' - reset to no style.");
-            }
-
             return resetMessages;
         }
 
@@ -137,7 +120,6 @@ namespace Sdl.Community.DeepLMTProvider.Model
             SupportsFormality = false;
             SupportsAdvancedModelTypes = false;
             SupportsGlossaries = false;
-            SupportsStyles = false;
         }
     }
 }

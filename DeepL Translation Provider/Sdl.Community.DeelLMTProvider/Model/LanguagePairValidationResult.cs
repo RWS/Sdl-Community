@@ -9,7 +9,6 @@ namespace Sdl.Community.DeepLMTProvider.Model
         public bool SupportsFormality { get; set; }
         public bool SupportsAdvancedModelTypes { get; set; }
         public bool SupportsGlossaries { get; set; }
-        public bool SupportsStyles { get; set; }
         public List<string> Messages { get; set; } = new();
     }
 }

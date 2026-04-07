@@ -45,9 +45,6 @@ namespace Sdl.Community.DeepLMTProvider.Service
             result.SupportsFormality = targetInfo?.Features?.Contains("formality") == true;
             result.SupportsAdvancedModelTypes = sourceInfo?.Features?.Contains("tag_handling") == true
                                              && targetInfo?.Features?.Contains("tag_handling") == true;
-            result.SupportsStyles = targetInfo?.Features?.Contains("writing_style") == true;
-
-            System.Diagnostics.Debug.WriteLine($"[DeepL Validation] Style check for '{targetCode}': supportsStyles={result.SupportsStyles} (writing_style feature present)");
 
             var sourceGlossaryInfo = await LanguageClientV3.GetLanguageV3InfoAsync(sourceCode, "glossary", apiKey, baseUrl);
             var targetGlossaryInfo = await LanguageClientV3.GetLanguageV3InfoAsync(targetCode, "glossary", apiKey, baseUrl);

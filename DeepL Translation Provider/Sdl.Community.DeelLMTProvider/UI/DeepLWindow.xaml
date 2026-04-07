@@ -384,32 +384,11 @@
 
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Grid>
-                                <ComboBox ItemsSource="{Binding Styles}"
-                                          Cursor="Hand"
-                                          HorizontalContentAlignment="Center"
-                                          SelectedItem="{Binding SelectedStyle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                          DisplayMemberPath="Name"
-                                          Visibility="{Binding SupportsStyles, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                                <TextBlock Text="Not supported"
-                                           VerticalAlignment="Center"
-                                           HorizontalAlignment="Center">
-                                    <TextBlock.Style>
-                                        <Style TargetType="TextBlock"
-                                               BasedOn="{StaticResource {x:Type TextBlock}}">
-                                            <Setter Property="Visibility"
-                                                    Value="Collapsed" />
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding SupportsStyles}"
-                                                             Value="False">
-                                                    <Setter Property="Visibility"
-                                                            Value="Visible" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
-                            </Grid>
+                            <ComboBox ItemsSource="{Binding Styles}"
+                                      Cursor="Hand"
+                                      HorizontalContentAlignment="Center"
+                                      SelectedItem="{Binding SelectedStyle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      DisplayMemberPath="Name" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

@@ -393,8 +393,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                 // Only validate specific properties that affect compatibility
                 if (e.PropertyName == "Formality" ||
                     e.PropertyName == "ModelType" ||
-                    e.PropertyName == "SelectedGlossary" ||
-                    e.PropertyName == "SelectedStyle")
+                    e.PropertyName == "SelectedGlossary")
                 {
                     await ValidateLanguagePairSettings(option);
                     UpdateValidationMessages();
