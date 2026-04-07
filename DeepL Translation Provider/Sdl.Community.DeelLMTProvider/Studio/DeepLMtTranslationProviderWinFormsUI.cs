@@ -93,7 +93,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                                                             TranslationProviderCredential credentials)
         {
             var deepLGlossaryClient = new DeepLGlossaryClient();
-            DeepLWindowViewModel = new DeepLWindowViewModel(options, deepLGlossaryClient, credentials, languagePairs, new MessageService());
+            DeepLWindowViewModel = new DeepLWindowViewModel(options, deepLGlossaryClient, credentials, languagePairs, new MessageService(), new LanguageValidationService());
             var dialog = new DeepLWindow(DeepLWindowViewModel);
 
             DeepLWindowViewModel.ManageGlossaries += ViewModel_ManageGlossaries;

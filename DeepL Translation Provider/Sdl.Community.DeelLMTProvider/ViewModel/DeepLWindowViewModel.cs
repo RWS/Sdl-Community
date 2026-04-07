@@ -23,25 +23,15 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 {
     public class DeepLWindowViewModel : ViewModel
     {
-        private string _apiKey;
-        private string _apiKeyValidationMessage;
-        private string _apiVersion;
-        private List<string> _ignoreTags;
         private ObservableCollection<LanguagePairOptions> _languagePairOptions = new();
-        private bool _preserveFormatting;
-        private bool _resendDraft;
-        private bool _sendPlainText;
-        private SplitSentences _splitSentencesType;
-        private TagFormat _tagType;
-        private string _validationMessages;
         private Dictionary<LanguagePair, List<string>> _languagePairValidationErrors = new();
-        private bool _isValidating;
 
-        public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, IDeepLGlossaryClient glossaryClient, IMessageService messageService)
+        public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, IDeepLGlossaryClient glossaryClient, IMessageService messageService, ILanguageValidationService languageValidationService)
         {
             IsTellMeAction = true;
             MessageService = messageService;
             GlossaryClient = glossaryClient;
+            LanguageValidationService = languageValidationService;
 
             var currentProject = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
             Title = $"{Title} - {currentProject.GetProjectInfo().Name}";
@@ -61,11 +51,12 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             LoadLanguagePairSettings();
         }
 
-        public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, IDeepLGlossaryClient glossaryClient, TranslationProviderCredential credentialStore, LanguagePair[] languagePairs, IMessageService messageService)
+        public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, IDeepLGlossaryClient glossaryClient, TranslationProviderCredential credentialStore, LanguagePair[] languagePairs, IMessageService messageService, ILanguageValidationService languageValidationService)
         {
             MessageService = messageService;
             LanguagePairs = languagePairs;
             GlossaryClient = glossaryClient;
+            LanguageValidationService = languageValidationService;
             IsTellMeAction = false;
 
             Options = deepLTranslationOptions;
@@ -88,10 +79,10 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         public string ApiKey
         {
-            get => _apiKey;
+            get;
             set
             {
-                SetField(ref _apiKey, value?.Trim());
+                SetField(ref field, value?.Trim());
                 PasswordChangedTimer.Enabled = true;
             }
         }
@@ -100,20 +91,20 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         public string ApiKeyValidationMessage
         {
-            get => _apiKeyValidationMessage;
+            get;
             set
             {
-                SetField(ref _apiKeyValidationMessage, value);
+                SetField(ref field, value);
                 OnPropertyChanged(nameof(OkCommand));
             }
         }
 
         public string ApiVersion
         {
-            get => _apiVersion;
+            get;
             set
             {
-                SetField(ref _apiVersion, value);
+                SetField(ref field, value);
                 OnPasswordChanged(null, null);
             }
         }
@@ -122,8 +113,8 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         public List<string> IgnoreTags
         {
-            get => _ignoreTags;
-            set => SetField(ref _ignoreTags, value);
+            get;
+            set => SetField(ref field, value);
         }
 
         public ObservableCollection<LanguagePairOptions> LanguagePairOptions
@@ -170,35 +161,35 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         public bool PreserveFormatting
         {
-            get => _preserveFormatting;
-            set => SetField(ref _preserveFormatting, value);
+            get;
+            set => SetField(ref field, value);
         }
 
         public bool ResendDraft
         {
-            get => _resendDraft;
-            set => SetField(ref _resendDraft, value);
+            get;
+            set => SetField(ref field, value);
         }
 
         public bool SendPlainText
         {
-            get => _sendPlainText;
-            set => SetField(ref _sendPlainText, value);
+            get;
+            set => SetField(ref field, value);
         }
 
         public SplitSentences SplitSentencesType
         {
-            get => _splitSentencesType;
-            set => SetField(ref _splitSentencesType, value);
+            get;
+            set => SetField(ref field, value);
         }
 
         public TagFormat TagType
         {
-            get => _tagType;
+            get;
             // Add a method here to update the splitsentencestype
             set
             {
-                SetField(ref _tagType, value);
+                SetField(ref field, value);
                 SplitSentencesType = GetDefaultSplitSentences(value);
             }
         }
@@ -207,18 +198,19 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         public string ValidationMessages
         {
-            get => _validationMessages;
-            set => SetField(ref _validationMessages, value);
+            get;
+            set => SetField(ref field, value);
         }
 
         public bool IsValidating
         {
-            get => _isValidating;
-            set => SetField(ref _isValidating, value);
+            get;
+            set => SetField(ref field, value);
         }
 
         private IDeepLGlossaryClient GlossaryClient { get; set; }
         private bool IsTellMeAction { get; }
+        private ILanguageValidationService LanguageValidationService { get; set; }
         private LanguagePair[] LanguagePairs { get; }
         private IMessageService MessageService { get; }
 
@@ -271,6 +263,13 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                         targetLangCode == style.Language?.ToLowerInvariant() || style.Name == PluginResources.NoStyle)
                     .ToList();
 
+                System.Diagnostics.Debug.WriteLine($"[DeepL] Language pair: {languagePair.SourceCulture} -> {languagePair.TargetCulture}, targetLangCode: '{targetLangCode}'");
+                System.Diagnostics.Debug.WriteLine($"[DeepL] All styles count: {allStyles.Count}, filtered styles for this language: {currentLanguageStyles.Count}");
+                foreach (var style in currentLanguageStyles)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[DeepL]   - Style: '{style.Name}', Language: '{style.Language}'");
+                }
+
                 var selectedStyle = currentLanguageStyles.FirstOrDefault(s => s.ID == languageSavedOptions?.SelectedStyle?.ID);
 
                 var formality = DeepLTranslationProviderClient.SupportsFormality(languagePair.TargetCulture)
@@ -311,179 +310,26 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             if (string.IsNullOrEmpty(ApiKey) || options?.LanguagePair == null)
                 return;
 
-            var validationErrors = new List<string>();
-            var validationInfos = new List<string>(); // For informational messages about language fallbacks
             var languagePair = options.LanguagePair;
 
             try
             {
-                // Get DeepL language codes with fallback information - pass source/target info
-                var (sourceLanguageCode, isSourceFallback, sourceFallbackMessage) = GetDeepLLanguageCodeWithFallbackInfo(languagePair.SourceCulture, isSourceLanguage: true);
-                var (targetLanguageCode, isTargetFallback, targetFallbackMessage) = GetDeepLLanguageCodeWithFallbackInfo(languagePair.TargetCulture, isSourceLanguage: false);
+                var result = await LanguageValidationService.ValidateAsync(languagePair, ApiKey, Constants.BaseUrlV3);
 
-                // Add fallback information messages
-                if (isSourceFallback && !string.IsNullOrEmpty(sourceFallbackMessage))
-                {
-                    validationInfos.Add($"ℹ️ {sourceFallbackMessage}");
-                }
-                if (isTargetFallback && !string.IsNullOrEmpty(targetFallbackMessage))
-                {
-                    validationInfos.Add($"ℹ️ {targetFallbackMessage}");
-                }
+                var allMessages = result.Messages.ToList();
+                if (result.IsSourceLanguageSupported && result.IsTargetLanguageSupported)
+                    allMessages.AddRange(options.Apply(result));
 
-                // Validate source language support for translate_text product
-                var isSourceSupported = await LanguageClientV3.IsLanguageSupportedAsync(
-                    sourceLanguageCode, "source", ApiKey, Constants.BaseUrlV3, "translate_text");
-
-                if (!isSourceSupported)
-                {
-                    validationErrors.Add($"Source language '{languagePair.SourceCulture}' ({sourceLanguageCode}) is not supported by DeepL V3 API for text translation.");
-                }
-
-                // Validate target language support for translate_text product
-                var isTargetSupported = await LanguageClientV3.IsLanguageSupportedAsync(
-                    targetLanguageCode, "target", ApiKey, Constants.BaseUrlV3, "translate_text");
-
-                if (!isTargetSupported)
-                {
-                    validationErrors.Add($"Target language '{languagePair.TargetCulture}' ({targetLanguageCode}) is not supported by DeepL V3 API for text translation.");
-                }
-
-                // If both languages are supported, validate specific settings
-                if (isSourceSupported && isTargetSupported)
-                {
-                    await ValidateLanguageSpecificSettings(options, sourceLanguageCode, targetLanguageCode, validationErrors);
-                }
-
-                // Combine validation errors and info messages
-                var allMessages = new List<string>();
-                allMessages.AddRange(validationInfos); // Add info messages first
-                allMessages.AddRange(validationErrors); // Then add errors
-
-                // Store validation results
                 if (allMessages.Any())
-                {
                     _languagePairValidationErrors[languagePair] = allMessages;
-                }
                 else
-                {
                     _languagePairValidationErrors.Remove(languagePair);
-                }
             }
             catch (Exception ex)
             {
-                validationErrors.Add($"Unable to validate language pair settings: {ex.Message}");
-                _languagePairValidationErrors[languagePair] = validationErrors;
+                options.ResetToUnsupported();
+                _languagePairValidationErrors[languagePair] = [$"Unable to validate language pair settings: {ex.Message}"];
             }
-        }
-
-        private async Task ValidateLanguageSpecificSettings(LanguagePairOptions options, string sourceLanguageCode, string targetLanguageCode, List<string> validationErrors)
-        {
-            try
-            {
-                System.Diagnostics.Debug.WriteLine($"[DeepL Validation] Validating source: '{sourceLanguageCode}', target: '{targetLanguageCode}'");
-
-                // Get target language metadata to check formality support for translate_text
-                var targetLanguageInfo = await LanguageClientV3.GetLanguageV3InfoAsync(
-                    targetLanguageCode, "translate_text", ApiKey, Constants.BaseUrlV3);
-
-                // Validate formality setting
-                if (options.Formality != Formality.Not_Supported && options.Formality != Formality.Default)
-                {
-                    if (targetLanguageInfo?.Features?.Contains("formality") != true)
-                    {
-                        validationErrors.Add($"Formality settings are not supported for target language '{options.LanguagePair.TargetCulture}' in DeepL V3 API.");
-                    }
-                }
-
-                // Validate model type setting (check if advanced features are supported)
-                if (options.ModelType != ModelType.Not_Supported && options.ModelType != ModelType.Prefer_Quality_Optimized)
-                {
-                    var sourceLanguageInfo = await LanguageClientV3.GetLanguageV3InfoAsync(
-                        sourceLanguageCode, "translate_text", ApiKey, Constants.BaseUrlV3);
-
-                    // Check if either source or target doesn't support advanced features like tag_handling
-                    if (sourceLanguageInfo?.Features?.Contains("tag_handling") != true || 
-                        targetLanguageInfo?.Features?.Contains("tag_handling") != true)
-                    {
-                        validationErrors.Add($"Advanced model types are not supported for this language pair in DeepL V3 API. Only quality-optimized models are available.");
-                    }
-                }
-
-                // Validate glossary compatibility
-                if (options.SelectedGlossary != null && 
-                    options.SelectedGlossary.Name != PluginResources.NoGlossary && 
-                    options.SelectedGlossary != GlossaryInfo.NotSupported)
-                {
-                    // Check if glossaries are supported for this language pair using the glossary product
-                    var sourceGlossaryInfo = await LanguageClientV3.GetLanguageV3InfoAsync(
-                        sourceLanguageCode, "glossary", ApiKey, Constants.BaseUrlV3);
-                    var targetGlossaryInfo = await LanguageClientV3.GetLanguageV3InfoAsync(
-                        targetLanguageCode, "glossary", ApiKey, Constants.BaseUrlV3);
-
-                    if (!sourceGlossaryInfo?.UsableAsSource == true || !targetGlossaryInfo?.UsableAsTarget == true)
-                    {
-                        validationErrors.Add($"Glossaries are not supported for this language pair '{options.LanguagePair.SourceCulture}' → '{options.LanguagePair.TargetCulture}' in DeepL V3 API.");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"[DeepL Validation] Error validating language codes '{sourceLanguageCode}' / '{targetLanguageCode}': {ex.Message}");
-                validationErrors.Add($"Unable to validate language-specific settings: {ex.Message}");
-            }
-        }
-
-        private (string languageCode, bool isFallback, string fallbackMessage) GetDeepLLanguageCodeWithFallbackInfo(Sdl.Core.Globalization.CultureCode cultureCode, bool isSourceLanguage = false)
-        {
-            // Convert culture code to DeepL language code format  
-            var cultureName = cultureCode.Name.ToUpperInvariant();
-            var regionNeutralName = cultureCode.RegionNeutralName.ToLowerInvariant(); // DeepL typically uses lowercase
-
-            // For source languages, DeepL V3 API often only supports generic language codes
-            // For target languages, it supports specific variants
-            var (result, isFallback, fallbackMessage) = cultureName switch
-            {
-                // English variants - only supported as target languages
-                "EN-US" when !isSourceLanguage => ("en-US", false, null),
-                "EN-GB" when !isSourceLanguage => ("en-GB", false, null),
-                "EN-US" or "EN-GB" when isSourceLanguage => 
-                    ("en", true, $"English variant '{cultureName}' will use generic 'en' for source language (variants only supported as target)"),
-
-                // Portuguese variants - only supported as target languages
-                "PT-BR" when !isSourceLanguage => ("pt-BR", false, null),
-                "PT-PT" when !isSourceLanguage => ("pt-PT", false, null),
-                "PT-BR" or "PT-PT" when isSourceLanguage => 
-                    ("pt", true, $"Portuguese variant '{cultureName}' will use generic 'pt' for source language (variants only supported as target)"),
-
-                // Spanish variants
-                "ES-419" when !isSourceLanguage => ("es-419", false, null),
-                "ES-419" when isSourceLanguage => 
-                    ("es", true, "Latin American Spanish (es-419) will use generic Spanish (es) for source language"),
-
-                // Chinese variants - only supported as target languages
-                "ZH-CN" or "ZH-HANS" when !isSourceLanguage => ("zh-Hans", false, null),
-                "ZH-TW" or "ZH-HANT" when !isSourceLanguage => ("zh-Hant", false, null),
-                "ZH-CN" or "ZH-HANS" or "ZH-TW" or "ZH-HANT" when isSourceLanguage => 
-                    ("zh", true, $"Chinese variant '{cultureName}' will use generic 'zh' for source language (variants only supported as target)"),
-
-                // For regional variants that don't have specific DeepL support, fall back to generic
-                _ when cultureName != regionNeutralName.ToUpperInvariant() => 
-                    (regionNeutralName, true, $"Regional variant '{cultureCode.Name}' will use generic '{regionNeutralName}' language code"),
-
-                // Generic languages use as-is
-                _ => (regionNeutralName, false, null)
-            };
-
-            // Debug logging to help identify conversion issues
-            System.Diagnostics.Debug.WriteLine($"[DeepL] Converting culture '{cultureCode.Name}' (regionNeutral: '{cultureCode.RegionNeutralName}') to DeepL code: '{result}' (fallback: {isFallback}, isSource: {isSourceLanguage})");
-
-            return (result, isFallback, fallbackMessage);
-        }
-
-        private string GetDeepLLanguageCode(Sdl.Core.Globalization.CultureCode cultureCode, bool isSourceLanguage = false)
-        {
-            return GetDeepLLanguageCodeWithFallbackInfo(cultureCode, isSourceLanguage).languageCode;
         }
 
         private void UpdateValidationMessages()
@@ -547,7 +393,8 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                 // Only validate specific properties that affect compatibility
                 if (e.PropertyName == "Formality" ||
                     e.PropertyName == "ModelType" ||
-                    e.PropertyName == "SelectedGlossary")
+                    e.PropertyName == "SelectedGlossary" ||
+                    e.PropertyName == "SelectedStyle")
                 {
                     await ValidateLanguagePairSettings(option);
                     UpdateValidationMessages();

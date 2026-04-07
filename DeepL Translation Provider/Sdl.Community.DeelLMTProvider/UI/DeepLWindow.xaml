@@ -267,26 +267,13 @@
                                 <ComboBox ItemsSource="{Binding Source={x:Static model:FormalityEnumHelper.Values}}"
                                           SelectedItem="{Binding Formality, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                           DisplayMemberPath="."
-                                          Cursor="Hand">
+                                          Cursor="Hand"
+                                          Visibility="{Binding SupportsFormality, Converter={StaticResource BooleanToVisibilityConverter}}">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Converter={StaticResource FormalityToFriendlyNameConverter}}" />
                                         </DataTemplate>
                                     </ComboBox.ItemTemplate>
-                                    <ComboBox.Style>
-                                        <Style TargetType="ComboBox"
-                                               BasedOn="{StaticResource {x:Type ComboBox}}">
-                                            <Setter Property="Visibility"
-                                                    Value="Visible" />
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Formality}"
-                                                             Value="Not_Supported">
-                                                    <Setter Property="Visibility"
-                                                            Value="Collapsed" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </ComboBox.Style>
                                 </ComboBox>
                                 <TextBlock Text="Not supported"
                                            VerticalAlignment="Center"
@@ -297,8 +284,8 @@
                                             <Setter Property="Visibility"
                                                     Value="Collapsed" />
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Formality}"
-                                                             Value="Not_Supported">
+                                                <DataTrigger Binding="{Binding SupportsFormality}"
+                                                             Value="False">
                                                     <Setter Property="Visibility"
                                                             Value="Visible" />
                                                 </DataTrigger>
@@ -322,23 +309,9 @@
                                           Cursor="Hand"
                                           HorizontalContentAlignment="Center"
                                           SelectedItem="{Binding SelectedGlossary, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                          DisplayMemberPath="Name">
-                                    <ComboBox.Style>
-                                        <Style TargetType="ComboBox"
-                                               BasedOn="{StaticResource {x:Type ComboBox}}">
-                                            <Setter Property="Visibility"
-                                                    Value="Visible" />
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Glossaries.Count}"
-                                                             Value="1">
-                                                    <Setter Property="Visibility"
-                                                            Value="Collapsed" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </ComboBox.Style>
-                                </ComboBox>
-                                <TextBlock Text="{Binding SelectedGlossary.Name}"
+                                          DisplayMemberPath="Name"
+                                          Visibility="{Binding SupportsGlossaries, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                <TextBlock Text="Not supported"
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Center">
                                     <TextBlock.Style>
@@ -347,8 +320,8 @@
                                             <Setter Property="Visibility"
                                                     Value="Collapsed" />
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Glossaries.Count}"
-                                                             Value="1">
+                                                <DataTrigger Binding="{Binding SupportsGlossaries}"
+                                                             Value="False">
                                                     <Setter Property="Visibility"
                                                             Value="Visible" />
                                                 </DataTrigger>
@@ -356,7 +329,7 @@
                                         </Style>
                                     </TextBlock.Style>
                                 </TextBlock>
-                               
+
                             </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -372,27 +345,14 @@
                                 <ComboBox Cursor="Hand"
                                           HorizontalContentAlignment="Center"
                                           SelectedItem="{Binding ModelType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                          ItemsSource="{Binding Source={x:Static model:ModelTypeEnumHelper.Values}}">
+                                          ItemsSource="{Binding Source={x:Static model:ModelTypeEnumHelper.Values}}"
+                                          Visibility="{Binding SupportsAdvancedModelTypes, Converter={StaticResource BooleanToVisibilityConverter}}">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
                                             <TextBlock ToolTip="{Binding Converter={StaticResource ModelTypeToDescriptionConverter }}"
                                                        Text="{Binding Converter={StaticResource ModelTypeToFriendlyNameConverter}}" />
                                         </DataTemplate>
                                     </ComboBox.ItemTemplate>
-                                    <ComboBox.Style>
-                                        <Style TargetType="ComboBox"
-                                               BasedOn="{StaticResource {x:Type ComboBox}}">
-                                            <Setter Property="Visibility"
-                                                    Value="Visible" />
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding ModelType}"
-                                                             Value="Not_Supported">
-                                                    <Setter Property="Visibility"
-                                                            Value="Collapsed" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </ComboBox.Style>
                                 </ComboBox>
                                 <TextBlock Text="Quality optimized"
                                            VerticalAlignment="Center"
@@ -403,8 +363,8 @@
                                             <Setter Property="Visibility"
                                                     Value="Collapsed" />
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding ModelType}"
-                                                             Value="Not_Supported">
+                                                <DataTrigger Binding="{Binding SupportsAdvancedModelTypes}"
+                                                             Value="False">
                                                     <Setter Property="Visibility"
                                                             Value="Visible" />
                                                 </DataTrigger>
@@ -429,23 +389,9 @@
                                           Cursor="Hand"
                                           HorizontalContentAlignment="Center"
                                           SelectedItem="{Binding SelectedStyle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                          DisplayMemberPath="Name">
-                                    <ComboBox.Style>
-                                        <Style TargetType="ComboBox"
-                                               BasedOn="{StaticResource {x:Type ComboBox}}">
-                                            <Setter Property="Visibility"
-                                                    Value="Visible" />
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Styles.Count}"
-                                                             Value="1">
-                                                    <Setter Property="Visibility"
-                                                            Value="Collapsed" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </ComboBox.Style>
-                                </ComboBox>
-                                <TextBlock Text="No style available"
+                                          DisplayMemberPath="Name"
+                                          Visibility="{Binding SupportsStyles, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                <TextBlock Text="Not supported"
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Center">
                                     <TextBlock.Style>
@@ -454,8 +400,8 @@
                                             <Setter Property="Visibility"
                                                     Value="Collapsed" />
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Styles.Count}"
-                                                             Value="1">
+                                                <DataTrigger Binding="{Binding SupportsStyles}"
+                                                             Value="False">
                                                     <Setter Property="Visibility"
                                                             Value="Visible" />
                                                 </DataTrigger>
