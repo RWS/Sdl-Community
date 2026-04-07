@@ -23,7 +23,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
         /// <param name="apiKey">DeepL API key</param>
         /// <param name="baseUrl">Base URL for the DeepL API</param>
         /// <returns>List of supported languages with enhanced metadata</returns>
-        public static async Task<List<LanguageV3Response>> GetSupportedLanguagesAsync(string product, string apiKey, string baseUrl)
+        private static async Task<List<LanguageV3Response>> GetSupportedLanguagesAsync(string product, string apiKey, string baseUrl)
         {
             if (string.IsNullOrEmpty(product))
                 throw new ArgumentException("Product cannot be null or empty", nameof(product));

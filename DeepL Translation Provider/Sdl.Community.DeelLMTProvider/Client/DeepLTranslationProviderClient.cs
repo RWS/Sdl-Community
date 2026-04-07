@@ -116,9 +116,10 @@ namespace Sdl.Community.DeepLMTProvider.Client
             var sourceLanguage = GetLanguage(languagePair.SourceCulture, SupportedSourceLanguages);
             var targetLanguage = GetLanguage(languagePair.TargetCulture, SupportedTargetLanguages, true);
 
-            return SupportedSourceLanguagesAndFormalities.TryGetValue(
-                sourceLanguage, out var supportsOptions) && SupportedTargetLanguagesAndFormalities.TryGetValue(
-                targetLanguage, out supportsOptions) && supportsOptions;
+            return SupportedSourceLanguagesAndFormalities.TryGetValue(sourceLanguage, out var sourceSupportsOptions) 
+                   && sourceSupportsOptions
+                   && SupportedTargetLanguagesAndFormalities.TryGetValue(targetLanguage, out var targetSupportsOptions) 
+                   && targetSupportsOptions;
         }
 
         public static bool SupportsFormality(CultureCode cultureCode)
