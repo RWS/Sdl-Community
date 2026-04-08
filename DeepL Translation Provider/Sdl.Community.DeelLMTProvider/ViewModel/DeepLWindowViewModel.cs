@@ -196,7 +196,31 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         public string Title { get; set; } = "DeepL Translation Provider";
 
+        public bool HasValidationErrors
+        {
+            get;
+            set => SetField(ref field, value);
+        }
+
+        public string ValidationIssues
+        {
+            get;
+            set => SetField(ref field, value);
+        }
+
         public string ValidationMessages
+        {
+            get;
+            set => SetField(ref field, value);
+        }
+
+        public string ValidationMessagePreview
+        {
+            get;
+            set => SetField(ref field, value);
+        }
+
+        public string ValidationNotes
         {
             get;
             set => SetField(ref field, value);
@@ -235,8 +259,12 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                 allStyles = await GetStyles();
             }
 
-            if (ApiKey is null) 
+            if (ApiKey is null)
             {
+                HasValidationErrors = false;
+                ValidationIssues = null;
+                ValidationNotes = null;
+                ValidationMessagePreview = null;
                 IsValidating = false;
                 return;
             }
@@ -336,54 +364,57 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         {
             if (!_languagePairValidationErrors.Any())
             {
+                HasValidationErrors = false;
+                ValidationIssues = null;
+                ValidationNotes = null;
                 ValidationMessages = null;
+                ValidationMessagePreview = null;
                 return;
             }
 
-            var messageBuilder = new StringBuilder();
-
-            // Check if we have any actual errors (not just informational messages)
-            bool hasActualErrors = _languagePairValidationErrors.Values
-                .Any(messages => messages.Any(msg => !msg.StartsWith("ℹ️")));
-
-            if (hasActualErrors)
-            {
-                messageBuilder.AppendLine("⚠️ Language Pair Compatibility Issues:");
-            }
-            else
-            {
-                messageBuilder.AppendLine("ℹ️ Language Configuration Information:");
-            }
-
-            messageBuilder.AppendLine();
+            var issuesBuilder = new StringBuilder();
+            var notesBuilder = new StringBuilder();
 
             foreach (var kvp in _languagePairValidationErrors)
             {
                 var languagePair = kvp.Key;
                 var messages = kvp.Value;
 
-                messageBuilder.AppendLine($"• {languagePair.SourceCulture} → {languagePair.TargetCulture}:");
-
-                // Separate info messages from errors
                 var infoMessages = messages.Where(msg => msg.StartsWith("ℹ️")).ToList();
                 var errorMessages = messages.Where(msg => !msg.StartsWith("ℹ️")).ToList();
 
-                // Display info messages first
-                foreach (var info in infoMessages)
+                if (errorMessages.Any())
                 {
-                    messageBuilder.AppendLine($"  {info}");
+                    issuesBuilder.AppendLine($"• {languagePair.SourceCulture} → {languagePair.TargetCulture}:");
+                    foreach (var error in errorMessages)
+                        issuesBuilder.AppendLine($"  - {error}");
+                    issuesBuilder.AppendLine();
                 }
 
-                // Then display errors
-                foreach (var error in errorMessages)
+                if (infoMessages.Any())
                 {
-                    messageBuilder.AppendLine($"  - {error}");
+                    notesBuilder.AppendLine($"• {languagePair.SourceCulture} → {languagePair.TargetCulture}:");
+                    foreach (var info in infoMessages)
+                        notesBuilder.AppendLine($"  {info}");
+                    notesBuilder.AppendLine();
                 }
-
-                messageBuilder.AppendLine();
             }
 
-            ValidationMessages = messageBuilder.ToString().Trim();
+            HasValidationErrors = issuesBuilder.Length > 0;
+            ValidationIssues = issuesBuilder.Length > 0 ? issuesBuilder.ToString().Trim() : null;
+            ValidationNotes = notesBuilder.Length > 0 ? notesBuilder.ToString().Trim() : null;
+            ValidationMessages = ValidationIssues ?? ValidationNotes;
+
+            var errorPairCount = _languagePairValidationErrors.Values.Count(msgs => msgs.Any(m => !m.StartsWith("\u2139\ufe0f")));
+            var infoPairCount = _languagePairValidationErrors.Values.Count(msgs => msgs.All(m => m.StartsWith("\u2139\ufe0f")));
+
+            var previewParts = new List<string>();
+            if (errorPairCount > 0)
+                previewParts.Add($"\u26a0\ufe0f {errorPairCount} pair{(errorPairCount > 1 ? "s" : "")} with issues");
+            if (infoPairCount > 0)
+                previewParts.Add($"\u2139\ufe0f {infoPairCount} pair{(infoPairCount > 1 ? "s" : "")} with notes");
+
+            ValidationMessagePreview = string.Join(", ", previewParts) + " \u2014 click to view";
         }
 
         private async void OnLanguagePairOptionChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

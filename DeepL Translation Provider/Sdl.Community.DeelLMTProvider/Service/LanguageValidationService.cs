@@ -32,9 +32,9 @@ namespace Sdl.Community.DeepLMTProvider.Service
                 targetCode, "target", apiKey, baseUrl, "translate_text");
 
             if (!result.IsSourceLanguageSupported)
-                result.Messages.Add($"Source language '{languagePair.SourceCulture}' ({sourceCode}) is not supported by DeepL V3 API for text translation.");
+                result.Messages.Add($"Source language '{languagePair.SourceCulture}' ({sourceCode}) is not supported by DeepL API for text translation.");
             if (!result.IsTargetLanguageSupported)
-                result.Messages.Add($"Target language '{languagePair.TargetCulture}' ({targetCode}) is not supported by DeepL V3 API for text translation.");
+                result.Messages.Add($"Target language '{languagePair.TargetCulture}' ({targetCode}) is not supported by DeepL API for text translation.");
 
             if (!result.IsSourceLanguageSupported || !result.IsTargetLanguageSupported)
                 return result;

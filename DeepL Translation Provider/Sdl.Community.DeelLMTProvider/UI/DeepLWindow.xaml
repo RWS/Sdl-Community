@@ -421,11 +421,33 @@
                     Click="Ok_Click"
                     DockPanel.Dock="Right"
                     Cursor="Hand" />
-            <TextBlock Text="{Binding ValidationMessages, Mode=TwoWay}"
-                       HorizontalAlignment="Center"
-                       TextWrapping="Wrap"
-                       Style="{StaticResource ValidationTextBlockStyle}"
-                       DockPanel.Dock="Left" />
+            <TextBlock HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontSize="12">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Visibility" Value="Visible" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ValidationMessagePreview}" Value="{x:Null}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+                <Hyperlink Click="ValidationDetailsLink_Click" Cursor="Hand">
+                    <Hyperlink.Style>
+                        <Style TargetType="Hyperlink">
+                            <Setter Property="Foreground" Value="#1E7EC2" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HasValidationErrors}" Value="True">
+                                    <Setter Property="Foreground" Value="#C0392B" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Hyperlink.Style>
+                    <Run Text="{Binding ValidationMessagePreview, Mode=OneWay}" />
+                </Hyperlink>
+            </TextBlock>
         </DockPanel>
     </Grid>
 </Window>

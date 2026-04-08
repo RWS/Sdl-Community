@@ -24,6 +24,16 @@ namespace Sdl.Community.DeepLMTProvider.UI
             if (ApiVersionCombobox.SelectedIndex == -1) ApiVersionCombobox.SelectedIndex = 0;
         }
 
+        private void ValidationDetailsLink_Click(object sender, RoutedEventArgs e)
+        {
+            var viewModel = (DeepLWindowViewModel)DataContext;
+            var detailsWindow = new ValidationDetailsWindow(viewModel.ValidationIssues, viewModel.ValidationNotes)
+            {
+                Owner = this
+            };
+            detailsWindow.ShowDialog();
+        }
+
         private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             Process.Start("https://www.deepl.com/api-contact.html");
