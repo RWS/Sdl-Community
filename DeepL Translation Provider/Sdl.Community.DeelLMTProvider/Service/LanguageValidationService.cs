@@ -43,8 +43,6 @@ namespace Sdl.Community.DeepLMTProvider.Service
             var targetInfo = await LanguageClientV3.GetLanguageV3InfoAsync(targetCode, "translate_text", apiKey, baseUrl);
 
             result.SupportsFormality = targetInfo?.Features?.Contains("formality") == true;
-            result.SupportsAdvancedModelTypes = sourceInfo?.Features?.Contains("tag_handling") == true
-                                             && targetInfo?.Features?.Contains("tag_handling") == true;
 
             var sourceGlossaryInfo = await LanguageClientV3.GetLanguageV3InfoAsync(sourceCode, "glossary", apiKey, baseUrl);
             var targetGlossaryInfo = await LanguageClientV3.GetLanguageV3InfoAsync(targetCode, "glossary", apiKey, baseUrl);

@@ -341,39 +341,17 @@
 
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Grid>
-                                <ComboBox Cursor="Hand"
-                                          HorizontalContentAlignment="Center"
-                                          SelectedItem="{Binding ModelType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                          ItemsSource="{Binding Source={x:Static model:ModelTypeEnumHelper.Values}}"
-                                          Visibility="{Binding SupportsAdvancedModelTypes, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock ToolTip="{Binding Converter={StaticResource ModelTypeToDescriptionConverter }}"
-                                                       Text="{Binding Converter={StaticResource ModelTypeToFriendlyNameConverter}}" />
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                </ComboBox>
-                                <TextBlock Text="Quality optimized"
-                                           VerticalAlignment="Center"
-                                           HorizontalAlignment="Center">
-                                    <TextBlock.Style>
-                                        <Style TargetType="TextBlock"
-                                               BasedOn="{StaticResource {x:Type TextBlock}}">
-                                            <Setter Property="Visibility"
-                                                    Value="Collapsed" />
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding SupportsAdvancedModelTypes}"
-                                                             Value="False">
-                                                    <Setter Property="Visibility"
-                                                            Value="Visible" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
-
-                            </Grid>
+                            <ComboBox Cursor="Hand"
+                                      HorizontalContentAlignment="Center"
+                                      SelectedItem="{Binding ModelType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      ItemsSource="{Binding Source={x:Static model:ModelTypeEnumHelper.Values}}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock ToolTip="{Binding Converter={StaticResource ModelTypeToDescriptionConverter }}"
+                                                   Text="{Binding Converter={StaticResource ModelTypeToFriendlyNameConverter}}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

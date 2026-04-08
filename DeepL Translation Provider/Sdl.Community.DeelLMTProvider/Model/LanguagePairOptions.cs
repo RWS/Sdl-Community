@@ -64,16 +64,6 @@ namespace Sdl.Community.DeepLMTProvider.Model
         } = true;
 
         /// <summary>
-        /// Indicates whether this language pair supports advanced model types (beyond Quality_Optimized) in DeepL V3 API
-        /// </summary>
-        [JsonIgnore]
-        public bool SupportsAdvancedModelTypes
-        {
-            get;
-            set => SetField(ref field, value);
-        } = true;
-
-        /// <summary>
         /// Indicates whether this language pair supports glossaries in DeepL V3 API
         /// </summary>
         [JsonIgnore]
@@ -96,13 +86,6 @@ namespace Sdl.Community.DeepLMTProvider.Model
                 resetMessages.Add($"Formality settings are not supported for target language '{LanguagePair.TargetCulture}' - reset to default.");
             }
 
-            SupportsAdvancedModelTypes = result.SupportsAdvancedModelTypes;
-            if (!result.SupportsAdvancedModelTypes && ModelType != ModelType.Not_Supported && ModelType != ModelType.Prefer_Quality_Optimized)
-            {
-                ModelType = ModelType.Prefer_Quality_Optimized;
-                resetMessages.Add($"Advanced model types are not supported for this language pair - reset to quality-optimized.");
-            }
-
             SupportsGlossaries = result.SupportsGlossaries;
             if (!result.SupportsGlossaries && SelectedGlossary != null &&
                 SelectedGlossary.Name != PluginResources.NoGlossary &&
@@ -118,7 +101,6 @@ namespace Sdl.Community.DeepLMTProvider.Model
         public void ResetToUnsupported()
         {
             SupportsFormality = false;
-            SupportsAdvancedModelTypes = false;
             SupportsGlossaries = false;
         }
     }

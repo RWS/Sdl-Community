@@ -304,9 +304,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                     ? languageSavedOptions?.Formality ?? Formality.Default
                     : Formality.Not_Supported;
 
-                var modelType = DeepLTranslationProviderClient.SupportsAllModelTypes(languagePair)
-                    ? languageSavedOptions?.ModelType ?? ModelType.Prefer_Quality_Optimized
-                    : ModelType.Not_Supported;
+                var modelType = languageSavedOptions?.ModelType ?? ModelType.Prefer_Quality_Optimized;
 
                 var newLanguagePairOptions = new LanguagePairOptions
                 {
