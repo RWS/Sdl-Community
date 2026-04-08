@@ -405,7 +405,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             ValidationMessages = ValidationIssues ?? ValidationNotes;
 
             var errorPairCount = _languagePairValidationErrors.Values.Count(msgs => msgs.Any(m => !m.StartsWith("\u2139\ufe0f")));
-            var infoPairCount = _languagePairValidationErrors.Values.Count(msgs => msgs.All(m => m.StartsWith("\u2139\ufe0f")));
+            var infoPairCount = _languagePairValidationErrors.Values.Count(msgs => msgs.Any(m => m.StartsWith("\u2139\ufe0f")));
 
             var previewParts = new List<string>();
             if (errorPairCount > 0)

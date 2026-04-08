@@ -224,6 +224,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
         {
             AppInitializer.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("DeepL-Auth-Key", ApiKey);
             IsApiKeyValidResponse = IsValidApiKey();
+            LanguageClientV3.ClearCache();
 
             if (!IsApiKeyValidResponse.IsSuccessStatusCode)
                 return;

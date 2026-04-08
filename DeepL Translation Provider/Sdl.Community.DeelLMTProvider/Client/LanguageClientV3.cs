@@ -2,7 +2,6 @@
 using Sdl.Community.DeepLMTProvider.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -16,14 +15,11 @@ namespace Sdl.Community.DeepLMTProvider.Client
     {
         private const string LanguagesEndpoint = "v3/languages";
 
-        /// <summary>
-        /// Gets detailed language information with all features from V3 API
-        /// </summary>
-        /// <param name="languageCode">Language code to get information for</param>
-        /// <param name="product">Product to get features for</param>
-        /// <param name="apiKey">DeepL API key</param>
-        /// <param name="baseUrl">Base URL for the DeepL API</param>
-        /// <returns>LanguageV3Response object with detailed features, or null if not found</returns>
+        // Session-scoped cache keyed by (product, apiKey, baseUrl).
+        // Static lifetime matches Studio's process lifetime, so results persist for the whole session.
+        private static readonly Dictionary<(string product, string apiKey, string baseUrl), List<LanguageV3Response>> _cache = new();
+
+        /// <summary>Gets detailed language information with all features from V3 API.</summary>
         public static async Task<LanguageV3Response> GetLanguageV3InfoAsync(string languageCode, string product, string apiKey, string baseUrl)
         {
             if (string.IsNullOrEmpty(languageCode))
@@ -31,8 +27,8 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
             try
             {
-                var supportedLanguages = await GetSupportedLanguagesAsync(product, apiKey, baseUrl);
-                return supportedLanguages.Find(lang => string.Equals(lang.Lang, languageCode, StringComparison.OrdinalIgnoreCase));
+                var languages = await GetLanguagesByProductAsync(product, apiKey, baseUrl);
+                return languages.Find(lang => string.Equals(lang.Lang, languageCode, StringComparison.OrdinalIgnoreCase));
             }
             catch
             {
@@ -40,15 +36,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
             }
         }
 
-        /// <summary>
-        /// Checks if a specific language is supported for the given type
-        /// </summary>
-        /// <param name="languageCode">Language code to check (e.g., "EN", "DE")</param>
-        /// <param name="type">Type of language support to check: "source" or "target"</param>
-        /// <param name="apiKey">DeepL API key</param>
-        /// <param name="baseUrl">Base URL for the DeepL API</param>
-        /// <param name="product">Product to check support for (defaults to "translate_text")</param>
-        /// <returns>True if the language is supported, false otherwise</returns>
+        /// <summary>Checks if a specific language is supported as source or target for a given product.</summary>
         public static async Task<bool> IsLanguageSupportedAsync(string languageCode, string type, string apiKey, string baseUrl, string product = "translate_text")
         {
             if (string.IsNullOrEmpty(languageCode))
@@ -56,8 +44,15 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
             try
             {
-                var supportedLanguages = await GetSupportedLanguagesAsync(type, product, apiKey, baseUrl);
-                return supportedLanguages.Exists(lang => string.Equals(lang.Language, languageCode, StringComparison.OrdinalIgnoreCase));
+                var languages = await GetLanguagesByProductAsync(product, apiKey, baseUrl);
+                return languages.Exists(lang =>
+                    string.Equals(lang.Lang, languageCode, StringComparison.OrdinalIgnoreCase) &&
+                    type.ToLowerInvariant() switch
+                    {
+                        "source" => lang.UsableAsSource,
+                        "target" => lang.UsableAsTarget,
+                        _ => false
+                    });
             }
             catch
             {
@@ -65,57 +60,49 @@ namespace Sdl.Community.DeepLMTProvider.Client
             }
         }
 
-        /// <summary>
-        /// Retrieves supported languages and converts to legacy format for compatibility
-        /// </summary>
-        /// <param name="type">Type of languages to retrieve: "source" or "target"</param>
-        /// <param name="product">Product to retrieve languages for: "translate_text", "translate_document", etc.</param>
-        /// <param name="apiKey">DeepL API key</param>
-        /// <param name="baseUrl">Base URL for the DeepL API</param>
-        /// <returns>List of supported languages in legacy format</returns>
-        private static async Task<List<SupportedLanguage>> GetSupportedLanguagesAsync(string type, string product, string apiKey, string baseUrl)
-        {
-            var v3Languages = await GetSupportedLanguagesAsync(product, apiKey, baseUrl);
-            var result = new List<SupportedLanguage>();
+        /// <summary>Clears the session language cache. Call after an API key change to release stale entries.</summary>
+        public static void ClearCache() => _cache.Clear();
 
-            foreach (var lang in v3Languages)
+        // --- Per-product entry points (one per product currently used by the plugin) ---
+
+        private static Task<List<LanguageV3Response>> GetTranslateTextLanguagesAsync(string apiKey, string baseUrl)
+            => GetCachedLanguagesAsync("translate_text", apiKey, baseUrl);
+
+        private static Task<List<LanguageV3Response>> GetGlossaryLanguagesAsync(string apiKey, string baseUrl)
+            => GetCachedLanguagesAsync("glossary", apiKey, baseUrl);
+
+        private static Task<List<LanguageV3Response>> GetStyleRulesLanguagesAsync(string apiKey, string baseUrl)
+            => GetCachedLanguagesAsync("style_rules", apiKey, baseUrl);
+
+        // Routes to the dedicated method for known products; falls back to the cache layer for any future product.
+        private static Task<List<LanguageV3Response>> GetLanguagesByProductAsync(string product, string apiKey, string baseUrl)
+            => product switch
             {
-                bool includeLanguage = type.ToLower() switch
-                {
-                    "source" => lang.UsableAsSource,
-                    "target" => lang.UsableAsTarget,
-                    _ => throw new ArgumentException($"Invalid type: {type}. Must be 'source' or 'target'.")
-                };
+                "translate_text" => GetTranslateTextLanguagesAsync(apiKey, baseUrl),
+                "glossary"       => GetGlossaryLanguagesAsync(apiKey, baseUrl),
+                "style_rules"    => GetStyleRulesLanguagesAsync(apiKey, baseUrl),
+                _                => GetCachedLanguagesAsync(product, apiKey, baseUrl)
+            };
 
-                if (includeLanguage)
-                {
-                    result.Add(new SupportedLanguage
-                    {
-                        Language = lang.Lang,
-                        Name = lang.Name,
-                        SupportsOptions = lang.Features?.Contains("formality") == true
-                    });
-                }
-            }
+        // Returns the cached list for the given product, fetching from the API on the first call.
+        private static async Task<List<LanguageV3Response>> GetCachedLanguagesAsync(string product, string apiKey, string baseUrl)
+        {
+            var key = (product, apiKey, baseUrl);
+            if (_cache.TryGetValue(key, out var cached))
+                return cached;
 
-            return result;
+            var languages = await FetchFromApiAsync(product, apiKey, baseUrl);
+            _cache[key] = languages;
+            return languages;
         }
 
-        /// <summary>
-        /// Retrieves supported languages from DeepL API V3 endpoint
-        /// </summary>
-        /// <param name="product">Product to retrieve languages for: "translate_text", "translate_document", "glossary", "voice", "write", "style_rules"</param>
-        /// <param name="apiKey">DeepL API key</param>
-        /// <param name="baseUrl">Base URL for the DeepL API</param>
-        /// <returns>List of supported languages with enhanced metadata</returns>
-        private static async Task<List<LanguageV3Response>> GetSupportedLanguagesAsync(string product, string apiKey, string baseUrl)
+        // Performs the actual HTTP request to GET /v3/languages?product={product}.
+        private static async Task<List<LanguageV3Response>> FetchFromApiAsync(string product, string apiKey, string baseUrl)
         {
             if (string.IsNullOrEmpty(product))
                 throw new ArgumentException("Product cannot be null or empty", nameof(product));
-
             if (string.IsNullOrEmpty(apiKey))
                 throw new ArgumentException("API key cannot be null or empty", nameof(apiKey));
-
             if (string.IsNullOrEmpty(baseUrl))
                 throw new ArgumentException("Base URL cannot be null or empty", nameof(baseUrl));
 
@@ -129,7 +116,6 @@ namespace Sdl.Community.DeepLMTProvider.Client
             {
                 var response = await AppInitializer.Client.SendAsync(request);
 
-                // Log response details for debugging
                 System.Diagnostics.Debug.WriteLine($"[DeepL V3] Request: {requestUri}");
                 System.Diagnostics.Debug.WriteLine($"[DeepL V3] Response Status: {response.StatusCode}");
 
@@ -138,9 +124,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
                 var content = await response.Content.ReadAsStringAsync();
                 System.Diagnostics.Debug.WriteLine($"[DeepL V3] Response Content: {content}");
 
-                var languages = JsonConvert.DeserializeObject<List<LanguageV3Response>>(content) ?? new List<LanguageV3Response>();
-
-                return languages;
+                return JsonConvert.DeserializeObject<List<LanguageV3Response>>(content) ?? new List<LanguageV3Response>();
             }
             catch (HttpRequestException ex)
             {
