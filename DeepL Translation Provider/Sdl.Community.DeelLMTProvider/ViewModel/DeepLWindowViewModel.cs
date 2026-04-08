@@ -120,7 +120,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         public ObservableCollection<LanguagePairOptions> LanguagePairOptions
         {
             get => _languagePairOptions;
-            set 
+            set
             {
                 SetField(ref _languagePairOptions, value);
 
@@ -154,7 +154,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         public ICommand ManageGlossariesCommand => new ParameterlessCommand(() => ManageGlossaries?.Invoke(), () => ApiKeyValidationMessage == null);
 
-        
+
         public ICommand OkCommand => new ParameterlessCommand(Save, () => ApiKeyValidationMessage == null);
 
         public DeepLTranslationOptions Options { get; set; }
@@ -318,12 +318,12 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                 };
 
                 // Validate language pair settings using V3 API
-                await ValidateLanguagePairSettings(newLanguagePairOptions);
+                var lpValid = await ValidateLanguagePairSettings(newLanguagePairOptions);
 
                 var oldLanguagePairOption = LanguagePairOptions.FirstOrDefault(lpo => lpo.LanguagePair.Equals(languagePair));
 
                 LanguagePairOptions.Remove(oldLanguagePairOption);
-                LanguagePairOptions.Add(newLanguagePairOptions);
+                if (lpValid) LanguagePairOptions.Add(newLanguagePairOptions);
             }
 
             // Update overall validation message
@@ -331,10 +331,9 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             IsValidating = false;
         }
 
-        private async Task ValidateLanguagePairSettings(LanguagePairOptions options)
+        private async Task<bool> ValidateLanguagePairSettings(LanguagePairOptions options)
         {
-            if (string.IsNullOrEmpty(ApiKey) || options?.LanguagePair == null)
-                return;
+            if (string.IsNullOrEmpty(ApiKey) || options?.LanguagePair == null) return false;
 
             var languagePair = options.LanguagePair;
 
@@ -342,19 +341,21 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             {
                 var result = await LanguageValidationService.ValidateAsync(languagePair, ApiKey, Constants.BaseUrlV3);
 
-                var allMessages = result.Messages.ToList();
-                if (result.IsSourceLanguageSupported && result.IsTargetLanguageSupported)
-                    allMessages.AddRange(options.Apply(result));
+                options.Apply(result);
 
+                var allMessages = result.Messages.ToList();
                 if (allMessages.Any())
                     _languagePairValidationErrors[languagePair] = allMessages;
                 else
                     _languagePairValidationErrors.Remove(languagePair);
+
+                return result.IsSourceLanguageSupported && result.IsTargetLanguageSupported;
             }
             catch (Exception ex)
             {
                 options.ResetToUnsupported();
                 _languagePairValidationErrors[languagePair] = [$"Unable to validate language pair settings: {ex.Message}"];
+                return false;
             }
         }
 
@@ -493,7 +494,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         private async Task<List<DeepLStyle>> GetStyles()
         {
-            var styles =  await StyleClient.GetStyles(ApiKey).ConfigureAwait(false) ?? [];
+            var styles = await StyleClient.GetStyles(ApiKey).ConfigureAwait(false) ?? [];
             styles.Add(DeepLStyle.NoStyle);
             return styles;
         }

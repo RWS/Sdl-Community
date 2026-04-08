@@ -75,27 +75,28 @@ namespace Sdl.Community.DeepLMTProvider.Model
 
         public override string ToString() => $"{nameof(LanguagePairOptions)}";
 
-        public IReadOnlyList<string> Apply(LanguagePairValidationResult result)
+        public void Apply(LanguagePairValidationResult result)
         {
-            var resetMessages = new List<string>();
+            if (!result.IsSourceLanguageSupported || !result.IsTargetLanguageSupported)
+            {
+                result.Messages.Clear();
+                result.Messages = [$"Language pair {LanguagePair} not supported - removing from list."];
+                return;
+            }
 
             SupportsFormality = result.SupportsFormality;
-            if (!result.SupportsFormality && Formality != Formality.Not_Supported && Formality != Formality.Default)
+            if (!result.SupportsFormality)
             {
-                Formality = Formality.Default;
-                resetMessages.Add($"Formality settings are not supported for target language '{LanguagePair.TargetCulture}' - reset to default.");
+                Formality = Formality.Not_Supported;
+                result.Messages.Add($"Formality settings are not supported for target language '{LanguagePair.TargetCulture}'.");
             }
 
             SupportsGlossaries = result.SupportsGlossaries;
-            if (!result.SupportsGlossaries && SelectedGlossary != null &&
-                SelectedGlossary.Name != PluginResources.NoGlossary &&
-                SelectedGlossary != GlossaryInfo.NotSupported)
+            if (!result.SupportsGlossaries)
             {
-                SelectedGlossary = Glossaries?.FirstOrDefault(g => g.Name == PluginResources.NoGlossary);
-                resetMessages.Add($"Glossaries are not supported for this language pair '{LanguagePair.SourceCulture}' → '{LanguagePair.TargetCulture}' - reset to no glossary.");
+                SelectedGlossary = Glossaries?.FirstOrDefault(g => g.Name == PluginResources.GlossariesNotSupported);
+                result.Messages.Add($"Glossaries are not supported for this language pair '{LanguagePair.SourceCulture}' → '{LanguagePair.TargetCulture}'.");
             }
-
-            return resetMessages;
         }
 
         public void ResetToUnsupported()

@@ -39,7 +39,6 @@ namespace Sdl.Community.DeepLMTProvider.Service
             if (!result.IsSourceLanguageSupported || !result.IsTargetLanguageSupported)
                 return result;
 
-            var sourceInfo = await LanguageClientV3.GetLanguageV3InfoAsync(sourceCode, "translate_text", apiKey, baseUrl);
             var targetInfo = await LanguageClientV3.GetLanguageV3InfoAsync(targetCode, "translate_text", apiKey, baseUrl);
 
             result.SupportsFormality = targetInfo?.Features?.Contains("formality") == true;

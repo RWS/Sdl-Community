@@ -125,6 +125,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
         public static bool SupportsFormality(CultureCode cultureCode)
         {
             var targetLanguage = GetLanguage(cultureCode, SupportedTargetLanguages, true);
+            if (string.IsNullOrWhiteSpace(targetLanguage)) return false;
             return SupportedTargetLanguagesAndFormalities.TryGetValue(
                 targetLanguage, out var supportsOptions) && supportsOptions;
         }
