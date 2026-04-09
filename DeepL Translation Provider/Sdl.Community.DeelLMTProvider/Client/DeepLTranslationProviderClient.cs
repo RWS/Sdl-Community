@@ -5,7 +5,6 @@ using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.Community.DeepLMTProvider.Service;
 using Sdl.LanguagePlatform.Core;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -38,18 +37,12 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
         public static HttpResponseMessage IsApiKeyValidResponse { get; private set; }
 
-        private static Dictionary<string, List<string>> ChineseMappings { get; set; } = new()
-        {
-            ["ZH-HANS"] = ["ZH-CN", "ZH-SG", "ZH-HANS-HK", "ZH-HANS-MO"],
-            ["ZH-HANT"] = ["ZH-TW", "ZH-HK", "ZH-MO"]
-        };
-
         private static string ChosenBaseUrl => ApiVersion?.Contains("V1") ?? true ? Constants.BaseUrlV1 : Constants.BaseUrlV2;
 
         public (string Translation, string ErrorMessage) Translate(LanguagePair languageDirection, string sourceText, DeepLSettings deepLSettings)
         {
-            var (sourceLanguage, _, _) = LanguageValidationService.GetDeepLLanguageCode(languageDirection.TargetCulture, true);
-            var (targetLanguage, _, _) = LanguageValidationService.GetDeepLLanguageCode(languageDirection.SourceCulture, false);
+            var (sourceLanguage, _, _) = LanguageValidationService.GetDeepLLanguageCode(languageDirection.SourceCulture, true);
+            var (targetLanguage, _, _) = LanguageValidationService.GetDeepLLanguageCode(languageDirection.TargetCulture, false);
 
             string errorMessage = null;
             try
@@ -102,8 +95,8 @@ namespace Sdl.Community.DeepLMTProvider.Client
             }
             catch (Exception ex)
             {
-                if (ex is AggregateException aEx) ex = aEx.InnerException;
-                errorMessage = ex?.Message;
+                var inner = ex is AggregateException aEx ? aEx.InnerExceptions.FirstOrDefault() ?? ex : ex;
+                errorMessage = inner.Message;
             }
 
             return (null, errorMessage);

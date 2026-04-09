@@ -231,7 +231,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             _connecter.Translate(_languageDirection, sourceText,
                 new(
                     _languagePairOptions?.Formality ?? Formality.Default,
-                    _languagePairOptions?.SelectedGlossary.Id,
+                    _languagePairOptions?.SelectedGlossary?.Id,
                     _options.TagHandling,
                     _options.SplitSentenceHandling,
                     _options.PreserveFormatting,
