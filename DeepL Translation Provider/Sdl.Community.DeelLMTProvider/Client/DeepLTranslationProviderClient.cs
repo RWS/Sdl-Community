@@ -49,7 +49,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
         public (string Translation, string ErrorMessage) Translate(LanguagePair languageDirection, string sourceText, DeepLSettings deepLSettings)
         {
             var (sourceLanguage, _, _) = LanguageValidationService.GetDeepLLanguageCode(languageDirection.TargetCulture, true);
-            var (targetLanguage, _,_) = LanguageValidationService.GetDeepLLanguageCode(languageDirection.SourceCulture, false);
+            var (targetLanguage, _, _) = LanguageValidationService.GetDeepLLanguageCode(languageDirection.SourceCulture, false);
 
             string errorMessage = null;
             try
@@ -115,10 +115,8 @@ namespace Sdl.Community.DeepLMTProvider.Client
                 deeplRequestParameters.ModelType == "latency_optimized" ? "v1" : "v2";
         }
 
-        private static HttpResponseMessage IsValidApiKey()
-        {
-            return AppInitializer.Client.GetAsync($"{ChosenBaseUrl}/usage").Result;
-        }
+        private static HttpResponseMessage IsValidApiKey() =>
+            AppInitializer.Client.GetAsync($"{ChosenBaseUrl}/usage").Result;
 
         private static void OnApiKeyChanged()
         {
