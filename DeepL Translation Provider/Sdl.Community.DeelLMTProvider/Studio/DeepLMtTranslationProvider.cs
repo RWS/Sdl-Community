@@ -8,6 +8,7 @@ using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.Community.DeepLMTProvider.Service;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using System.Threading.Tasks;
 
 namespace Sdl.Community.DeepLMTProvider.Studio
 {
@@ -73,14 +74,14 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             try
             {
                 var (sourceLangCode, _, _) = LanguageValidationService.GetDeepLLanguageCode(languageDirection.SourceCulture, true);
-                var (targetLangCode, _, _) = LanguageValidationService.GetDeepLLanguageCode(languageDirection.SourceCulture, false);
+                var (targetLangCode, _, _) = LanguageValidationService.GetDeepLLanguageCode(languageDirection.TargetCulture, false);
                 return
-                    LanguageClientV3
-                        .IsLanguageSupportedAsync(sourceLangCode, "source", DeepLTranslationProviderClient.ApiKey)
-                        .Result &&
-                    LanguageClientV3
-                        .IsLanguageSupportedAsync(targetLangCode, "target", DeepLTranslationProviderClient.ApiKey)
-                        .Result;
+                    Task.Run(() => LanguageClientV3
+                            .IsLanguageSupportedAsync(sourceLangCode, "source", DeepLTranslationProviderClient.ApiKey))
+                        .GetAwaiter().GetResult() &&
+                    Task.Run(() => LanguageClientV3
+                            .IsLanguageSupportedAsync(targetLangCode, "target", DeepLTranslationProviderClient.ApiKey))
+                        .GetAwaiter().GetResult();
             }
             catch (Exception e)
             {
