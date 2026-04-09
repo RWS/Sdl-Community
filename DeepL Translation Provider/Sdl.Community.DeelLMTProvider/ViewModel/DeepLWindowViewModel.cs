@@ -1,6 +1,5 @@
 ﻿using Sdl.Community.DeepLMTProvider.Client;
 using Sdl.Community.DeepLMTProvider.Command;
-using Sdl.Community.DeepLMTProvider.Extensions;
 using Sdl.Community.DeepLMTProvider.Interface;
 using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.LanguagePlatform.Core;
@@ -9,7 +8,6 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Runtime.CompilerServices;
@@ -72,7 +70,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             PasswordChangedTimer.Elapsed += OnPasswordChanged;
 
             LoadCredentialSettings(credentialStore);
-            //DeepLTranslationProviderClient.ApiKeyChanged += Dispatcher_LoadLanguagePairSettings;
         }
 
         public event Action ManageGlossaries;
@@ -299,11 +296,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                 }
 
                 var selectedStyle = currentLanguageStyles.FirstOrDefault(s => s.ID == languageSavedOptions?.SelectedStyle?.ID);
-
-                var formality = DeepLTranslationProviderClient.SupportsFormality(languagePair.TargetCulture)
-                    ? languageSavedOptions?.Formality ?? Formality.Default
-                    : Formality.Not_Supported;
-
+                var formality = languageSavedOptions?.Formality ?? Formality.Default;
                 var modelType = languageSavedOptions?.ModelType ?? ModelType.Prefer_Quality_Optimized;
 
                 var newLanguagePairOptions = new LanguagePairOptions
@@ -339,7 +332,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
             try
             {
-                var result = await LanguageValidationService.ValidateAsync(languagePair, ApiKey, Constants.BaseUrlV3);
+                var result = await LanguageValidationService.ValidateAsync(languagePair, ApiKey);
 
                 options.Apply(result);
 
@@ -459,15 +452,9 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             PasswordChangedTimer.Elapsed -= OnPasswordChanged;
 
             // Unsubscribe from language pair options changes
-            if (_languagePairOptions != null)
-            {
-                foreach (var option in _languagePairOptions)
-                {
-                    option.PropertyChanged -= OnLanguagePairOptionChanged;
-                }
-            }
+            if (_languagePairOptions == null) return;
 
-            //DeepLTranslationProviderClient.ApiKeyChanged -= Dispatcher_LoadLanguagePairSettings;
+            foreach (var option in _languagePairOptions) option.PropertyChanged -= OnLanguagePairOptionChanged;
         }
 
         private void Dispatcher_LoadLanguagePairSettings() =>

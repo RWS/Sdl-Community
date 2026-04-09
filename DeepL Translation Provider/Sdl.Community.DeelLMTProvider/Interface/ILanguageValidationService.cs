@@ -8,7 +8,6 @@ namespace Sdl.Community.DeepLMTProvider.Interface
     {
         Task<LanguagePairValidationResult> ValidateAsync(
             LanguagePair languagePair,
-            string apiKey,
-            string baseUrl);
+            string apiKey);
     }
 }

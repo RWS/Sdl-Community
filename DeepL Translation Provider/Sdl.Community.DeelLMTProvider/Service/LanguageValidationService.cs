@@ -9,50 +9,9 @@ namespace Sdl.Community.DeepLMTProvider.Service
 {
     public class LanguageValidationService : ILanguageValidationService
     {
-        public async Task<LanguagePairValidationResult> ValidateAsync(
-            LanguagePair languagePair,
-            string apiKey,
-            string baseUrl)
-        {
-            var (sourceCode, isSourceFallback, sourceFallbackMsg) = GetDeepLLanguageCode(languagePair.SourceCulture, isSourceLanguage: true);
-            var (targetCode, isTargetFallback, targetFallbackMsg) = GetDeepLLanguageCode(languagePair.TargetCulture, isSourceLanguage: false);
+        private static string BaseUrl => Constants.BaseUrlV3;
 
-            System.Diagnostics.Debug.WriteLine($"[DeepL Validation] Validating source: '{sourceCode}', target: '{targetCode}'");
-
-            var result = new LanguagePairValidationResult();
-
-            if (isSourceFallback && !string.IsNullOrEmpty(sourceFallbackMsg))
-                result.Messages.Add($"ℹ️ {sourceFallbackMsg}");
-            if (isTargetFallback && !string.IsNullOrEmpty(targetFallbackMsg))
-                result.Messages.Add($"ℹ️ {targetFallbackMsg}");
-
-            result.IsSourceLanguageSupported = await LanguageClientV3.IsLanguageSupportedAsync(
-                sourceCode, "source", apiKey, baseUrl, "translate_text");
-            result.IsTargetLanguageSupported = await LanguageClientV3.IsLanguageSupportedAsync(
-                targetCode, "target", apiKey, baseUrl, "translate_text");
-
-            if (!result.IsSourceLanguageSupported)
-                result.Messages.Add($"Source language '{languagePair.SourceCulture}' ({sourceCode}) is not supported by DeepL API for text translation.");
-            if (!result.IsTargetLanguageSupported)
-                result.Messages.Add($"Target language '{languagePair.TargetCulture}' ({targetCode}) is not supported by DeepL API for text translation.");
-
-            if (!result.IsSourceLanguageSupported || !result.IsTargetLanguageSupported)
-                return result;
-
-            var targetInfo = await LanguageClientV3.GetLanguageV3InfoAsync(targetCode, "translate_text", apiKey, baseUrl);
-
-            result.SupportsFormality = targetInfo?.Features?.Contains("formality") == true;
-
-            var sourceGlossaryInfo = await LanguageClientV3.GetLanguageV3InfoAsync(sourceCode, "glossary", apiKey, baseUrl);
-            var targetGlossaryInfo = await LanguageClientV3.GetLanguageV3InfoAsync(targetCode, "glossary", apiKey, baseUrl);
-
-            result.SupportsGlossaries = sourceGlossaryInfo?.UsableAsSource == true
-                                     && targetGlossaryInfo?.UsableAsTarget == true;
-
-            return result;
-        }
-
-        private static (string code, bool isFallback, string fallbackMessage) GetDeepLLanguageCode(
+        public static (string code, bool isFallback, string fallbackMessage) GetDeepLLanguageCode(
             Sdl.Core.Globalization.CultureCode cultureCode, bool isSourceLanguage)
         {
             var cultureName = cultureCode.Name.ToUpperInvariant();
@@ -89,6 +48,47 @@ namespace Sdl.Community.DeepLMTProvider.Service
 
             return result;
         }
+
+        public async Task<LanguagePairValidationResult> ValidateAsync(
+                    LanguagePair languagePair,
+            string apiKey)
+        {
+            var (sourceCode, isSourceFallback, sourceFallbackMsg) = GetDeepLLanguageCode(languagePair.SourceCulture, isSourceLanguage: true);
+            var (targetCode, isTargetFallback, targetFallbackMsg) = GetDeepLLanguageCode(languagePair.TargetCulture, isSourceLanguage: false);
+
+            System.Diagnostics.Debug.WriteLine($"[DeepL Validation] Validating source: '{sourceCode}', target: '{targetCode}'");
+
+            var result = new LanguagePairValidationResult();
+
+            if (isSourceFallback && !string.IsNullOrEmpty(sourceFallbackMsg))
+                result.Messages.Add($"ℹ️ {sourceFallbackMsg}");
+            if (isTargetFallback && !string.IsNullOrEmpty(targetFallbackMsg))
+                result.Messages.Add($"ℹ️ {targetFallbackMsg}");
+
+            result.IsSourceLanguageSupported = await LanguageClientV3.IsLanguageSupportedAsync(
+                sourceCode, "source", apiKey, "translate_text");
+            result.IsTargetLanguageSupported = await LanguageClientV3.IsLanguageSupportedAsync(
+                targetCode, "target", apiKey, "translate_text");
+
+            if (!result.IsSourceLanguageSupported)
+                result.Messages.Add($"Source language '{languagePair.SourceCulture}' ({sourceCode}) is not supported by DeepL API for text translation.");
+            if (!result.IsTargetLanguageSupported)
+                result.Messages.Add($"Target language '{languagePair.TargetCulture}' ({targetCode}) is not supported by DeepL API for text translation.");
+
+            if (!result.IsSourceLanguageSupported || !result.IsTargetLanguageSupported)
+                return result;
+
+            var targetInfo = await LanguageClientV3.GetLanguageV3InfoAsync(targetCode, "translate_text", apiKey);
+
+            result.SupportsFormality = targetInfo?.Features?.Contains("formality") == true;
+
+            var sourceGlossaryInfo = await LanguageClientV3.GetLanguageV3InfoAsync(sourceCode, "glossary", apiKey);
+            var targetGlossaryInfo = await LanguageClientV3.GetLanguageV3InfoAsync(targetCode, "glossary", apiKey);
+
+            result.SupportsGlossaries = sourceGlossaryInfo?.UsableAsSource == true
+                                     && targetGlossaryInfo?.UsableAsTarget == true;
+
+            return result;
+        }
     }
 }
-
