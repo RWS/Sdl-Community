@@ -5,6 +5,7 @@ using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.Community.DeepLMTProvider.Service;
 using Sdl.LanguagePlatform.Core;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -15,6 +16,8 @@ namespace Sdl.Community.DeepLMTProvider.Client
 {
     public class DeepLTranslationProviderClient
     {
+        private const int MaxBatchSizeBytes = 128 * 1024;
+
         private static readonly Logger Logger = Log.GetLogger(nameof(DeepLTranslationProviderClient));
 
         public DeepLTranslationProviderClient(string key)
@@ -102,10 +105,113 @@ namespace Sdl.Community.DeepLMTProvider.Client
             return (null, errorMessage);
         }
 
+        public IReadOnlyList<(string Translation, string ErrorMessage)> TranslateBatch(
+            LanguagePair languageDirection,
+            IReadOnlyList<string> sourceTexts,
+            DeepLSettings deepLSettings)
+        {
+            var (sourceLanguage, _, _) = LanguageValidationService.GetDeepLLanguageCode(languageDirection.SourceCulture, true);
+            var (targetLanguage, _, _) = LanguageValidationService.GetDeepLLanguageCode(languageDirection.TargetCulture, false);
+
+            var modelType = deepLSettings.ModelType == ModelType.Not_Supported
+                ? ModelType.Quality_Optimized.ToString().ToLowerInvariant()
+                : deepLSettings.ModelType.ToString().ToLowerInvariant();
+
+            var tagHandling = deepLSettings.TagHandling == TagFormat.None
+                ? null
+                : deepLSettings.TagHandling.ToString().ToLowerInvariant();
+
+            var formality = deepLSettings.Formality == Formality.Not_Supported
+                ? null
+                : deepLSettings.Formality.ToString().ToLowerInvariant();
+
+            var results = new (string Translation, string ErrorMessage)[sourceTexts.Count];
+            var batchStartIndex = 0;
+
+            foreach (var batch in BuildBatches(sourceTexts))
+            {
+                var deeplRequestParameters = new DeeplRequestParameters
+                {
+                    Text = batch,
+                    SourceLanguage = sourceLanguage,
+                    TargetLanguage = targetLanguage,
+                    Formality = formality,
+                    GlossaryId = deepLSettings.GlossaryId,
+                    PreserveFormatting = deepLSettings.PreserveFormatting,
+                    TagHandling = tagHandling,
+                    SplittingSentenceHandling = deepLSettings.SplitSentencesHandling.GetApiValue(),
+                    IgnoreTags = deepLSettings.IgnoreTags,
+                    ModelType = modelType,
+                    StyleId = deepLSettings.StyleId,
+                    TagHandlingVersion = "v2"
+                };
+
+                ApplyDeepLRestrictions(deeplRequestParameters);
+
+                try
+                {
+                    var response = Translate(deeplRequestParameters);
+                    var responseBody = response.Content?.ReadAsStringAsync().Result;
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorMessage = !string.IsNullOrWhiteSpace(responseBody) ? responseBody : response.ReasonPhrase;
+                        for (var i = 0; i < batch.Count; i++)
+                            results[batchStartIndex + i] = (null, errorMessage);
+                    }
+                    else
+                    {
+                        var translatedObject = JsonConvert.DeserializeObject<TranslationResponse>(responseBody);
+                        for (var i = 0; i < batch.Count; i++)
+                        {
+                            var translation = translatedObject?.Translations?.Count > i
+                                ? translatedObject.Translations[i].Text
+                                : null;
+                            results[batchStartIndex + i] = (translation, null);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var inner = ex is AggregateException aEx ? aEx.InnerExceptions.FirstOrDefault() ?? ex : ex;
+                    for (var i = 0; i < batch.Count; i++)
+                        results[batchStartIndex + i] = (null, inner.Message);
+                }
+
+                batchStartIndex += batch.Count;
+            }
+
+            return results;
+        }
+
         private static void ApplyDeepLRestrictions(DeeplRequestParameters deeplRequestParameters)
         {
             deeplRequestParameters.TagHandlingVersion =
                 deeplRequestParameters.ModelType == "latency_optimized" ? "v1" : "v2";
+        }
+
+        private static IEnumerable<List<string>> BuildBatches(IReadOnlyList<string> sourceTexts)
+        {
+            var currentBatch = new List<string>();
+            var currentBatchSize = 0;
+
+            foreach (var text in sourceTexts)
+            {
+                var textSize = Encoding.UTF8.GetByteCount(text ?? string.Empty);
+
+                if (currentBatch.Count > 0 && currentBatchSize + textSize > MaxBatchSizeBytes)
+                {
+                    yield return currentBatch;
+                    currentBatch = new List<string>();
+                    currentBatchSize = 0;
+                }
+
+                currentBatch.Add(text);
+                currentBatchSize += textSize;
+            }
+
+            if (currentBatch.Count > 0)
+                yield return currentBatch;
         }
 
         private static HttpResponseMessage IsValidApiKey() =>

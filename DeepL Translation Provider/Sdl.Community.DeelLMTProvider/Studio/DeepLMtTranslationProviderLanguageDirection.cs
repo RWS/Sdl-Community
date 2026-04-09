@@ -227,38 +227,40 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             return resultsList;
         }
 
-        private (string Translation, string ErrorMessage) LookupDeepL(string sourceText) =>
-            _connecter.Translate(_languageDirection, sourceText,
-                new(
-                    _languagePairOptions?.Formality ?? Formality.Default,
-                    _languagePairOptions?.SelectedGlossary?.Id,
-                    _options.TagHandling,
-                    _options.SplitSentenceHandling,
-                    _options.PreserveFormatting,
-                    _options.IgnoreTagsParameter,
-                    _languagePairOptions?.ModelType ?? ModelType.Prefer_Quality_Optimized,
-                    _languagePairOptions?.SelectedStyle.ID));
-
         private List<PreTranslateSegment> TranslateSegments(List<PreTranslateSegment> preTranslateSegments)
         {
             foreach (var segment in preTranslateSegments.Where(segment => segment != null))
             {
                 var newSeg = segment.TranslationUnit.SourceSegment.Duplicate();
-
-                var sourceText = ApplyBeforeTranslationSettings(newSeg);
-
-                segment.SourceText = sourceText;
+                segment.SourceText = ApplyBeforeTranslationSettings(newSeg);
             }
 
+            var eligibleSegments = preTranslateSegments
+                .Where(segment => segment != null &&
+                       (_options.ResendDraft || segment.TranslationUnit.ConfirmationLevel == ConfirmationLevel.Unspecified))
+                .ToList();
+
+            if (!eligibleSegments.Any())
+                return preTranslateSegments;
+
+            var deepLSettings = new DeepLSettings(
+                _languagePairOptions?.Formality ?? Formality.Default,
+                _languagePairOptions?.SelectedGlossary?.Id,
+                _options.TagHandling,
+                _options.SplitSentenceHandling,
+                _options.PreserveFormatting,
+                _options.IgnoreTagsParameter,
+                _languagePairOptions?.ModelType ?? ModelType.Prefer_Quality_Optimized,
+                _languagePairOptions?.SelectedStyle.ID);
+
+            var sourceTexts = eligibleSegments.Select(s => s.SourceText).ToList();
+            var translationResults = _connecter.TranslateBatch(_languageDirection, sourceTexts, deepLSettings);
+
             var errorMessages = new List<ErrorItem>();
-            Parallel.ForEach(preTranslateSegments, segment =>
+            for (var i = 0; i < eligibleSegments.Count; i++)
             {
-                if (segment == null) return;
-
-                if (!_options.ResendDraft &&
-                    segment.TranslationUnit.ConfirmationLevel != ConfirmationLevel.Unspecified) return;
-
-                var (translation, errorMessage) = LookupDeepL(segment.SourceText);
+                var segment = eligibleSegments[i];
+                var (translation, errorMessage) = translationResults[i];
                 segment.PlainTranslation = translation;
                 if (errorMessage is not null)
                     errorMessages.Add(new ErrorItem
@@ -266,7 +268,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                         Id = int.Parse(segment.TranslationUnit.DocumentSegmentPair.Properties.Id.ToString()),
                         Message = errorMessage
                     });
-            });
+            }
 
             if (!errorMessages.Any())
                 return preTranslateSegments;
@@ -276,7 +278,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             LogErrors(errorMessages);
             NotificationService.Show(errorMessages);
 
-            return  preTranslateSegments;
+            return preTranslateSegments;
         }
 
         private void LogErrors(List<ErrorItem> errorMessages)
