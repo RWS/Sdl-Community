@@ -33,9 +33,10 @@ namespace Sdl.Community.DeepLMTProvider.Service
                 "ES-419" when isSourceLanguage =>
                     ("es", true, "Latin American Spanish (es-419) will use generic Spanish (es) for source language"),
 
-                "ZH-CN" or "ZH-HANS" when !isSourceLanguage => ("zh-Hans", false, null),
-                "ZH-TW" or "ZH-HANT" when !isSourceLanguage => ("zh-Hant", false, null),
-                "ZH-CN" or "ZH-HANS" or "ZH-TW" or "ZH-HANT" when isSourceLanguage =>
+                "ZH-CN" or "ZH-SG" or "ZH-HANS" or "ZH-HANS-HK" or "ZH-HANS-MO" when !isSourceLanguage => ("zh-Hans", false, null),
+                "ZH-TW" or "ZH-HK" or "ZH-MO" or "ZH-HANT" when !isSourceLanguage => ("zh-Hant", false, null),
+                "ZH-CN" or "ZH-SG" or "ZH-HANS" or "ZH-HANS-HK" or "ZH-HANS-MO"
+                or "ZH-TW" or "ZH-HK" or "ZH-MO" or "ZH-HANT" when isSourceLanguage =>
                     ("zh", true, $"Chinese variant '{cultureName}' will use generic 'zh' for source language (variants only supported as target)"),
 
                 _ when cultureName != regionNeutralName.ToUpperInvariant() =>
