@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -17,10 +18,11 @@ namespace Sdl.Community.DeepLMTProvider.Client
         // Session-scoped cache keyed by (product, apiKey, baseUrl).
         // Static lifetime matches Studio's process lifetime, so results persist for the whole session.
         private static readonly Dictionary<(string product, string apiKey), List<LanguageV3Response>> _cache = new();
+        private static readonly Logger Logger = Log.GetLogger(nameof(LanguageClientV3));
 
         private static string BaseUrl => Constants.BaseUrlV3;
 
-        /// <summary>Clears the session language cache. Call after an API key change to release stale entries.</summary>
+        /// <summary>Clears the session language cache.
         public static void ClearCache() => _cache.Clear();
 
         /// <summary>Gets detailed language information with all features from V3 API.</summary>
@@ -81,24 +83,24 @@ namespace Sdl.Community.DeepLMTProvider.Client
             {
                 var response = await AppInitializer.Client.SendAsync(request);
 
-                System.Diagnostics.Debug.WriteLine($"[DeepL V3] Request: {requestUri}");
-                System.Diagnostics.Debug.WriteLine($"[DeepL V3] Response Status: {response.StatusCode}");
+                Logger.Info($"Request: {requestUri}");
+                Logger.Info($"Response Status: {response.StatusCode}");
 
                 response.EnsureSuccessStatusCode();
 
                 var content = await response.Content.ReadAsStringAsync();
-                System.Diagnostics.Debug.WriteLine($"[DeepL V3] Response Content: {content}");
+                Logger.Info($"Response Content: {content}");
 
                 return JsonConvert.DeserializeObject<List<LanguageV3Response>>(content) ?? new List<LanguageV3Response>();
             }
             catch (HttpRequestException ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[DeepL V3] HTTP Error: {ex.Message}");
+                Logger.Error(ex, "Failed to retrieve languages from DeepL API");
                 throw new InvalidOperationException($"Failed to retrieve languages from DeepL API: {ex.Message}", ex);
             }
             catch (JsonException ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[DeepL V3] JSON Error: {ex.Message}");
+                Logger.Error(ex, "Failed to parse language response from DeepL API");
                 throw new InvalidOperationException($"Failed to parse language response from DeepL API: {ex.Message}", ex);
             }
         }

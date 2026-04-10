@@ -1,3 +1,4 @@
+using NLog;
 using Sdl.Community.DeepLMTProvider.Client;
 using Sdl.Community.DeepLMTProvider.Interface;
 using Sdl.Community.DeepLMTProvider.Model;
@@ -9,6 +10,8 @@ namespace Sdl.Community.DeepLMTProvider.Service
 {
     public class LanguageValidationService : ILanguageValidationService
     {
+        private static readonly Logger Logger = Log.GetLogger(nameof(LanguageValidationService));
+
         private static string BaseUrl => Constants.BaseUrlV3;
 
         public static (string code, bool isFallback, string fallbackMessage) GetDeepLLanguageCode(
@@ -45,7 +48,7 @@ namespace Sdl.Community.DeepLMTProvider.Service
                 _ => (regionNeutralName, false, null)
             };
 
-            System.Diagnostics.Debug.WriteLine($"[DeepL] Converting culture '{cultureCode.Name}' (regionNeutral: '{cultureCode.RegionNeutralName}') to DeepL code: '{result.Item1}' (fallback: {result.Item2}, isSource: {isSourceLanguage})");
+            Logger.Info($"Converting culture '{cultureCode.Name}' (regionNeutral: '{cultureCode.RegionNeutralName}') to DeepL code: '{result.Item1}' (fallback: {result.Item2}, isSource: {isSourceLanguage})");
 
             return result;
         }
@@ -57,7 +60,7 @@ namespace Sdl.Community.DeepLMTProvider.Service
             var (sourceCode, isSourceFallback, sourceFallbackMsg) = GetDeepLLanguageCode(languagePair.SourceCulture, isSourceLanguage: true);
             var (targetCode, isTargetFallback, targetFallbackMsg) = GetDeepLLanguageCode(languagePair.TargetCulture, isSourceLanguage: false);
 
-            System.Diagnostics.Debug.WriteLine($"[DeepL Validation] Validating source: '{sourceCode}', target: '{targetCode}'");
+            Logger.Info($"Validating source: '{sourceCode}', target: '{targetCode}'");
 
             var result = new LanguagePairValidationResult();
 

@@ -1,4 +1,5 @@
-﻿using Sdl.Community.DeepLMTProvider.Client;
+﻿using NLog;
+using Sdl.Community.DeepLMTProvider.Client;
 using Sdl.Community.DeepLMTProvider.Command;
 using Sdl.Community.DeepLMTProvider.Interface;
 using Sdl.Community.DeepLMTProvider.Model;
@@ -21,6 +22,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 {
     public class DeepLWindowViewModel : ViewModel
     {
+        private static readonly Logger Logger = Log.GetLogger(nameof(DeepLWindowViewModel));
         private ObservableCollection<LanguagePairOptions> _languagePairOptions = new();
         private Dictionary<LanguagePair, List<string>> _languagePairValidationErrors = new();
 
@@ -288,12 +290,9 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                         targetLangCode == style.Language?.ToLowerInvariant() || style.Name == PluginResources.NoStyle)
                     .ToList();
 
-                System.Diagnostics.Debug.WriteLine($"[DeepL] Language pair: {languagePair.SourceCulture} -> {languagePair.TargetCulture}, targetLangCode: '{targetLangCode}'");
-                System.Diagnostics.Debug.WriteLine($"[DeepL] All styles count: {allStyles.Count}, filtered styles for this language: {currentLanguageStyles.Count}");
-                foreach (var style in currentLanguageStyles)
-                {
-                    System.Diagnostics.Debug.WriteLine($"[DeepL]   - Style: '{style.Name}', Language: '{style.Language}'");
-                }
+                Logger.Info($"[DeepL] Language pair: {languagePair.SourceCulture} -> {languagePair.TargetCulture}, targetLangCode: '{targetLangCode}'");
+                Logger.Info($"[DeepL] All styles count: {allStyles.Count}, filtered styles for this language: {currentLanguageStyles.Count}");
+                foreach (var style in currentLanguageStyles) Logger.Info($"[DeepL]   - Style: '{style.Name}', Language: '{style.Language}'");
 
                 var selectedStyle = currentLanguageStyles.FirstOrDefault(s => s.ID == languageSavedOptions?.SelectedStyle?.ID);
                 var formality = languageSavedOptions?.Formality ?? Formality.Default;
