@@ -37,8 +37,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             if (!dialog.DialogResult.HasValue || !dialog.DialogResult.Value)
                 return null;
 
-            var provider = new DeepLMtTranslationProvider(options, new DeepLTranslationProviderClient(options.ApiKey),
-                languagePairs);
+            var provider = new DeepLMtTranslationProvider(options, new DeepLTranslationProviderClient(options.ApiKey));
 
             var apiKey = DeepLWindowViewModel.Options.ApiKey;
             credentialStore.SetDeeplCredentials(apiKey, true);
@@ -93,7 +92,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                                                             TranslationProviderCredential credentials)
         {
             var deepLGlossaryClient = new DeepLGlossaryClient();
-            DeepLWindowViewModel = new DeepLWindowViewModel(options, deepLGlossaryClient, credentials, languagePairs, new MessageService());
+            DeepLWindowViewModel = new DeepLWindowViewModel(options, deepLGlossaryClient, credentials, languagePairs, new MessageService(), new LanguageValidationService());
             var dialog = new DeepLWindow(DeepLWindowViewModel);
 
             DeepLWindowViewModel.ManageGlossaries += ViewModel_ManageGlossaries;

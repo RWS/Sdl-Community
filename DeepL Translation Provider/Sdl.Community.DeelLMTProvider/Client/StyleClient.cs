@@ -26,10 +26,26 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
             try
             {
+                Logger.Info($"Requesting styles from: {request.RequestUri}");
+
                 using var response = await AppInitializer.Client.SendAsync(request);
-                return
-                    JsonConvert.DeserializeObject<StyleRulesResponse>(
-                        await response.Content.ReadAsStringAsync()).StyleRules;
+
+                Logger.Info($"Response Status: {response.StatusCode}");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    Logger.Error($"StyleClient failed with {response.StatusCode}: {errorContent}");
+                    return [];
+                }
+
+                var content = await response.Content.ReadAsStringAsync();
+                Logger.Info($"Response Content: {content}");
+
+                var styleRules = JsonConvert.DeserializeObject<StyleRulesResponse>(content).StyleRules;
+                Logger.Info($"Loaded {styleRules?.Count ?? 0} styles");
+
+                return styleRules ?? [];
             }
             catch(Exception ex)
             {

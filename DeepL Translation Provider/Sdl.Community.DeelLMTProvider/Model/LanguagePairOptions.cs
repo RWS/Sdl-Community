@@ -7,16 +7,10 @@ namespace Sdl.Community.DeepLMTProvider.Model
 {
     public class LanguagePairOptions : ViewModel.ViewModel
     {
-        private Formality _formality;
-        private ModelType _modelType;
-        private GlossaryInfo _selectedGlossary;
-        private DeepLStyle _selectedStyle;
-        private List<DeepLStyle> _styles = [];
-
         public Formality Formality
         {
-            get => _formality;
-            set => SetField(ref _formality, value);
+            get;
+            set => SetField(ref field, value);
         }
 
         [JsonIgnore]
@@ -26,10 +20,10 @@ namespace Sdl.Community.DeepLMTProvider.Model
 
         public ModelType ModelType
         {
-            get => _modelType;
+            get;
             set
             {
-                if (!SetField(ref _modelType, value)) return;
+                if (!SetField(ref field, value)) return;
                 if (value == ModelType.Latency_Optimized)
                     SelectedStyle = Styles.FirstOrDefault(s => s.Name == PluginResources.NoStyle);
             }
@@ -37,16 +31,16 @@ namespace Sdl.Community.DeepLMTProvider.Model
 
         public GlossaryInfo SelectedGlossary
         {
-            get => _selectedGlossary;
-            set => SetField(ref _selectedGlossary, value);
+            get;
+            set => SetField(ref field, value);
         }
 
         public DeepLStyle SelectedStyle
         {
-            get => _selectedStyle;
+            get;
             set
             {
-                if (!SetField(ref _selectedStyle, value)) return;
+                if (!SetField(ref field, value)) return;
                 if (value.Name != PluginResources.NoStyle)
                     ModelType = ModelType.Quality_Optimized;
             }
@@ -55,10 +49,60 @@ namespace Sdl.Community.DeepLMTProvider.Model
         [JsonIgnore]
         public List<DeepLStyle> Styles
         {
-            get => _styles;
-            set => SetField(ref _styles, value);
-        }
+            get;
+            set => SetField(ref field, value);
+        } = [];
+
+        /// <summary>
+        /// Indicates whether this language pair supports formality settings in DeepL V3 API
+        /// </summary>
+        [JsonIgnore]
+        public bool SupportsFormality
+        {
+            get;
+            set => SetField(ref field, value);
+        } = true;
+
+        /// <summary>
+        /// Indicates whether this language pair supports glossaries in DeepL V3 API
+        /// </summary>
+        [JsonIgnore]
+        public bool SupportsGlossaries
+        {
+            get;
+            set => SetField(ref field, value);
+        } = true;
 
         public override string ToString() => $"{nameof(LanguagePairOptions)}";
+
+        public void Apply(LanguagePairValidationResult result)
+        {
+            if (!result.IsSourceLanguageSupported || !result.IsTargetLanguageSupported)
+            {
+                result.Messages.Clear();
+                result.Messages = [$"Language pair {LanguagePair} not supported - removing from list."];
+                return;
+            }
+
+            SupportsFormality = result.SupportsFormality;
+            if (!result.SupportsFormality)
+            {
+                Formality = Formality.Not_Supported;
+                result.Messages.Add($"Formality settings are not supported for target language '{LanguagePair.TargetCulture}'.");
+            }
+
+            SupportsGlossaries = result.SupportsGlossaries;
+            if (!result.SupportsGlossaries)
+            {
+                SelectedGlossary = Glossaries?.FirstOrDefault(g => g.Name == PluginResources.GlossariesNotSupported);
+                result.Messages.Add($"Glossaries are not supported for this language pair '{LanguagePair.SourceCulture}' → '{LanguagePair.TargetCulture}'.");
+            }
+        }
+
+        public void ResetToUnsupported()
+        {
+            SupportsFormality = false;
+            SupportsGlossaries = false;
+        }
     }
 }

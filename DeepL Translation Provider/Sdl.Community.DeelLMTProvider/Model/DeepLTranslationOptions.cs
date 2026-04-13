@@ -12,8 +12,6 @@ namespace Sdl.Community.DeepLMTProvider.Model
         public string ApiVersion { get; set; }
         public List<string> IgnoreTagsParameter { get; set; }
         public List<LanguagePairOptions> LanguagePairOptions { get; set; }
-        public Dictionary<string, string> LanguagesSupported { get; set; } = new();
-
 
         public bool PreserveFormatting { get; set; }
 

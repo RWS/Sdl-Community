@@ -1,6 +1,6 @@
-﻿using Sdl.Community.DeepLMTProvider.Client;
+﻿using NLog;
+using Sdl.Community.DeepLMTProvider.Client;
 using Sdl.Community.DeepLMTProvider.Command;
-using Sdl.Community.DeepLMTProvider.Extensions;
 using Sdl.Community.DeepLMTProvider.Interface;
 using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.LanguagePlatform.Core;
@@ -9,10 +9,10 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
@@ -22,23 +22,16 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 {
     public class DeepLWindowViewModel : ViewModel
     {
-        private string _apiKey;
-        private string _apiKeyValidationMessage;
-        private string _apiVersion;
-        private List<string> _ignoreTags;
+        private static readonly Logger Logger = Log.GetLogger(nameof(DeepLWindowViewModel));
         private ObservableCollection<LanguagePairOptions> _languagePairOptions = new();
-        private bool _preserveFormatting;
-        private bool _resendDraft;
-        private bool _sendPlainText;
-        private SplitSentences _splitSentencesType;
-        private TagFormat _tagType;
-        private string _validationMessages;
+        private Dictionary<LanguagePair, List<string>> _languagePairValidationErrors = new();
 
-        public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, IDeepLGlossaryClient glossaryClient, IMessageService messageService)
+        public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, IDeepLGlossaryClient glossaryClient, IMessageService messageService, ILanguageValidationService languageValidationService)
         {
             IsTellMeAction = true;
             MessageService = messageService;
             GlossaryClient = glossaryClient;
+            LanguageValidationService = languageValidationService;
 
             var currentProject = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
             Title = $"{Title} - {currentProject.GetProjectInfo().Name}";
@@ -58,11 +51,12 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             LoadLanguagePairSettings();
         }
 
-        public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, IDeepLGlossaryClient glossaryClient, TranslationProviderCredential credentialStore, LanguagePair[] languagePairs, IMessageService messageService)
+        public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, IDeepLGlossaryClient glossaryClient, TranslationProviderCredential credentialStore, LanguagePair[] languagePairs, IMessageService messageService, ILanguageValidationService languageValidationService)
         {
             MessageService = messageService;
             LanguagePairs = languagePairs;
             GlossaryClient = glossaryClient;
+            LanguageValidationService = languageValidationService;
             IsTellMeAction = false;
 
             Options = deepLTranslationOptions;
@@ -78,17 +72,16 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             PasswordChangedTimer.Elapsed += OnPasswordChanged;
 
             LoadCredentialSettings(credentialStore);
-            //DeepLTranslationProviderClient.ApiKeyChanged += Dispatcher_LoadLanguagePairSettings;
         }
 
         public event Action ManageGlossaries;
 
         public string ApiKey
         {
-            get => _apiKey;
+            get;
             set
             {
-                SetField(ref _apiKey, value?.Trim());
+                SetField(ref field, value?.Trim());
                 PasswordChangedTimer.Enabled = true;
             }
         }
@@ -97,20 +90,20 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         public string ApiKeyValidationMessage
         {
-            get => _apiKeyValidationMessage;
+            get;
             set
             {
-                SetField(ref _apiKeyValidationMessage, value);
+                SetField(ref field, value);
                 OnPropertyChanged(nameof(OkCommand));
             }
         }
 
         public string ApiVersion
         {
-            get => _apiVersion;
+            get;
             set
             {
-                SetField(ref _apiVersion, value);
+                SetField(ref field, value);
                 OnPasswordChanged(null, null);
             }
         }
@@ -119,68 +112,128 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         public List<string> IgnoreTags
         {
-            get => _ignoreTags;
-            set => SetField(ref _ignoreTags, value);
+            get;
+            set => SetField(ref field, value);
         }
 
         public ObservableCollection<LanguagePairOptions> LanguagePairOptions
         {
             get => _languagePairOptions;
-            set => SetField(ref _languagePairOptions, value);
+            set
+            {
+                SetField(ref _languagePairOptions, value);
+
+                // Subscribe to changes in language pair options
+                if (_languagePairOptions != null)
+                {
+                    foreach (var option in _languagePairOptions)
+                    {
+                        option.PropertyChanged += OnLanguagePairOptionChanged;
+                    }
+                    _languagePairOptions.CollectionChanged += (sender, e) =>
+                    {
+                        if (e.NewItems != null)
+                        {
+                            foreach (LanguagePairOptions newOption in e.NewItems)
+                            {
+                                newOption.PropertyChanged += OnLanguagePairOptionChanged;
+                            }
+                        }
+                        if (e.OldItems != null)
+                        {
+                            foreach (LanguagePairOptions oldOption in e.OldItems)
+                            {
+                                oldOption.PropertyChanged -= OnLanguagePairOptionChanged;
+                            }
+                        }
+                    };
+                }
+            }
         }
 
         public ICommand ManageGlossariesCommand => new ParameterlessCommand(() => ManageGlossaries?.Invoke(), () => ApiKeyValidationMessage == null);
 
-        
+
         public ICommand OkCommand => new ParameterlessCommand(Save, () => ApiKeyValidationMessage == null);
 
         public DeepLTranslationOptions Options { get; set; }
 
         public bool PreserveFormatting
         {
-            get => _preserveFormatting;
-            set => SetField(ref _preserveFormatting, value);
+            get;
+            set => SetField(ref field, value);
         }
 
         public bool ResendDraft
         {
-            get => _resendDraft;
-            set => SetField(ref _resendDraft, value);
+            get;
+            set => SetField(ref field, value);
         }
 
         public bool SendPlainText
         {
-            get => _sendPlainText;
-            set => SetField(ref _sendPlainText, value);
+            get;
+            set => SetField(ref field, value);
         }
 
         public SplitSentences SplitSentencesType
         {
-            get => _splitSentencesType;
-            set => SetField(ref _splitSentencesType, value);
+            get;
+            set => SetField(ref field, value);
         }
 
         public TagFormat TagType
         {
-            get => _tagType;
+            get;
             // Add a method here to update the splitsentencestype
             set
             {
-                SetField(ref _tagType, value);
+                SetField(ref field, value);
                 SplitSentencesType = GetDefaultSplitSentences(value);
             }
         }
 
         public string Title { get; set; } = "DeepL Translation Provider";
 
+        public bool HasValidationErrors
+        {
+            get;
+            set => SetField(ref field, value);
+        }
+
+        public string ValidationIssues
+        {
+            get;
+            set => SetField(ref field, value);
+        }
+
         public string ValidationMessages
         {
-            get => _validationMessages;
-            set => SetField(ref _validationMessages, value);
+            get;
+            set => SetField(ref field, value);
+        }
+
+        public string ValidationMessagePreview
+        {
+            get;
+            set => SetField(ref field, value);
+        }
+
+        public string ValidationNotes
+        {
+            get;
+            set => SetField(ref field, value);
+        }
+
+        public bool IsValidating
+        {
+            get;
+            set => SetField(ref field, value);
         }
 
         private IDeepLGlossaryClient GlossaryClient { get; set; }
         private bool IsTellMeAction { get; }
+        private ILanguageValidationService LanguageValidationService { get; set; }
         private LanguagePair[] LanguagePairs { get; }
         private IMessageService MessageService { get; }
 
@@ -193,6 +246,9 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         public async Task LoadLanguagePairSettings()
         {
             ValidationMessages = null;
+            IsValidating = true;
+            _languagePairValidationErrors.Clear();
+
             List<GlossaryInfo> glossaries = [];
             List<DeepLStyle> allStyles = [];
 
@@ -202,7 +258,16 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                 allStyles = await GetStyles();
             }
 
-            if (ApiKey is null) return;
+            if (ApiKey is null)
+            {
+                HasValidationErrors = false;
+                ValidationIssues = null;
+                ValidationNotes = null;
+                ValidationMessagePreview = null;
+                IsValidating = false;
+                return;
+            }
+
             foreach (var languagePair in LanguagePairs)
             {
                 var sourceLangCode = languagePair.SourceCulture.RegionNeutralName.ToLowerInvariant();
@@ -225,15 +290,13 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                         targetLangCode == style.Language?.ToLowerInvariant() || style.Name == PluginResources.NoStyle)
                     .ToList();
 
+                Logger.Info($"[DeepL] Language pair: {languagePair.SourceCulture} -> {languagePair.TargetCulture}, targetLangCode: '{targetLangCode}'");
+                Logger.Info($"[DeepL] All styles count: {allStyles.Count}, filtered styles for this language: {currentLanguageStyles.Count}");
+                foreach (var style in currentLanguageStyles) Logger.Info($"[DeepL]   - Style: '{style.Name}', Language: '{style.Language}'");
+
                 var selectedStyle = currentLanguageStyles.FirstOrDefault(s => s.ID == languageSavedOptions?.SelectedStyle?.ID);
-
-                var formality = DeepLTranslationProviderClient.SupportsFormality(languagePair.TargetCulture)
-                    ? languageSavedOptions?.Formality ?? Formality.Default
-                    : Formality.Not_Supported;
-
-                var modelType = DeepLTranslationProviderClient.SupportsAllModelTypes(languagePair)
-                    ? languageSavedOptions?.ModelType ?? ModelType.Prefer_Quality_Optimized
-                    : ModelType.Not_Supported;
+                var formality = languageSavedOptions?.Formality ?? Formality.Default;
+                var modelType = languageSavedOptions?.ModelType ?? ModelType.Prefer_Quality_Optimized;
 
                 var newLanguagePairOptions = new LanguagePairOptions
                 {
@@ -246,10 +309,117 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                     ModelType = modelType
                 };
 
+                // Validate language pair settings using V3 API
+                var lpValid = await ValidateLanguagePairSettings(newLanguagePairOptions);
+
                 var oldLanguagePairOption = LanguagePairOptions.FirstOrDefault(lpo => lpo.LanguagePair.Equals(languagePair));
 
                 LanguagePairOptions.Remove(oldLanguagePairOption);
-                LanguagePairOptions.Add(newLanguagePairOptions);
+                if (lpValid) LanguagePairOptions.Add(newLanguagePairOptions);
+            }
+
+            // Update overall validation message
+            UpdateValidationMessages();
+            IsValidating = false;
+        }
+
+        private async Task<bool> ValidateLanguagePairSettings(LanguagePairOptions options)
+        {
+            if (string.IsNullOrEmpty(ApiKey) || options?.LanguagePair == null) return false;
+
+            var languagePair = options.LanguagePair;
+
+            try
+            {
+                var result = await LanguageValidationService.ValidateAsync(languagePair, ApiKey);
+
+                options.Apply(result);
+
+                var allMessages = result.Messages.ToList();
+                if (allMessages.Any())
+                    _languagePairValidationErrors[languagePair] = allMessages;
+                else
+                    _languagePairValidationErrors.Remove(languagePair);
+
+                return result.IsSourceLanguageSupported && result.IsTargetLanguageSupported;
+            }
+            catch (Exception ex)
+            {
+                options.ResetToUnsupported();
+                _languagePairValidationErrors[languagePair] = [$"Unable to validate language pair settings: {ex.Message}"];
+                return false;
+            }
+        }
+
+        private void UpdateValidationMessages()
+        {
+            if (!_languagePairValidationErrors.Any())
+            {
+                HasValidationErrors = false;
+                ValidationIssues = null;
+                ValidationNotes = null;
+                ValidationMessages = null;
+                ValidationMessagePreview = null;
+                return;
+            }
+
+            var issuesBuilder = new StringBuilder();
+            var notesBuilder = new StringBuilder();
+
+            foreach (var kvp in _languagePairValidationErrors)
+            {
+                var languagePair = kvp.Key;
+                var messages = kvp.Value;
+
+                var infoMessages = messages.Where(msg => msg.StartsWith("ℹ️")).ToList();
+                var errorMessages = messages.Where(msg => !msg.StartsWith("ℹ️")).ToList();
+
+                if (errorMessages.Any())
+                {
+                    issuesBuilder.AppendLine($"• {languagePair.SourceCulture} → {languagePair.TargetCulture}:");
+                    foreach (var error in errorMessages)
+                        issuesBuilder.AppendLine($"  - {error}");
+                    issuesBuilder.AppendLine();
+                }
+
+                if (infoMessages.Any())
+                {
+                    notesBuilder.AppendLine($"• {languagePair.SourceCulture} → {languagePair.TargetCulture}:");
+                    foreach (var info in infoMessages)
+                        notesBuilder.AppendLine($"  {info}");
+                    notesBuilder.AppendLine();
+                }
+            }
+
+            HasValidationErrors = issuesBuilder.Length > 0;
+            ValidationIssues = issuesBuilder.Length > 0 ? issuesBuilder.ToString().Trim() : null;
+            ValidationNotes = notesBuilder.Length > 0 ? notesBuilder.ToString().Trim() : null;
+            ValidationMessages = ValidationIssues ?? ValidationNotes;
+
+            var errorPairCount = _languagePairValidationErrors.Values.Count(msgs => msgs.Any(m => !m.StartsWith("\u2139\ufe0f")));
+            var infoPairCount = _languagePairValidationErrors.Values.Count(msgs => msgs.Any(m => m.StartsWith("\u2139\ufe0f")));
+
+            var previewParts = new List<string>();
+            if (errorPairCount > 0)
+                previewParts.Add($"\u26a0\ufe0f {errorPairCount} pair{(errorPairCount > 1 ? "s" : "")} with issues");
+            if (infoPairCount > 0)
+                previewParts.Add($"\u2139\ufe0f {infoPairCount} pair{(infoPairCount > 1 ? "s" : "")} with notes");
+
+            ValidationMessagePreview = string.Join(", ", previewParts) + " \u2014 click to view";
+        }
+
+        private async void OnLanguagePairOptionChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (sender is LanguagePairOptions option && !string.IsNullOrEmpty(ApiKey))
+            {
+                // Only validate specific properties that affect compatibility
+                if (e.PropertyName == "Formality" ||
+                    e.PropertyName == "ModelType" ||
+                    e.PropertyName == "SelectedGlossary")
+                {
+                    await ValidateLanguagePairSettings(option);
+                    UpdateValidationMessages();
+                }
             }
         }
 
@@ -279,7 +449,11 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         private void DetachEvents()
         {
             PasswordChangedTimer.Elapsed -= OnPasswordChanged;
-            //DeepLTranslationProviderClient.ApiKeyChanged -= Dispatcher_LoadLanguagePairSettings;
+
+            // Unsubscribe from language pair options changes
+            if (_languagePairOptions == null) return;
+
+            foreach (var option in _languagePairOptions) option.PropertyChanged -= OnLanguagePairOptionChanged;
         }
 
         private void Dispatcher_LoadLanguagePairSettings() =>
@@ -306,7 +480,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         private async Task<List<DeepLStyle>> GetStyles()
         {
-            var styles =  await StyleClient.GetStyles(ApiKey).ConfigureAwait(false) ?? [];
+            var styles = await StyleClient.GetStyles(ApiKey).ConfigureAwait(false) ?? [];
             styles.Add(DeepLStyle.NoStyle);
             return styles;
         }

@@ -2,11 +2,10 @@
 using Newtonsoft.Json.Serialization;
 using NLog;
 using Sdl.Community.DeepLMTProvider.Model;
-using Sdl.Core.Globalization;
+using Sdl.Community.DeepLMTProvider.Service;
 using Sdl.LanguagePlatform.Core;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -17,8 +16,9 @@ namespace Sdl.Community.DeepLMTProvider.Client
 {
     public class DeepLTranslationProviderClient
     {
+        private const int MaxBatchSizeBytes = 128 * 1024;
+
         private static readonly Logger Logger = Log.GetLogger(nameof(DeepLTranslationProviderClient));
-        private static string _apiKey;
 
         public DeepLTranslationProviderClient(string key)
         {
@@ -26,14 +26,12 @@ namespace Sdl.Community.DeepLMTProvider.Client
             ApiKey = key;
         }
 
-        public static event Action ApiKeyChanged;
-
         public static string ApiKey
         {
-            get => _apiKey;
+            get;
             set
             {
-                _apiKey = value;
+                field = value;
                 OnApiKeyChanged();
             }
         }
@@ -42,107 +40,12 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
         public static HttpResponseMessage IsApiKeyValidResponse { get; private set; }
 
-        private static Dictionary<string, List<string>> ChineseMappings { get; set; } = new()
-        {
-            ["ZH-HANS"] = ["ZH-CN", "ZH-SG", "ZH-HANS-HK", "ZH-HANS-MO"],
-            ["ZH-HANT"] = ["ZH-TW", "ZH-HK", "ZH-MO"]
-        };
-
         private static string ChosenBaseUrl => ApiVersion?.Contains("V1") ?? true ? Constants.BaseUrlV1 : Constants.BaseUrlV2;
-
-        private static List<string> SupportedSourceLanguages { get; set; }
-        private static Dictionary<string, bool> SupportedSourceLanguagesAndFormalities { get; set; }
-        private static List<string> SupportedTargetLanguages { get; set; }
-
-        private static Dictionary<string, bool> SupportedTargetLanguagesAndFormalities { get; set; }
-
-        // Get the target language based on availability in DeepL; if we have a flavour use that, otherwise use general culture of that flavour (two letter iso) if available, otherwise return null
-        // (e.g. for Portuguese, the leftLanguageTag (pt-PT or pt-BR) should be used, so the translations will correspond to the specific language flavor)
-        public static string GetLanguage(CultureInfo culture, List<string> languageList, bool isTarget = false)
-        {
-            var ietfLanguageTag = culture.IetfLanguageTag.ToUpperInvariant();
-            if (isTarget && ietfLanguageTag.Contains("ZH"))
-                return GetChineseFlavour(ietfLanguageTag);
-
-            if (languageList == null || !languageList.Any())
-                return string.Empty;
-
-            var twoLetterIso = culture.TwoLetterISOLanguageName.ToUpperInvariant();
-
-            var selectedTargetLanguage = languageList.FirstOrDefault(tl => tl == ietfLanguageTag) ?? languageList.FirstOrDefault(tl => tl == twoLetterIso);
-            return selectedTargetLanguage ?? (languageList.Any(tl => tl.Contains(twoLetterIso)) ? twoLetterIso : null);
-        }
-
-        public static Dictionary<string, bool> GetSupportedSourceLanguages(string apiKey)
-        {
-            var supportedLanguages = new Dictionary<string, bool>();
-            try
-            {
-                var response = LanguageClient.GetSupportedLanguages("source", apiKey, ChosenBaseUrl);
-                supportedLanguages =
-                    response.ToDictionary(
-                        item => item.Language.ToUpperInvariant(),
-                        item => item.SupportsOptions);
-            }
-            catch (Exception ex)
-            {
-                Logger.Error($"{ex}");
-            }
-
-            return supportedLanguages;
-        }
-
-        public static Dictionary<string, bool> GetSupportedTargetLanguages(string apiKey)
-        {
-            var supportedLanguages = new Dictionary<string, bool>();
-            try
-            {
-                var response = LanguageClient.GetSupportedLanguages("target", apiKey, ChosenBaseUrl);
-                supportedLanguages =
-                    response.ToDictionary(
-                        item => item.Language.ToUpperInvariant(),
-                        item => item.SupportsOptions);
-            }
-            catch (Exception ex)
-            {
-                Logger.Error($"{ex}");
-            }
-
-            return supportedLanguages;
-        }
-
-        public static bool SupportsAllModelTypes(LanguagePair languagePair)
-        {
-            var sourceLanguage = GetLanguage(languagePair.SourceCulture, SupportedSourceLanguages);
-            var targetLanguage = GetLanguage(languagePair.TargetCulture, SupportedTargetLanguages, true);
-
-            return SupportedSourceLanguagesAndFormalities.TryGetValue(
-                sourceLanguage, out var supportsOptions) && SupportedTargetLanguagesAndFormalities.TryGetValue(
-                targetLanguage, out supportsOptions) && supportsOptions;
-        }
-
-        public static bool SupportsFormality(CultureCode cultureCode)
-        {
-            var targetLanguage = GetLanguage(cultureCode, SupportedTargetLanguages, true);
-            return SupportedTargetLanguagesAndFormalities.TryGetValue(
-                targetLanguage, out var supportsOptions) && supportsOptions;
-        }
-
-        public bool IsLanguagePairSupported(CultureInfo sourceCulture, CultureInfo targetCulture)
-        {
-            var supportedSourceLanguage = GetLanguage(sourceCulture, SupportedSourceLanguages);
-            // do not make a call again to the server if source languages are not supported, because the return condition requires both source and target languages to be supported
-            var supportedTargetLanguage = !string.IsNullOrEmpty(supportedSourceLanguage)
-                ? GetLanguage(targetCulture, SupportedTargetLanguages)
-                : string.Empty;
-
-            return !string.IsNullOrEmpty(supportedSourceLanguage) && !string.IsNullOrEmpty(supportedTargetLanguage);
-        }
 
         public (string Translation, string ErrorMessage) Translate(LanguagePair languageDirection, string sourceText, DeepLSettings deepLSettings)
         {
-            var targetLanguage = GetLanguage(languageDirection.TargetCulture, SupportedTargetLanguages, true);
-            var sourceLanguage = GetLanguage(languageDirection.SourceCulture, SupportedSourceLanguages);
+            var (sourceLanguage, _, _) = LanguageValidationService.GetDeepLLanguageCode(languageDirection.SourceCulture, true);
+            var (targetLanguage, _, _) = LanguageValidationService.GetDeepLLanguageCode(languageDirection.TargetCulture, false);
 
             string errorMessage = null;
             try
@@ -195,11 +98,90 @@ namespace Sdl.Community.DeepLMTProvider.Client
             }
             catch (Exception ex)
             {
-                if (ex is AggregateException aEx) ex = aEx.InnerException;
-                errorMessage = ex?.Message;
+                var inner = ex is AggregateException aEx ? aEx.InnerExceptions.FirstOrDefault() ?? ex : ex;
+                errorMessage = inner.Message;
             }
 
             return (null, errorMessage);
+        }
+
+        public IReadOnlyList<(string Translation, string ErrorMessage)> TranslateBatch(
+            LanguagePair languageDirection,
+            IReadOnlyList<string> sourceTexts,
+            DeepLSettings deepLSettings)
+        {
+            var (sourceLanguage, _, _) = LanguageValidationService.GetDeepLLanguageCode(languageDirection.SourceCulture, true);
+            var (targetLanguage, _, _) = LanguageValidationService.GetDeepLLanguageCode(languageDirection.TargetCulture, false);
+
+            var modelType = deepLSettings.ModelType == ModelType.Not_Supported
+                ? ModelType.Quality_Optimized.ToString().ToLowerInvariant()
+                : deepLSettings.ModelType.ToString().ToLowerInvariant();
+
+            var tagHandling = deepLSettings.TagHandling == TagFormat.None
+                ? null
+                : deepLSettings.TagHandling.ToString().ToLowerInvariant();
+
+            var formality = deepLSettings.Formality == Formality.Not_Supported
+                ? null
+                : deepLSettings.Formality.ToString().ToLowerInvariant();
+
+            var results = new (string Translation, string ErrorMessage)[sourceTexts.Count];
+            var batchStartIndex = 0;
+
+            foreach (var batch in BuildBatches(sourceTexts))
+            {
+                var deeplRequestParameters = new DeeplRequestParameters
+                {
+                    Text = batch,
+                    SourceLanguage = sourceLanguage,
+                    TargetLanguage = targetLanguage,
+                    Formality = formality,
+                    GlossaryId = deepLSettings.GlossaryId,
+                    PreserveFormatting = deepLSettings.PreserveFormatting,
+                    TagHandling = tagHandling,
+                    SplittingSentenceHandling = deepLSettings.SplitSentencesHandling.GetApiValue(),
+                    IgnoreTags = deepLSettings.IgnoreTags,
+                    ModelType = modelType,
+                    StyleId = deepLSettings.StyleId,
+                    TagHandlingVersion = "v2"
+                };
+
+                ApplyDeepLRestrictions(deeplRequestParameters);
+
+                try
+                {
+                    var response = Translate(deeplRequestParameters);
+                    var responseBody = response.Content?.ReadAsStringAsync().Result;
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorMessage = !string.IsNullOrWhiteSpace(responseBody) ? responseBody : response.ReasonPhrase;
+                        for (var i = 0; i < batch.Count; i++)
+                            results[batchStartIndex + i] = (null, errorMessage);
+                    }
+                    else
+                    {
+                        var translatedObject = JsonConvert.DeserializeObject<TranslationResponse>(responseBody);
+                        for (var i = 0; i < batch.Count; i++)
+                        {
+                            var translation = translatedObject?.Translations?.Count > i
+                                ? translatedObject.Translations[i].Text
+                                : null;
+                            results[batchStartIndex + i] = (translation, null);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var inner = ex is AggregateException aEx ? aEx.InnerExceptions.FirstOrDefault() ?? ex : ex;
+                    for (var i = 0; i < batch.Count; i++)
+                        results[batchStartIndex + i] = (null, inner.Message);
+                }
+
+                batchStartIndex += batch.Count;
+            }
+
+            return results;
         }
 
         private static void ApplyDeepLRestrictions(DeeplRequestParameters deeplRequestParameters)
@@ -208,37 +190,38 @@ namespace Sdl.Community.DeepLMTProvider.Client
                 deeplRequestParameters.ModelType == "latency_optimized" ? "v1" : "v2";
         }
 
-        private static string GetChineseFlavour(string languageName)
+        private static IEnumerable<List<string>> BuildBatches(IReadOnlyList<string> sourceTexts)
         {
-            return ChineseMappings.FirstOrDefault(m => m.Value.Contains(languageName)).Key;
+            var currentBatch = new List<string>();
+            var currentBatchSize = 0;
+
+            foreach (var text in sourceTexts)
+            {
+                var textSize = Encoding.UTF8.GetByteCount(text ?? string.Empty);
+
+                if (currentBatch.Count > 0 && currentBatchSize + textSize > MaxBatchSizeBytes)
+                {
+                    yield return currentBatch;
+                    currentBatch = new List<string>();
+                    currentBatchSize = 0;
+                }
+
+                currentBatch.Add(text);
+                currentBatchSize += textSize;
+            }
+
+            if (currentBatch.Count > 0)
+                yield return currentBatch;
         }
 
-        private static HttpResponseMessage IsValidApiKey()
-        {
-            return AppInitializer.Client.GetAsync($"{ChosenBaseUrl}/usage").Result;
-        }
+        private static HttpResponseMessage IsValidApiKey() =>
+            AppInitializer.Client.GetAsync($"{ChosenBaseUrl}/usage").Result;
 
         private static void OnApiKeyChanged()
         {
             AppInitializer.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("DeepL-Auth-Key", ApiKey);
             IsApiKeyValidResponse = IsValidApiKey();
-
-            if (!IsApiKeyValidResponse.IsSuccessStatusCode)
-                return;
-
-            if (SupportedTargetLanguagesAndFormalities is { Count: not 0 })
-            {
-                ApiKeyChanged?.Invoke();
-                return;
-            }
-
-            SupportedSourceLanguagesAndFormalities = GetSupportedSourceLanguages(ApiKey);
-            SupportedSourceLanguages = SupportedSourceLanguagesAndFormalities.Keys.ToList();
-
-            SupportedTargetLanguagesAndFormalities = GetSupportedTargetLanguages(ApiKey);
-            SupportedTargetLanguages = SupportedTargetLanguagesAndFormalities.Keys.ToList();
-
-            ApiKeyChanged?.Invoke();
+            LanguageClientV3.ClearCache();
         }
 
         private static HttpResponseMessage Translate(DeeplRequestParameters deeplRequestParameters)
@@ -251,11 +234,9 @@ namespace Sdl.Community.DeepLMTProvider.Client
                     ContractResolver = new CamelCasePropertyNamesContractResolver()
                 });
 
-            var content = new StringContent(requestJson, Encoding.UTF8, "application/json");
-
             var request = new HttpRequestMessage
             {
-                Content = content,
+                Content = new StringContent(requestJson, Encoding.UTF8, "application/json"),
                 Method = HttpMethod.Post,
                 RequestUri = new Uri($"{ChosenBaseUrl}/translate")
             };

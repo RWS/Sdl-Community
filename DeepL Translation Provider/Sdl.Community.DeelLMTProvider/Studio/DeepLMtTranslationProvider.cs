@@ -5,27 +5,22 @@ using NLog;
 using Sdl.Community.DeepLMTProvider.Interface;
 using Sdl.Community.DeepLMTProvider.Client;
 using Sdl.Community.DeepLMTProvider.Model;
+using Sdl.Community.DeepLMTProvider.Service;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using System.Threading.Tasks;
 
 namespace Sdl.Community.DeepLMTProvider.Studio
 {
     public class DeepLMtTranslationProvider : ITranslationProvider, ITranslationProviderExtension
     {
         public static readonly string ListTranslationProviderScheme = "deepltranslationprovider";
-        private readonly Logger _logger = Log.GetLogger(nameof(Client.DeepLTranslationProviderClient));
+        private readonly Logger _logger = Log.GetLogger(nameof(DeepLTranslationProviderClient));
 
-        public DeepLMtTranslationProvider(DeepLTranslationOptions options, DeepLTranslationProviderClient deepLTranslationProviderConnecter, LanguagePair[] languagePairs = null)
+        public DeepLMtTranslationProvider(DeepLTranslationOptions options, DeepLTranslationProviderClient deepLTranslationProviderConnecter)
         {
             DeepLTranslationProviderConnecter = deepLTranslationProviderConnecter;
             Options = options;
-
-            if (languagePairs != null)
-            {
-                GetSupportedTargetLanguages(languagePairs);
-            }
-
-            LanguagesSupported = Options.LanguagesSupported;
         }
 
         public bool IsReadOnly => true;
@@ -78,7 +73,15 @@ namespace Sdl.Community.DeepLMTProvider.Studio
         {
             try
             {
-                return DeepLTranslationProviderConnecter.IsLanguagePairSupported(languageDirection.SourceCulture, languageDirection.TargetCulture);
+                var (sourceLangCode, _, _) = LanguageValidationService.GetDeepLLanguageCode(languageDirection.SourceCulture, true);
+                var (targetLangCode, _, _) = LanguageValidationService.GetDeepLLanguageCode(languageDirection.TargetCulture, false);
+                return
+                    Task.Run(() => LanguageClientV3
+                            .IsLanguageSupportedAsync(sourceLangCode, "source", DeepLTranslationProviderClient.ApiKey))
+                        .GetAwaiter().GetResult() &&
+                    Task.Run(() => LanguageClientV3
+                            .IsLanguageSupportedAsync(targetLangCode, "target", DeepLTranslationProviderClient.ApiKey))
+                        .GetAwaiter().GetResult();
             }
             catch (Exception e)
             {
@@ -89,19 +92,19 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             return false;
         }
 
-        private void GetSupportedTargetLanguages(LanguagePair[] languagePairs)
-        {
-            foreach (var languagePair in languagePairs)
-            {
-                var targetLanguage = languagePair.TargetCulture.RegionNeutralName.ToUpper();
-                if (DeepLTranslationProviderConnecter.IsLanguagePairSupported(languagePair.SourceCulture, languagePair.TargetCulture) && !Options.LanguagesSupported.ContainsKey(targetLanguage))
-                {
-                    if (!Options.LanguagesSupported.ContainsKey(languagePair.TargetCultureName))
-                    {
-                        Options.LanguagesSupported.Add(languagePair.TargetCultureName, "DeepLTranslator");
-                    }
-                }
-            }
-        }
+        //private void GetSupportedTargetLanguages(LanguagePair[] languagePairs)
+        //{
+        //    foreach (var languagePair in languagePairs)
+        //    {
+        //        var targetLanguage = languagePair.TargetCulture.RegionNeutralName.ToUpper();
+        //        if (DeepLTranslationProviderConnecter.IsLanguagePairSupported(languagePair.SourceCulture, languagePair.TargetCulture) && !Options.LanguagesSupported.ContainsKey(targetLanguage))
+        //        {
+        //            if (!Options.LanguagesSupported.ContainsKey(languagePair.TargetCultureName))
+        //            {
+        //                Options.LanguagesSupported.Add(languagePair.TargetCultureName, "DeepLTranslator");
+        //            }
+        //        }
+        //    }
+        //}
     }
 }
