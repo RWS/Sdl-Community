@@ -151,9 +151,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             }
         }
 
-        public ICommand ManageGlossariesCommand => new ParameterlessCommand(() => ManageGlossaries?.Invoke(), () => ApiKeyValidationMessage == null);
-
-
         public ICommand OkCommand => new ParameterlessCommand(Save, () => ApiKeyValidationMessage == null);
 
         public DeepLTranslationOptions Options { get; set; }

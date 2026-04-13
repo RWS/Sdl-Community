@@ -20,7 +20,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
         private static readonly Dictionary<(string product, string apiKey), List<LanguageV3Response>> _cache = new();
         private static readonly Logger Logger = Log.GetLogger(nameof(LanguageClientV3));
 
-        private static string BaseUrl => Constants.BaseUrlV3;
+        private static string BaseUrl => Constants.BaseUrl;
 
         /// <summary>Clears the session language cache.
         public static void ClearCache() => _cache.Clear();

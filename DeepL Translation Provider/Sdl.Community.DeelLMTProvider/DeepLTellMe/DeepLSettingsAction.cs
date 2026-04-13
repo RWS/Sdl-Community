@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Sdl.Community.DeepLMTProvider.Client;
 using Sdl.Community.DeepLMTProvider.DeepLTellMe.WarningWindow;
-using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.Community.DeepLMTProvider.Service;
 using Sdl.Community.DeepLMTProvider.UI;
 using Sdl.Community.DeepLMTProvider.ViewModel;
@@ -57,13 +56,10 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
                         var options = OptionsProvider.GetTranslationOptions(translationProvider.MainTranslationProvider.Uri, state);
 
                         ViewModel = new DeepLWindowViewModel(options, new DeepLGlossaryClient(), new MessageService(), new LanguageValidationService());
-                        ViewModel.ManageGlossaries += ViewModel_ManageGlossaries;
 
                         var dialog = new DeepLWindow(ViewModel);
 
                         dialog.ShowDialog();
-
-                        ViewModel.ManageGlossaries -= ViewModel_ManageGlossaries;
 
                         if (dialog.DialogResult.HasValue && dialog.DialogResult.Value)
                         {
@@ -74,12 +70,6 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
                     }
                 }
             }
-        }
-
-        private void ViewModel_ManageGlossaries()
-        {
-            GlossaryBackupService.ViewModel_ManageGlossaries();
-            ViewModel.LoadLanguagePairSettings();
         }
     }
 }

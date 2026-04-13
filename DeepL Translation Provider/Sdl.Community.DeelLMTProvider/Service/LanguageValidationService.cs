@@ -12,7 +12,7 @@ namespace Sdl.Community.DeepLMTProvider.Service
     {
         private static readonly Logger Logger = Log.GetLogger(nameof(LanguageValidationService));
 
-        private static string BaseUrl => Constants.BaseUrlV3;
+        private static string BaseUrl => Constants.BaseUrl;
 
         public static (string code, bool isFallback, string fallbackMessage) GetDeepLLanguageCode(
             Sdl.Core.Globalization.CultureCode cultureCode, bool isSourceLanguage)
