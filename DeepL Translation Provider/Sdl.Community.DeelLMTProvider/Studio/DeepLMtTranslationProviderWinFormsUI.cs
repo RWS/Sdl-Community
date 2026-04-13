@@ -95,20 +95,11 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             DeepLWindowViewModel = new DeepLWindowViewModel(options, deepLGlossaryClient, credentials, languagePairs, new MessageService(), new LanguageValidationService());
             var dialog = new DeepLWindow(DeepLWindowViewModel);
 
-            DeepLWindowViewModel.ManageGlossaries += ViewModel_ManageGlossaries;
-            GlossaryBackupService.DeepLGlossaryClient = deepLGlossaryClient;
 
             ElementHost.EnableModelessKeyboardInterop(dialog);
             dialog.ShowDialog();
 
-            DeepLWindowViewModel.ManageGlossaries -= ViewModel_ManageGlossaries;
             return dialog;
-        }
-
-        private void ViewModel_ManageGlossaries()
-        {
-            GlossaryBackupService.ViewModel_ManageGlossaries();
-            DeepLWindowViewModel.LoadLanguagePairSettings();
         }
     }
 }

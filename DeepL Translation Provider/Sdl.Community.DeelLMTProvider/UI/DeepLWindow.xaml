@@ -380,12 +380,6 @@
                    DockPanel.Dock="Bottom"
                    Margin="10 5 10 5">
             <Button Style="{StaticResource Sdl.Button.SecondaryStyle}"
-                    Content="Manage glossaries"
-                    DockPanel.Dock="Left"
-                    Command="{Binding ManageGlossariesCommand}"
-                    Cursor="Hand" />
-
-            <Button Style="{StaticResource Sdl.Button.SecondaryStyle}"
                     IsCancel="True"
                     Content="Cancel"
                     Click="Cancel_Click"
