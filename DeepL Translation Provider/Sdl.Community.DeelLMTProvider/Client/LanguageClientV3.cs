@@ -17,13 +17,13 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
         // Session-scoped cache keyed by (product, apiKey, baseUrl).
         // Static lifetime matches Studio's process lifetime, so results persist for the whole session.
-        private static readonly Dictionary<(string product, string apiKey), List<LanguageV3Response>> _cache = new();
+        private static readonly Dictionary<(string product, string apiKey), List<LanguageV3Response>> Cache = new();
+
         private static readonly Logger Logger = Log.GetLogger(nameof(LanguageClientV3));
 
-        private static string BaseUrl => Constants.BaseUrlV3;
+        private static string BaseUrl => Constants.BaseUrl;
 
-        /// <summary>Clears the session language cache.
-        public static void ClearCache() => _cache.Clear();
+        public static void ClearCache() => Cache.Clear();
 
         /// <summary>Gets detailed language information with all features from V3 API.</summary>
         public static async Task<LanguageV3Response> GetLanguageV3InfoAsync(string languageCode, string product, string apiKey)
@@ -109,11 +109,11 @@ namespace Sdl.Community.DeepLMTProvider.Client
         private static async Task<List<LanguageV3Response>> GetCachedLanguagesAsync(string product, string apiKey)
         {
             var key = (product, apiKey);
-            if (_cache.TryGetValue(key, out var cached))
+            if (Cache.TryGetValue(key, out var cached))
                 return cached;
 
             var languages = await FetchFromApiAsync(product, apiKey);
-            _cache[key] = languages;
+            Cache[key] = languages;
             return languages;
         }
 

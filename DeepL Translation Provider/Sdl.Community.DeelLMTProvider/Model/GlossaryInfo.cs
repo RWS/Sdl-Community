@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Sdl.Community.DeepLMTProvider.Model
 {
@@ -28,10 +29,11 @@ namespace Sdl.Community.DeepLMTProvider.Model
             set => SetField(ref _name, value);
         }
 
-        [JsonProperty("source_lang")]
+        [JsonProperty("dictionaries")]
+        public List<GlossaryLanguagePair> Dictionaries { get; set; }
+
         public string SourceLanguage { get; set; }
 
-        [JsonProperty("target_lang")]
         public string TargetLanguage { get; set; }
 
         public override bool Equals(object obj)
