@@ -12,8 +12,6 @@ namespace Sdl.Community.DeepLMTProvider.Service
     {
         private static readonly Logger Logger = Log.GetLogger(nameof(LanguageValidationService));
 
-        private static string BaseUrl => Constants.BaseUrl;
-
         public static (string code, bool isFallback, string fallbackMessage) GetDeepLLanguageCode(
             Sdl.Core.Globalization.CultureCode cultureCode, bool isSourceLanguage)
         {
@@ -86,8 +84,11 @@ namespace Sdl.Community.DeepLMTProvider.Service
 
             result.SupportsFormality = targetInfo?.Features?.Contains("formality") == true;
 
-            var sourceGlossaryInfo = await LanguageClientV3.GetLanguageV3InfoAsync(sourceCode, "glossary", apiKey);
-            var targetGlossaryInfo = await LanguageClientV3.GetLanguageV3InfoAsync(targetCode, "glossary", apiKey);
+            var sourceCodeForGlossary = sourceCode.Split('-')[0];
+            var targetCodeForGlossary = targetCode.Split('-')[0];
+
+            var sourceGlossaryInfo = await LanguageClientV3.GetLanguageV3InfoAsync(sourceCodeForGlossary, "glossary", apiKey);
+            var targetGlossaryInfo = await LanguageClientV3.GetLanguageV3InfoAsync(targetCodeForGlossary, "glossary", apiKey);
 
             result.SupportsGlossaries = sourceGlossaryInfo?.UsableAsSource == true
                                      && targetGlossaryInfo?.UsableAsTarget == true;

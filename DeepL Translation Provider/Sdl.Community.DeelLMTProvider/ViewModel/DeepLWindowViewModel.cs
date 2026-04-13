@@ -74,8 +74,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             LoadCredentialSettings(credentialStore);
         }
 
-        public event Action ManageGlossaries;
-
         public string ApiKey
         {
             get;
