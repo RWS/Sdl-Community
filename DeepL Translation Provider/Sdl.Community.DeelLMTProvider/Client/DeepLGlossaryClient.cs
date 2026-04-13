@@ -4,6 +4,7 @@ using Sdl.Community.DeepLMTProvider.Interface;
 using Sdl.Community.DeepLMTProvider.Model;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -20,7 +21,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri($"{ChosenBaseUrl}/v2/glossaries"),
+                RequestUri = new Uri($"{ChosenBaseUrl}/v3/glossaries"),
                 Headers =
                 {
                     { "Authorization", $"DeepL-Auth-Key {apiKey}" },
@@ -34,7 +35,21 @@ namespace Sdl.Community.DeepLMTProvider.Client
             var serializedGlossaries = await response.Content.ReadAsStringAsync();
 
             return ErrorHandler.WrapTryCatch(() =>
-                JObject.Parse(serializedGlossaries)["glossaries"]?.ToObject<List<GlossaryInfo>>());
+            {
+                var multilingualGlossaries = JObject.Parse(serializedGlossaries)["glossaries"]?.ToObject<List<GlossaryInfo>>();
+                if (multilingualGlossaries == null) return null;
+
+                return multilingualGlossaries
+                    .SelectMany(g => g.Dictionaries ?? Enumerable.Empty<GlossaryLanguagePair>(),
+                        (g, dict) => new GlossaryInfo
+                        {
+                            Id = g.Id,
+                            Name = g.Name,
+                            SourceLanguage = dict.SourceLanguage,
+                            TargetLanguage = dict.TargetLanguage
+                        })
+                    .ToList();
+            });
         }
     }
 }
