@@ -1,12 +1,11 @@
-﻿using System;
-using Sdl.Community.DeepLMTProvider.Client;
-using Sdl.Community.DeepLMTProvider.Model;
+﻿using Sdl.Community.DeepLMTProvider.Client;
 using Sdl.Community.DeepLMTProvider.Service;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using System;
 
 namespace Sdl.Community.DeepLMTProvider.Studio
 {
-	[TranslationProviderFactory(Id = "DeepLMtTranslationProviderFactory",
+    [TranslationProviderFactory(Id = "DeepLMtTranslationProviderFactory",
         Name = "DeepLMtTranslationProviderFactory",
         Description = "DeepL Mt Translation Provider")]
     public class DeepLMtTranslationProviderFactory : ITranslationProviderFactory
@@ -20,7 +19,6 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 
             var credentials = credentialStore.GetCredential(translationProviderUri);
             options.ApiKey = credentials.Credential;
-            DeepLTranslationProviderClient.ApiVersion = options.ApiVersion;
             DeepLTranslationProviderClient.ApiKey = credentials.Credential;
 
             return new DeepLMtTranslationProvider(options, new DeepLTranslationProviderClient(options.ApiKey));

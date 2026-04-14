@@ -11,27 +11,11 @@ namespace Sdl.Community.DeepLMTProvider.UI
         {
             InitializeComponent();
             DataContext = viewModel;
-            Loaded += DeepLWindow_Loaded;
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             Close();
-        }
-
-        private void DeepLWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (ApiVersionCombobox.SelectedIndex == -1) ApiVersionCombobox.SelectedIndex = 0;
-        }
-
-        private void ValidationDetailsLink_Click(object sender, RoutedEventArgs e)
-        {
-            var viewModel = (DeepLWindowViewModel)DataContext;
-            var detailsWindow = new ValidationDetailsWindow(viewModel.ValidationIssues, viewModel.ValidationNotes)
-            {
-                Owner = this
-            };
-            detailsWindow.ShowDialog();
         }
 
         private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
@@ -43,6 +27,16 @@ namespace Sdl.Community.DeepLMTProvider.UI
         {
             DialogResult = true;
             Close();
+        }
+
+        private void ValidationDetailsLink_Click(object sender, RoutedEventArgs e)
+        {
+            var viewModel = (DeepLWindowViewModel)DataContext;
+            var detailsWindow = new ValidationDetailsWindow(viewModel.ValidationIssues, viewModel.ValidationNotes)
+            {
+                Owner = this
+            };
+            detailsWindow.ShowDialog();
         }
     }
 }
