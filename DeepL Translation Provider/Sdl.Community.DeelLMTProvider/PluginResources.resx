@@ -233,6 +233,9 @@ The formatting aspects affected by this setting include:
   <data name="NoStyle" xml:space="preserve">
     <value>No style</value>
   </data>
+  <data name="NoTranslationMemory" xml:space="preserve">
+    <value>No translation memory</value>
+  </data>
   <data name="GlossariesNotSupported" xml:space="preserve">
     <value>Not supported</value>
   </data>

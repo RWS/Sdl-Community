@@ -5,6 +5,9 @@ namespace Sdl.Community.DeepLMTProvider.Model
 {
     public class TranslationMemoryInfo
     {
+        [JsonIgnore]
+        public static TranslationMemoryInfo NoTranslationMemory { get; } = new() { Name = PluginResources.NoTranslationMemory };
+
         [JsonProperty("translation_memory_id")]
         public string Id { get; set; }
 

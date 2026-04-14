@@ -10,7 +10,8 @@ namespace Sdl.Community.DeepLMTProvider.Model
         bool preserveFormatting,
         List<string> ignoreTags,
         ModelType modelType,
-        string styleId)
+        string styleId,
+        string translationMemoryId = null)
     {
         public Formality Formality { get; set; } = formality;
         public string GlossaryId { get; } = glossaryId;
@@ -20,5 +21,6 @@ namespace Sdl.Community.DeepLMTProvider.Model
         public SplitSentences SplitSentencesHandling { get; } = splitSentencesHandling;
         public string StyleId { get; } = styleId;
         public TagFormat TagHandling { get; } = tagHandling;
+        public string TranslationMemoryId { get; } = translationMemoryId;
     }
 }

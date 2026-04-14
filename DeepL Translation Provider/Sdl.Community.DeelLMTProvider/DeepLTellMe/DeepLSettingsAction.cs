@@ -55,7 +55,7 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
                         var state = translationProvider.MainTranslationProvider.State;
                         var options = OptionsProvider.GetTranslationOptions(translationProvider.MainTranslationProvider.Uri, state);
 
-                        ViewModel = new DeepLWindowViewModel(options, new DeepLGlossaryClient(), new MessageService(), new LanguageValidationService());
+                        ViewModel = new DeepLWindowViewModel(options, new DeepLGlossaryClient(), new TMClient(), new MessageService(), new LanguageValidationService());
 
                         var dialog = new DeepLWindow(ViewModel);
 

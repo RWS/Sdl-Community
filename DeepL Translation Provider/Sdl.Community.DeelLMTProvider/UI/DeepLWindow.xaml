@@ -335,6 +335,21 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
+                <DataGridTemplateColumn Header="Translation Memory"
+                                        SortMemberPath="SelectedTranslationMemory.Name"
+                                        Width="*">
+
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding TranslationMemories}"
+                                      Cursor="Hand"
+                                      HorizontalContentAlignment="Center"
+                                      SelectedItem="{Binding SelectedTranslationMemory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      DisplayMemberPath="Name" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
                 <DataGridTemplateColumn Header="Model type"
                                         SortMemberPath="Name"
                                         Width="*">

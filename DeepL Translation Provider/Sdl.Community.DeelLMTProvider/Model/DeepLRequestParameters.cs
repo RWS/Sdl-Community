@@ -38,5 +38,8 @@ namespace Sdl.Community.DeepLMTProvider.Model
         public string TargetLanguage { get; set; }
 
         public List<string> Text { get; set; }
+
+        [JsonProperty("translation_memory_id")]
+        public string TranslationMemoryId { get; set; }
     }
 }

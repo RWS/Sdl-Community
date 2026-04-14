@@ -22,7 +22,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
             try
             {
                 var allMemories = new List<TranslationMemoryInfo>();
-                int page = 0;
+                var page = 0;
                 int totalCount;
 
                 do
