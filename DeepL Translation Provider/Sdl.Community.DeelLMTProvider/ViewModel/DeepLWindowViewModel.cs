@@ -26,11 +26,12 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         private ObservableCollection<LanguagePairOptions> _languagePairOptions = new();
         private Dictionary<LanguagePair, List<string>> _languagePairValidationErrors = new();
 
-        public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, IDeepLGlossaryClient glossaryClient, IMessageService messageService, ILanguageValidationService languageValidationService)
+        public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, IDeepLGlossaryClient glossaryClient, ITMClient tmClient, IMessageService messageService, ILanguageValidationService languageValidationService)
         {
             IsTellMeAction = true;
             MessageService = messageService;
             GlossaryClient = glossaryClient;
+            TMClient = tmClient;
             LanguageValidationService = languageValidationService;
 
             var currentProject = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
@@ -51,11 +52,12 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             LoadLanguagePairSettings();
         }
 
-        public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, IDeepLGlossaryClient glossaryClient, TranslationProviderCredential credentialStore, LanguagePair[] languagePairs, IMessageService messageService, ILanguageValidationService languageValidationService)
+        public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, IDeepLGlossaryClient glossaryClient, ITMClient tmClient, TranslationProviderCredential credentialStore, LanguagePair[] languagePairs, IMessageService messageService, ILanguageValidationService languageValidationService)
         {
             MessageService = messageService;
             LanguagePairs = languagePairs;
             GlossaryClient = glossaryClient;
+            TMClient = tmClient;
             LanguageValidationService = languageValidationService;
             IsTellMeAction = false;
 
@@ -231,6 +233,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         private ILanguageValidationService LanguageValidationService { get; set; }
         private LanguagePair[] LanguagePairs { get; }
         private IMessageService MessageService { get; }
+        private ITMClient TMClient { get; set; }
 
         private Timer PasswordChangedTimer { get; } = new()
         {
@@ -246,11 +249,13 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
             List<GlossaryInfo> glossaries = [];
             List<DeepLStyle> allStyles = [];
+            List<TranslationMemoryInfo> allTMs = [];
 
             if (DeepLTranslationProviderClient.IsApiKeyValidResponse.IsSuccessStatusCode)
             {
                 glossaries = await GetGlossaries();
                 allStyles = await GetStyles();
+                allTMs = await GetTranslationMemories();
             }
 
             if (ApiKey is null)
@@ -293,6 +298,16 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                 var formality = languageSavedOptions?.Formality ?? Formality.Default;
                 var modelType = languageSavedOptions?.ModelType ?? ModelType.Prefer_Quality_Optimized;
 
+                var currentLanguageTMs = allTMs
+                    .Where(tm =>
+                        tm.SourceLanguage == sourceLangCode &&
+                        tm.TargetLanguages?.Any(t => t == targetLangCode || t.StartsWith(targetLangCode + "-")) == true)
+                    .ToList();
+                currentLanguageTMs.Insert(0, TranslationMemoryInfo.NoTranslationMemory);
+
+                var selectedTM = currentLanguageTMs.FirstOrDefault(tm => tm.Id == languageSavedOptions?.SelectedTranslationMemory?.Id)
+                    ?? currentLanguageTMs.First(tm => tm.Name == PluginResources.NoTranslationMemory);
+
                 var newLanguagePairOptions = new LanguagePairOptions
                 {
                     Formality = formality,
@@ -301,7 +316,9 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                     LanguagePair = languagePair,
                     SelectedStyle = selectedStyle,
                     Styles = currentLanguageStyles,
-                    ModelType = modelType
+                    ModelType = modelType,
+                    TranslationMemories = currentLanguageTMs,
+                    SelectedTranslationMemory = selectedTM,
                 };
 
                 // Validate language pair settings using V3 API
@@ -478,6 +495,17 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             var styles = await StyleClient.GetStyles(ApiKey).ConfigureAwait(false) ?? [];
             styles.Add(DeepLStyle.NoStyle);
             return styles;
+        }
+
+        private async Task<List<TranslationMemoryInfo>> GetTranslationMemories()
+        {
+            var (success, tms, message) = await TMClient.GetTranslationMemoriesAsync(DeepLTranslationProviderClient.ApiKey);
+            if (!success)
+            {
+                HandleError(message);
+                tms = [];
+            }
+            return tms ?? [];
         }
 
         private void HandleError(string message, [CallerMemberName] string failingMethod = null)

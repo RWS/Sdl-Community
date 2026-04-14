@@ -25,11 +25,32 @@ namespace Sdl.Community.DeepLMTProvider.Model
             {
                 if (!SetField(ref field, value)) return;
                 if (value == ModelType.Latency_Optimized)
+                {
                     SelectedStyle = Styles.FirstOrDefault(s => s.Name == PluginResources.NoStyle);
+                    SelectedTranslationMemory = TranslationMemories?.FirstOrDefault(tm => tm.Name == PluginResources.NoTranslationMemory);
+                }
             }
         }
 
         public GlossaryInfo SelectedGlossary
+        {
+            get;
+            set => SetField(ref field, value);
+        }
+
+        public TranslationMemoryInfo SelectedTranslationMemory
+        {
+            get;
+            set
+            {
+                if (!SetField(ref field, value)) return;
+                if (value?.Id != null)
+                    ModelType = ModelType.Quality_Optimized;
+            }
+        }
+
+        [JsonIgnore]
+        public List<TranslationMemoryInfo> TranslationMemories
         {
             get;
             set => SetField(ref field, value);

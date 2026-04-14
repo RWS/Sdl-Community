@@ -251,7 +251,8 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                 _options.PreserveFormatting,
                 _options.IgnoreTagsParameter,
                 _languagePairOptions?.ModelType ?? ModelType.Prefer_Quality_Optimized,
-                _languagePairOptions?.SelectedStyle.ID);
+                _languagePairOptions?.SelectedStyle.ID,
+                _languagePairOptions?.SelectedTranslationMemory?.Id);
 
             var sourceTexts = eligibleSegments.Select(s => s.SourceText).ToList();
             var translationResults = _connecter.TranslateBatch(_languageDirection, sourceTexts, deepLSettings);

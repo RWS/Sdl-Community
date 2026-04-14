@@ -221,6 +221,15 @@ namespace Sdl.Community.DeepLMTProvider {
                 return ResourceManager.GetString("NoGlossary", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to No translation memory.
+        /// </summary>
+        public static string NoTranslationMemory {
+            get {
+                return ResourceManager.GetString("NoTranslationMemory", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to No style.

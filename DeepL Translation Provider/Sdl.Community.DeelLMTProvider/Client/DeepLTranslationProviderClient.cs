@@ -75,7 +75,8 @@ namespace Sdl.Community.DeepLMTProvider.Client
                     IgnoreTags = deepLSettings.IgnoreTags,
                     ModelType = modelType,
                     StyleId = deepLSettings.StyleId,
-                    TagHandlingVersion = "v2"
+                    TagHandlingVersion = "v2",
+                    TranslationMemoryId = deepLSettings.TranslationMemoryId
                 };
 
                 ApplyDeepLRestrictions(deeplRequestParameters);
@@ -143,7 +144,8 @@ namespace Sdl.Community.DeepLMTProvider.Client
                     IgnoreTags = deepLSettings.IgnoreTags,
                     ModelType = modelType,
                     StyleId = deepLSettings.StyleId,
-                    TagHandlingVersion = "v2"
+                    TagHandlingVersion = "v2",
+                    TranslationMemoryId = deepLSettings.TranslationMemoryId
                 };
 
                 ApplyDeepLRestrictions(deeplRequestParameters);
