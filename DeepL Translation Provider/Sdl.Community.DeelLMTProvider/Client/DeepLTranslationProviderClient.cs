@@ -36,11 +36,9 @@ namespace Sdl.Community.DeepLMTProvider.Client
             }
         }
 
-        public static string ApiVersion { get; set; }
-
         public static HttpResponseMessage IsApiKeyValidResponse { get; private set; }
 
-        private static string ChosenBaseUrl => ApiVersion?.Contains("V1") ?? true ? Constants.BaseUrlV1 : Constants.BaseUrlV2;
+        private static string BaseUrl => $"{Constants.BaseUrl}/v2";
 
         public (string Translation, string ErrorMessage) Translate(LanguagePair languageDirection, string sourceText, DeepLSettings deepLSettings)
         {
@@ -217,7 +215,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
         }
 
         private static HttpResponseMessage IsValidApiKey() =>
-            AppInitializer.Client.GetAsync($"{ChosenBaseUrl}/usage").Result;
+            AppInitializer.Client.GetAsync($"{BaseUrl}/usage").Result;
 
         private static void OnApiKeyChanged()
         {
@@ -240,7 +238,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
             {
                 Content = new StringContent(requestJson, Encoding.UTF8, "application/json"),
                 Method = HttpMethod.Post,
-                RequestUri = new Uri($"{ChosenBaseUrl}/translate")
+                RequestUri = new Uri($"{BaseUrl}/translate")
             };
 
             var response = AppInitializer.Client.SendAsync(request).Result;

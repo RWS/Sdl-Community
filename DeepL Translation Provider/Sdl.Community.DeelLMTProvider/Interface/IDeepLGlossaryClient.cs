@@ -7,7 +7,6 @@ namespace Sdl.Community.DeepLMTProvider.Interface
 {
     public interface IDeepLGlossaryClient
     {
-        string ApiVersion { get; set; }
 
         Task<ActionResult<List<GlossaryInfo>>> GetGlossaries(string apiKey, bool continueOnCapturedContext = true);
     }

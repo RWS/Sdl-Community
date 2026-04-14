@@ -9,7 +9,6 @@ namespace Sdl.Community.DeepLMTProvider.Model
         [JsonIgnore]
         public string ApiKey { get; set; }
 
-        public string ApiVersion { get; set; }
         public List<string> IgnoreTagsParameter { get; set; }
         public List<LanguagePairOptions> LanguagePairOptions { get; set; }
 

@@ -134,15 +134,9 @@
 						Click here to obtain your API Key from DeepL
 					</Hyperlink>
             </TextBlock>
-            <!--<TextBlock Style="{DynamicResource Sdl.TextBlock.InformationTitleStyle}"
-                       Text="Translation options"
-                       Margin="10 0 0 5" />-->
+          
 
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
                 <GroupBox Header="Translation options"
                           Margin="10 0 0 5">
                     <StackPanel Orientation="Horizontal">
@@ -212,18 +206,7 @@
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>
-                <GroupBox Header="API Version"
-                          Grid.Column="1"
-                          Margin="5 0 10 5">
-                    <ComboBox VerticalAlignment="Center"
-                              Name="ApiVersionCombobox"
-                              SelectedValue="{Binding ApiVersion}"
-                              SelectedValuePath="Content"
-                              HorizontalContentAlignment="Center">
-                        <ComboBoxItem Content="V1 (DeepL Advanced or Ultimate subscription)" />
-                        <ComboBoxItem Content="V2 (DeepL Pro API subscription)" />
-                    </ComboBox>
-                </GroupBox>
+                
             </Grid>
         </StackPanel>
 
