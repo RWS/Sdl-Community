@@ -2,7 +2,6 @@
 using Newtonsoft.Json.Serialization;
 using NLog;
 using Sdl.Community.DeepLMTProvider.Model;
-using Sdl.Community.DeepLMTProvider.Service;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using System;
@@ -142,8 +141,8 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
         public (string Translation, string ErrorMessage) Translate(LanguagePair languageDirection, string sourceText, DeepLSettings deepLSettings)
         {
-            var (sourceLanguage, _, _) = LanguageValidationService.GetDeepLLanguageCode(languageDirection.SourceCulture, true);
-            var (targetLanguage, _, _) = LanguageValidationService.GetDeepLLanguageCode(languageDirection.TargetCulture, false);
+            var targetLanguage = GetLanguage(languageDirection.TargetCulture, SupportedTargetLanguages, true);
+            var sourceLanguage = GetLanguage(languageDirection.SourceCulture, SupportedSourceLanguages);
 
             string errorMessage = null;
             try
