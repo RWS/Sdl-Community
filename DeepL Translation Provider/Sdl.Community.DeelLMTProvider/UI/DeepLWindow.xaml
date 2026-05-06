@@ -15,9 +15,8 @@
         d:DataContext="{d:DesignInstance Type=viewModel:DeepLWindowViewModel}"
         Icon="../Resources/deepLIcon.ico"
         WindowStyle="None"
-        Width="610"
-        MaxWidth="610"
-        MaxHeight="600"
+        Width="850"
+        Height="700"
         AllowsTransparency="False"
         WindowStartupLocation="CenterScreen"
         Title="{Binding Title}">
@@ -36,7 +35,7 @@
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/buttonresources.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <converters1:ListToStringConverter x:Key="ListToStringConverter"/>
+            <converters1:ListToStringConverter x:Key="ListToStringConverter" />
             <converters:EnumDescriptionConverter x:Key="EnumToDescriptionConverter" />
 
             <ObjectDataProvider MethodName="GetValues"
@@ -46,14 +45,8 @@
                     <x:Type TypeName="model:TagFormat" />
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
-            
-            <ObjectDataProvider MethodName="GetValues"
-                                ObjectType="{x:Type model:ModelType}"
-                                x:Key="ModelTypeProvider">
-                <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="model:ModelType" />
-                </ObjectDataProvider.MethodParameters>
-            </ObjectDataProvider>
+
+     
 
             <ObjectDataProvider MethodName="GetValues"
                                 ObjectType="{x:Type model:SplitSentences}"
@@ -175,21 +168,7 @@
                                       IsChecked="{Binding ResendDraft}"
                                       Content="Resend Draft" />
 
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Model type"
-                                       Margin="12 0 0 5" />
-                                <ComboBox Margin="5 0 0 0"
-                                          Height="20"
-                                          SelectedItem="{Binding ModelType}"
-                                          ItemsSource="{Binding Source={StaticResource ModelTypeProvider}}">
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock ToolTip="{Binding Converter={StaticResource ModelTypeToDescriptionConverter }}" Text="{Binding Converter={StaticResource ModelTypeToFriendlyNameConverter}}" />
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                </ComboBox>
-                            </StackPanel>
-
+                           
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Tag handling"
                                        Margin="12 0 0 5" />
@@ -198,11 +177,12 @@
                                           SelectedItem="{Binding TagType}"
                                           ItemsSource="{Binding Source={StaticResource TagTypeProvider}}" />
                             </StackPanel>
-                            
-                           
+
+
 
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="Newline Handling" Margin="12 0 0 5" />
+                                <Label Content="Newline Handling"
+                                       Margin="12 0 0 5" />
                                 <ComboBox Margin="5 0 0 0"
                                           Height="20"
                                           SelectedItem="{Binding SplitSentencesType, Mode=TwoWay}"
@@ -224,6 +204,8 @@
                                          Text="{Binding IgnoreTags, Converter={StaticResource ListToStringConverter}}"
                                          HorizontalAlignment="Right" />
                             </StackPanel>
+
+
                         </StackPanel>
                         <StackPanel Margin="5 5 0 5">
 
@@ -281,17 +263,50 @@
 
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-
-                            <ComboBox ItemsSource="{Binding Source={x:Static model:FormalityEnumHelper.Values}}"
-                                      SelectedItem="{Binding Formality, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                      DisplayMemberPath="."
-                                      Cursor="Hand" >
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Converter={StaticResource FormalityToFriendlyNameConverter}}" />
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
+                            <Grid>
+                                <ComboBox ItemsSource="{Binding Source={x:Static model:FormalityEnumHelper.Values}}"
+                                          SelectedItem="{Binding Formality, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                          DisplayMemberPath="."
+                                          Cursor="Hand">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Converter={StaticResource FormalityToFriendlyNameConverter}}" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                    <ComboBox.Style>
+                                        <Style TargetType="ComboBox"
+                                               BasedOn="{StaticResource {x:Type ComboBox}}">
+                                            <Setter Property="Visibility"
+                                                    Value="Visible" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Formality}"
+                                                             Value="Not_Supported">
+                                                    <Setter Property="Visibility"
+                                                            Value="Collapsed" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ComboBox.Style>
+                                </ComboBox>
+                                <TextBlock Text="Not supported"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock"
+                                               BasedOn="{StaticResource {x:Type TextBlock}}">
+                                            <Setter Property="Visibility"
+                                                    Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Formality}"
+                                                             Value="Not_Supported">
+                                                    <Setter Property="Visibility"
+                                                            Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -323,7 +338,8 @@
                                         </Style>
                                     </ComboBox.Style>
                                 </ComboBox>
-                                <TextBlock Text="No glossary available"
+                                <TextBlock Text="{Binding SelectedGlossary.Name}"
+                                           VerticalAlignment="Center"
                                            HorizontalAlignment="Center">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock"
@@ -340,10 +356,119 @@
                                         </Style>
                                     </TextBlock.Style>
                                 </TextBlock>
+                               
                             </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Model type"
+                                        SortMemberPath="Name"
+                                        Width="*">
+
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <ComboBox Cursor="Hand"
+                                          HorizontalContentAlignment="Center"
+                                          SelectedItem="{Binding ModelType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                          ItemsSource="{Binding Source={x:Static model:ModelTypeEnumHelper.Values}}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock ToolTip="{Binding Converter={StaticResource ModelTypeToDescriptionConverter }}"
+                                                       Text="{Binding Converter={StaticResource ModelTypeToFriendlyNameConverter}}" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                    <ComboBox.Style>
+                                        <Style TargetType="ComboBox"
+                                               BasedOn="{StaticResource {x:Type ComboBox}}">
+                                            <Setter Property="Visibility"
+                                                    Value="Visible" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ModelType}"
+                                                             Value="Not_Supported">
+                                                    <Setter Property="Visibility"
+                                                            Value="Collapsed" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ComboBox.Style>
+                                </ComboBox>
+                                <TextBlock Text="Quality optimized"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock"
+                                               BasedOn="{StaticResource {x:Type TextBlock}}">
+                                            <Setter Property="Visibility"
+                                                    Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ModelType}"
+                                                             Value="Not_Supported">
+                                                    <Setter Property="Visibility"
+                                                            Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Style"
+                                        SortMemberPath="Name"
+                                        Width="*">
+
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <ComboBox ItemsSource="{Binding Styles}"
+                                          Cursor="Hand"
+                                          HorizontalContentAlignment="Center"
+                                          SelectedItem="{Binding SelectedStyle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                          DisplayMemberPath="Name">
+                                    <ComboBox.Style>
+                                        <Style TargetType="ComboBox"
+                                               BasedOn="{StaticResource {x:Type ComboBox}}">
+                                            <Setter Property="Visibility"
+                                                    Value="Visible" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Styles.Count}"
+                                                             Value="1">
+                                                    <Setter Property="Visibility"
+                                                            Value="Collapsed" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ComboBox.Style>
+                                </ComboBox>
+                                <TextBlock Text="No style available"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock"
+                                               BasedOn="{StaticResource {x:Type TextBlock}}">
+                                            <Setter Property="Visibility"
+                                                    Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Styles.Count}"
+                                                             Value="1">
+                                                    <Setter Property="Visibility"
+                                                            Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+
             </DataGrid.Columns>
         </DataGrid>
 

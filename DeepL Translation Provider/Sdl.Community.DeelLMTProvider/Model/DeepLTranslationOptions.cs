@@ -14,60 +14,15 @@ namespace Sdl.Community.DeepLMTProvider.Model
         public List<LanguagePairOptions> LanguagePairOptions { get; set; }
         public Dictionary<string, string> LanguagesSupported { get; set; } = new();
 
-        [JsonIgnore]
-        public bool PreserveFormatting
-        {
-            get => PreserveFormattingParameter != null && Convert.ToBoolean(PreserveFormattingParameter);
-            set => PreserveFormattingParameter = value.ToString();
-        }
 
-        public string PreserveFormattingParameter { get; set; }
+        public bool PreserveFormatting { get; set; }
 
-        [JsonIgnore]
-        public bool SendPlainText
-        {
-            get => SendPlainTextParameter != null && Convert.ToBoolean(SendPlainTextParameter);
-            set => SendPlainTextParameter = value.ToString();
-        }
+        public bool ResendDraft { get; set; }
 
-        [JsonIgnore]
-        public bool ResendDraft 
-        {
-            get => ResendDraftParameter != null && Convert.ToBoolean(ResendDraftParameter);
-            set => ResendDraftParameter = value.ToString(); 
-        }
+        public bool SendPlainText { get; set; }
+        public SplitSentences SplitSentenceHandling { get; set; } = SplitSentences.Default;
 
-        public string SendPlainTextParameter { get; set; }
-
-        public string ResendDraftParameter { get; set; }
-
-        public string ModelTypeParameter { get; set; }
-
-        [JsonIgnore]
-        public TagFormat TagHandling
-        {
-            get => Enum.TryParse<TagFormat>(TagHandlingParameter, out var tagHandling) ? tagHandling : TagFormat.None;
-            set => TagHandlingParameter = value.ToString();
-        }
-        
-        [JsonIgnore]
-        public ModelType ModelType
-        {
-            get => Enum.TryParse<ModelType>(ModelTypeParameter, out var modelType) ? modelType : ModelType.Latency_Optimized;
-            set => ModelTypeParameter = value.ToString();
-        }
-
-        [JsonIgnore]
-        public SplitSentences SplitSentencesHandling 
-        {
-            get => Enum.TryParse<SplitSentences>(SplitSentenceHandlingParameter, out var splitSentencesHandling) ? splitSentencesHandling : SplitSentences.Default;
-            set => SplitSentenceHandlingParameter = value.ToString(); 
-        }
-
-        public string TagHandlingParameter { get; set; }
-
-        public string SplitSentenceHandlingParameter { get; set; }
-
+        public TagFormat TagHandling { get; set; }
         public Uri Uri { get; set; }
     }
 }

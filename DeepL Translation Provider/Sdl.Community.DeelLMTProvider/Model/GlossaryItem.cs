@@ -2,6 +2,10 @@
 {
     public class GlossaryItem : ViewModel.ViewModel
     {
+        private string _name;
+        private string _sourceLanguage;
+        private string _targetLanguage;
+
         public GlossaryItem(string path)
         {
             Path = path;
@@ -10,9 +14,6 @@
 
         }
 
-        private string _sourceLanguage;
-        private string _targetLanguage;
-        private string _name;
         public string Path { get; set; }
 
         public string Delimiter { get; set; }

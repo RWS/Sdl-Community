@@ -29,7 +29,7 @@ namespace Sdl.Community.DeepLMTProvider.Service
 
             foreach (var d in possibleDelimiters)
             {
-                var split = Regex.Split(line.ToLower(), d);
+                var split = Regex.Split(line.ToLowerInvariant(), d);
 
                 if (split.Length is not (2 or 4)) continue;
 

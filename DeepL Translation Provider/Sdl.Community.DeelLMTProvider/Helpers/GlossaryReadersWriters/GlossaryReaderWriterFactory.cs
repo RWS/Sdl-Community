@@ -10,7 +10,7 @@ namespace Sdl.Community.DeepLMTProvider.Helpers.GlossaryReadersWriters
     {
         public ActionResult<IGlossaryReaderWriter> CreateFileReader(string filePath, string delimiter = default)
         {
-            var fileExtension = Path.GetExtension(filePath).ToLower();
+            var fileExtension = Path.GetExtension(filePath).ToLowerInvariant();
 
             return ErrorHandler.WrapTryCatch<IGlossaryReaderWriter>(() => fileExtension switch
             {

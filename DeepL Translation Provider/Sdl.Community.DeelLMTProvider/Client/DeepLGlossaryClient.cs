@@ -14,7 +14,9 @@ namespace Sdl.Community.DeepLMTProvider.Client
 {
     public class DeepLGlossaryClient : IDeepLGlossaryClient
     {
-        
+        public string ApiVersion { get; set; }
+
+        private string ChosenBaseUrl => ApiVersion?.Contains("V1") ?? true ? Constants.BaseUrlV1 : Constants.BaseUrlV2;
 
         public async Task<ActionResult<GlossaryInfo>> DeleteGlossary(string apiKey, string glossaryId)
         {
@@ -121,8 +123,6 @@ namespace Sdl.Community.DeepLMTProvider.Client
                 () => JObject.Parse(serializedCreatedGlossary).ToObject<GlossaryInfo>());
         }
 
-        private string ChosenBaseUrl => ApiVersion?.Contains("V1") ?? true ? Constants.BaseUrlV1 : Constants.BaseUrlV2;
-
         public async Task<ActionResult<List<GlossaryEntry>>> RetrieveGlossaryEntries(string glossaryId, string apiKey)
         {
             var request = new HttpRequestMessage
@@ -165,7 +165,5 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
             return await ImportGlossary(glossary, apiKey);
         }
-
-        public string ApiVersion { get; set; }
     }
 }

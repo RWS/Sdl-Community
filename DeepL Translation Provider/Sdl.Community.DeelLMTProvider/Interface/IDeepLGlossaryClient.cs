@@ -7,6 +7,8 @@ namespace Sdl.Community.DeepLMTProvider.Interface
 {
     public interface IDeepLGlossaryClient
     {
+        string ApiVersion { get; set; }
+
         Task<ActionResult<GlossaryInfo>> DeleteGlossary(string apiKey, string glossaryId);
 
         Task<ActionResult<List<GlossaryInfo>>> GetGlossaries(string apiKey, bool continueOnCapturedContext = true);
@@ -18,6 +20,5 @@ namespace Sdl.Community.DeepLMTProvider.Interface
         Task<ActionResult<List<GlossaryEntry>>> RetrieveGlossaryEntries(string glossaryId, string apiKey);
 
         Task<ActionResult<GlossaryInfo>> UpdateGlossary(Glossary glossary, string glossaryId, string apiKey);
-        string ApiVersion { get; set; }
     }
 }

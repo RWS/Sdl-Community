@@ -18,10 +18,7 @@ namespace Sdl.Community.DeepLMTProvider.Model
         public string SourceTerm
         {
             get => _sourceTerm;
-            set
-            {
-                SetField(ref _sourceTerm, value);
-            }
+            set => SetField(ref _sourceTerm, value);
         }
 
         [Required(ErrorMessage = "Target term required.")]
