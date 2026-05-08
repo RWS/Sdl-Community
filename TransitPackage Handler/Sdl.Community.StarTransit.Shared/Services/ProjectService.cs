@@ -111,23 +111,38 @@ namespace Sdl.Community.StarTransit.Shared.Services
         {
             return System.Threading.Tasks.Task.Run(() =>
             {
-                var studioProject = PrepareStudioProject(transitPackage);
-                foreach (var languagePair in transitPackage.LanguagePairs)
+                try
                 {
-                    var projectContainsTm = false;
-                    if (!languagePair.NoTm)
+                    var studioProject = PrepareStudioProject(transitPackage);
+                    foreach (var languagePair in transitPackage.LanguagePairs)
                     {
-                        _messageModel = ImportTms(transitPackage, languagePair);
-                        projectContainsTm = true;
+                        var projectContainsTm = false;
+                        if (!languagePair.NoTm)
+                        {
+                            _messageModel = ImportTms(transitPackage, languagePair);
+                            projectContainsTm = true;
+                        }
+
+                        var projectFiles = transitPackage.LanguagePairs[0].TargetFile.ToArray();
+                        var targetFiles = AddFilesToProject(projectFiles, transitPackage.GetTempProjectName(), studioProject);
+
+                        _messageModel = UpdateProjectSettings(studioProject, targetFiles.GetIds(), projectContainsTm, languagePair.TargetLanguage); // runs Studio batchtask to save all the changes to the project
                     }
-
-                    var projectFiles = transitPackage.LanguagePairs[0].TargetFile.ToArray();
-                    var targetFiles = AddFilesToProject(projectFiles, transitPackage.GetTempProjectName(), studioProject);
-
-                    _messageModel = UpdateProjectSettings(studioProject, targetFiles.GetIds(), projectContainsTm, languagePair.TargetLanguage); // runs Studio batchtask to save all the changes to the project
+                    CreateMetadataFolder(transitPackage.Location, transitPackage.PathToPrjFile);
+                    return studioProject;
                 }
-                CreateMetadataFolder(transitPackage.Location, transitPackage.PathToPrjFile);
-                return studioProject;
+                catch (InvalidOperationException ex)
+                {
+                    _logger.Error(ex, "Validation error while preparing studio project");
+                    _eventAggregatorService?.PublishEvent(new Error { ErrorMessage = ex.Message });
+                    return null;
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error(ex, "Error creating studio project");
+                    _eventAggregatorService?.PublishEvent(new Error { ErrorMessage = "An error occurred while creating the project. Please check the logs for details." });
+                    return null;
+                }
             });
         }
 
