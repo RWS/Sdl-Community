@@ -135,11 +135,28 @@ namespace Sdl.Community.StarTransit.Shared.Services
         {
             var target = _fileService.GetStudioTargetLanguages(transitPackage.LanguagePairs);
             Directory.CreateDirectory(transitPackage.Location); //if the location is set using project template feature this folder does not exist 
+            
+            if (transitPackage.LanguagePairs == null || transitPackage.LanguagePairs.Count == 0)
+            {
+                throw new InvalidOperationException("Language pairs are required.");
+            }
+            
+            var sourceLanguage = transitPackage.LanguagePairs[0].SourceLanguage;
+            if (sourceLanguage == null)
+            {
+                throw new InvalidOperationException("Source language is required.");
+            }
+            
+            if (transitPackage.ProjectTemplate == null)
+            {
+                throw new InvalidOperationException("Project template is required.");
+            }
+            
             var projectInfo = new ProjectInfo
             {
                 Name = transitPackage.Name,
                 LocalProjectFolder = transitPackage.Location,
-                SourceLanguage = LanguageRegistryApi.Instance.GetLanguage(transitPackage.LanguagePairs[0].SourceLanguage.Name),
+                SourceLanguage = LanguageRegistryApi.Instance.GetLanguage(sourceLanguage.Name),
                 TargetLanguages = target,
                 DueDate = transitPackage.DueDate,
                 ProjectOrigin = Resources.ProjectOrigin,
@@ -153,6 +170,11 @@ namespace Sdl.Community.StarTransit.Shared.Services
             }
 
             //Add StarTransit package source files. The same on all language pairs
+            if (transitPackage.LanguagePairs[0].SourceFile == null || transitPackage.LanguagePairs[0].SourceFile.Count == 0)
+            {
+                throw new InvalidOperationException("Source files are required.");
+            }
+            
             var projectFiles = transitPackage.LanguagePairs[0].SourceFile.ToArray();
             AddFilesToProject(projectFiles, transitPackage.GetTempProjectName(), newProject);
 
