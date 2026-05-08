@@ -77,7 +77,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 
 		public bool ImportRefMaterials => _wizardModel.ImportRefMeta;
 
-		public string CreateMessage =>  string.Format(PluginResources.CreateProject_Creating, _wizardModel.PackageModel.Result.Name);
+		public string CreateMessage =>  string.Format(PluginResources.CreateProject_Creating, _wizardModel?.PackageModel?.Result?.Name ?? string.Empty);
 
 		public ObservableCollection<TmSummaryOptions> TmSummaryOptions
 		{
@@ -218,7 +218,11 @@ namespace Sdl.Community.StarTransit.ViewModel
 			if (!IsCurrentPage) return;
 			TmSummaryOptions.Clear();
 			CanFinish = true;
-			foreach (var languagePair in _wizardModel.PackageModel.Result.LanguagePairs)
+
+			var languagePairs = _wizardModel?.PackageModel?.Result?.LanguagePairs;
+			if (languagePairs == null) return;
+
+			foreach (var languagePair in languagePairs)
 			{
 				languagePair.SelectedTranslationMemoryMetadatas.Clear();
 
@@ -250,11 +254,10 @@ namespace Sdl.Community.StarTransit.ViewModel
 						{
 							selectedTm.Name = $"{selectedTm.Name}.sdltm";
 						}
-						selectedTm.LocalTmCreationPath =
-							Path.Combine(_wizardModel.PackageModel.Result.Location, selectedTm.Name);
-
-						var selectedTmOption = $"{PluginResources.Tm_CreateTm}: {selectedTm.Name} {PluginResources.CreateProject_Penalty} {selectedTm.TmPenalty}";
-						tmSummary.SelectedOption.Add(selectedTmOption);
+					var resultLocation = _wizardModel?.PackageModel?.Result?.Location;
+					if (resultLocation != null)
+					{
+						selectedTm.LocalTmCreationPath = Path.Combine(resultLocation, selectedTm.Name);
 					}
 				}
 
