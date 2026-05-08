@@ -44,11 +44,14 @@ namespace Sdl.Community.StarTransit.ViewModel
 
 		public List<LanguagePair> LanguagePairsTmOptions
 		{
-			get => _wizardModel.PackageModel.Result?.LanguagePairs;
+			get => _wizardModel?.PackageModel?.Result?.LanguagePairs;
 			set
 			{
-				_wizardModel.PackageModel.Result.LanguagePairs = value;
-				OnPropertyChanged(nameof(LanguagePairsTmOptions));
+				if (_wizardModel?.PackageModel?.Result != null)
+				{
+					_wizardModel.PackageModel.Result.LanguagePairs = value;
+					OnPropertyChanged(nameof(LanguagePairsTmOptions));
+				}
 			}
 		}
 
@@ -221,14 +224,17 @@ namespace Sdl.Community.StarTransit.ViewModel
 			SetPageDescription();
 			SetTmsAreaVisibility();
 
-			foreach (var languagePairsTmOption in LanguagePairsTmOptions)
+			if (LanguagePairsTmOptions != null)
 			{
+				foreach (var languagePairsTmOption in LanguagePairsTmOptions)
+				{
 				languagePairsTmOption.SelectTmCommand = SelectTmCommand;
 				languagePairsTmOption.RemoveSelectedTmCommand = RemoveSelectedTmCommand;
 				languagePairsTmOption.TmOptionChangedEventRaised -= LanguagePairsTmOption_EventRaised;
 				languagePairsTmOption.TmOptionChangedEventRaised += LanguagePairsTmOption_EventRaised;
-				languagePairsTmOption.BrowseTmChangedEventRaised -= LanguagePairsBrowseTm_EventRaised;
-				languagePairsTmOption.BrowseTmChangedEventRaised += LanguagePairsBrowseTm_EventRaised;
+					languagePairsTmOption.BrowseTmChangedEventRaised -= LanguagePairsBrowseTm_EventRaised;
+					languagePairsTmOption.BrowseTmChangedEventRaised += LanguagePairsBrowseTm_EventRaised;
+				}
 			}
 		}
 
@@ -267,8 +273,10 @@ namespace Sdl.Community.StarTransit.ViewModel
 		{
 			if(!ImportRefMeta && ContainsOnlyRefMaterials())
 			{
-				foreach (var languagePair in _wizardModel.PackageModel.Result.LanguagePairs)
+				if (_wizardModel?.PackageModel?.Result?.LanguagePairs != null)
 				{
+					foreach (var languagePair in _wizardModel.PackageModel.Result.LanguagePairs)
+					{
 					languagePair.NoTm = true;
 					languagePair.CreateNewTm = false;
 					languagePair.ChoseExistingTm = false;
@@ -277,6 +285,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 						metadata.TmPenalty = 0;
 					}
 				}
+			}
 			}
 		}
 
@@ -353,7 +362,10 @@ namespace Sdl.Community.StarTransit.ViewModel
 
 		private bool ContainsOnlyRefMaterials()
 		{
-			foreach (var languagePair in _wizardModel.PackageModel.Result?.LanguagePairs)
+			var languagePairs = _wizardModel?.PackageModel?.Result?.LanguagePairs;
+			if (languagePairs == null) return true;
+
+			foreach (var languagePair in languagePairs)
 			{
 				var containsTm = languagePair.StarTranslationMemoryMetadatas.Any(t => !t.IsReferenceMeta);
 				if (containsTm) return false;
@@ -363,7 +375,10 @@ namespace Sdl.Community.StarTransit.ViewModel
 		}
 		private bool ContainsRefMaterials()
 		{
-			foreach (var languagePair in _wizardModel.PackageModel.Result?.LanguagePairs)
+			var languagePairs = _wizardModel?.PackageModel?.Result?.LanguagePairs;
+			if (languagePairs == null) return false;
+
+			foreach (var languagePair in languagePairs)
 			{
 				var containsTm = languagePair.StarTranslationMemoryMetadatas.Any(t => t.IsReferenceMeta);
 				if (containsTm) return true;
