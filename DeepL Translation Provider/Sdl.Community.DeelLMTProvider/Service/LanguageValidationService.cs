@@ -3,7 +3,6 @@ using Sdl.Community.DeepLMTProvider.Client;
 using Sdl.Community.DeepLMTProvider.Interface;
 using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.LanguagePlatform.Core;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Sdl.Community.DeepLMTProvider.Service
@@ -23,25 +22,30 @@ namespace Sdl.Community.DeepLMTProvider.Service
                 "EN-US" when !isSourceLanguage => ("en-US", false, (string)null),
                 "EN-GB" when !isSourceLanguage => ("en-GB", false, null),
                 "EN-US" or "EN-GB" when isSourceLanguage =>
-                    ("en", true, $"English variant '{cultureName}' will use generic 'en' for source language (variants only supported as target)"),
+                    ("en", true,
+                        $"English variant '{cultureName}' will use generic 'en' for source language (variants only supported as target)"),
 
                 "PT-BR" when !isSourceLanguage => ("pt-BR", false, null),
                 "PT-PT" when !isSourceLanguage => ("pt-PT", false, null),
                 "PT-BR" or "PT-PT" when isSourceLanguage =>
-                    ("pt", true, $"Portuguese variant '{cultureName}' will use generic 'pt' for source language (variants only supported as target)"),
+                    ("pt", true,
+                        $"Portuguese variant '{cultureName}' will use generic 'pt' for source language (variants only supported as target)"),
 
                 "ES-419" when !isSourceLanguage => ("es-419", false, null),
                 "ES-419" when isSourceLanguage =>
                     ("es", true, "Latin American Spanish (es-419) will use generic Spanish (es) for source language"),
 
-                "ZH-CN" or "ZH-SG" or "ZH-HANS" or "ZH-HANS-HK" or "ZH-HANS-MO" when !isSourceLanguage => ("zh-Hans", false, null),
+                "ZH-CN" or "ZH-SG" or "ZH-HANS" or "ZH-HANS-HK" or "ZH-HANS-MO" when !isSourceLanguage => ("zh-Hans",
+                    false, null),
                 "ZH-TW" or "ZH-HK" or "ZH-MO" or "ZH-HANT" when !isSourceLanguage => ("zh-Hant", false, null),
                 "ZH-CN" or "ZH-SG" or "ZH-HANS" or "ZH-HANS-HK" or "ZH-HANS-MO"
-                or "ZH-TW" or "ZH-HK" or "ZH-MO" or "ZH-HANT" when isSourceLanguage =>
-                    ("zh", true, $"Chinese variant '{cultureName}' will use generic 'zh' for source language (variants only supported as target)"),
+                    or "ZH-TW" or "ZH-HK" or "ZH-MO" or "ZH-HANT" when isSourceLanguage =>
+                    ("zh", true,
+                        $"Chinese variant '{cultureName}' will use generic 'zh' for source language (variants only supported as target)"),
 
                 _ when cultureName != regionNeutralName.ToUpperInvariant() =>
-                    (regionNeutralName, true, $"Regional variant '{cultureCode.Name}' will use generic '{regionNeutralName}' language code"),
+                    (regionNeutralName, true,
+                        $"Regional variant '{cultureCode.Name}' will use generic '{regionNeutralName}' language code"),
 
                 _ => (regionNeutralName, false, null)
             };
@@ -82,7 +86,7 @@ namespace Sdl.Community.DeepLMTProvider.Service
 
             var targetInfo = await LanguageClientV3.GetLanguageV3InfoAsync(targetCode, "translate_text", apiKey);
 
-            result.SupportsFormality = targetInfo?.Features?.Contains("formality") == true;
+            result.SupportsFormality = targetInfo?.Features?.ContainsKey("formality") == true;
 
             var sourceCodeForGlossary = sourceCode.Split('-')[0];
             var targetCodeForGlossary = targetCode.Split('-')[0];

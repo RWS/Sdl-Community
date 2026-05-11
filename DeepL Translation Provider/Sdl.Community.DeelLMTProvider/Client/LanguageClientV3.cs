@@ -73,7 +73,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
             if (string.IsNullOrEmpty(apiKey))
                 throw new ArgumentException("API key cannot be null or empty", nameof(apiKey));
 
-            var requestUri = new Uri($"{BaseUrl.TrimEnd('/')}/{LanguagesEndpoint}?product={product}");
+            var requestUri = new Uri($"{BaseUrl.TrimEnd('/')}/{LanguagesEndpoint}?resource={product}");
 
             using var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
             request.Headers.Add("Authorization", $"DeepL-Auth-Key {apiKey}");
@@ -138,12 +138,21 @@ namespace Sdl.Community.DeepLMTProvider.Client
     }
 
     /// <summary>
+    /// Represents a single feature entry in the DeepL V3 language features object
+    /// </summary>
+    public class LanguageFeature
+    {
+        [JsonProperty("status")]
+        public string Status { get; set; }
+    }
+
+    /// <summary>
     /// Response model for DeepL V3 languages endpoint
     /// </summary>
     public class LanguageV3Response
     {
         [JsonProperty("features")]
-        public string[] Features { get; set; }
+        public Dictionary<string, LanguageFeature> Features { get; set; }
 
         [JsonProperty("lang")]
         public string Lang { get; set; }
