@@ -62,7 +62,8 @@ namespace VerifyFilesAuditReport.Components.SettingsProvider.Verifiers
 
         private void EnhanceForbiddenTermsListUi()
         {
-            var forbiddenTermsList = this["ForbiddenDefValues"].Values;
+            var forbiddenTermsList = this["ForbiddenDefValues"]?.Values;
+            if (forbiddenTermsList is null) return;
             foreach (var term in forbiddenTermsList.Where(term => !string.IsNullOrWhiteSpace(term.Value)))
             {
                 try
