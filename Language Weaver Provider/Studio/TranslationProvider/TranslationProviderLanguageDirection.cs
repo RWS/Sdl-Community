@@ -113,7 +113,9 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
             return searchResults;
         }
 
-        var (Segments, Emojis) = FilterSegmentEmojis(translatableSegments);
+        //var (Segments, Emojis) = FilterSegmentEmojis(translatableSegments);
+
+        var Segments = translatableSegments;
 
         if (UsePreLookup)
         {
@@ -135,10 +137,10 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
 
         var translatedSegments = allEvaluatedSegments.Select(seg => seg.Translation).ToList();
 
-        if (Emojis.Any())
-        {
-            ReconstructBaseSegments(translatedSegments, Emojis);
-        }
+        //if (Emojis.Any())
+        //{
+        //    ReconstructBaseSegments(translatedSegments, Emojis);
+        //}
 
         if (UsePostLookup)
         {
