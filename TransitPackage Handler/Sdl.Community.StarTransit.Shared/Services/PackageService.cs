@@ -185,7 +185,13 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				foreach (var file in fileNames)
 				{
 					var filePath = Path.Combine(pathToExtractedProject, $"{file}.{multiLangExtension}");
-					if (!File.Exists(filePath)) continue;
+					if (!File.Exists(filePath))
+                    {
+                        var fileName = Path.GetFileName(file);
+                        filePath = Path.Combine(pathToExtractedProject, $"{fileName}.{multiLangExtension}");
+                        if (!File.Exists(filePath))
+                            continue;
+                    }
 					var pathExists = filePaths.Any(f => f.Equals(filePath));
 					if (!pathExists)
 					{
