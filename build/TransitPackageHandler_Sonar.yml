@@ -5,7 +5,10 @@ resources:
     name: AppStoreApplications/AppStoreApplications
     ref: 'Studio_2026'
 
-trigger: none
+trigger:
+  branches:
+    include:
+     - Studio_2026
 
 pr:
   branches:
