@@ -70,7 +70,7 @@ public class VerifyFilesExtended : AbstractFileContentProcessingAutomaticTask
 
     private void AddMetadataToSegments(IExtendedReport extendedReport)
     {
-        var languageFiles = Project.GetTargetLanguageFiles();
+        var languageFiles = Project.GetTargetLanguageFiles().Where(lf=>lf.Role != FileRole.Reference);
 
         foreach (var languageFile in languageFiles)
         {

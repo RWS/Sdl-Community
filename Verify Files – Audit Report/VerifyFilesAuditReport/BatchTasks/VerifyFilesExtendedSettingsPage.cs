@@ -2,6 +2,7 @@
 using System.Linq;
 using Sdl.Core.Settings;
 using Sdl.Desktop.IntegrationApi;
+using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using VerifyFilesAuditReport.BatchTasks.UI;
 using VerifyFilesAuditReport.Components.SegmentMetadata_Provider;
@@ -21,11 +22,15 @@ namespace VerifyFilesAuditReport.BatchTasks
 
             var currentProject = controller.SelectedProjects.FirstOrDefault() ?? controller.CurrentProject;
 
-            var languageFiles = currentProject.GetTargetLanguageFiles();
+            var languageFiles = currentProject.GetTargetLanguageFiles().Where(lf => lf.Role != FileRole.Reference);
 
             List<Segment> statuses = [];
             foreach (var languageFile in languageFiles)
-                statuses.AddRange(SegmentMetadataProvider.GetAllSegmentStatuses(currentProject, languageFile.Id));
+            {
+                var langFileStatuses = SegmentMetadataProvider.GetAllSegmentStatuses(currentProject, languageFile.Id);
+                if (langFileStatuses is null) continue;
+                statuses.AddRange(langFileStatuses);
+            }
 
             VerifyFilesExtendedSettings = ((ISettingsBundle)DataSource).GetSettingsGroup<VerifyFilesExtendedSettings>();
             Control = base.GetControl() as VerifyFilesExtendedSettingsView;

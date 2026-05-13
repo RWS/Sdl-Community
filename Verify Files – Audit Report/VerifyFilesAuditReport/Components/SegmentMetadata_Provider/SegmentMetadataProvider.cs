@@ -13,6 +13,8 @@ public class SegmentMetadataProvider
     public List<Segment> GetAllSegmentStatuses(IProject project, Guid languageFileGuid)
     {
         var sdlxliffPath = GetSdlxliffPath(project, languageFileGuid);
+        if (sdlxliffPath is null)
+            return null;
 
         XNamespace xliffNs = "urn:oasis:names:tc:xliff:document:1.2";
         XNamespace sdlNs = "http://sdl.com/FileTypes/SdlXliff/1.0";
@@ -36,12 +38,12 @@ public class SegmentMetadataProvider
 
     private static string GetSdlxliffPath(IProject project, Guid languageFileGuid)
     {
-        // locate the language‐file in the project by its Guid
         var langFile = project.GetTargetLanguageFiles()
             .Single(f => f.Id == languageFileGuid);
 
-        // LocalFilePath is the full path to the .sdlxliff on disk
-        return langFile.LocalFilePath;
+        return langFile.Role == FileRole.Reference 
+            ? null 
+            : langFile.LocalFilePath;
     }
 
     private static string GetUiStatusString(XElement seg)
