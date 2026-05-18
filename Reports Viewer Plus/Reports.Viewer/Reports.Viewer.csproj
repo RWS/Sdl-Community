@@ -6,7 +6,7 @@
 		<RootNamespace>Reports.Viewer.Plus</RootNamespace>
 		<AssemblyName>Reports.Viewer.Plus</AssemblyName>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<TradosFolder>C:\Things\Code\SDL\Trados\Bin\Mixed Platforms\Debug</TradosFolder>
+		<TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19Beta</TradosFolder>
 		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19beta\Plugins</PluginDeploymentPath>
 		<UseWindowsForms>true</UseWindowsForms>
 		<UseWPF>true</UseWPF>
@@ -16,11 +16,11 @@
 	<ItemGroup>
 
 		<Reference Include="Microsoft.Web.WebView2.Core">
-		  <HintPath>..\..\..\..\..\..\Program Files\Trados\Trados Studio\Studio19Beta\Microsoft.Web.WebView2.Core.dll</HintPath>
+		  <HintPath>$(TradosFolder)\Microsoft.Web.WebView2.Core.dll</HintPath>
 		</Reference>
 
 		<Reference Include="Microsoft.Web.WebView2.Wpf">
-		  <HintPath>..\..\..\..\..\..\Program Files\Trados\Trados Studio\Studio19Beta\Microsoft.Web.WebView2.WPF.dll</HintPath>
+		  <HintPath>$(TradosFolder)\Microsoft.Web.WebView2.WPF.dll</HintPath>
 		</Reference>
 
 		<Reference Include="PresentationFramework.Aero" />
