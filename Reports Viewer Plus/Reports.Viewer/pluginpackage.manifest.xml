@@ -1,36 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 	<PlugInName>Reports Viewer Plus</PlugInName>
-	<Version>5.0.1.0</Version>
+	<Version>5.0.2.0</Version>
 	<Description>Reports Viewer Plus</Description>
 	<Author>Trados AppStore Team</Author>
 	<RequiredProduct name="TradosStudio" minversion="19.0" maxversion="19.0.9"/>
 	<Include>
-
 		<File>Reports.Viewer.Api.dll</File>
 		<File>Microsoft.Office.Interop.Excel.dll</File>
-
-		<File>CefSharp.Wpf.dll</File>
-		<File>CefSharp.Core.dll</File>
-
-		<File>CefSharp.Core.Runtime.dll</File>
-		<File>CefSharp.BrowserSubprocess.Core.dll</File>
-		<File>CefSharp.BrowserSubprocess.exe</File>
-		<File>CefSharp.dll</File>
-		<File>CefSharp.Wpf.ChromiumWebBrowser.dll</File>
-		<File>CefSettings.BrowserSubprocessPath.dll</File>
-
-		<File>chrome_elf.dll</File>
-		<File>libcef.dll</File>
-		<File>icudtl.dat</File>
-		<File>libEGL.dll</File>
-		<File>libGLESv2.dll</File>
-
-		<File>chrome_100_percent.pak</File>
-		<File>chrome_200_percent.pak</File>
-		<File>resources.pak</File>
-
-		<File>snapshot_blob.bin</File>
-		<File>v8_context_snapshot.bin</File>
 	</Include>
 </PluginPackage>

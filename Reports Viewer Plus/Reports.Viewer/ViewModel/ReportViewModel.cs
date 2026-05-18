@@ -10,7 +10,6 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using CefSharp;
 using Microsoft.Win32;
 using Reports.Viewer.Api.Model;
 using Reports.Viewer.Plus.Commands;
@@ -62,6 +61,7 @@ namespace Reports.Viewer.Plus.ViewModel
                 OnPropertyChanged(nameof(Address));
 
                 if (_browserViewModel != null) _browserViewModel.Address = _address;
+                _browserView.Navigate(_address);
             }
         }
 
@@ -104,7 +104,7 @@ namespace Reports.Viewer.Plus.ViewModel
 
         public void Print()
         {
-            _browserView.WebBrowser.Print();
+            _browserView.Print();
         }
 
         public void SaveReport()
