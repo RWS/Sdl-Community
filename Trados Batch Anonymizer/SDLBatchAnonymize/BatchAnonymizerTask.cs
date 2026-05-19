@@ -9,6 +9,7 @@ using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using System;
 using System.Linq;
 using System.Windows;
 
@@ -37,7 +38,7 @@ namespace Sdl.Community.SDLBatchAnonymize
 			_resourceOriginsService = new ResourceOriginsService();
 			_userNameService = new UserNameService();
 
-			var projectInfo = Project?.GetProjectInfo();
+            var projectInfo = Project?.GetProjectInfo();
 			if (projectInfo is null) return;
 			var backupService = new BackupService();
 
@@ -55,28 +56,23 @@ namespace Sdl.Community.SDLBatchAnonymize
 			backupService.BackupProject(projectInfo.LocalProjectFolder, projectInfo.Name);
 		}
 
-		private void BatchTaskWindow_Closed(object sender, System.EventArgs e)
+        private void BatchTaskWindow_Closed(object sender, EventArgs e)
 		{
 			var projectFilePath = Project.GetProjectInfo()?.Uri?.LocalPath;
 			if (string.IsNullOrEmpty(projectFilePath)) return;
 
 			var anonymizeProjService = new AnonymizeSdlProjService();
 			var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
-			var filesController = SdlTradosStudio.Application.GetController<FilesController>();
 			if (Project is FileBasedProject proj)
 			{
 				proj.Save();
 				projectController.Close(proj);
-				//Remove the comment and task template id any way
+
 				anonymizeProjService.RemoveFileVersionComment(projectFilePath);
 				anonymizeProjService.RemoveTraces(projectFilePath);
 
 				projectController.Add(projectFilePath);
-
-				if (filesController?.SelectedFiles?.Count() > 0) // that means we are in files view. Once we close the project user will be redirected to Welcome view
-				{
-					projectController.Open(proj); // we open the project again so the focus will remain in files view.
-				}
+                projectController.Open(proj);
 			}
 			_batchTaskWindow.Closed -= BatchTaskWindow_Closed;
 		}
