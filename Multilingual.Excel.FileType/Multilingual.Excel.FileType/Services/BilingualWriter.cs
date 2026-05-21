@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 using Multilingual.Excel.FileType.Constants;
 using Multilingual.Excel.FileType.FileType.Settings;
@@ -57,6 +58,7 @@ namespace Multilingual.Excel.FileType.Services
 		private string _excelSheetName;
 		private uint _excelRowIndex;
 		private bool _isCDATA;
+		private static readonly Regex _pattern = new(@"<\/([A-Za-z][A-Za-z0-9]*)>(\s*)<\1>", RegexOptions.Compiled);
 
 		public BilingualWriter(SegmentBuilder segmentBuilder, EntityContext entityContext, EntityService entityService, ExcelReader excelReader, ExcelWriter excelWriter,
 			bool isPreview = false, bool isSource = false)
@@ -347,13 +349,10 @@ namespace Multilingual.Excel.FileType.Services
 				return;
 			}
 
-			// prepare the target segment for output format.
-			foreach (var segmentPair in paragraphUnit.SegmentPairs)
-			{
-				_segmentVisitor.VisitSegment(segmentPair.Target);
-				segmentPair.Target.Clear();
-				segmentPair.Target.Add(_segmentBuilder.Text(_segmentVisitor.Text));
-			}
+			// Traverse the entire target paragraph container so that tag pairs wrapping
+			// multiple segments (e.g. <i>…</i> spanning the whole paragraph) are included.
+			_segmentVisitor.VisitContainer(paragraphUnit.Target);
+			var targetValue = new StringBuilder(MergeAdjacentTagPairs(_segmentVisitor.Text));
 
 
 			var excelSheet = _excelSheets.FirstOrDefault(a => a.Index == _excelSheetIndex);
@@ -395,28 +394,49 @@ namespace Multilingual.Excel.FileType.Services
 					switch (hyperlinkDataType)
 					{
 						case nameof(targetContent.Hyperlink.Url):
-							targetContent.Hyperlink.Url = paragraphUnit.Target.ToString();
+							targetContent.Hyperlink.Url = targetValue.ToString();
 							break;
 						case nameof(targetContent.Hyperlink.Tooltip):
-							targetContent.Hyperlink.Tooltip = paragraphUnit.Target.ToString();
+							targetContent.Hyperlink.Tooltip = targetValue.ToString();
 							break;
 						case nameof(targetContent.Hyperlink.Email):
 							targetContent.Hyperlink.Url = targetContent.Hyperlink.Url.Replace(targetContent.Hyperlink.Email,
-								paragraphUnit.Target.ToString());
-							targetContent.Hyperlink.Email = paragraphUnit.Target.ToString();
+								targetValue.ToString());
+							targetContent.Hyperlink.Email = targetValue.ToString();
 							break;
 						case nameof(targetContent.Hyperlink.Subject):
 							targetContent.Hyperlink.Url = targetContent.Hyperlink.Url.Replace(targetContent.Hyperlink.Subject,
-								paragraphUnit.Target.ToString());
-							targetContent.Hyperlink.Subject = paragraphUnit.Target.ToString();
+								targetValue.ToString());
+							targetContent.Hyperlink.Subject = targetValue.ToString();
 							break;
 					}
 				}
 				else
 				{
-					targetContent.Value = paragraphUnit.Target.ToString();
+					targetContent.Value = targetValue.ToString();
 				}
 			}
+		}
+
+		private static string MergeAdjacentTagPairs(string text)
+		{
+			if (string.IsNullOrEmpty(text))
+			{
+				return text;
+			}
+
+			// Collapse </TAG>\s*<TAG> into just the whitespace that was between them,
+			// repeating until no more adjacent pairs can be merged.
+			
+			string previous;
+			do
+			{
+				previous = text;
+				text = _pattern.Replace(text, "$2");
+			}
+			while (text != previous);
+
+			return text;
 		}
 
 		private string GetMarkupText(IParagraphUnit paragraphUnit, ISegmentPair segmentPair, IEnumerable<Element> elements)
