@@ -55,7 +55,6 @@ namespace Multilingual.Excel.FileType.Services
 		private List<ExcelSheet> _excelSheets;
 
 		private int _excelSheetIndex;
-		private string _excelSheetName;
 		private uint _excelRowIndex;
 		private bool _isCDATA;
 		private static readonly Regex _pattern = new(@"<\/([A-Za-z][A-Za-z0-9]*)>(\s*)<\1>", RegexOptions.Compiled);
@@ -227,7 +226,6 @@ namespace Multilingual.Excel.FileType.Services
 			if (multilingualParagraphUnitContext != null)
 			{
 				_excelSheetIndex = Convert.ToInt32(multilingualParagraphUnitContext.GetMetaData(FiletypeConstants.MultilingualExcelSheetIndex));
-				_excelSheetName = multilingualParagraphUnitContext.GetMetaData(FiletypeConstants.MultilingualExcelSheetName);
 				_excelRowIndex = Convert.ToUInt32(multilingualParagraphUnitContext.GetMetaData(FiletypeConstants.MultilingualExcelRowIndex));
 				_isCDATA = Convert.ToBoolean(multilingualParagraphUnitContext.GetMetaData(FiletypeConstants.IsCDATA));
 			}
@@ -249,18 +247,14 @@ namespace Multilingual.Excel.FileType.Services
 				return;
 			}
 
-			var structureParagraph = _embeddedContentPositionMarkerParagraph.Dequeue();
+			_embeddedContentPositionMarkerParagraph.Dequeue();
 			var targetSubContent = GetTargetSubContent(subContentStream);
 
 			var excelSheet = _excelSheets.FirstOrDefault(a => a.Index == _excelSheetIndex);
 			var excelRow = excelSheet?.Rows.FirstOrDefault(a => a.Index == _excelRowIndex);
 			if (excelRow != null)
 			{
-				//var sourceContent = excelRow.Cells.FirstOrDefault(a => a.Column.Name == _sourceLanguageMapping.ContentColumn);
 				var targetContent = excelRow.Cells.FirstOrDefault(a => a.Column.Name == _targetLanguageMapping.ContentColumn);
-
-				//var escapedInnerXml = _entityService.ConvertKnownCharactersToEntities(targetContent.Value);
-
 				targetContent.Value = _isCDATA ? string.Format(XmlConstants.CdataFormat, targetSubContent) : targetSubContent;
 			}
 		}
@@ -352,7 +346,7 @@ namespace Multilingual.Excel.FileType.Services
 			// Traverse the entire target paragraph container so that tag pairs wrapping
 			// multiple segments (e.g. <i>…</i> spanning the whole paragraph) are included.
 			_segmentVisitor.VisitContainer(paragraphUnit.Target);
-			var targetValue = new StringBuilder(MergeAdjacentTagPairs(_segmentVisitor.Text));
+			var targetValue = MergeAdjacentTagPairs(_segmentVisitor.Text);
 
 
 			var excelSheet = _excelSheets.FirstOrDefault(a => a.Index == _excelSheetIndex);
@@ -394,26 +388,24 @@ namespace Multilingual.Excel.FileType.Services
 					switch (hyperlinkDataType)
 					{
 						case nameof(targetContent.Hyperlink.Url):
-							targetContent.Hyperlink.Url = targetValue.ToString();
+							targetContent.Hyperlink.Url = targetValue;
 							break;
 						case nameof(targetContent.Hyperlink.Tooltip):
-							targetContent.Hyperlink.Tooltip = targetValue.ToString();
+							targetContent.Hyperlink.Tooltip = targetValue;
 							break;
 						case nameof(targetContent.Hyperlink.Email):
-							targetContent.Hyperlink.Url = targetContent.Hyperlink.Url.Replace(targetContent.Hyperlink.Email,
-								targetValue.ToString());
-							targetContent.Hyperlink.Email = targetValue.ToString();
+							targetContent.Hyperlink.Url = targetContent.Hyperlink.Url.Replace(targetContent.Hyperlink.Email, targetValue);
+							targetContent.Hyperlink.Email = targetValue;
 							break;
 						case nameof(targetContent.Hyperlink.Subject):
-							targetContent.Hyperlink.Url = targetContent.Hyperlink.Url.Replace(targetContent.Hyperlink.Subject,
-								targetValue.ToString());
-							targetContent.Hyperlink.Subject = targetValue.ToString();
+							targetContent.Hyperlink.Url = targetContent.Hyperlink.Url.Replace(targetContent.Hyperlink.Subject, targetValue);
+							targetContent.Hyperlink.Subject = targetValue;
 							break;
 					}
 				}
 				else
 				{
-					targetContent.Value = targetValue.ToString();
+					targetContent.Value = targetValue;
 				}
 			}
 		}
@@ -437,35 +429,6 @@ namespace Multilingual.Excel.FileType.Services
 			while (text != previous);
 
 			return text;
-		}
-
-		private string GetMarkupText(IParagraphUnit paragraphUnit, ISegmentPair segmentPair, IEnumerable<Element> elements)
-		{
-			var content = string.Empty;
-			foreach (var element in elements)
-			{
-				if (element is ElementText text)
-				{
-					var markup = string.Format(XmlConstants.CdataFormat, "<" + FiletypeConstants.MultilingualSegment + " "
-								 + "pid=\"" + paragraphUnit.Properties.ParagraphUnitId.Id + "\" sid=\"" + segmentPair.Properties.Id.Id + "\">");
-					markup += text.Text;
-					markup += string.Format(XmlConstants.CdataFormat, "</" + FiletypeConstants.MultilingualSegment + ">");
-
-					content += markup;
-				}
-
-				if (element is ElementTagPair tagPair)
-				{
-					content += tagPair.TagContent;
-				}
-
-				if (element is ElementPlaceholder placeholder)
-				{
-					content += placeholder.TagContent;
-				}
-			}
-
-			return content;
 		}
 
 		public void FileComplete()
