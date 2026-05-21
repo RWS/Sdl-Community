@@ -38,10 +38,29 @@ namespace Multilingual.Excel.FileType.Services
 
 		public string Text { get; private set; }
 
+		private bool _visitingContainer;
+
 		public void VisitSegment(ISegment segment)
 		{
-			InitializeComponents();
+			if (!_visitingContainer)
+			{
+				InitializeComponents();
+			}
 			VisitChilderen(segment);
+		}
+
+		public void VisitContainer(IAbstractMarkupDataContainer container)
+		{
+			InitializeComponents();
+			_visitingContainer = true;
+			try
+			{
+				VisitChilderen(container);
+			}
+			finally
+			{
+				_visitingContainer = false;
+			}
 		}
 
 		public void InitializeComponents()
