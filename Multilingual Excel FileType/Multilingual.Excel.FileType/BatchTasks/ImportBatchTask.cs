@@ -33,7 +33,7 @@ namespace Multilingual.Excel.FileType.BatchTasks
 		GeneratedFileType = AutomaticTaskFileType.BilingualTarget, AllowMultiple = true)]
 	[AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]
 	[RequiresSettings(typeof(MultilingualExcelImportSettings), typeof(ImportSettingsPage))]
-	public class ImportBatchTask : AbstractFileContentProcessingAutomaticTask
+	public class ImportBatchTask : BatchTaskBase
 	{
 		private MultilingualExcelImportSettings _settings;
 		private LanguageMappingSettings _languageMappingSettings;
@@ -82,18 +82,7 @@ namespace Multilingual.Excel.FileType.BatchTasks
 
 		private IPropertiesFactory propertiesFactory;
 
-		public override bool ShouldProcessFile(ProjectFile projectFile)
-		{
-			var valid = projectFile.FileTypeId == FiletypeConstants.FileTypeDefinitionId;
-			if (!valid)
-			{
-				var message = string.Format(PluginResources.ExceptionMessage_Incorrect_File_Type,
-					projectFile.FileTypeId, FiletypeConstants.FileTypeDefinitionId);
-				throw new Exception(message);
-			}
-
-			return true;
-		}
+		
 
 
 		private LanguageMapping _targetLanguageMapping = null;
@@ -218,17 +207,6 @@ namespace Multilingual.Excel.FileType.BatchTasks
 				// 2 c. Remove the translations and reset the segment status to not defined.
 				var sdlxliffUpdater = new SdlxliffUpdater(new ClearTranslationsContentProcessor());
 				UpdateFile(projectFile, sdlxliffUpdater);
-			}
-		}
-
-		private static void UpdateFile(ProjectFile projectFile, SdlxliffUpdater sdlxliffUpdater)
-		{
-			var updatedFilePath = Path.GetTempFileName();
-			sdlxliffUpdater.UpdateFile(projectFile.LocalFilePath, updatedFilePath);
-			File.Copy(updatedFilePath, projectFile.LocalFilePath, true);
-			if (File.Exists(updatedFilePath))
-			{
-				File.Delete(updatedFilePath);
 			}
 		}
 
@@ -673,33 +651,5 @@ namespace Multilingual.Excel.FileType.BatchTasks
 		}
 
 
-		private List<Models.AnalysisBand> GetAnalysisBands(FileBasedProject project)
-		{
-			var regex = new Regex(@"(?<min>[\d]*)([^\d]*)(?<max>[\d]*)", RegexOptions.IgnoreCase);
-
-			var analysisBands = new List<Models.AnalysisBand>();
-			var type = project.GetType();
-			var internalProjectField = type.GetField("_project", BindingFlags.NonPublic | BindingFlags.Instance);
-			if (internalProjectField != null)
-			{
-				dynamic internalDynamicProject = internalProjectField.GetValue(project);
-				foreach (var analysisBand in internalDynamicProject.AnalysisBands)
-				{
-					Match match = regex.Match(analysisBand.ToString());
-					if (match.Success)
-					{
-						var min = match.Groups["min"].Value;
-						var max = match.Groups["max"].Value;
-						analysisBands.Add(new Models.AnalysisBand
-						{
-							MinimumMatchValue = Convert.ToInt32(min),
-							MaximumMatchValue = Convert.ToInt32(max)
-						});
-					}
-				}
 			}
-
-			return analysisBands;
 		}
-	}
-}
