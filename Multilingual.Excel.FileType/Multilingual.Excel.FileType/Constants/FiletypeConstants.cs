@@ -1,10 +1,17 @@
-﻿using System.Reflection;
-
-namespace Multilingual.Excel.FileType.Constants
+﻿namespace Multilingual.Excel.FileType.Constants
 {
 	public class FiletypeConstants
 	{
-		public static readonly string FileTypeDefinitionId = "Multilingual Excel FileType v " + Assembly.GetExecutingAssembly().GetName().Version;
+		// IMPORTANT: This identifier is persisted in user project files (.sdlproj, .sdlxliff)
+		// when a file is added to a Trados Studio project. It MUST remain stable across
+		// plugin releases, otherwise Studio will not recognize files created with previous
+		// versions of the plugin as belonging to this file type.
+		// Historically this string was built at runtime from Assembly.GetName().Version
+		// (e.g. "Multilingual Excel FileType v 3.0.0.0"). Legacy versioned IDs that exist
+		// in already-deployed projects are rewritten to this stable form on Studio startup
+		// and whenever a project is added (see FileTypeIdMigrationService).
+		// Do NOT change this string when bumping the assembly version.
+		public const string FileTypeDefinitionId = "Multilingual Excel FileType";
 		public const string FileTypeName = "Multilingual Excel";
 		public const string FileTypeDocumentName = "Multilingual Excel Document";
 		public const string FileTypeDocumentsName = "Multilingual Excel Documents";

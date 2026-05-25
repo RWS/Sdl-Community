@@ -120,6 +120,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationInstance.cs" />
+    <Compile Include="BatchTasks\BatchTaskBase.cs" />
     <Compile Include="BatchTasks\ExportBatchTask.cs" />
     <Compile Include="BatchTasks\Settings\MultilingualExcelExportSettings.cs" />
     <Compile Include="BatchTasks\Settings\MultilingualExcelImportSettings.cs" />
@@ -186,6 +187,7 @@
     <Compile Include="FileType\Views\CommentMappingView.xaml.cs">
       <DependentUpon>CommentMappingView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Actions\MigrateLegacyFileTypeIdAction.cs" />
     <Compile Include="Models\AbstractMetaDataContainer.cs" />
     <Compile Include="Models\Attribute.cs" />
     <Compile Include="Models\Comment.cs" />
@@ -280,6 +282,7 @@
     <Compile Include="Services\Entities\EntityRule.cs" />
     <Compile Include="Services\Entities\EntityService.cs" />
     <Compile Include="Services\FileSystemService.cs" />
+    <Compile Include="Services\FileTypeIdMigrationService.cs" />
     <Compile Include="Services\FilterItemService.cs" />
     <Compile Include="Models\ParagraphUnitInfo.cs" />
     <Compile Include="Services\QuickInsertWriter.cs" />
