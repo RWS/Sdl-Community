@@ -34,9 +34,9 @@ namespace Multilingual.Excel.FileType.Actions
     /// </summary>
     [Action(
         "Multilingual.Excel.FileType.MigrateLegacyFileTypeIdAction",
-        Name = "Migrate Legacy File Type Id",
+        Name = "Migrate To Current FileType Id",
         Icon = "MLExcel",
-        Description = "Use this on a project that was created with an earlier version of the Multilingual Excel FileType plugin. It rewrites references to the Multilingual Excel FileType in the selected project's .sdlproj and .sdlxliff files so they match the currently installed version of the plugin (e.g. ' v 1.0.0.0' becomes ' v 3.0.0.0').")]
+        Description = "Use this on a project that was created with another version of the Multilingual Excel FileType plugin. It rewrites references to the Multilingual Excel FileType in the selected project's .sdlproj and .sdlxliff files so they match the currently installed version of the plugin.")]
     [ActionLayout(typeof(MultilingualExcelRibbonGroup), 10, DisplayType.Large)]
     public class MigrateLegacyFileTypeIdAction : AbstractAction
     {
@@ -144,8 +144,7 @@ namespace Multilingual.Excel.FileType.Actions
                             ? "\r\n\r\nThe project could not be re-opened automatically; please open it manually from:\r\n"
                                 + projectFilePath
                                 + (reopenError != null ? "\r\n\r\nReason: " + reopenError : string.Empty)
-                            : "\r\n\r\nThe project has been re-opened.")
-                        + "\r\n\r\nSee the Trace output for per-file details.",
+                            : "\r\n\r\nThe project has been re-opened."),
                     "Multilingual Excel FileType",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
