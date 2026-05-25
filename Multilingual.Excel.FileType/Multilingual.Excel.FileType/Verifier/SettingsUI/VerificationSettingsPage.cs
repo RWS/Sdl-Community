@@ -22,7 +22,7 @@ namespace Multilingual.Excel.FileType.Verifier.SettingsUI
 			_controlSettings = ((ISettingsBundle)DataSource).GetSettingsGroup<MultilingualExcelVerificationSettings>();
 			_controlSettings.BeginEdit();
 
-			return _control ?? (_control = new VerifcationSettings());
+			return _control ??= new VerifcationSettings();
 		}
 
 		public override void OnActivate()

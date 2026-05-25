@@ -125,11 +125,11 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 			return fonts;
 		}
 
-		public ICommand SelectedLanguagesChangedCommand => _selectedLanguagesChangedCommand ?? (_selectedLanguagesChangedCommand = new CommandHandler(SelectedLanguagesChanged));
+		public ICommand SelectedLanguagesChangedCommand => _selectedLanguagesChangedCommand ??= new CommandHandler(SelectedLanguagesChanged);
 
-		public ICommand SelectedFontsChangedCommand => _selectedFontsChangedCommand ?? (_selectedFontsChangedCommand = new CommandHandler(SelectedFontsChanged));
+		public ICommand SelectedFontsChangedCommand => _selectedFontsChangedCommand ??= new CommandHandler(SelectedFontsChanged);
 
-		public ICommand GetDefaultLanguageFontCommand => _getDefaultLanguageFontCommand ?? (_getDefaultLanguageFontCommand = new CommandHandler(GetDefaultLanguageFont));
+		public ICommand GetDefaultLanguageFontCommand => _getDefaultLanguageFontCommand ??= new CommandHandler(GetDefaultLanguageFont);
 
 		public string WindowTitle
 		{

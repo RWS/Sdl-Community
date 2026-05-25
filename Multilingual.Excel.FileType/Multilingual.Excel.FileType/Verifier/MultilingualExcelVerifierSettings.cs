@@ -20,7 +20,7 @@ namespace Multilingual.Excel.FileType.Verifier
 			{
 				lock (LockObject)
 				{
-					return _instance ?? (_instance = new MultilingualExcelVerifierSettings());
+					return _instance ??= new MultilingualExcelVerifierSettings();
 				}
 			}
 		}

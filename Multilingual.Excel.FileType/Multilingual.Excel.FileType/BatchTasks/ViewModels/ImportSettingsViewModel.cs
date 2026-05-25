@@ -37,7 +37,7 @@ namespace Multilingual.Excel.FileType.BatchTasks.ViewModels
 		public MultilingualExcelImportSettings Settings { get; }
 
 
-		public ICommand ClearFiltersCommand => _clearFiltersCommand ?? (_clearFiltersCommand = new CommandHandler(ClearFilters));
+		public ICommand ClearFiltersCommand => _clearFiltersCommand ??= new CommandHandler(ClearFilters);
 
 		public bool BackupFiles { get; set; }
 
@@ -91,7 +91,7 @@ namespace Multilingual.Excel.FileType.BatchTasks.ViewModels
 
 		public ObservableCollection<FilterItem> SelectedExcludeFilterItems
 		{
-			get => _selectedExcludeFilterItems ?? (_selectedExcludeFilterItems = new ObservableCollection<FilterItem>());
+			get => _selectedExcludeFilterItems ??= new ObservableCollection<FilterItem>();
 			set
 			{
 				if (_selectedExcludeFilterItems == value)
