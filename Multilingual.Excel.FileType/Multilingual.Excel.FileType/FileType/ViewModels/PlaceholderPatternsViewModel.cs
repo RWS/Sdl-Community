@@ -55,26 +55,26 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 			UpdateCheckedAllState();
 		}
 
-		public ICommand ExportPlaceholderPatternsCommand => _exportPlaceholderPatternsCommand ?? (_exportPlaceholderPatternsCommand = new CommandHandler(ExportPlaceholderPatterns));
+		public ICommand ExportPlaceholderPatternsCommand => _exportPlaceholderPatternsCommand ??= new CommandHandler(ExportPlaceholderPatterns);
 
-		public ICommand ImportPlaceholderPatternsCommand => _importPlaceholderPatternsCommand ?? (_importPlaceholderPatternsCommand = new CommandHandler(ImportPlaceholderPatterns));
+		public ICommand ImportPlaceholderPatternsCommand => _importPlaceholderPatternsCommand ??= new CommandHandler(ImportPlaceholderPatterns);
 
 
-		public ICommand MovePlaceholderPatternUpCommand => _movePlaceholderPatternUpCommand ?? (_movePlaceholderPatternUpCommand = new CommandHandler(MovePlaceholderPatternUp));
+		public ICommand MovePlaceholderPatternUpCommand => _movePlaceholderPatternUpCommand ??= new CommandHandler(MovePlaceholderPatternUp);
 
-		public ICommand MovePlaceholderPatternDownCommand => _movePlaceholderPatternDownCommand ?? (_movePlaceholderPatternDownCommand = new CommandHandler(MovePlaceholderPatternDown));
+		public ICommand MovePlaceholderPatternDownCommand => _movePlaceholderPatternDownCommand ??= new CommandHandler(MovePlaceholderPatternDown);
 
-		public ICommand SelectAllCommand => _selectAllCommand ?? (_selectAllCommand = new CommandHandler(SelectAllPatterns));
+		public ICommand SelectAllCommand => _selectAllCommand ??= new CommandHandler(SelectAllPatterns);
 
-		public ICommand AddPlaceholderPatternCommand => _addPlaceholderPatternCommand ?? (_addPlaceholderPatternCommand = new CommandHandler(AddPlaceholderPattern));
+		public ICommand AddPlaceholderPatternCommand => _addPlaceholderPatternCommand ??= new CommandHandler(AddPlaceholderPattern);
 
-		public ICommand EditPlaceholderPatternCommand => _editPlaceholderPatternCommand ?? (_editPlaceholderPatternCommand = new CommandHandler(EditPlaceholderPattern));
+		public ICommand EditPlaceholderPatternCommand => _editPlaceholderPatternCommand ??= new CommandHandler(EditPlaceholderPattern);
 
-		public ICommand RemovePlaceholderPatternCommand => _removePlaceholderPatternCommand ?? (_removePlaceholderPatternCommand = new CommandHandler(RemovePlaceholderPattern));
+		public ICommand RemovePlaceholderPatternCommand => _removePlaceholderPatternCommand ??= new CommandHandler(RemovePlaceholderPattern);
 
-		public ICommand DragDropCommand => _dragDropCommand ?? (_dragDropCommand = new CommandHandler(DragDrop));
+		public ICommand DragDropCommand => _dragDropCommand ??= new CommandHandler(DragDrop);
 
-		public ICommand MouseDoubleClickCommand => _mouseDoubleClick ?? (_mouseDoubleClick = new CommandHandler(MouseDoubleClick));
+		public ICommand MouseDoubleClickCommand => _mouseDoubleClick ??= new CommandHandler(MouseDoubleClick);
 
 		public PlaceholderPatternSettings Settings { get; }
 
