@@ -427,10 +427,7 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 			}
 
 			EnsureDefaultLanguageMappingIsSet();
-
-			OnPropertyChanged(nameof(LanguageMappings));
-			OnPropertyChanged(nameof(LanguageMappingsStatusLabel));
-
+			RefreshLanguageMappings();
 
 			dataGrid.ForceCursor = true;
 			Keyboard.Focus(dataGrid);
