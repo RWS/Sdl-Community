@@ -80,6 +80,9 @@
 			<HintPath>$(TradosFolder)\Sdl.TellMe.ProviderApi.dll</HintPath>
 		</Reference>
 		<Reference Include="System.Configuration" />
+		<Reference Include="System.Reactive">
+		  <HintPath>$(TradosFolder)\System.Reactive.dll</HintPath>
+		</Reference>
 		<Reference Include="System.Web" />
 		<Reference Include="System.Data.DataSetExtensions" />
 		<Reference Include="Microsoft.CSharp" />
