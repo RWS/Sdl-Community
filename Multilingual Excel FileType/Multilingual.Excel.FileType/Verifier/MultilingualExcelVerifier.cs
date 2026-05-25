@@ -93,7 +93,7 @@ namespace Multilingual.Excel.FileType.Verifier
 
 		internal LanguageMapping LanguageMapping { get; set; }
 
-		public TextGenerator TextGeneratorProcessor => _textGeneratorProcessor ?? (_textGeneratorProcessor = new TextGenerator());
+		public TextGenerator TextGeneratorProcessor => _textGeneratorProcessor ??= new TextGenerator();
 
 		public string Description => PluginResources.Verifier_Description;
 
