@@ -144,8 +144,7 @@ namespace Multilingual.Excel.FileType.Actions
                             ? "\r\n\r\nThe project could not be re-opened automatically; please open it manually from:\r\n"
                                 + projectFilePath
                                 + (reopenError != null ? "\r\n\r\nReason: " + reopenError : string.Empty)
-                            : "\r\n\r\nThe project has been re-opened.")
-                        + "\r\n\r\nSee the Trace output for per-file details.",
+                            : "\r\n\r\nThe project has been re-opened."),
                     "Multilingual Excel FileType",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
