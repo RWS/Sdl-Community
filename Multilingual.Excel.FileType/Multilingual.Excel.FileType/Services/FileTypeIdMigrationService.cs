@@ -4,29 +4,33 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using Sdl.ProjectAutomation.FileBased;
+using Multilingual.Excel.FileType.Constants;
 
 namespace Multilingual.Excel.FileType.Services
 {
     /// <summary>
-    /// Rewrites legacy versioned file type identifiers
-    /// (e.g. "Multilingual Excel FileType v 3.0.0.0") to the stable
-    /// "Multilingual Excel FileType" identifier inside Trados Studio
-    /// project files (.sdlproj) and bilingual files (.sdlxliff).
-    /// Only the trailing " v X.X.X.X" suffix is removed; the rest of the file
-    /// is preserved byte-for-byte (including original encoding/BOM and line endings).
-    /// The operation is idempotent: files without legacy IDs are not modified.
+    /// Rewrites Multilingual Excel FileType identifiers found inside Trados Studio
+    /// project files (.sdlproj) and bilingual files (.sdlxliff) so that they match
+    /// the currently installed plugin's versioned identifier
+    /// (e.g. "Multilingual Excel FileType v 3.0.2.0").
+    /// Both legacy versioned ids ("Multilingual Excel FileType v 1.0.0.0") and the
+    /// unversioned form ("Multilingual Excel FileType") are upgraded to the current
+    /// versioned id. The rest of the file is preserved byte-for-byte (including
+    /// original encoding/BOM and line endings).
+    /// The operation is idempotent: files already on the current id are not modified.
     /// </summary>
     internal class FileTypeIdMigrationService
     {
-        // Strict match: exactly four dot-separated integer components.
-        // The first group ("Multilingual Excel FileType") is preserved by the
-        // replacement; only the " v X.X.X.X" suffix is dropped.
-        private const string LegacyIdPattern = @"(Multilingual Excel FileType) v \d+\.\d+\.\d+\.\d+";
+        // Matches the file type id prefix with an optional " v X.X.X.X" version suffix.
+        // The whole match is replaced with the current plugin's versioned id, so files
+        // that contain a stale version (or no version at all) get upgraded.
+        private const string FileTypeIdPattern = @"Multilingual Excel FileType( v \d+\.\d+\.\d+\.\d+)?";
 
-        private static readonly Regex LegacyIdRegex = new Regex(
-            LegacyIdPattern,
+        private static readonly Regex FileTypeIdRegex = new Regex(
+            FileTypeIdPattern,
             RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
+        private static readonly string CurrentFileTypeId = FiletypeConstants.FileTypeDefinitionId;
 
         // Per-file dedup. A path is added only after the file was successfully
         // read AND either rewritten or confirmed to not need rewriting. Files
@@ -36,29 +40,14 @@ namespace Multilingual.Excel.FileType.Services
             new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
-        /// Migrates the given project's .sdlproj and all .sdlxliff files under
-        /// its folder. Safe to call repeatedly: files that already succeeded are
-        /// skipped, files that previously failed (because they were locked) are
-        /// retried.
+        /// Migrates the .sdlproj at <paramref name="projectFilePath"/> and all .sdlxliff
+        /// files under its folder. Safe to call repeatedly: files that already succeeded
+        /// are skipped, files that previously failed (because they were locked) are
+        /// retried. The caller is responsible for closing the project in Studio before
+        /// calling this method.
         /// </summary>
-        public void MigrateProject(FileBasedProject project)
+        public void MigrateProject(string projectFilePath)
         {
-            if (project == null)
-            {
-                return;
-            }
-
-            string projectFilePath;
-            try
-            {
-                projectFilePath = project.FilePath;
-            }
-            catch (Exception ex)
-            {
-                Trace.TraceWarning("MultilingualExcel: cannot read project FilePath: {0}", ex.Message);
-                return;
-            }
-
             if (string.IsNullOrEmpty(projectFilePath) || !File.Exists(projectFilePath))
             {
                 return;
@@ -157,15 +146,16 @@ namespace Multilingual.Excel.FileType.Services
             var preambleLength = hasBom ? encoding.GetPreamble().Length : 0;
             var original = encoding.GetString(originalBytes, preambleLength, originalBytes.Length - preambleLength);
 
-            if (!LegacyIdRegex.IsMatch(original))
+            if (!FileTypeIdRegex.IsMatch(original))
             {
                 // Nothing to do; mark as processed so we don't keep re-reading it.
                 return true;
             }
 
-            // "$1" keeps the captured "Multilingual Excel FileType" and drops the
-            // " v X.X.X.X" suffix. Nothing else in the file is touched.
-            var updated = LegacyIdRegex.Replace(original, "$1");
+            // Replace every occurrence (legacy versioned or unversioned) with the
+            // current plugin's versioned id. Idempotent: if every occurrence already
+            // matches CurrentFileTypeId, the resulting string is identical.
+            var updated = FileTypeIdRegex.Replace(original, CurrentFileTypeId);
             if (string.Equals(updated, original, StringComparison.Ordinal))
             {
                 return true;
@@ -195,7 +185,7 @@ namespace Multilingual.Excel.FileType.Services
                 // an exclusive lock, this will throw and we return false so the
                 // caller can retry later (e.g. when the project is closed).
                 File.Replace(tempPath, filePath, null, ignoreMetadataErrors: true);
-                Trace.TraceInformation("MultilingualExcel: migrated legacy file type id in '{0}'.", filePath);
+                Trace.TraceInformation("MultilingualExcel: rewrote file type id to '{0}' in '{1}'.", CurrentFileTypeId, filePath);
                 return true;
             }
             catch (IOException ex)
