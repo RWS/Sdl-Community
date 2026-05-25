@@ -57,17 +57,17 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 			LanguageMappings = new ObservableCollection<LanguageMapping>(Settings.LanguageMappingLanguages);
 		}
 
-		public ICommand AddLanguageCommand => _addLanguageCommand ?? (_addLanguageCommand = new CommandHandler(AddLanguage));
+		public ICommand AddLanguageCommand => _addLanguageCommand ??= new CommandHandler(AddLanguage);
 
-		public ICommand EditLanguageCommand => _editLanguageCommand ?? (_editLanguageCommand = new CommandHandler(EditLanguage));
+		public ICommand EditLanguageCommand => _editLanguageCommand ??= new CommandHandler(EditLanguage);
 
-		public ICommand RemoveLanguageCommand => _removeLanguageCommand ?? (_removeLanguageCommand = new CommandHandler(RemoveLangauge));
+		public ICommand RemoveLanguageCommand => _removeLanguageCommand ??= new CommandHandler(RemoveLangauge);
 
-		public ICommand SetAsDefaultLanguageCommand => _setAsDefaultLanguageCommand ?? (_setAsDefaultLanguageCommand = new CommandHandler(SetAsDefaultLanguage));
+		public ICommand SetAsDefaultLanguageCommand => _setAsDefaultLanguageCommand ??= new CommandHandler(SetAsDefaultLanguage);
 
-		public ICommand DragDropCommand => _dragDropCommand ?? (_dragDropCommand = new CommandHandler(DragDrop));
+		public ICommand DragDropCommand => _dragDropCommand ??= new CommandHandler(DragDrop);
 
-		public ICommand MouseDoubleClickCommand => _mouseDoubleClick ?? (_mouseDoubleClick = new CommandHandler(MouseDoubleClick));
+		public ICommand MouseDoubleClickCommand => _mouseDoubleClick ??= new CommandHandler(MouseDoubleClick);
 
 		public IFilterService LanguageFilterService { get; set; }
 

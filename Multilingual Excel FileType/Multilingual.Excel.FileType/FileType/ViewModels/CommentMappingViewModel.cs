@@ -47,15 +47,15 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 			OnPropertyChanged(nameof(AddCommentPropertyIsEnabled));
 		}
 
-		public ICommand AddCommentPropertyCommand => _addLanguageCommand ?? (_addLanguageCommand = new CommandHandler(AddPropertyMapping));
+		public ICommand AddCommentPropertyCommand => _addLanguageCommand ??= new CommandHandler(AddPropertyMapping);
 
-		public ICommand EditCommentPropertyCommand => _editLanguageCommand ?? (_editLanguageCommand = new CommandHandler(EditPropertyMapping));
+		public ICommand EditCommentPropertyCommand => _editLanguageCommand ??= new CommandHandler(EditPropertyMapping);
 
-		public ICommand RemoveCommentPropertyCommand => _removeLanguageCommand ?? (_removeLanguageCommand = new CommandHandler(RemovePropertyMappings));
+		public ICommand RemoveCommentPropertyCommand => _removeLanguageCommand ??= new CommandHandler(RemovePropertyMappings);
 
-		public ICommand DragDropCommand => _dragDropCommand ?? (_dragDropCommand = new CommandHandler(DragDrop));
+		public ICommand DragDropCommand => _dragDropCommand ??= new CommandHandler(DragDrop);
 
-		public ICommand MouseDoubleClickCommand => _mouseDoubleClick ?? (_mouseDoubleClick = new CommandHandler(MouseDoubleClick));
+		public ICommand MouseDoubleClickCommand => _mouseDoubleClick ??= new CommandHandler(MouseDoubleClick);
 
 		public IFilterService FilterService { get; set; }
 
