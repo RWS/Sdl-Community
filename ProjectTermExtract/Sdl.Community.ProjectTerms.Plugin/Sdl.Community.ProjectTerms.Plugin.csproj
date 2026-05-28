@@ -5,7 +5,7 @@
         <PlatformTarget>x64</PlatformTarget>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<TradosFolder>$(ProgramW6432)\Trados\Trados Studio\Studio19Beta</TradosFolder>
-		<MultiTermFolder>$(MSBuildProgramFiles32)\Trados\MultiTerm\MultiTerm18</MultiTermFolder>
+		<MultiTermFolder>$(MSBuildProgramFiles32)\Trados\MultiTerm\MultiTerm19</MultiTermFolder>
 		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19beta\Plugins</PluginDeploymentPath>
 		<CreatePluginPackage>true</CreatePluginPackage>
 	</PropertyGroup>
@@ -44,6 +44,7 @@
     <Reference Include="Sdl.MultiTerm.TMO.Interop">
       <HintPath>$(MultiTermFolder)\Sdl.MultiTerm.TMO.Interop.dll</HintPath>
     </Reference>
+   
     
     <Reference Include="Sdl.ProjectApi">
       <HintPath>$(TradosFolder)\Sdl.ProjectApi.dll</HintPath>
