@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TradosFolder>$(Trados16)</TradosFolder>
+		<!-- Update this path to match your local Trados Studio installation folder -->
+		<TradosFolder>C:\Program Files\Trados\Trados Studio\Studio19Beta</TradosFolder>
 		<TargetFramework>net48</TargetFramework>
-        <PlatformTarget>x64</PlatformTarget>
+		<PlatformTarget>x64</PlatformTarget>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<CreatePluginPackage>true</CreatePluginPackage>
-		<PlatformTarget>x86</PlatformTarget>
 		<OutputType>Exe</OutputType>
-		<OutputPath>$(TradosFolder)</OutputPath>
 		<LangVersion>latest</LangVersion>
+		<OutputPath>$(TradosFolder)</OutputPath>
 	</PropertyGroup>
   <ItemGroup>
     <Reference Include="Sdl.Core.Globalization">
@@ -35,5 +34,8 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Helpers\" />
   </ItemGroup>
 </Project>
