@@ -3,15 +3,15 @@ using System.IO;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 
-namespace PretranslateProjectsCreatedFromTemplateSample
+namespace CreateProjectFromTemplateSample
 {
 	public static class Program
 	{
-		private const string TemplatePath      = @"";
-		private const string SourceFilesFolder = @"";
-		private const string OutputFolder      = @"";
+        private const string TemplatePath = @"";
+        private const string SourceFilesFolder = @"";
+        private const string OutputFolder = @"";
 
-		private static void Main()
+        private static void Main()
 		{
 			var template = new ProjectTemplateReference(TemplatePath);
 

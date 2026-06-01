@@ -11,7 +11,7 @@
 		<LangVersion>latest</LangVersion>
 		<OutputPath>$(TradosFolder)</OutputPath>
 	</PropertyGroup>
-  <ItemGroup>
+	<ItemGroup>
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
@@ -34,8 +34,5 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Helpers\" />
   </ItemGroup>
 </Project>

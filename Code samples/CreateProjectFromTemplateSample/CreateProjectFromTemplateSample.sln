@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PretranslateProjectsCreatedFromTemplateSample", "PretranslateProjectsCreatedFromTemplateSample.csproj", "{E5D453D0-CDBB-4B0D-ADE0-0F886EE73984}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CreateProjectFromTemplateSample", "CreateProjectFromTemplateSample.csproj", "{E5D453D0-CDBB-4B0D-ADE0-0F886EE73984}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
