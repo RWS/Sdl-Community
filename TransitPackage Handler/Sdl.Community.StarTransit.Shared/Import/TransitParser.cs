@@ -290,17 +290,10 @@ namespace Sdl.Community.StarTransit.Shared.Import
 				_srcSegmentTagCount += 1;
 			}
 
+			var isSubSeg = item.Name == "SubSeg";
 			foreach (XmlNode child in item.ChildNodes)
 			{
-				if (child.NodeType == XmlNodeType.Text)
-				{
-					tagPair.Add(CreateText(child.InnerText));
-				}
-				else if (child.NodeType == XmlNodeType.Whitespace)
-				{
-					tagPair.Add(CreateText(" "));
-				}
-				else if (child.NodeType == XmlNodeType.Element)
+				if (child.NodeType == XmlNodeType.Element)
 				{
 					if (child.Name == "SubSeg" || child.SelectSingleNode(".//SubSeg") != null)
 					{
@@ -309,6 +302,18 @@ namespace Sdl.Community.StarTransit.Shared.Import
 					else
 					{
 						tagPair.Add(CreatePhTag(child.Name, child, source));
+					}
+				}
+				else if (isSubSeg)
+				{
+					// Only expose text content as translatable when directly inside a SubSeg
+					if (child.NodeType == XmlNodeType.Text)
+					{
+						tagPair.Add(CreateText(child.InnerText));
+					}
+					else if (child.NodeType == XmlNodeType.Whitespace)
+					{
+						tagPair.Add(CreateText(" "));
 					}
 				}
 			}
