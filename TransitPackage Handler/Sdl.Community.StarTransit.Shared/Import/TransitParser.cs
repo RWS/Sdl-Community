@@ -241,7 +241,14 @@ namespace Sdl.Community.StarTransit.Shared.Import
 
 					if (item.NodeType == XmlNodeType.Element)
 					{
-						segment.Add(CreatePhTag(item.Name, item, source));
+						if (item.Name == "SubSeg" || item.SelectSingleNode(".//SubSeg") != null)
+						{
+							segment.Add(CreateTagPair(item, source));
+						}
+						else
+						{
+							segment.Add(CreatePhTag(item.Name, item, source));
+						}
 					}
 
 					if (item.NodeType == XmlNodeType.Whitespace)
@@ -253,6 +260,66 @@ namespace Sdl.Community.StarTransit.Shared.Import
 			return segment;
 		}
 
+
+		private ITagPair CreateTagPair(XmlNode item, bool source)
+		{
+			var startTagContent = new StringBuilder($"<{item.Name}");
+			if (item.Attributes != null)
+			{
+				foreach (XmlAttribute attr in item.Attributes)
+				{
+					startTagContent.Append($" {attr.Name}=\"{attr.Value}\"");
+				}
+			}
+			startTagContent.Append(">");
+
+			var startTagProperties = PropertiesFactory.CreateStartTagProperties(startTagContent.ToString());
+			startTagProperties.DisplayText = item.Name;
+			startTagProperties.SegmentationHint = SegmentationHint.IncludeWithText;
+			startTagProperties.CanHide = false;
+
+			var endTagProperties = PropertiesFactory.CreateEndTagProperties($"</{item.Name}>");
+			endTagProperties.DisplayText = $"/{item.Name}";
+
+			var tagPair = ItemFactory.CreateTagPair(startTagProperties, endTagProperties);
+
+			if (source)
+			{
+				_totalTagCount += 1;
+				_tmpTotalTagCount += 1;
+				_srcSegmentTagCount += 1;
+			}
+
+			var isSubSeg = item.Name == "SubSeg";
+			foreach (XmlNode child in item.ChildNodes)
+			{
+				if (child.NodeType == XmlNodeType.Element)
+				{
+					if (child.Name == "SubSeg" || child.SelectSingleNode(".//SubSeg") != null)
+					{
+						tagPair.Add(CreateTagPair(child, source));
+					}
+					else
+					{
+						tagPair.Add(CreatePhTag(child.Name, child, source));
+					}
+				}
+				else if (isSubSeg)
+				{
+					// Only expose text content as translatable when directly inside a SubSeg
+					if (child.NodeType == XmlNodeType.Text)
+					{
+						tagPair.Add(CreateText(child.InnerText));
+					}
+					else if (child.NodeType == XmlNodeType.Whitespace)
+					{
+						tagPair.Add(CreateText(" "));
+					}
+				}
+			}
+
+			return tagPair;
+		}
 
 		private IText CreateText(string segText)
 		{
