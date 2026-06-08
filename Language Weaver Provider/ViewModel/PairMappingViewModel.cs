@@ -26,7 +26,7 @@ namespace LanguageWeaverProvider.ViewModel
 
 		string _headerImagePath;
 
-		SettingsViewModel _settingsView;
+		SettingsViewModel _settingsViewModel;
 		bool _showSettingsView;
 		string _loadingAction;
 		string _windowTitle;
@@ -59,10 +59,10 @@ namespace LanguageWeaverProvider.ViewModel
 
 		public SettingsViewModel SettingsView
 		{
-			get => _settingsView;
+			get => _settingsViewModel;
 			set
 			{
-				_settingsView = value;
+				_settingsViewModel = value;
 				OnPropertyChanged();
 			}
 		}
@@ -151,7 +151,7 @@ namespace LanguageWeaverProvider.ViewModel
 		{
 			var settingsViewModel = new SettingsViewModel(_translationOptions);
 			settingsViewModel.BackCommandExecuted += ChangeSettingsViewState;
-			_settingsView = settingsViewModel;
+			_settingsViewModel = settingsViewModel;
 		}
 
 		private void Save(object parameter)
@@ -226,11 +226,6 @@ namespace LanguageWeaverProvider.ViewModel
 			Process.Start(uriTarget);
 		}
 
-		//private void OpenSettingsView(object parameter)
-		//{
-		//	ChangeSettingsViewState(null, null);
-		//}
-
 		private void ChangeSettingsViewState(object sender, EventArgs e)
 		{
 			ShowSettingsView = !ShowSettingsView;
@@ -239,10 +234,7 @@ namespace LanguageWeaverProvider.ViewModel
 
         private void OpenSettingsView(object parameter)
         {
-            var settingsViewModel = new SettingsViewModel(_translationOptions);
-
-            var settingsView = new SettingsWindow() { DataContext = settingsViewModel };
-
+            var settingsView = new SettingsWindow() { DataContext = _settingsViewModel };
             settingsView.ShowDialog();
         }
 
