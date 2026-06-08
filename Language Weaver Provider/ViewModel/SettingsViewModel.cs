@@ -1,236 +1,216 @@
-﻿using System.Windows.Input;
-using LanguageWeaverProvider.Command;
+﻿using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.Extensions;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using Microsoft.Win32;
+using System.Windows.Input;
 
 namespace LanguageWeaverProvider.ViewModel
 {
-	public class SettingsViewModel : BaseViewModel
-	{
-		bool _useCustomName;
-		string _customName;
-
-		bool _autosendFeedback;
-		bool _resendDrafts;
-		bool _includeTags;
-
-		bool _usePreLookup;
-		bool _usePostLookup;
-		string _preLookupFilePath;
-		string _postLookupFilePath;
+    public class SettingsViewModel : BaseViewModel
+    {
+        private bool _autosendFeedback;
+        private string _customName;
+        private bool _includeTags;
+        private string _postLookupFilePath;
+        private string _preLookupFilePath;
+        private bool _resendDrafts;
+        private bool _useCustomName;
+        private bool _usePostLookup;
+        private bool _usePreLookup;
 
         public SettingsViewModel(ITranslationOptions translationOptions)
-		{
-			TranslationOptions = translationOptions;
-			InitializeCommands();
-			SetSettings();
-		}
-
-        public ITranslationOptions TranslationOptions { get; private set; }
-
-		public bool IncludeTags
-		{
-			get => _includeTags;
-			set
-			{
-				_includeTags = value;
-				OnPropertyChanged();
-			}
-		}
-
-		public bool ResendDrafts
-		{
-			get => _resendDrafts;
-			set
-			{
-				_resendDrafts = value;
-				OnPropertyChanged();
-			}
-		}
-
-		public bool AutosendFeedback
-		{
-			get => _autosendFeedback;
-			set
-			{
-				_autosendFeedback = value;
-				OnPropertyChanged();
-			}
-		}
-
-		public bool UseCustomName
-		{
-			get => _useCustomName;
-			set
-			{
-				_useCustomName = value;
-				OnPropertyChanged();
-			}
-		}
-
-		public string CustomName
-		{
-			get => _customName;
-			set
-			{
-				_customName = value;
-				OnPropertyChanged();
-			}
-		}
-
-		public bool UsePreLookup
-		{
-			get => _usePreLookup;
-			set
-			{
-				_usePreLookup = value;
-				OnPropertyChanged();
-			}
-		}
-
-		public bool UsePostLookup
-		{
-			get => _usePostLookup;
-			set
-			{
-				_usePostLookup = value;
-				OnPropertyChanged();
-			}
-		}
-
-		public string PreLookupFilePath
-		{
-			get => _preLookupFilePath;
-			set
-			{
-				_preLookupFilePath = value;
-				OnPropertyChanged();
-			}
-		}
-
-		public string PostLookupFilePath
-		{
-			get => _postLookupFilePath;
-			set
-			{
-				_postLookupFilePath = value;
-				OnPropertyChanged();
-			}
-		}
-
-
-        public ICommand SaveCommand { get; private set; }
-
-
-		public ICommand BrowseFileCommand { get; private set; }
-
-
-        public bool SettingsAreValid()
-		{
-			return CustomNameIsValid();
-		}
-
-		private bool CustomNameIsValid()
-		{
-			if (!UseCustomName)
-			{
-				return true;
-			}
-
-			if (string.IsNullOrEmpty(CustomName))
-			{
-				ErrorHandling.ShowDialog(null, "Custom name", "The frienly provider name can not be empty if the option \"Friendly provider name\" is active.");
-				return false;
-			}
-
-			CustomName = CustomName.Trim();
-			var customNameIsSet = !string.IsNullOrEmpty(CustomName);
-			if (!customNameIsSet)
-			{
-				ErrorHandling.ShowDialog(null, "Friendly name option", "The frienly provider name can not be empty if the option \"Friendly provider name\" is active.");
-			}
-
-			return customNameIsSet;
-		}
-
-		private void InitializeCommands()
-		{
-			BrowseFileCommand = new RelayCommand(BrowseFile);
-            SaveCommand = new RelayCommand(SaveChanges);
+        {
+            TranslationOptions = translationOptions;
+            InitializeCommands();
+            SetSettings();
         }
 
-		private void SetSettings()
-		{
-			TranslationOptions.ProviderSettings ??= new();
-			AutosendFeedback = TranslationOptions.ProviderSettings.AutosendFeedback;
-			ResendDrafts = TranslationOptions.ProviderSettings.ResendDrafts;
-			IncludeTags = TranslationOptions.ProviderSettings.IncludeTags;
-			UseCustomName = TranslationOptions.ProviderSettings.UseCustomName;
-			CustomName = TranslationOptions.ProviderSettings.CustomName;
-			UsePreLookup = TranslationOptions.ProviderSettings.UsePrelookup;
-			UsePostLookup = TranslationOptions.ProviderSettings.UsePostLookup;
-			PreLookupFilePath = TranslationOptions.ProviderSettings.PreLookupFilePath;
-			PostLookupFilePath = TranslationOptions.ProviderSettings.PostLookupFilePath;
-		}
+        public bool AutosendFeedback
+        {
+            get => _autosendFeedback;
+            set
+            {
+                _autosendFeedback = value;
+                OnPropertyChanged();
+            }
+        }
 
-		private void Clear(object parameter)
-		{
-			if (parameter is not string parameterString)
-			{
-				return;
-			}
+        public ICommand BrowseFileCommand { get; private set; }
 
-			switch (parameterString)
-			{
-				case nameof(CustomName):
-					CustomName = string.Empty;
-					break;
+        public string CustomName
+        {
+            get => _customName;
+            set
+            {
+                _customName = value;
+                OnPropertyChanged();
+            }
+        }
 
-				case nameof(PreLookupFilePath):
-					PreLookupFilePath = string.Empty;
-					break;
+        public bool IncludeTags
+        {
+            get => _includeTags;
+            set
+            {
+                _includeTags = value;
+                OnPropertyChanged();
+            }
+        }
 
-				case nameof(PostLookupFilePath):
-					PostLookupFilePath = string.Empty;
-					break;
+        public string PostLookupFilePath
+        {
+            get => _postLookupFilePath;
+            set
+            {
+                _postLookupFilePath = value;
+                OnPropertyChanged();
+            }
+        }
 
-				default:
-					break;
-			}
-		}
+        public string PreLookupFilePath
+        {
+            get => _preLookupFilePath;
+            set
+            {
+                _preLookupFilePath = value;
+                OnPropertyChanged();
+            }
+        }
 
-		private void BrowseFile(object parameter)
-		{
-			if (parameter is not string target)
-			{
-				return;
-			}
+        public bool ResendDrafts
+        {
+            get => _resendDrafts;
+            set
+            {
+                _resendDrafts = value;
+                OnPropertyChanged();
+            }
+        }
 
-			var openFileDialog = new OpenFileDialog { Multiselect = false };
-			var filePath = (bool)openFileDialog.ShowDialog() ? openFileDialog.FileName : string.Empty;
-			if (string.IsNullOrEmpty(filePath))
-			{
-				return;
-			}
+        public ICommand SaveCommand { get; private set; }
+        public ITranslationOptions TranslationOptions { get; private set; }
 
-			switch (target)
-			{
-				case nameof(PreLookupFilePath):
-					PreLookupFilePath = filePath;
-					ValidateLookupFile(PreLookupFilePath, target);
-					break;
+        public bool UseCustomName
+        {
+            get => _useCustomName;
+            set
+            {
+                _useCustomName = value;
+                OnPropertyChanged();
+            }
+        }
 
-				case nameof(PostLookupFilePath):
-					PostLookupFilePath = filePath;
-					ValidateLookupFile(PostLookupFilePath, target);
-					break;
+        public bool UsePostLookup
+        {
+            get => _usePostLookup;
+            set
+            {
+                _usePostLookup = value;
+                OnPropertyChanged();
+            }
+        }
 
-				default:
-					break;
-			}
-		}
+        public bool UsePreLookup
+        {
+            get => _usePreLookup;
+            set
+            {
+                _usePreLookup = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool SettingsAreValid()
+        {
+            return CustomNameIsValid();
+        }
+
+        private void BrowseFile(object parameter)
+        {
+            if (parameter is not string target)
+            {
+                return;
+            }
+
+            var openFileDialog = new OpenFileDialog { Multiselect = false };
+            var filePath = (bool)openFileDialog.ShowDialog() ? openFileDialog.FileName : string.Empty;
+            if (string.IsNullOrEmpty(filePath))
+            {
+                return;
+            }
+
+            switch (target)
+            {
+                case nameof(PreLookupFilePath):
+                    PreLookupFilePath = filePath;
+                    ValidateLookupFile(PreLookupFilePath, target);
+                    break;
+
+                case nameof(PostLookupFilePath):
+                    PostLookupFilePath = filePath;
+                    ValidateLookupFile(PostLookupFilePath, target);
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        private void Clear(object parameter)
+        {
+            if (parameter is not string parameterString)
+            {
+                return;
+            }
+
+            switch (parameterString)
+            {
+                case nameof(CustomName):
+                    CustomName = string.Empty;
+                    break;
+
+                case nameof(PreLookupFilePath):
+                    PreLookupFilePath = string.Empty;
+                    break;
+
+                case nameof(PostLookupFilePath):
+                    PostLookupFilePath = string.Empty;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        private bool CustomNameIsValid()
+        {
+            if (!UseCustomName)
+            {
+                return true;
+            }
+
+            if (string.IsNullOrEmpty(CustomName))
+            {
+                ErrorHandling.ShowDialog(null, "Custom name", "The frienly provider name can not be empty if the option \"Friendly provider name\" is active.");
+                return false;
+            }
+
+            CustomName = CustomName.Trim();
+            var customNameIsSet = !string.IsNullOrEmpty(CustomName);
+            if (!customNameIsSet)
+            {
+                ErrorHandling.ShowDialog(null, "Friendly name option", "The frienly provider name can not be empty if the option \"Friendly provider name\" is active.");
+            }
+
+            return customNameIsSet;
+        }
+
+        private void InitializeCommands()
+        {
+            BrowseFileCommand = new RelayCommand(BrowseFile);
+            SaveCommand = new RelayCommand(SaveChanges);
+        }
 
         private void SaveChanges(object parameter)
         {
@@ -245,33 +225,47 @@ namespace LanguageWeaverProvider.ViewModel
             TranslationOptions.ProviderSettings.PostLookupFilePath = PostLookupFilePath;
         }
 
-		private void ValidateLookupFile(string filePath, string propertyName)
-		{
-			var lookup = new LWSegmentEditor(filePath);
-			if (lookup.IsValid)
-			{
-				return;
-			}
+        private void SetSettings()
+        {
+            TranslationOptions.ProviderSettings ??= new();
+            AutosendFeedback = TranslationOptions.ProviderSettings.AutosendFeedback;
+            ResendDrafts = TranslationOptions.ProviderSettings.ResendDrafts;
+            IncludeTags = TranslationOptions.ProviderSettings.IncludeTags;
+            UseCustomName = TranslationOptions.ProviderSettings.UseCustomName;
+            CustomName = TranslationOptions.ProviderSettings.CustomName;
+            UsePreLookup = TranslationOptions.ProviderSettings.UsePrelookup;
+            UsePostLookup = TranslationOptions.ProviderSettings.UsePostLookup;
+            PreLookupFilePath = TranslationOptions.ProviderSettings.PreLookupFilePath;
+            PostLookupFilePath = TranslationOptions.ProviderSettings.PostLookupFilePath;
+        }
 
-			string target;
-			switch (propertyName)
-			{
-				case nameof(PreLookupFilePath):
-					UsePreLookup = false;
-					target = "Pre-Lookup Find/Replace";
-					break;
+        private void ValidateLookupFile(string filePath, string propertyName)
+        {
+            var lookup = new LWSegmentEditor(filePath);
+            if (lookup.IsValid)
+            {
+                return;
+            }
 
-				case nameof(PostLookupFilePath):
-					UsePostLookup = false;
-					target = "Post-Lookup Find/Replace";
-					break;
+            string target;
+            switch (propertyName)
+            {
+                case nameof(PreLookupFilePath):
+                    UsePreLookup = false;
+                    target = "Pre-Lookup Find/Replace";
+                    break;
 
-				default:
-					return;
-			}
+                case nameof(PostLookupFilePath):
+                    UsePostLookup = false;
+                    target = "Post-Lookup Find/Replace";
+                    break;
 
-			Clear(propertyName);
-			ErrorHandling.ShowDialog(null, "Oops! An error occurred", $"The chosen file is not in a valid format, and the {target} option has been disabled for now. Please see documentation for assistance.");
-		}
-	}
+                default:
+                    return;
+            }
+
+            Clear(propertyName);
+            ErrorHandling.ShowDialog(null, "Oops! An error occurred", $"The chosen file is not in a valid format, and the {target} option has been disabled for now. Please see documentation for assistance.");
+        }
+    }
 }
