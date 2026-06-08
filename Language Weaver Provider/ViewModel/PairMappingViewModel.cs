@@ -150,7 +150,6 @@ namespace LanguageWeaverProvider.ViewModel
 		private void InitializeSettingsView()
 		{
 			var settingsViewModel = new SettingsViewModel(_translationOptions);
-			settingsViewModel.BackCommandExecuted += ChangeSettingsViewState;
 			_settingsViewModel = settingsViewModel;
 		}
 
@@ -226,11 +225,7 @@ namespace LanguageWeaverProvider.ViewModel
 			Process.Start(uriTarget);
 		}
 
-		private void ChangeSettingsViewState(object sender, EventArgs e)
-		{
-			ShowSettingsView = !ShowSettingsView;
-			WindowTitle = ShowSettingsView ? Constants.PairMapping_SettingsWindow : Constants.PairMapping_MainWindow;
-		}
+		
 
         private void OpenSettingsView(object parameter)
         {

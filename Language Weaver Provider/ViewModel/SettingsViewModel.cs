@@ -1,11 +1,9 @@
-﻿using System;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.Extensions;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using Microsoft.Win32;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 
 namespace LanguageWeaverProvider.ViewModel
 {
@@ -122,16 +120,12 @@ namespace LanguageWeaverProvider.ViewModel
 			}
 		}
 
-		public ICommand BackCommand { get; private set; }
-
 
         public ICommand SaveCommand { get; private set; }
 
-		public ICommand ClearCommand { get; private set; }
 
 		public ICommand BrowseFileCommand { get; private set; }
 
-		public event EventHandler BackCommandExecuted;
 
         public bool SettingsAreValid()
 		{
@@ -163,8 +157,6 @@ namespace LanguageWeaverProvider.ViewModel
 
 		private void InitializeCommands()
 		{
-			BackCommand = new RelayCommand(Back);
-			ClearCommand = new RelayCommand(Clear);
 			BrowseFileCommand = new RelayCommand(BrowseFile);
             SaveCommand = new RelayCommand(SaveChanges);
         }
@@ -181,11 +173,6 @@ namespace LanguageWeaverProvider.ViewModel
 			UsePostLookup = TranslationOptions.ProviderSettings.UsePostLookup;
 			PreLookupFilePath = TranslationOptions.ProviderSettings.PreLookupFilePath;
 			PostLookupFilePath = TranslationOptions.ProviderSettings.PostLookupFilePath;
-		}
-
-		private void Back(object parameter)
-		{
-			BackCommandExecuted?.Invoke(this, EventArgs.Empty);
 		}
 
 		private void Clear(object parameter)
