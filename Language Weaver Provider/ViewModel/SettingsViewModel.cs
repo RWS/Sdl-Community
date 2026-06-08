@@ -5,6 +5,7 @@ using LanguageWeaverProvider.Extensions;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using Microsoft.Win32;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 
 namespace LanguageWeaverProvider.ViewModel
 {
@@ -22,14 +23,14 @@ namespace LanguageWeaverProvider.ViewModel
 		string _preLookupFilePath;
 		string _postLookupFilePath;
 
-		public SettingsViewModel(ITranslationOptions translationOptions)
+        public SettingsViewModel(ITranslationOptions translationOptions)
 		{
 			TranslationOptions = translationOptions;
 			InitializeCommands();
 			SetSettings();
 		}
 
-		public ITranslationOptions TranslationOptions { get; private set; }
+        public ITranslationOptions TranslationOptions { get; private set; }
 
 		public bool IncludeTags
 		{
@@ -123,13 +124,16 @@ namespace LanguageWeaverProvider.ViewModel
 
 		public ICommand BackCommand { get; private set; }
 
+
+        public ICommand SaveCommand { get; private set; }
+
 		public ICommand ClearCommand { get; private set; }
 
 		public ICommand BrowseFileCommand { get; private set; }
 
 		public event EventHandler BackCommandExecuted;
 
-		public bool SettingsAreValid()
+        public bool SettingsAreValid()
 		{
 			return CustomNameIsValid();
 		}
@@ -162,7 +166,8 @@ namespace LanguageWeaverProvider.ViewModel
 			BackCommand = new RelayCommand(Back);
 			ClearCommand = new RelayCommand(Clear);
 			BrowseFileCommand = new RelayCommand(BrowseFile);
-		}
+            SaveCommand = new RelayCommand(SaveChanges);
+        }
 
 		private void SetSettings()
 		{
@@ -239,6 +244,19 @@ namespace LanguageWeaverProvider.ViewModel
 					break;
 			}
 		}
+
+        private void SaveChanges(object parameter)
+        {
+            TranslationOptions.ProviderSettings.AutosendFeedback = AutosendFeedback;
+            TranslationOptions.ProviderSettings.ResendDrafts = ResendDrafts;
+            TranslationOptions.ProviderSettings.IncludeTags = IncludeTags;
+            TranslationOptions.ProviderSettings.UseCustomName = UseCustomName;
+            TranslationOptions.ProviderSettings.CustomName = CustomName;
+            TranslationOptions.ProviderSettings.UsePrelookup = UsePreLookup;
+            TranslationOptions.ProviderSettings.UsePostLookup = UsePostLookup;
+            TranslationOptions.ProviderSettings.PreLookupFilePath = PreLookupFilePath;
+            TranslationOptions.ProviderSettings.PostLookupFilePath = PostLookupFilePath;
+        }
 
 		private void ValidateLookupFile(string filePath, string propertyName)
 		{

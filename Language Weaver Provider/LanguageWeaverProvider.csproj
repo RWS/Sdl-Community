@@ -12,7 +12,7 @@
 		<SignAssembly>true</SignAssembly>
 		<CreatePluginPackage>true</CreatePluginPackage>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<AssemblyOriginatorKeyFile>..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+		<AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
 	</PropertyGroup>
 	
 	<PropertyGroup>
@@ -60,18 +60,10 @@
 	  <None Remove="Resources\Feedback_Default.png" />
 	  <None Remove="Resources\Feedback_Notification.png" />
 	  <None Remove="Resources\Information.png" />
-	  <None Remove="Resources\lwHeader_Cloud.png" />
-	  <None Remove="Resources\lwHeader_Edge.png" />
-	  <None Remove="Resources\lwHeader_Main.png" />
-	  <None Remove="Resources\lwLogo_Cloud.png" />
-	  <None Remove="Resources\lwLogo_Cloud16.png" />
-	  <None Remove="Resources\lwLogo_Cloud32.png" />
-	  <None Remove="Resources\lwLogo_Edge.png" />
-	  <None Remove="Resources\lwLogo_Edge16.png" />
-	  <None Remove="Resources\lwLogo_Edge32.png" />
-	  <None Remove="Resources\lwLogo_Main.png" />
-	  <None Remove="Resources\lwLogo_Main16.png" />
-	  <None Remove="Resources\lwLogo_Main32.png" />
+	  <None Remove="Resources\LanguageWeaver_MainIcon.ico" />
+	  <None Remove="Resources\language_weaver_logo.png" />
+	  <None Remove="Resources\LW_Logo_Brand.png" />
+	  <None Remove="Resources\lw_logo_main16.png" />
 	  <None Remove="Resources\Report.xsl" />
 	</ItemGroup>
 	
@@ -80,6 +72,12 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+		<Reference Include="System.Reactive">
+			<HintPath>$(TradosFolder)\System.Reactive.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.LanguageCloud.IdentityApi">
+			<HintPath>$(TradosFolder)\Sdl.LanguageCloud.IdentityApi.dll</HintPath>
+		</Reference>
 		<Reference Include="Microsoft.Web.WebView2.Core">
 		  <HintPath>$(TradosFolder)\Microsoft.Web.WebView2.Core.dll</HintPath>
 		</Reference>
@@ -187,22 +185,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Resource Include="Resources\LanguageWeaver_MainIcon.ico" />
+	  <Resource Include="Resources\language_weaver_logo.png" />
 	  <EmbeddedResource Include="Resources\Report.xsl" />
 	  <Resource Include="Resources\Feedback_Default.png" />
 	  <Resource Include="Resources\Feedback_Notification.png" />
 	  <Resource Include="Resources\Information.png" />
-	  <Resource Include="Resources\lwHeader_Cloud.png" />
-	  <Resource Include="Resources\lwHeader_Edge.png" />
-	  <Resource Include="Resources\lwHeader_Main.png" />
-	  <Resource Include="Resources\lwLogo_Cloud.png" />
-	  <Resource Include="Resources\lwLogo_Cloud16.png" />
-	  <Resource Include="Resources\lwLogo_Cloud32.png" />
-	  <Resource Include="Resources\lwLogo_Edge.png" />
-	  <Resource Include="Resources\lwLogo_Edge16.png" />
-	  <Resource Include="Resources\lwLogo_Edge32.png" />
-	  <Resource Include="Resources\lwLogo_Main.png" />
-	  <Resource Include="Resources\lwLogo_Main16.png" />
-	  <Resource Include="Resources\lwLogo_Main32.png" />
+	  <Resource Include="Resources\LW_Logo_Brand.png" />
+	  <Resource Include="Resources\lw_logo_main16.png" />
 	  <Resource Include="Style\Buttons.xaml" />
 	</ItemGroup>
 

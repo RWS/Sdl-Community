@@ -6,6 +6,7 @@ using LanguageWeaverProvider.LanguageMappingProvider.ViewModel;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Services;
+using LanguageWeaverProvider.View;
 using Sdl.LanguagePlatform.Core;
 using System;
 using System.Collections.ObjectModel;
@@ -225,10 +226,10 @@ namespace LanguageWeaverProvider.ViewModel
 			Process.Start(uriTarget);
 		}
 
-		private void OpenSettingsView(object parameter)
-		{
-			ChangeSettingsViewState(null, null);
-		}
+		//private void OpenSettingsView(object parameter)
+		//{
+		//	ChangeSettingsViewState(null, null);
+		//}
 
 		private void ChangeSettingsViewState(object sender, EventArgs e)
 		{
@@ -236,7 +237,17 @@ namespace LanguageWeaverProvider.ViewModel
 			WindowTitle = ShowSettingsView ? Constants.PairMapping_SettingsWindow : Constants.PairMapping_MainWindow;
 		}
 
-		private void OpenLanguageMappingProviderView(object parameter)
+        private void OpenSettingsView(object parameter)
+        {
+            var settingsViewModel = new SettingsViewModel(_translationOptions);
+
+            var settingsView = new SettingsWindow() { DataContext = settingsViewModel };
+
+            settingsView.ShowDialog();
+        }
+
+
+        private void OpenLanguageMappingProviderView(object parameter)
 		{
 			var lmpViewModel = new LanguageMappingProviderViewModel(_languageMappingDatabase, _translationOptions.PluginVersion);
 			lmpViewModel.LanguageMappingUpdated += LanguageMappingUpdated;
@@ -244,7 +255,7 @@ namespace LanguageWeaverProvider.ViewModel
 			var lmpView = new LanguageMappingProviderView() { DataContext = lmpViewModel };
 			lmpViewModel.CloseEventRaised += lmpView.Close;
 
-			var dialog = lmpView.ShowDialog();
+			lmpView.ShowDialog();
 		}
 
 		private void LanguageMappingUpdated(object sender, EventArgs e)
@@ -371,12 +382,7 @@ namespace LanguageWeaverProvider.ViewModel
 
 		private void SetHeader()
 		{
-			HeaderImagePath = _translationOptions.PluginVersion switch
-			{
-				PluginVersion.LanguageWeaverCloud => "pack://application:,,,/LanguageWeaverProvider;component/Resources/lwHeader_Cloud.png",
-				PluginVersion.LanguageWeaverEdge => "pack://application:,,,/LanguageWeaverProvider;component/Resources/lwHeader_Edge.png",
-				_ => "pack://application:,,,/LanguageWeaverProvider;component/Resources/lwHeader_Main.png"
-			};
+            HeaderImagePath = "pack://application:,,,/LanguageWeaverProvider;component/Resources/LW_Logo_Brand.png";
 		}
 	}
 }
