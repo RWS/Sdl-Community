@@ -113,16 +113,13 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
             return searchResults;
         }
 
-        var (Segments, Emojis) = FilterSegmentEmojis(translatableSegments);
-
         if (UsePreLookup)
         {
-            Segments = ModifySegmentsOnLookup(_preLookupEditor, Segments);
+            translatableSegments = ModifySegmentsOnLookup(_preLookupEditor, translatableSegments);
         }
 
-
         var mappedPair = GetMappedPair();
-        var segmentBatches = SplitSegmentsIntoBatches(Segments);
+        var segmentBatches = SplitSegmentsIntoBatches(translatableSegments);
         var allEvaluatedSegments = new List<EvaluatedSegment>();
 
         foreach (var segmentBatch in segmentBatches)
@@ -134,11 +131,6 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
         }
 
         var translatedSegments = allEvaluatedSegments.Select(seg => seg.Translation).ToList();
-
-        if (Emojis.Any())
-        {
-            ReconstructBaseSegments(translatedSegments, Emojis);
-        }
 
         if (UsePostLookup)
         {
@@ -459,125 +451,7 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
         return translatableSegments;
     }
 
-    private void ReconstructBaseSegments(List<Segment> translations, List<string> emojis)
-    {
-        var anchorCount = 1;
-        var currentEmojiIndex = 0;
-        foreach (var translation in translations)
-        {
-            for (var i = 0; i < translation.Elements.Count; i++)
-            {
-                var element = translation.Elements[i];
-                if (element is not Tag tag || !tag.TagID.Contains("Emoji"))
-                {
-                    continue;
-                }
-
-                if (tag.TagID.Contains("textEmoji"))
-                {
-                    translation.Elements[i] = new Text(emojis[currentEmojiIndex++]);
-                    continue;
-                }
-
-                tag.Anchor = anchorCount++;
-                tag.TagID = tag.TextEquivalent;
-                tag.TextEquivalent = emojis[currentEmojiIndex++];
-            }
-        }
-    }
-
-    private (List<Segment> Segments, List<string> Emojis) FilterSegmentEmojis(List<Segment> translatableSegments)
-    {
-        const string EmojiRegexPattern = @"(\p{So}|\p{Cs}\p{Cs}(\p{Cf}\p{Cs}\p{Cs})*)";
-
-        var textTagIndex = 1;
-        var newSegments = new List<Segment>();
-        var emojis = new List<string>();
-        foreach (var segment in translatableSegments)
-        {
-            var newSegment = new Segment();
-            foreach (var element in segment.Elements)
-            {
-                var input = element.ToString();
-
-                if (element is Tag tag)
-                {
-                    var isEmoji = DetectTagEmoji(tag, emojis);
-                    if (isEmoji)
-                    {
-                        var newTag = CreateEmojiPlaceholder(tag);
-                        newSegment.Elements.Add(newTag);
-                        continue;
-                    }
-
-                    newSegment.Elements.Add(element);
-                    continue;
-                }
-
-                if (element is Text text)
-                {
-                    var regex = new Regex(EmojiRegexPattern);
-                    var splitResults = regex.Split(input);
-
-                    foreach (var result in splitResults)
-                    {
-                        var isEmoji = regex.Match(result).Success;
-                        if (isEmoji)
-                        {
-                            var newTag = CreateEmojiPlaceholder(textTagIndex++);
-                            newSegment.Elements.Add(newTag);
-                            emojis.Add(result);
-                            continue;
-                        }
-
-                        newSegment.Elements.Add(new Text(result));
-                    }
-                }
-            }
-
-            newSegments.Add(newSegment);
-        }
-
-        return (newSegments, emojis);
-    }
-
-    bool DetectTagEmoji(Tag tag, List<string> emojis)
-    {
-        var input = tag.ToString();
-        var hasEmoji = false;
-        for (var i = 0; i < input.Length; i++)
-        {
-            var category = CharUnicodeInfo.GetUnicodeCategory(input, i);
-            if (category == UnicodeCategory.OtherSymbol || category == UnicodeCategory.OtherNotAssigned)
-            {
-                hasEmoji = true;
-                var emoji = char.ConvertFromUtf32(char.ConvertToUtf32(input, i));
-                emojis.Add(emoji);
-            }
-        }
-
-        return hasEmoji;
-    }
-
-    Tag CreateEmojiPlaceholder(Tag currentTag)
-    {
-        return new Tag(
-            TagType.TextPlaceholder,
-            $"tagEmoji_{currentTag.TagID}",
-            0,
-            currentTag.AlignmentAnchor,
-            currentTag.TagID);
-    }
-
-    Tag CreateEmojiPlaceholder(int index)
-    {
-        return new Tag(
-            TagType.TextPlaceholder,
-            $"textEmoji_{index}",
-            0,
-            0,
-            index.ToString());
-    }
+    
     #endregion
 
     #region Unused
