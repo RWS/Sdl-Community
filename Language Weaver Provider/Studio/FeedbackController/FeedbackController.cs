@@ -10,7 +10,7 @@ namespace LanguageWeaverProvider.Studio.FeedbackController
 	[ViewPart(Id = "Language Weaver - Feedback",
 			  Name = "Language Weaver - Feedback",
 			  Description = "Send feedback for the translated content using Language Weaver.",
-			  Icon = "lwLogo_Main_Icon")]
+			  Icon = "LanguageWeaver_MainIcon")]
 	[ViewPartLayout(typeof(EditorController), Dock = DockType.Left)]
 	public class FeedbackController : AbstractViewPartController
 	{

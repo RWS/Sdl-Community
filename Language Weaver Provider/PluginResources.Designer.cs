@@ -520,6 +520,26 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap language_weaver_logo {
+            get {
+                object obj = ResourceManager.GetObject("language_weaver_logo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon LanguageWeaver_MainIcon {
+            get {
+                object obj = ResourceManager.GetObject("LanguageWeaver_MainIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Language Weaver Cloud.
         /// </summary>
         public static string LCCloud_ShortName {
@@ -714,149 +734,9 @@ namespace LanguageWeaverProvider {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap lwHeader_Cloud {
+        public static System.Drawing.Bitmap lw_logo_main16 {
             get {
-                object obj = ResourceManager.GetObject("lwHeader_Cloud", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap lwHeader_Edge {
-            get {
-                object obj = ResourceManager.GetObject("lwHeader_Edge", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap lwHeader_Main {
-            get {
-                object obj = ResourceManager.GetObject("lwHeader_Main", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap lwLogo_Cloud {
-            get {
-                object obj = ResourceManager.GetObject("lwLogo_Cloud", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon lwLogo_Cloud_Icon {
-            get {
-                object obj = ResourceManager.GetObject("lwLogo_Cloud_Icon", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap lwLogo_Cloud16 {
-            get {
-                object obj = ResourceManager.GetObject("lwLogo_Cloud16", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap lwLogo_Cloud32 {
-            get {
-                object obj = ResourceManager.GetObject("lwLogo_Cloud32", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap lwLogo_Edge {
-            get {
-                object obj = ResourceManager.GetObject("lwLogo_Edge", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon lwLogo_Edge_Icon {
-            get {
-                object obj = ResourceManager.GetObject("lwLogo_Edge_Icon", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap lwLogo_Edge16 {
-            get {
-                object obj = ResourceManager.GetObject("lwLogo_Edge16", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap lwLogo_Edge32 {
-            get {
-                object obj = ResourceManager.GetObject("lwLogo_Edge32", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap lwLogo_Main {
-            get {
-                object obj = ResourceManager.GetObject("lwLogo_Main", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon lwLogo_Main_Icon {
-            get {
-                object obj = ResourceManager.GetObject("lwLogo_Main_Icon", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap lwLogo_Main16 {
-            get {
-                object obj = ResourceManager.GetObject("lwLogo_Main16", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap lwLogo_Main32 {
-            get {
-                object obj = ResourceManager.GetObject("lwLogo_Main32", resourceCulture);
+                object obj = ResourceManager.GetObject("lw_logo_main16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
