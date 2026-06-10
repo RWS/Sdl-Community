@@ -2,7 +2,6 @@
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Services;
-using LanguageWeaverProvider.Services.Model;
 using LanguageWeaverProvider.XliffConverter.Model;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
@@ -26,7 +25,7 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
     private readonly LWSegmentEditor _postLookupEditor;
     private readonly LWSegmentEditor _preLookupEditor;
     private readonly LanguagePair _languagePair;
-    private readonly ITranslationEngine _translationEngine;
+    private readonly IBatchTranslator _batchTranslator;
 
     private ITranslationOptions _translationOptions;
     private TranslationUnit _currentTranslationUnit;
@@ -38,7 +37,7 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
         TranslationProvider = translationProvider;
         _translationOptions = translationOptions;
         _languagePair = languagePair;
-        _translationEngine = translationEngine;
+        _batchTranslator = new PlainTextBatchTranslator(translationEngine, () => _translationOptions.AccessToken, languagePair.TargetCulture);
         CredentialManager.GetCredentials(translationOptions, true);
 
         if (_translationOptions.ProviderSettings.UsePrelookup)
@@ -126,14 +125,9 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
 
         foreach (var segmentBatch in segmentBatches)
         {
-            var batchSegments = segmentBatch as Segment[] ?? segmentBatch.ToArray();
-            var placers = batchSegments.Select(s => new SegmentTagPlacer(s)).ToArray();
-            var plainTexts = placers.Select(p => p.PreparedText).ToArray();
-            var translationResults = _translationEngine.TranslateAsync(_translationOptions.AccessToken, mappedPair, plainTexts).Result;
-            for (var batchIndex = 0; batchIndex < translationResults.Count; batchIndex++)
-            {
-                allEvaluatedSegments.Add(ToEvaluatedSegment(translationResults[batchIndex], placers[batchIndex]));
-            }
+            var batchSegments = segmentBatch as IReadOnlyList<Segment> ?? segmentBatch.ToList();
+            var evaluatedSegments = _batchTranslator.Translate(batchSegments, mappedPair);
+            allEvaluatedSegments.AddRange(evaluatedSegments);
         }
 
         var translatedSegments = allEvaluatedSegments.Select(seg => seg.Translation).ToList();
@@ -293,9 +287,8 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
     private SearchResult TranslateSegment(Segment segment, Segment sourceSegment)
     {
         var mappedPair = GetMappedPair();
-        var placer = new SegmentTagPlacer(sourceSegment);
-        var results = _translationEngine.TranslateAsync(_translationOptions.AccessToken, mappedPair, [placer.PreparedText]).Result;
-        var evaluatedSegment = ToEvaluatedSegment(results[0], placer);
+        var evaluatedSegments = _batchTranslator.Translate([sourceSegment], mappedPair);
+        var evaluatedSegment = evaluatedSegments[0];
         var tuSearchResult = CreateTuSearchResult(segment, evaluatedSegment.Translation);
 
         ManageSegmentMetadata(evaluatedSegment, mappedPair, null, 1, tuSearchResult.DocumentSegmentPair.Properties.TranslationOrigin);
@@ -303,16 +296,6 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
         return new SearchResult(tuSearchResult)
         {
             ScoringResult = new ScoringResult { BaseScore = 0 },
-        };
-    }
-
-    private EvaluatedSegment ToEvaluatedSegment(TranslationResult result, SegmentTagPlacer placer)
-    {
-        var targetSegment = placer.BuildTargetSegment(result.Translation ?? string.Empty, _languagePair.TargetCulture);
-        return new EvaluatedSegment
-        {
-            Translation = targetSegment,
-            QualityEstimation = result.QualityEstimation
         };
     }
 
