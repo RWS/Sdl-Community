@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using LanguageWeaverProvider.LanguageMappingProvider;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Model.Options;
+using LanguageWeaverProvider.Services;
 using Newtonsoft.Json;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -90,7 +91,10 @@ namespace LanguageWeaverProvider
 
 		public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
 		{
-			return new TranslationProviderLanguageDirection(this, TranslationOptions, languageDirection);
+			ITranslationEngine engine = TranslationOptions.PluginVersion == PluginVersion.LanguageWeaverEdge
+				? new EdgeTranslationEngine()
+				: new CloudTranslationEngine();
+			return new TranslationProviderLanguageDirection(this, TranslationOptions, languageDirection, engine);
 		}
 
         public void SetSupportedLanguages()
