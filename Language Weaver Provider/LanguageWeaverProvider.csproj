@@ -207,8 +207,4 @@
 	    <DependentUpon>PluginResources.resx</DependentUpon>
 	  </Compile>
 	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="XliffConverter\Model\" />
-	</ItemGroup>
 </Project>
