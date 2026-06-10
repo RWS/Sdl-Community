@@ -2,7 +2,7 @@
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Services;
-using LanguageWeaverProvider.XliffConverter.Converter;
+using LanguageWeaverProvider.Services.Model;
 using LanguageWeaverProvider.XliffConverter.Model;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
@@ -26,17 +26,19 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
     private readonly LWSegmentEditor _postLookupEditor;
     private readonly LWSegmentEditor _preLookupEditor;
     private readonly LanguagePair _languagePair;
+    private readonly ITranslationEngine _translationEngine;
 
     private ITranslationOptions _translationOptions;
     private TranslationUnit _currentTranslationUnit;
     private Window _batchTaskWindow;
 
-    public TranslationProviderLanguageDirection(ITranslationProvider translationProvider, ITranslationOptions translationOptions, LanguagePair languagePair)
+    public TranslationProviderLanguageDirection(ITranslationProvider translationProvider, ITranslationOptions translationOptions, LanguagePair languagePair, ITranslationEngine translationEngine)
     {
         ItemFactory = DefaultDocumentItemFactory.CreateInstance();
         TranslationProvider = translationProvider;
         _translationOptions = translationOptions;
         _languagePair = languagePair;
+        _translationEngine = translationEngine;
         CredentialManager.GetCredentials(translationOptions, true);
 
         if (_translationOptions.ProviderSettings.UsePrelookup)
@@ -124,10 +126,14 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
 
         foreach (var segmentBatch in segmentBatches)
         {
-            var xliffFile = CreateXliffFile(segmentBatch);
-            var translation = GetTranslation(mappedPair, xliffFile);
-            var evaluatedSegments = translation.GetTargetSegments();
-            allEvaluatedSegments.AddRange(evaluatedSegments);
+            var batchSegments = segmentBatch as Segment[] ?? segmentBatch.ToArray();
+            var placers = batchSegments.Select(s => new SegmentTagPlacer(s)).ToArray();
+            var plainTexts = placers.Select(p => p.PreparedText).ToArray();
+            var translationResults = _translationEngine.TranslateAsync(_translationOptions.AccessToken, mappedPair, plainTexts).Result;
+            for (var batchIndex = 0; batchIndex < translationResults.Count; batchIndex++)
+            {
+                allEvaluatedSegments.Add(ToEvaluatedSegment(translationResults[batchIndex], placers[batchIndex]));
+            }
         }
 
         var translatedSegments = allEvaluatedSegments.Select(seg => seg.Translation).ToList();
@@ -284,31 +290,15 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
         return searchResult is not null || !isMasked || segment is null || ShouldResendDrafts();
     }
 
-    private Xliff GetTranslation(PairMapping mappedPair, Xliff xliffFile)
-    {
-        try
-        {
-            var translation = _translationOptions.PluginVersion == PluginVersion.LanguageWeaverCloud
-                ? CloudService.Translate(_translationOptions.AccessToken, mappedPair, xliffFile).Result
-                : EdgeService.Translate(_translationOptions.AccessToken, mappedPair, xliffFile).Result;
-            return translation;
-        }
-        catch (Exception ex)
-        {
-            if (ex.InnerException is null) throw;
-            throw ex.InnerException;
-        }
-    }
-
     private SearchResult TranslateSegment(Segment segment, Segment sourceSegment)
     {
-        var xliff = CreateXliffFile([sourceSegment]);
         var mappedPair = GetMappedPair();
-        var translation = CloudService.Translate(_translationOptions.AccessToken, mappedPair, xliff).Result;
-        var translatedSegment = translation.GetTargetSegments().First();
-        var tuSearchResult = CreateTuSearchResult(segment, translatedSegment.Translation);
+        var placer = new SegmentTagPlacer(sourceSegment);
+        var results = _translationEngine.TranslateAsync(_translationOptions.AccessToken, mappedPair, [placer.PreparedText]).Result;
+        var evaluatedSegment = ToEvaluatedSegment(results[0], placer);
+        var tuSearchResult = CreateTuSearchResult(segment, evaluatedSegment.Translation);
 
-        ManageSegmentMetadata(translatedSegment, mappedPair, null, 1, tuSearchResult.DocumentSegmentPair.Properties.TranslationOrigin);
+        ManageSegmentMetadata(evaluatedSegment, mappedPair, null, 1, tuSearchResult.DocumentSegmentPair.Properties.TranslationOrigin);
 
         return new SearchResult(tuSearchResult)
         {
@@ -316,28 +306,14 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
         };
     }
 
-    private Xliff CreateXliffFile(IEnumerable<Segment> segments)
+    private EvaluatedSegment ToEvaluatedSegment(TranslationResult result, SegmentTagPlacer placer)
     {
-        var file = new File
+        var targetSegment = placer.BuildTargetSegment(result.Translation ?? string.Empty, _languagePair.TargetCulture);
+        return new EvaluatedSegment
         {
-            SourceCulture = _languagePair.SourceCulture,
-            TargetCulture = _languagePair.TargetCulture
+            Translation = targetSegment,
+            QualityEstimation = result.QualityEstimation
         };
-
-        var xliffDocument = new Xliff
-        {
-            File = file
-        };
-
-        foreach (var segment in segments)
-        {
-            if (segment is not null)
-            {
-                xliffDocument.AddSourceSegment(segment);
-            }
-        }
-
-        return xliffDocument;
     }
 
     private void ManageSegmentMetadata(EvaluatedSegment evaluatedSegment, PairMapping pairMapping, string fileName,

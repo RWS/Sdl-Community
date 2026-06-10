@@ -39,21 +39,29 @@
 	
 	<ItemGroup>
 	  <Compile Remove="Interface\**" />
+	  <Compile Remove="LanguageWeaverProviderTests\**" />
 	  <Compile Remove="ServiceClients\**" />
 	  <Compile Remove="Studio\AccountSubscription\Model\**" />
 	  <Compile Remove="Studio\Actions\Models\**" />
+	  <Compile Remove="XliffConverter\Converter\**" />
 	  <EmbeddedResource Remove="Interface\**" />
+	  <EmbeddedResource Remove="LanguageWeaverProviderTests\**" />
 	  <EmbeddedResource Remove="ServiceClients\**" />
 	  <EmbeddedResource Remove="Studio\AccountSubscription\Model\**" />
 	  <EmbeddedResource Remove="Studio\Actions\Models\**" />
+	  <EmbeddedResource Remove="XliffConverter\Converter\**" />
 	  <None Remove="Interface\**" />
+	  <None Remove="LanguageWeaverProviderTests\**" />
 	  <None Remove="ServiceClients\**" />
 	  <None Remove="Studio\AccountSubscription\Model\**" />
 	  <None Remove="Studio\Actions\Models\**" />
+	  <None Remove="XliffConverter\Converter\**" />
 	  <Page Remove="Interface\**" />
+	  <Page Remove="LanguageWeaverProviderTests\**" />
 	  <Page Remove="ServiceClients\**" />
 	  <Page Remove="Studio\AccountSubscription\Model\**" />
 	  <Page Remove="Studio\Actions\Models\**" />
+	  <Page Remove="XliffConverter\Converter\**" />
 	</ItemGroup>
 	
 	<ItemGroup>

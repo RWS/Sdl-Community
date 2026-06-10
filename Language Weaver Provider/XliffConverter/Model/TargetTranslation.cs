@@ -1,14 +1,12 @@
 ﻿using System.Globalization;
 using System.Xml.Serialization;
-using LanguageWeaverProvider.XliffConverter.SegmentParser;
-using Sdl.LanguagePlatform.Core;
 
 namespace LanguageWeaverProvider.XliffConverter.Model
 {
 	public class TargetTranslation
 	{		
 		private CultureInfo _targetCulture;
-		
+
 		private string _targetLanguage;
 
 		[XmlAttribute("xml:lang")]
@@ -41,16 +39,11 @@ namespace LanguageWeaverProvider.XliffConverter.Model
 				// else you run the risk of infinite loop
 				var newTargetLanguage = value.ToString();
 				if (TargetLanguage != newTargetLanguage)
-				{
 					TargetLanguage = newTargetLanguage;
-				}
 			}
 		}
 
 		[XmlText]
 		public string Text { get; set; }
-
-		[XmlIgnore]
-		public Segment TargetSegment => Parser.ParseLine(Converter.Converter.RemoveXliffTags(Text));
 	}
 }

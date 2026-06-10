@@ -5,7 +5,7 @@ using Sdl.LanguagePlatform.Core;
 
 namespace LanguageWeaverProvider.XliffConverter.SegmentParser
 {
-    public class Parser
+    public static class Parser
     {
         #region Tag Regex Patterns
 

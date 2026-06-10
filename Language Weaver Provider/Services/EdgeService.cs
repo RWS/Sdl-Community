@@ -2,7 +2,6 @@
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Services.Model;
-using LanguageWeaverProvider.XliffConverter.Converter;
 using Microsoft.Web.WebView2.Wpf;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -196,11 +195,12 @@ namespace LanguageWeaverProvider.Services
             }
         }
 
-        public static async Task<Xliff> Translate(AccessToken accessToken, PairMapping pairMapping, Xliff sourceXliff)
+        public static async Task<IReadOnlyList<TranslationResult>> Translate(AccessToken accessToken, PairMapping pairMapping, string[] plainTextSegments)
         {
             try
             {
-                var translationRequest = await SendTranslationRequest(accessToken, pairMapping, sourceXliff);
+                var joinedInput = string.Join("\n", plainTextSegments);
+                var translationRequest = await SendTranslationRequest(accessToken, pairMapping, joinedInput);
                 var translationStatus = await GetTranslationStatus(accessToken, translationRequest.TranslationId);
                 if (translationStatus.Error is not null)
                 {
@@ -210,10 +210,20 @@ namespace LanguageWeaverProvider.Services
 
                 await WaitForTranslationCompletion(accessToken, translationRequest.TranslationId);
                 var translationResponse = await GetTranslation(accessToken, translationRequest.TranslationId);
-                var decodedtTranslationResponse = Base64Decode(translationResponse);
-                var translatedXliff = Converter.ParseXliffString(decodedtTranslationResponse);
+                var decoded = Base64Decode(translationResponse);
 
-                return translatedXliff;
+                var translations = decoded.Split('\n');
+                var results = new List<TranslationResult>(plainTextSegments.Length);
+                for (var i = 0; i < plainTextSegments.Length; i++)
+                {
+                    results.Add(new TranslationResult
+                    {
+                        Translation = i < translations.Length ? translations[i] : string.Empty,
+                        QualityEstimation = null
+                    });
+                }
+
+                return results;
             }
             catch (Exception ex)
             {
@@ -323,11 +333,11 @@ namespace LanguageWeaverProvider.Services
             throw new Exception($"Code {error.Error.Code}: {error.Error.Message}. Details: {error.Error.Details}.");
         }
 
-        private static async Task<EdgeTranslationRequestResponse> SendTranslationRequest(AccessToken accessToken, PairMapping pairMapping, Xliff sourceXliff)
+        private static async Task<EdgeTranslationRequestResponse> SendTranslationRequest(AccessToken accessToken, PairMapping pairMapping, string plainText)
         {
             var requestUri = $"{accessToken.BaseUri}api/v2/translations";
 
-            var input = Base64Encode(sourceXliff.ToString());
+            var input = Base64Encode(plainText);
             var edgeTranslationRequestContent = new EdgeTranslationRequestContent(pairMapping, input);
             var content = new FormUrlEncodedContent(edgeTranslationRequestContent.ToKeyValuePairDictionary());
 

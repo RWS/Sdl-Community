@@ -17,5 +17,28 @@ namespace LanguageWeaverProvider.Services.Model
 		public CloudTranslationStats TranslationStats { get; set; }
 
 		public List<CloudLanguagePair> TranslationLanguagePairs { get; set; }
+
+		[JsonProperty("qualityEstimation")]
+		public List<CloudQualityEstimation> QualityEstimation { get; set; }
+	}
+
+	public class CloudQualityEstimation
+	{
+		[JsonProperty("good")]
+		public int Good { get; set; }
+
+		[JsonProperty("adequate")]
+		public int Adequate { get; set; }
+
+		[JsonProperty("poor")]
+		public int Poor { get; set; }
+
+		/// <summary>Returns the dominant quality label based on the highest percentage score.</summary>
+		public string DominantLabel()
+		{
+			if (Good >= Adequate && Good >= Poor) return "Good";
+			if (Adequate >= Poor) return "Adequate";
+			return "Poor";
+		}
 	}
 }

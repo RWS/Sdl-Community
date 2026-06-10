@@ -7,7 +7,7 @@ namespace LanguageWeaverProvider.Services.Model
 {
 	public class EdgeTranslationRequestContent
 	{
-		const string XliffMimeType = "application/x-xliff";
+		const string PlainTextMimeType = "text/plain";
 
 		public EdgeTranslationRequestContent(PairMapping pairMapping, string input)
 		{
@@ -28,7 +28,7 @@ namespace LanguageWeaverProvider.Services.Model
 		public string Input { get;  }
 
 		[JsonProperty("inputFormat")]
-		public string InputFormat => XliffMimeType;
+		public string InputFormat => PlainTextMimeType;
 
 		[JsonProperty("dictionaryIds")]
 		public string DictionaryIds { get; }

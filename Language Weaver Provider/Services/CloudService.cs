@@ -12,7 +12,6 @@ using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Services.Model;
 using LanguageWeaverProvider.Studio.FeedbackController.Model;
-using LanguageWeaverProvider.XliffConverter.Converter;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -226,19 +225,28 @@ namespace LanguageWeaverProvider.Services
             return languagePairs;
         }
 
-        public static async Task<Xliff> Translate(AccessToken accessToken, PairMapping mappedPair, Xliff sourceXliff)
+        public static async Task<IReadOnlyList<TranslationResult>> Translate(AccessToken accessToken, PairMapping mappedPair, string[] plainTextSegments)
         {
-            var translationResponse = await SendTranslationRequest(accessToken, mappedPair, sourceXliff);
-            await WaitForTranslationCompletion(accessToken, translationResponse.RequestId);
-            var translation = await GetTranslationInfo<CloudTranslationResponse>(accessToken, translationResponse.RequestId, "content");
-            var translatedSegment = translation.Translation.First();
-            return Converter.ParseXliffString(translatedSegment);
+            var translationResponse = await SendTranslationRequest(accessToken, mappedPair, plainTextSegments);
+            var translationStatus = await WaitForTranslationCompletion(accessToken, translationResponse.RequestId);
+            var content = await GetTranslationInfo<CloudTranslationResponse>(accessToken, translationResponse.RequestId, "content");
+
+            var results = new List<TranslationResult>(content.Translation.Count);
+            for (var i = 0; i < content.Translation.Count; i++)
+            {
+                var qe = translationStatus.QualityEstimation != null && i < translationStatus.QualityEstimation.Count
+                    ? translationStatus.QualityEstimation[i].DominantLabel()
+                    : null;
+                results.Add(new TranslationResult { Translation = content.Translation[i], QualityEstimation = qe });
+            }
+
+            return results;
         }
 
-        private static async Task<CloudTranslationRequestResponse> SendTranslationRequest(AccessToken accessToken, PairMapping mappedPair, Xliff sourceXliff)
+        private static async Task<CloudTranslationRequestResponse> SendTranslationRequest(AccessToken accessToken, PairMapping mappedPair, string[] plainTextSegments)
         {
             var requestUri = $"{accessToken.BaseUri}v4/mt/translations/async";
-            var translationRequestModel = CreateTranslationRequest(mappedPair, sourceXliff);
+            var translationRequestModel = CreateTranslationRequest(mappedPair, plainTextSegments);
             var translationRequestModelJson = JsonConvert.SerializeObject(translationRequestModel);
             var content = new StringContent(translationRequestModelJson, Encoding.UTF8, "application/json");
             var response = await Service.SendRequest(HttpMethod.Post, requestUri, accessToken, content);
@@ -253,29 +261,24 @@ namespace LanguageWeaverProvider.Services
             return translationRequestResponse;
         }
 
-        private static CloudTranslationRequest CreateTranslationRequest(PairMapping mappedPair, Xliff sourceXliff)
+        private static CloudTranslationRequest CreateTranslationRequest(PairMapping mappedPair, string[] plainTextSegments)
         {
-            const string InputFormat = "xliff";
-
             var linguisticOptionsDictionary = mappedPair.LinguisticOptions?.ToDictionary(lo => lo.Id, lo => lo.SelectedValue);
             var dictionaries = mappedPair.Dictionaries.Where(d => d.IsSelected).Select(d => d.DictionaryId).ToArray();
 
-            var translationRequestModel = new CloudTranslationRequest
+            return new CloudTranslationRequest
             {
                 SourceLanguageId = mappedPair.SourceCode,
                 TargetLanguageId = mappedPair.TargetCode,
-                Input = [sourceXliff.ToString()],
+                Input = plainTextSegments,
                 Model = mappedPair.SelectedModel.Model,
-                InputFormat = InputFormat,
                 Dictionaries = dictionaries,
                 LinguisticOptions = linguisticOptionsDictionary,
                 QualityEstimation = mappedPair.SelectedModel.QeSupport ? 1 : 0
             };
-
-            return translationRequestModel;
         }
 
-        private static async Task WaitForTranslationCompletion(AccessToken accessToken, string RequestId)
+        private static async Task<CloudTranslationStatus> WaitForTranslationCompletion(AccessToken accessToken, string RequestId)
         {
             CloudTranslationStatus translationStatus;
             bool isWaiting;
@@ -289,6 +292,8 @@ namespace LanguageWeaverProvider.Services
                     await Task.Delay(1000);
                 }
             } while (isWaiting);
+
+            return translationStatus;
         }
 
         private static async Task<T> GetTranslationInfo<T>(AccessToken accessToken, string requestId, string endpoint = null)
