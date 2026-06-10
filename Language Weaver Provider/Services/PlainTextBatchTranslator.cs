@@ -1,6 +1,5 @@
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Services.Model;
-using LanguageWeaverProvider.XliffConverter.Model;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using System;

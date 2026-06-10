@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using LanguageWeaverProvider.Model;
-using LanguageWeaverProvider.XliffConverter.Model;
+using LanguageWeaverProvider.Services.Model;
 using Sdl.LanguagePlatform.Core;
 
 namespace LanguageWeaverProvider.Services
