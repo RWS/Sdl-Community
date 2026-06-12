@@ -71,8 +71,8 @@ namespace LanguageWeaverProviderTests
             var engine = new RecordingTranslationEngine(inputs =>
             {
                 Assert.Single(inputs);
-                Assert.Equal("Click <lwtg0/>here", inputs[0]);
-                return new[] { "Klicke <lwtg0/>hier" };
+                Assert.Equal("Click <x id=\"0\"/>here", inputs[0]);
+                return new[] { "Klicke <x id=\"0\"/>hier" };
             });
 
             var translator = CreateTranslator(engine);
