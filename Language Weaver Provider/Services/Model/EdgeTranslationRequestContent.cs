@@ -7,9 +7,9 @@ namespace LanguageWeaverProvider.Services.Model
 {
 	public class EdgeTranslationRequestContent
 	{
-		const string PlainTextMimeType = "text/plain";
+        const string PlainTextMimeType = "text/html";
 
-		public EdgeTranslationRequestContent(PairMapping pairMapping, string input)
+        public EdgeTranslationRequestContent(PairMapping pairMapping, string input)
 		{
 			LanguagePairId = pairMapping.SelectedModel.Model;
 			Input = input;

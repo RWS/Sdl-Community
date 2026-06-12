@@ -33,7 +33,7 @@ namespace LanguageWeaverProviderTests
 
             var placer = new SegmentTagPlacer(segment);
 
-            Assert.Equal("Click <lwtg0/>here<lwtg1/>.", placer.PreparedText);
+            Assert.Equal("Click <x id=\"0\"/>here<x id=\"1\"/>.", placer.PreparedText);
         }
 
         [Fact]
@@ -49,7 +49,7 @@ namespace LanguageWeaverProviderTests
 
             var placer = new SegmentTagPlacer(segment);
 
-            Assert.Equal("<lwtg0/>a<lwtg1/>b<lwtg2/><lwtg3/>", placer.PreparedText);
+            Assert.Equal("<x id=\"0\"/>a<x id=\"1\"/>b<x id=\"2\"/>", placer.PreparedText);
         }
 
         [Fact]
@@ -76,7 +76,7 @@ namespace LanguageWeaverProviderTests
 
             var placer = new SegmentTagPlacer(source);
 
-            var target = placer.BuildTargetSegment("<lwtg0/>texte", TargetCulture);
+            var target = placer.BuildTargetSegment("<x id=\"0\"/>texte", TargetCulture);
 
             var emittedTag = target.Elements.OfType<Tag>().Single();
             Assert.Same(startTag, emittedTag);
@@ -92,7 +92,7 @@ namespace LanguageWeaverProviderTests
 
             var placer = new SegmentTagPlacer(source);
 
-            var target = placer.BuildTargetSegment("hallo<lwtg0/>", TargetCulture);
+            var target = placer.BuildTargetSegment("hallo<x id=\"0\"/>", TargetCulture);
 
             var elements = target.Elements;
             Assert.Equal(2, elements.Count);
@@ -113,7 +113,7 @@ namespace LanguageWeaverProviderTests
 
             var placer = new SegmentTagPlacer(source);
 
-            var target = placer.BuildTargetSegment("plain <lwtg0/>fett<lwtg1/>", TargetCulture);
+            var target = placer.BuildTargetSegment("plain <x id=\"0\"/>fett<x id=\"1\"/>", TargetCulture);
 
             var elements = target.Elements;
             Assert.Equal(4, elements.Count);
@@ -146,7 +146,7 @@ namespace LanguageWeaverProviderTests
             source.Add("hello");
             var placer = new SegmentTagPlacer(source);
 
-            var target = placer.BuildTargetSegment("hello <lwtg42/>world", TargetCulture);
+            var target = placer.BuildTargetSegment("hello <x id=\"42\"/>world", TargetCulture);
 
             Assert.False(target.HasTags);
             Assert.Equal("hello world", target.ToPlain());
@@ -200,6 +200,48 @@ namespace LanguageWeaverProviderTests
             Assert.Equal("here", ((Text)elements[2]).Value);
             Assert.Same(close, elements[3]);
             Assert.Equal(".", ((Text)elements[4]).Value);
+        }
+
+        [Fact]
+        public void PreparedText_TextWithXmlSpecialChars_IsEscaped()
+        {
+            var segment = new Segment();
+            segment.Add("a < b & c > d \"quote\"");
+
+            var placer = new SegmentTagPlacer(segment);
+
+            Assert.Equal("a &lt; b &amp; c &gt; d &quot;quote&quot;", placer.PreparedText);
+        }
+
+        [Fact]
+        public void BuildTargetSegment_EncodedTextSpan_IsDecoded()
+        {
+            var source = new Segment();
+            source.Add("dummy");
+            var placer = new SegmentTagPlacer(source);
+
+            var target = placer.BuildTargetSegment("a &lt; b &amp; c &gt; d &quot;quote&quot;", TargetCulture);
+
+            Assert.Equal("a < b & c > d \"quote\"", target.ToPlain());
+        }
+
+        [Fact]
+        public void RoundTrip_TextWithXmlSpecialChars_PreservesOriginalText()
+        {
+            var tag = new Tag(TagType.Start, "1", 1);
+            var source = new Segment();
+            source.Add("a < b & c");
+            source.Add(tag);
+            source.Add(" \"d\" > e");
+
+            var placer = new SegmentTagPlacer(source);
+            var target = placer.BuildTargetSegment(placer.PreparedText, TargetCulture);
+
+            var elements = target.Elements;
+            Assert.Equal(3, elements.Count);
+            Assert.Equal("a < b & c", ((Text)elements[0]).Value);
+            Assert.Same(tag, elements[1]);
+            Assert.Equal(" \"d\" > e", ((Text)elements[2]).Value);
         }
     }
 }

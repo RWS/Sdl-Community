@@ -271,6 +271,7 @@ namespace LanguageWeaverProvider.Services
                 SourceLanguageId = mappedPair.SourceCode,
                 TargetLanguageId = mappedPair.TargetCode,
                 Input = plainTextSegments,
+                InputFormat = "HTML",
                 Model = mappedPair.SelectedModel.Model,
                 Dictionaries = dictionaries,
                 LinguisticOptions = linguisticOptionsDictionary,
