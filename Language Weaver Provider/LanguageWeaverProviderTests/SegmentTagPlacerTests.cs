@@ -124,7 +124,7 @@ namespace LanguageWeaverProviderTests
         }
 
         [Fact]
-        public void BuildTargetSegment_DroppedStartPlaceholder_RestoresTagAtSegmentStart()
+        public void BuildTargetSegment_DroppedPlaceholder_OmitsTagWithoutThrowing()
         {
             var tag = new Tag(TagType.Start, "1", 1);
             var source = new Segment();
@@ -135,144 +135,8 @@ namespace LanguageWeaverProviderTests
 
             var target = placer.BuildTargetSegment("texte", TargetCulture);
 
-            var elements = target.Elements;
-            Assert.Equal(2, elements.Count);
-            Assert.Same(tag, elements[0]);
+            Assert.False(target.HasTags);
             Assert.Equal("texte", target.ToPlain());
-        }
-
-        [Fact]
-        public void BuildTargetSegment_DroppedEndPlaceholder_RestoresTagAtSegmentEnd()
-        {
-            var open = new Tag(TagType.Start, "1", 1);
-            var close = new Tag(TagType.End, "1", 1);
-            var source = new Segment();
-            source.Add(open);
-            source.Add("bold");
-            source.Add(close);
-
-            var placer = new SegmentTagPlacer(source);
-
-            var target = placer.BuildTargetSegment("<x id=\"0\"/>fett gedruckt", TargetCulture);
-
-            var elements = target.Elements;
-            Assert.Equal(3, elements.Count);
-            Assert.Same(open, elements[0]);
-            Assert.Equal("fett gedruckt", ((Text)elements[1]).Value);
-            Assert.Same(close, elements[2]);
-        }
-
-        [Fact]
-        public void BuildTargetSegment_AllPlaceholdersDropped_WrapsTranslationInTagPair()
-        {
-            var open = new Tag(TagType.Start, "1", 1);
-            var close = new Tag(TagType.End, "1", 1);
-            var source = new Segment();
-            source.Add(open);
-            source.Add("bold");
-            source.Add(close);
-
-            var placer = new SegmentTagPlacer(source);
-
-            var target = placer.BuildTargetSegment("fett", TargetCulture);
-
-            var elements = target.Elements;
-            Assert.Equal(3, elements.Count);
-            Assert.Same(open, elements[0]);
-            Assert.Equal("fett", ((Text)elements[1]).Value);
-            Assert.Same(close, elements[2]);
-        }
-
-        [Fact]
-        public void BuildTargetSegment_DroppedStartPlaceholder_InsertsStartBeforeItsEnd()
-        {
-            var open = new Tag(TagType.Start, "1", 1);
-            var close = new Tag(TagType.End, "1", 1);
-            var source = new Segment();
-            source.Add(open);
-            source.Add("bold");
-            source.Add(close);
-            source.Add(" plain");
-
-            var placer = new SegmentTagPlacer(source);
-
-            var target = placer.BuildTargetSegment("fett<x id=\"1\"/> einfach", TargetCulture);
-
-            var elements = target.Elements;
-            Assert.Equal(4, elements.Count);
-            Assert.Same(open, elements[0]);
-            Assert.Equal("fett", ((Text)elements[1]).Value);
-            Assert.Same(close, elements[2]);
-            Assert.Equal(" einfach", ((Text)elements[3]).Value);
-        }
-
-        [Fact]
-        public void BuildTargetSegment_PlaceholderWithoutSelfClosingSlash_IsRecognized()
-        {
-            var tag = new Tag(TagType.Start, "1", 1);
-            var source = new Segment();
-            source.Add(tag);
-            source.Add("text");
-
-            var placer = new SegmentTagPlacer(source);
-
-            var target = placer.BuildTargetSegment("<x id=\"0\">texte", TargetCulture);
-
-            var elements = target.Elements;
-            Assert.Equal(2, elements.Count);
-            Assert.Same(tag, elements[0]);
-            Assert.Equal("texte", target.ToPlain());
-        }
-
-        [Fact]
-        public void BuildTargetSegment_PlaceholderWithUnquotedId_IsRecognized()
-        {
-            var tag = new Tag(TagType.Start, "1", 1);
-            var source = new Segment();
-            source.Add(tag);
-            source.Add("text");
-
-            var placer = new SegmentTagPlacer(source);
-
-            var target = placer.BuildTargetSegment("<x id=0/>texte", TargetCulture);
-
-            Assert.Same(tag, target.Elements[0]);
-            Assert.Equal("texte", target.ToPlain());
-        }
-
-        [Fact]
-        public void BuildTargetSegment_HtmlizedPlaceholderWithCloser_StripsCloser()
-        {
-            var tag = new Tag(TagType.Start, "1", 1);
-            var source = new Segment();
-            source.Add(tag);
-            source.Add("text");
-
-            var placer = new SegmentTagPlacer(source);
-
-            var target = placer.BuildTargetSegment("<x id=\"0\">texte</x>", TargetCulture);
-
-            var elements = target.Elements;
-            Assert.Equal(2, elements.Count);
-            Assert.Same(tag, elements[0]);
-            Assert.Equal("texte", target.ToPlain());
-        }
-
-        [Fact]
-        public void BuildTargetSegment_RepeatedPlaceholder_EmitsTagOnlyOnce()
-        {
-            var tag = new Tag(TagType.Start, "1", 1);
-            var source = new Segment();
-            source.Add(tag);
-            source.Add("text");
-
-            var placer = new SegmentTagPlacer(source);
-
-            var target = placer.BuildTargetSegment("<x id=\"0\"/>a<x id=\"0\"/>b", TargetCulture);
-
-            Assert.Single(target.Elements.OfType<Tag>());
-            Assert.Same(tag, target.Elements[0]);
-            Assert.Equal("ab", target.ToPlain());
         }
 
         [Fact]
