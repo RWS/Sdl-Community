@@ -9,8 +9,8 @@ using Sdl.Core.Globalization;
 using Sdl.Core.Globalization.LanguageRegistry;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
-using Sdl.MultiTerm.TMO.Interop;
 using Sdl.ProjectAutomation.Core;
+using Sdl.Terminology.TerminologyProvider.Core.Termbase;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
@@ -38,33 +38,22 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
 			        return;
 		        }
 
-		        var termbaseCreator = new TermbaseGeneration();
-		        var termbase = GetTermbase(termbaseCreator);
-		        if (termbase == null)
-		        {
-			        DisplayMessage(PluginResources.Info_TermbaseExists, PluginResources.MessageTitle);
-			        return;
-		        }
-		        termbaseCreator.PopulateTermbase(termbase);
+				var termbaseCreator = new TermbaseGeneration();
+				var termbase = GetTermbase(termbaseCreator);
+				if (termbase == null)
+				{
+					DisplayMessage(PluginResources.Info_TermbaseExists, PluginResources.MessageTitle);
+					return;
+				}
+				termbaseCreator.PopulateTermbase(termbase);
 
-		        var termbaseDirectoryPath = Path.Combine(Path.GetDirectoryName(StudioContext.ProjectsController?.CurrentProject?.FilePath), "Tb");
-
-		        if (!string.IsNullOrEmpty(termbaseDirectoryPath) && !Directory.Exists(termbaseDirectoryPath))
-		        {
-			        Directory.CreateDirectory(termbaseDirectoryPath);
-		        }
-
-		        AddStudioTermbase(termbaseCreator, termbase._Path, termbaseDirectoryPath);
-	        }
-	        catch (ProjectTermsException e)
-	        {
-		        DisplayMessage(e.Message, PluginResources.MessageType_Error);
-	        }
-	        catch (TermbaseDefinitionException e)
-	        {
-		        DisplayMessage(e.Message, PluginResources.MessageType_Error);
-	        }
-	        catch (TermbaseGenerationException e)
+				AddStudioTermbase(termbaseCreator);
+			}
+			catch (ProjectTermsException e)
+			{
+				DisplayMessage(e.Message, PluginResources.MessageType_Error);
+			}
+			catch (TermbaseGenerationException e)
 	        {
 		        DisplayMessage($@"{e.Message}. {PluginResources.LocalTermbaseFilePath_Message}",
 			        PluginResources.MessageType_Error);
@@ -75,36 +64,24 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
 	        }
         }
 
-        private void AddStudioTermbase(TermbaseGeneration termbaseCreator, string termbasePath, string termbaseDirectoryPath)
-        {
-	        var termbaseName = Path.GetFileName(termbasePath);
-	        if (!string.IsNullOrEmpty(termbaseName))
-	        {
-		        var localTermbasePath = Path.Combine(termbaseDirectoryPath, Path.GetFileName(termbasePath));
-		        File.Copy(termbasePath, localTermbasePath);
+		private void AddStudioTermbase(TermbaseGeneration termbaseCreator)
+		{
+			var termbasePath = termbaseCreator.TermbasePath;
+			if (!string.IsNullOrEmpty(termbasePath) && File.Exists(termbasePath))
+			{
+				IncludeTermbaseInStudio(termbaseCreator, termbasePath);
 
-		        IncludeTermbaseInStudio(termbaseCreator, localTermbasePath);
-
-		        DisplayMessage(PluginResources.Info_SuccessfullyAdded, PluginResources.MessageTitle);
-	        }
-	        else
-	        {
-		        DisplayMessage(PluginResources.Info_NotSuccessfullyAdded, PluginResources.MessageTitle);
-	        }
+				DisplayMessage(PluginResources.Info_SuccessfullyAdded, PluginResources.MessageTitle);
+			}
+			else
+			{
+				DisplayMessage(PluginResources.Info_NotSuccessfullyAdded, PluginResources.MessageTitle);
+			}
 		}
 
-        private ITermbase GetTermbase(TermbaseGeneration termbaseCreator)
-        {
-	        var termbaseDefaultContent = TermbaseDefinitionFile.GetResourceTextFile("termbaseDefaultDefinitionFile.xdt");
-	        var termbaseDefinitionPath = TermbaseDefinitionFile.SaveTermbaseDefinitionToTempLocation(termbaseDefaultContent);
-
-	        TermbaseDefinitionFile.AddLanguages(termbaseDefinitionPath, termbaseCreator.GetProjectTargetLanguages());
-	        TermbaseDefinitionFile.AddLanguageGroups(termbaseDefinitionPath, termbaseCreator.GetProjectTargetLanguages(), "EmptyEntry");
-	        TermbaseDefinitionFile.AddLanguageGroups(termbaseDefinitionPath, termbaseCreator.GetProjectTargetLanguages(), "DummyEntry");
-	        TermbaseDefinitionFile.AddLanguageGroups(termbaseDefinitionPath, termbaseCreator.GetProjectTargetLanguages(), "FullEntry");
-	        TermbaseDefinitionFile.AddSchemaElements(termbaseDefinitionPath, termbaseCreator.GetProjectTargetLanguages());
-
-	        return termbaseCreator.CreateTermbase(termbaseDefinitionPath);
+		private IStudioTermbase GetTermbase(TermbaseGeneration termbaseCreator)
+		{
+			return termbaseCreator.CreateTermbase();
 		}
 
         private void DisplayMessage(string message, string title)
