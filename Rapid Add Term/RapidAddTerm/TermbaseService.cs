@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using System.Security;
 using System.Windows.Forms;
 using System.Xml;
 using Sdl.Core.Globalization;
-using Sdl.MultiTerm.TMO.Interop;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
+using Sdl.Terminology.TerminologyProvider.Core;
+using Sdl.Terminology.TerminologyProvider.Core.Termbase;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-using Application = Sdl.MultiTerm.TMO.Interop.Application;
-using Termbase = Sdl.MultiTerm.TMO.Interop.Termbase;
 
 namespace Sdl.Community.RapidAddTerm
 {
@@ -41,37 +40,51 @@ namespace Sdl.Community.RapidAddTerm
 
 				// Add concept to default termbase for source and target language of active file
 				var termbasePath = GetTermbasePath();
-				var languageIndexes = GetTermbaseConfiguration().LanguageIndexes;
 				if (!string.IsNullOrEmpty(termbasePath))
 				{
-					var termbase = GetTermbase(termbasePath);
-					var sourceIndexName = GetTermbaseIndex(termbase, languageIndexes, sourceLanguage);
-					var sourceLanguageCode = GetLanguageCode(sourceIndexName, sourceLanguage);
+					var provider = GetTerminologyProvider(termbasePath);
+					if (provider == null)
+					{
+						ShowTermbaseError();
+						return;
+					}
 
-					var targetIndexName = GetTermbaseIndex(termbase, languageIndexes, targetLanguage);
-					var targetLanguageCode = GetLanguageCode(targetIndexName,targetLanguage);
-						
-					var sourceEntry = SearchEntries(termbasePath, sourceSelection, sourceIndexName);
-					var targetEntries = SearchTargetEntries(termbasePath, targetSelection, targetIndexName);
-					targetSelection = SecurityElement.Escape(targetSelection);
-					sourceSelection = SecurityElement.Escape(sourceSelection);
+					// Do not dispose the provider: TerminologyProviderManager hands back a shared
+					// instance that Studio's Termbase Viewer and terminology search reuse. Disposing it
+					// closes the underlying termbase, so every later terminology access in Studio throws
+					// ConnectionException (SQLiteFileBasedTerminologyProvider.ErrorIfNotInitialized).
+					if (!(provider is IStudioTermbase termbase))
+					{
+						ShowTermbaseError();
+						return;
+					}
+
+					var sourceTermbaseLanguage = ResolveLanguage(provider, sourceLanguage);
+					var targetTermbaseLanguage = ResolveLanguage(provider, targetLanguage);
+					if (sourceTermbaseLanguage?.Locale == null || targetTermbaseLanguage?.Locale == null)
+						return;
+
+					var entries = LoadAllEntries(termbase);
+					var sourceEntry = entries.FirstOrDefault(e => ContainsTerm(e, sourceTermbaseLanguage, sourceSelection));
+					var targetEntryIds = entries
+						.Where(e => ContainsTerm(e, targetTermbaseLanguage, targetSelection))
+						.Select(e => e.Id)
+						.Distinct()
+						.ToList();
+
 					if (sourceEntry != null)
 					{
-						var targetAlreadyExists = IsTargetAlreadyAdded(targetEntries, sourceEntry.ID);
-						if (targetAlreadyExists)
+						if (targetEntryIds.Contains(sourceEntry.Id))
 						{
 							MessageBox.Show(@"The term you are trying to add already exists", @"Duplicate", MessageBoxButtons.OK,
 								MessageBoxIcon.Warning);
 							return;
 						}
-						AddTermToExistingEntry(sourceEntry, targetSelection, targetLanguageCode);
+						AddTermToExistingEntry(termbase, sourceEntry, targetSelection, targetTermbaseLanguage);
 					}
 					else
 					{
-						var entries = GetTermbaseEntries(termbasePath);
-						var entryText =
-							$"<conceptGrp><languageGrp><language type=\"{sourceIndexName}\" lang=\"{sourceLanguageCode}\"></language><termGrp><term>{sourceSelection}</term></termGrp></languageGrp><languageGrp><language type=\"{targetIndexName}\" lang=\"{targetLanguageCode}\"></language><termGrp><term>{targetSelection}</term></termGrp></languageGrp></conceptGrp>";
-						entries.New(entryText, false);
+						AddNewConcept(termbase, sourceSelection, sourceTermbaseLanguage, targetSelection, targetTermbaseLanguage);
 					}
 				}
 			}
@@ -82,36 +95,52 @@ namespace Sdl.Community.RapidAddTerm
 			}
 		}
 
-		private static bool IsLanguage(Index index, Language language)
+		private static ITerminologyProvider GetTerminologyProvider(string termbasePath)
 		{
-			return index.Locale.ToLower() == language.CultureInfo.TwoLetterISOLanguageName.ToLower();
-		}
-		private  string GetTermbaseIndex(Termbase termbase, List<TermbaseLanguageIndex> projectTermbaseIndexes, Language currentLanguage)
-		{
-			// https://jira.sdl.com/browse/SDLCOM-3794 - always prefer language code from the termbase file, if possible
-			var termbaseIndex = termbase.Definition.Indexes.OfType<Index>().FirstOrDefault(i => IsLanguage(i, currentLanguage));
-			if (termbaseIndex != null)
-				return termbaseIndex.Label;
+			var termbaseUri = new Uri("ttb." + new Uri(termbasePath).AbsoluteUri);
+			var provider = TerminologyProviderManager.Instance.GetTerminologyProvider(termbaseUri);
+			if (provider == null)
+				return null;
 
-			if (!projectTermbaseIndexes.Any()) return string.Empty;
-			if (currentLanguage == null) return string.Empty;
-
-			var projectTermbaseIndex = projectTermbaseIndexes.FirstOrDefault(t => t.ProjectLanguage.CultureInfo.Name.Equals(currentLanguage.CultureInfo.Name));
-			return projectTermbaseIndex?.TermbaseIndex ?? string.Empty;
+			// The provider is owned by TerminologyProviderManager and shared across Studio
+			// (Termbase Viewer, terminology search). Never dispose it here - disposing closes the
+			// underlying termbase and makes every later Studio terminology access throw
+			// ConnectionException. Initialize() is idempotent and safe to call on a shared instance.
+			return provider.Initialize() ? provider : null;
 		}
 
-		private bool IsSubLanguage(string languageName)
+		private static TermbaseLanguage ResolveLanguage(ITerminologyProvider provider, Language language)
 		{
-			return languageName.IndexOf('(') >0;
-		}
+			var cultureInfo = language?.CultureInfo;
+			if (cultureInfo == null)
+				return null;
 
-		private string GetLanguageCode(string termbaseIndex,Language language)
-		{
-			if (IsSubLanguage(termbaseIndex))
+			var definitionLanguages = provider.Definition?.Languages?.ToList();
+			if (definitionLanguages == null || !definitionLanguages.Any())
+				return null;
+
+			var definitionLanguage =
+				definitionLanguages.FirstOrDefault(l => IsSameCulture(l.Locale, cultureInfo.Name)) ??
+				definitionLanguages.FirstOrDefault(l => IsSameCulture(l.Locale, cultureInfo.TwoLetterISOLanguageName));
+			if (definitionLanguage == null)
+				return null;
+
+			return new TermbaseLanguage
 			{
-				return language.CultureInfo.Name.ToUpper();
-			}
-			return language.CultureInfo.TwoLetterISOLanguageName.ToUpper();
+				Locale = definitionLanguage.Locale.Name,
+				Name = definitionLanguage.Name
+			};
+		}
+
+		private static bool IsSameCulture(CultureCode locale, string cultureName)
+		{
+			return string.Equals(locale?.Name, cultureName, StringComparison.OrdinalIgnoreCase);
+		}
+
+		private static void ShowTermbaseError()
+		{
+			MessageBox.Show(@"The default termbase could not be opened. Make sure the project's default termbase is a file-based (.ttb) termbase.",
+				@"Termbase error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 		}
 
 
@@ -135,148 +164,120 @@ namespace Sdl.Community.RapidAddTerm
 			return string.Empty;
 		}
 
-		/// <summary>
-		/// Search a entru
-		/// </summary>
-		/// <param name="termbasePath">Local path of the default termbase</param>
-		/// <param name="searchText">Searched text</param>
-		/// <param name="languageCode">Language code for searched entry</param>
-		/// <returns>First entry content or NULL if there is no entry which matches the criteria</returns>
-		private Entry SearchEntries(string termbasePath,string searchText, string languageCode)
+		private static List<Entry> LoadAllEntries(IStudioTermbase termbase)
 		{
-			var termbase = GetTermbase(termbasePath);
+			var entries = new List<Entry>();
+			var lastSeenId = 0;
+			const int pageSize = 200;
 
-			var entries = termbase.Entries;
-
-			//set search parameters
-			var search = termbase.Search;
-			search.Direction = MtSearchDirection.mtSearchDown;
-			search.MaximumHits = 10;
-			search.FuzzySearch = false;
-			search.SearchExpression = searchText;
-			search.SourceIndex = languageCode; 
-			var oHits = search.Execute();
-
-			foreach (HitTerm oHit in oHits)
+			while (true)
 			{
-				if (!string.IsNullOrEmpty(oHit.ParentEntryID))
-				{
-					var hitText = oHit.Text;
-					if (hitText.Equals(searchText))
-					{
-						var entryId = Convert.ToInt32(oHit.ParentEntryID);
-						var entry = entries.Item(entryId);
-						return entry;
-					}
-				}
+				var page = termbase.GetEntries(lastSeenId, pageSize);
+				if (page == null || page.Count == 0)
+					break;
+
+				entries.AddRange(page);
+				lastSeenId = page[page.Count - 1].Id;
+
+				if (page.Count < pageSize)
+					break;
 			}
-			return null;
+
+			return entries;
 		}
 
-		private List<Entry> SearchTargetEntries(string termbasePath, string searchText, string languageCode)
+		private static bool ContainsTerm(Entry entry, TermbaseLanguage language, string termText)
 		{
-			var termbase = GetTermbase(termbasePath);
-			var entries = termbase.Entries;
+			if (entry?.Languages == null)
+				return false;
 
-			//set search parameters
-			var search = termbase.Search;
-			search.Direction = MtSearchDirection.mtSearchDown;
-			search.MaximumHits = 10;
-			search.FuzzySearch = false;
-			search.SearchExpression = searchText;
-			search.SourceIndex = languageCode;
-			var oHits = search.Execute();
-
-			var targetEntriesList= new List<Entry>();
-			foreach (HitTerm oHit in oHits)
+			foreach (var entryLanguage in entry.Languages)
 			{
-				if (!string.IsNullOrEmpty(oHit.ParentEntryID))
-				{
-					var hitText = oHit.Text;
-					if (hitText.Equals(searchText))
-					{
-						var entryId = Convert.ToInt32(oHit.ParentEntryID);
-						var entry = entries.Item(entryId);
-						var entryExists = targetEntriesList.Exists(e => e.ID.Equals(entryId));
-						if (!entryExists)
-						{
-							targetEntriesList.Add(entry);
-						}
-					}
-				}
+				if (!IsSameLocale(entryLanguage, language) || entryLanguage.Terms == null)
+					continue;
+
+				if (entryLanguage.Terms.Any(term => string.Equals(term.Value, termText, StringComparison.Ordinal)))
+					return true;
 			}
-			return targetEntriesList;
+
+			return false;
 		}
 
-		private void AddTermToExistingEntry(Entry entry, string term, string languageCode)
+		private static bool IsSameLocale(EntryLanguage entryLanguage, TermbaseLanguage language)
 		{
-			var xml = new XmlDocument();
-			xml.LoadXml(entry.Content.Content);
-			var languageGrNodes = xml.SelectNodes("/conceptGrp/languageGrp");
-			if (languageGrNodes != null)
+			return string.Equals(entryLanguage?.Locale?.Name, language?.Locale, StringComparison.OrdinalIgnoreCase);
+		}
+
+		private static void AddTermToExistingEntry(IStudioTermbase termbase, Entry entry, string term, TermbaseLanguage language)
+		{
+			var entryLanguage = entry.Languages?.FirstOrDefault(l => IsSameLocale(l, language));
+			if (entryLanguage == null)
 			{
-				foreach (XmlNode node in languageGrNodes)
-				{
-					foreach (XmlNode childNode in node.ChildNodes)
-					{
-						if (childNode.Name.Equals("language"))
-						{
-							var attributes = childNode.Attributes;
-							if (attributes != null)
-							{
-								foreach (XmlAttribute attribute in attributes)
-								{
-									if (attribute.Name.Equals("lang"))
-									{
-										if (attribute.Value.Equals(languageCode))
-										{
-											var termGrNode = xml.CreateNode(XmlNodeType.Element, "termGrp", string.Empty);
-											var termNode = xml.CreateNode(XmlNodeType.Element, "term", string.Empty);
-											termNode.InnerText = term;
-											termGrNode.AppendChild(termNode);
-											node.AppendChild(termGrNode);
-										}
-									}
-								}
-							}
-						}
-					}
-				}
+				entryLanguage = CreateEntryLanguage(language);
+				if (entry.Languages == null)
+					entry.Languages = new List<EntryLanguage>();
+				entry.Languages.Add(entryLanguage);
 			}
-			var content = xml.InnerXml;
-			entry.LockEntry(MtLockingState.mtLock);
-			entry.Content.Content = content;
-			entry.Save();
+
+			if (entryLanguage.Terms == null)
+				entryLanguage.Terms = new List<EntryTerm>();
+			entryLanguage.Terms.Add(CreateTerm(term));
+
+			if (entry.Transactions == null)
+				entry.Transactions = new List<EntryTransaction>();
+			entry.Transactions.Add(CreateTransaction(TransactionType.Modification));
+
+			termbase.UpdateEntry(entry);
 		}
 
-		private bool IsTargetAlreadyAdded(List<Entry> targetEntries, int parentId)
+		private static void AddNewConcept(IStudioTermbase termbase, string sourceTerm, TermbaseLanguage sourceLanguage, string targetTerm, TermbaseLanguage targetLanguage)
 		{
-			var exists = targetEntries.Exists(e => e.ID.Equals(parentId));
-			return exists;
+			var entry = new Entry
+			{
+				Languages = new List<EntryLanguage>
+				{
+					CreateEntryLanguage(sourceLanguage, sourceTerm),
+					CreateEntryLanguage(targetLanguage, targetTerm)
+				},
+				Transactions = new List<EntryTransaction>
+				{
+					CreateTransaction(TransactionType.Origination)
+				}
+			};
+
+			termbase.AddEntry(entry);
 		}
 
-		private Entries GetTermbaseEntries(string termbasePath)
+		private static EntryLanguage CreateEntryLanguage(TermbaseLanguage language, string term = null)
 		{
-			var termbase = GetTermbase(termbasePath);
-			return termbase.Entries;
+			var entryLanguage = new EntryLanguage
+			{
+				Name = language.Name,
+				Locale = language.Locale,
+				Terms = new List<EntryTerm>()
+			};
+
+			if (term != null)
+				entryLanguage.Terms.Add(CreateTerm(term));
+
+			return entryLanguage;
 		}
 
-		private Termbases GetTermbases()
+		private static EntryTerm CreateTerm(string value)
 		{
-			var multiTermApplication = new Application();
-			var localRep = multiTermApplication.LocalRepository;
-			localRep.Connect("", "");
-
-			var termbases = localRep.Termbases;
-			return termbases;
+			return new EntryTerm { Value = value };
 		}
 
-		private Termbase GetTermbase(string termbasePath)
+		private static EntryTransaction CreateTransaction(TransactionType type)
 		{
-			var termbases = GetTermbases();
-			termbases.Add(termbasePath, string.Empty, string.Empty);
-			var termbase = termbases[termbasePath];
-			return termbase;
+			return new EntryTransaction { Type = type, Date = DateTime.Now };
+		}
+
+		private sealed class TermbaseLanguage
+		{
+			public string Locale { get; set; }
+
+			public string Name { get; set; }
 		}
 	}
 }
