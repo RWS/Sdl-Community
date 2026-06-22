@@ -36,22 +36,6 @@ variables:
   value: MultiTerm19
 
 steps:
-  - task: PowerShell@2
-    displayName: 'set x86 path'
-    inputs:
-      targetType: 'inline'
-      script: |
-        Write-Host "##vso[task.setvariable variable=x86path;]$Env:ProgramFiles(x86)"
-  - task: DownloadPipelineArtifact@2
-    displayName: 'Download Multiterm Binaries Pipeline Artifact'
-    inputs:
-      buildType: 'specific'
-      project: 'Terminology'
-      definition: '2038'
-      artifactName: 'binaries'
-      buildVersionToDownload: 'latestFromBranch'
-      branchName: 'refs/heads/master'
-      targetPath: '$(x86path)\Trados\MultiTerm\$(MultiTermProductIdentifier)'
   - template: build/jobs/build-sdlplugin.yml@AppStoreApplicationsRepo
   - template: build/jobs/publish-build-artifact-task.yml@AppStoreApplicationsRepo
 
