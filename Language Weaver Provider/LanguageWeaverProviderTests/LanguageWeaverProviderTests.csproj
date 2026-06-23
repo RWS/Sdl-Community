@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
     <IsPackable>false</IsPackable>
-    <TradosFolder>$(ProgramW6432)\Trados\Trados Studio\Studio19Beta</TradosFolder>
+    <TradosFolder>$(ProgramW6432)\Trados\Trados Studio\Studio19</TradosFolder>
   </PropertyGroup>
 
   <ItemGroup>

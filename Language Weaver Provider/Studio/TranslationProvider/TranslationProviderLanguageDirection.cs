@@ -372,10 +372,11 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
             Origin = TranslationUnitOrigin.Nmt,
             TargetSegment = translation.Duplicate(),
             SourceSegment = searchSegment.Duplicate(),
-            DocumentSegmentPair = _currentTranslationUnit.DocumentSegmentPair
+            // Prevent returning this with the TU search results; issue reported here: https://rws-dev.atlassian.net/browse/DET-725
+            // DocumentSegmentPair = _currentTranslationUnit.DocumentSegmentPair
         };
 
-        translationUnit.DocumentSegmentPair.Properties.TranslationOrigin ??= ItemFactory.CreateTranslationOrigin();
+        //translationUnit.DocumentSegmentPair.Properties.TranslationOrigin ??= ItemFactory.CreateTranslationOrigin();
         translationUnit.ResourceId = new PersistentObjectToken(translationUnit.GetHashCode(), Guid.NewGuid());
 
         return translationUnit;
