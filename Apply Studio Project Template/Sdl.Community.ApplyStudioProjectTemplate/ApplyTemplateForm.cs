@@ -259,7 +259,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             if (SelectedTemplate.SelectedItem is ApplyTemplate selectedTemplate)
 			{
                 TranslationProvidersAllLanguages.SelectedItem = selectedTemplate.TranslationProvidersAllLanguages.ToString().ToUiString();
-				TranslationProvidersSpecificLanguages.SelectedItem = selectedTemplate.TranslationProvidersSpecificLanguages.ToString();
+				TranslationProvidersSpecificLanguages.SelectedItem = selectedTemplate.TranslationProvidersSpecificLanguages.ToString().ToUiString();
 				TranslationMemoriesAllLanguages.SelectedItem = selectedTemplate.TranslationMemoriesAllLanguages.ToString();
 				TranslationMemoriesSpecificLanguages.SelectedItem = selectedTemplate.TranslationMemoriesSpecificLanguages.ToString();
 				TerminologyTermbases.SelectedItem = selectedTemplate.TerminologyTermbases.ToString().ToUiString();
