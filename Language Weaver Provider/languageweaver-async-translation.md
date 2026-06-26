@@ -124,6 +124,8 @@ GET /v4/mt/translations/async/{requestId}?includeProgressInfo=true
 | `adequate` | int | Percentage estimated as adequate |
 | `poor` | int | Percentage estimated as poor |
 
+> **Note (XLIFF input/output):** when the input/output format is `XLIFF` and quality estimation is enabled (with a QE-capable model such as `genericqe`), the authoritative per-segment estimate is **also embedded in the translated XLIFF itself** as the `match-quality` attribute of each `<alt-trans>` element (values `Good`, `Adequate`, `Poor`). This is the value the plugin consumes, because it stays aligned with its own `<trans-unit>` regardless of batching. The status `qualityEstimation` array above is a secondary, lossy percentage form. With a non-QE model (e.g. `generic`) neither the `match-quality` attribute nor this array is present.
+
 ---
 
 ## Step 3 — Retrieve Translated Content
@@ -143,6 +145,26 @@ Only call this once status is `DONE`.
 | `model` | string | Model used |
 | `inputFormat` | string | Format of input |
 | `translation` | string array | Translated segments, positionally matching the `input` array |
+
+When `inputFormat` is `XLIFF`, each `translation[i]` is itself a full XLIFF 1.2 document. With quality estimation enabled on a QE-capable model, the per-segment estimate appears as the `match-quality` attribute of `<alt-trans>`:
+
+```xml
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file original="segment" source-language="en" target-language="de" datatype="plaintext">
+    <header><tool tool-name="SDL ETS" tool-version="8.7.1" tool-id="ETS"/></header>
+    <body>
+      <trans-unit id="1">
+        <source>The quick brown fox jumps over the lazy dog.</source>
+        <alt-trans tool-id="ETS" date="2026-06-25T15:25:56Z" match-quality="Good">
+          <target xml:lang="de">Der schnelle braune Fuchs springt über den faulen Hund.</target>
+        </alt-trans>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
+```
+
+With a non-QE model the `<alt-trans>` element carries no `match-quality` attribute.
 
 ---
 

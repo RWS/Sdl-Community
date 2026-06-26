@@ -11,7 +11,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace LanguageWeaverProvider.Services
 {
@@ -200,7 +199,7 @@ namespace LanguageWeaverProvider.Services
         {
             try
             {
-                var consolidatedInput = ConsolidateSegments(segmentSerializers);
+                var consolidatedInput = EdgeXliffBatch.Consolidate(segmentSerializers);
                 var translationRequest = await SendTranslationRequest(accessToken, pairMapping, consolidatedInput);
                 var translationStatus = await GetTranslationStatus(accessToken, translationRequest.TranslationId);
                 if (translationStatus.Error is not null)
@@ -213,14 +212,15 @@ namespace LanguageWeaverProvider.Services
                 var translationResponse = await GetTranslation(accessToken, translationRequest.TranslationId);
                 var decoded = Base64Decode(translationResponse);
 
-                var translations = SplitConsolidatedXliffResponse(decoded, segmentSerializers.Count);
+                var translations = EdgeXliffBatch.Split(decoded, segmentSerializers.Count);
                 var results = new List<TranslationResult>(segmentSerializers.Count);
                 for (var i = 0; i < segmentSerializers.Count; i++)
                 {
+                    var translatedXliff = i < translations.Length ? translations[i] : string.Empty;
                     results.Add(new TranslationResult
                     {
-                        Translation = i < translations.Length ? translations[i] : string.Empty,
-                        QualityEstimation = null
+                        Translation = translatedXliff,
+                        QualityEstimation = SegmentSerializer.ExtractQualityEstimation(translatedXliff)
                     });
                 }
 
@@ -297,61 +297,6 @@ namespace LanguageWeaverProvider.Services
 
         private static string Base64Encode(this string text)
             => Convert.ToBase64String(Encoding.UTF8.GetBytes(text));
-
-        /// <summary>
-        /// Builds the single consolidated XLIFF 1.2 document Edge requires: one body holding one
-        /// <c>&lt;trans-unit&gt;</c> per segment (ids 1..N), produced straight from the
-        /// <see cref="SegmentSerializer"/> structure. Edge only preserves inline <c>&lt;g&gt;</c>/<c>&lt;x&gt;</c>
-        /// tags when the whole batch is one document under <c>application/x-xliff</c>; concatenating
-        /// standalone XLIFF documents is rejected with <c>400 Bad Request</c>.
-        /// </summary>
-        private static string ConsolidateSegments(IReadOnlyList<SegmentSerializer> segmentSerializers)
-        {
-            var transUnits = new List<XElement>(segmentSerializers.Count);
-            for (var i = 0; i < segmentSerializers.Count; i++)
-                transUnits.Add(segmentSerializers[i].CreateTransUnit(i + 1));
-
-            var first = segmentSerializers.Count > 0 ? segmentSerializers[0] : null;
-            return SegmentSerializer.BuildXliffDocument(
-                first?.SourceLanguage ?? string.Empty,
-                first?.TargetLanguage ?? string.Empty,
-                transUnits);
-        }
-
-        /// <summary>
-        /// Splits the consolidated Edge XLIFF response back into per-segment XLIFF fragments,
-        /// ordered to match the request. Edge echoes the request <c>&lt;trans-unit&gt;</c> ids, so each
-        /// fragment is mapped to its segment index by id; missing ids yield an empty string so the
-        /// caller still produces one result per source segment. Each returned fragment is a complete
-        /// <c>&lt;trans-unit&gt;</c> element that <see cref="SegmentSerializer.DeserializeSegment"/> can parse
-        /// (it locates the nested <c>&lt;alt-trans&gt;&lt;target&gt;</c> at any depth).
-        /// </summary>
-        private static string[] SplitConsolidatedXliffResponse(string responseXliff, int segmentCount)
-        {
-            var fragments = new string[segmentCount];
-
-            var transUnits = XDocument.Parse(responseXliff)
-                .Descendants()
-                .Where(e => e.Name.LocalName == "trans-unit");
-
-            foreach (var transUnit in transUnits)
-            {
-                var idValue = transUnit.Attribute("id")?.Value;
-                if (!int.TryParse(idValue, out var id))
-                    continue;
-
-                var index = id - 1;
-                if (index < 0 || index >= segmentCount)
-                    continue;
-
-                fragments[index] = transUnit.ToString(SaveOptions.DisableFormatting);
-            }
-
-            for (var i = 0; i < fragments.Length; i++)
-                fragments[i] ??= string.Empty;
-
-            return fragments;
-        }
 
         private static async Task<string> GetTranslation(AccessToken accessToken, string translationId)
         {

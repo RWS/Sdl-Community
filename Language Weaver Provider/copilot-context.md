@@ -86,6 +86,8 @@ LanguageWeaverProvider/
 │   ├── Service.cs                  # Shared HTTP helpers (SendRequest, DeserializeResponse, ValidateTokenAsync)
 │   ├── CloudService.cs             # All Cloud API calls (auth, translate, QE, feedback, account)
 │   ├── EdgeService.cs              # All Edge API calls (auth, translate, QE, dictionaries, feedback)
+│   ├── EdgeXliffBatch.cs           # Pure (no-I/O) Edge XLIFF batching: Consolidate(serializers) / Split(response) — unit-tested
+│   ├── SegmentSerializer.cs        # Segment <-> XLIFF 1.2 (CreateTransUnit, BuildXliffDocument, DeserializeSegment, ExtractQualityEstimation) — shared by both engines
 │   ├── ITranslationEngine.cs       # Abstraction over Cloud / Edge MT calls (seam takes IReadOnlyList<SegmentSerializer>)
 │   ├── CloudTranslationEngine.cs   # ITranslationEngine adapter for CloudService.Translate
 │   ├── EdgeTranslationEngine.cs    # ITranslationEngine adapter for EdgeService.Translate
@@ -95,7 +97,7 @@ LanguageWeaverProvider/
 │   ├── Model/TranslationResult.cs  # Translated text + optional QE label (returned by ITranslationEngine)
 │   ├── Model/EvaluatedSegment.cs   # Per-segment translation result (Segment + QE label) returned by IBatchTranslator
 │   ├── Model/CloudTranslationRequest.cs   # POST body for v4/mt/translations/async
-│   ├── Model/CloudTranslationStatus.cs    # GET status payload incl. qualityEstimation array + DominantLabel()
+│   ├── Model/CloudTranslationStatus.cs    # GET status payload (translationStatus, stats, language pairs) — used only to poll to DONE
 │   ├── Model/EdgeTranslationRequestContent.cs  # POST body for Edge translate (inputFormat: application/x-xliff)
 │   └── CredentialManager.cs       # Reads/writes credentials to/from the Trados credential store
 │
@@ -213,8 +215,8 @@ Each `PairMapping` links a `LanguagePair` to a chosen `PairModel` (the MT model 
 4. Segments are split into batches and each batch is delegated to `IBatchTranslator.Translate(...)` (default: `PlainTextBatchTranslator`).
 5. The batch translator builds a `SegmentSerializer` per source segment (each owns its XLIFF `<source>` structure and inline `<g>`/`<x>` tags) and passes the `IReadOnlyList<SegmentSerializer>` straight to the engine — no pre-stringified `string[]`, so the engine decides its own wire shape from the structure.
 6. The configured `ITranslationEngine` (`CloudTranslationEngine` or `EdgeTranslationEngine`) calls the underlying static service:
-   - **Cloud**: maps each serializer to its `SerializedSegment` (`string[]` of full XLIFF docs) → `CloudService.Translate` → 3-step async at `{baseUri}v4/mt/translations/async` (submit → poll status → GET `/content`)
-   - **Edge**: `EdgeService.Translate` builds ONE consolidated `application/x-xliff` document directly from the serializers via `SegmentSerializer.CreateTransUnit(i+1)` + `BuildXliffDocument(...)` (no reparse), POSTs base64 of it to `{baseUri}api/v2/translations` (form-urlencoded), polls, then GET `/download`, base64-decodes, and splits the response back per `<trans-unit>`
+   - **Cloud**: maps each serializer to its `SerializedSegment` (`string[]` of full XLIFF docs) → `CloudService.Translate` → 3-step async at `{baseUri}v4/mt/translations/async` (submit → poll status → GET `/content`). Each returned `/content` `translation[i]` is a full XLIFF document; the per-segment QE label is read straight from its `<alt-trans match-quality="…">` attribute via `SegmentSerializer.ExtractQualityEstimation`
+   - **Edge**: `EdgeService.Translate` builds ONE consolidated `application/x-xliff` document directly from the serializers via `SegmentSerializer.CreateTransUnit(i+1)` + `BuildXliffDocument(...)` (no reparse), POSTs base64 of it to `{baseUri}api/v2/translations` (form-urlencoded), polls, then GET `/download`, base64-decodes, and splits the response back per `<trans-unit>`. Each split fragment is itself a complete `<trans-unit>` whose `<alt-trans match-quality="…">` carries the per-segment QE, so the label is read with the same `SegmentSerializer.ExtractQualityEstimation` helper Cloud uses
 7. Each `TranslationResult` (translated text + optional QE label) is rehydrated by the matching `SegmentTagPlacer` into a target `Segment` with the original `Tag` instances re-inserted.
 8. Results are returned as `EvaluatedSegment` (`{ Segment Translation, string QualityEstimation }`) and the QE score is stored in `ApplicationInitializer.RatedSegments`.
 9. The **post-lookup editor** is applied to the translated text.
@@ -238,9 +240,15 @@ After translation, `BuildTargetSegment(translatedText, targetCulture)` scans the
 
 ---
 
-## Cloud quality-estimation mapping
+## Quality-estimation mapping (Cloud & Edge)
 
-The Cloud API returns a per-segment `qualityEstimation` array of `{ good, adequate, poor }` percentages. `CloudQualityEstimation.DominantLabel()` collapses each entry to the single label (`"Good"`, `"Adequate"`, or `"Poor"`) with the highest percentage. QE is requested only when `mappedPair.SelectedModel.QeSupport` is true (sets `qualityEstimation: 1` in the request body). Edge does not currently surface QE through this flow.
+QE travels **with the translated content**, not in the status payload. When QE is requested (`qualityEstimation: 1`, set only when `mappedPair.SelectedModel.QeSupport` is true), each XLIFF document returned by `GET /content` carries the per-segment estimate as the `match-quality` attribute on its `<alt-trans>` element (values `"Good"`, `"Adequate"`, `"Poor"`). `CloudService.Translate` reads it straight from each `translation[i]` via the static `SegmentSerializer.ExtractQualityEstimation(xliff)` helper, which returns the attribute value or `null` when absent. Downstream, `TranslationOriginExtension.QESCoreMap` lowercases the label to a score (`poor`=33, `adequate`=66, `good`=80) and the `QualityEstimations` enum parses the same names, so the XLIFF label flows through unchanged.
+
+**Edge uses the exact same source of truth.** A live probe confirmed the Edge `/download` payload embeds QE identically: a QE-capable pair (e.g. `EngFra_Generative-Gen-32888_Cloud`, advertised by `qeSupport: true` on the language pair) returns `<alt-trans … match-quality="Good|Adequate">` per `<trans-unit>`, while a non-QE pair (e.g. `EngGer_AutoAdaptive_SRV_TNM`) returns `<alt-trans>` with no `match-quality` (and a status `qualityEstimation: {}`). `EdgeService.Translate` therefore extracts QE from each split fragment with `SegmentSerializer.ExtractQualityEstimation`, exactly like Cloud, yielding `null` when the model emits none. The Edge status response's job-level numeric `qualityEstimation` and the separate `content-insights` `importanceScore` are **not** used for per-segment QE.
+
+On Cloud, QE labels only appear when the **`genericqe`** model is selected. The plain `generic` model returns no `match-quality` (and no status QE), so `ExtractQualityEstimation` correctly yields `null` and there is simply no estimate to report. The same null-when-absent rule covers non-QE Edge models.
+
+**History:** The async status response *also* exposes a per-segment `qualityEstimation` array of `{ good, adequate, poor }` percentages. A prior refactor ("Remove XLIFF conversion") briefly switched QE to that array, collapsing each entry with a `CloudQualityEstimation.DominantLabel()` max-of-three reducer. That was a regression: it relied on fragile positional alignment between the status array and the content array, lost the authoritative per-segment label that ships inside the XLIFF, and added a dead model. The status-based `CloudQualityEstimation`/`DominantLabel()` were removed and QE was restored to the original XLIFF `match-quality` source. A live probe against both models confirmed the shape (see the `ExtractQualityEstimation_*` unit tests, which pin the exact `genericqe`/`generic` XLIFF captured from the API).
 
 ---
 
@@ -254,7 +262,7 @@ The Cloud API returns a per-segment `qualityEstimation` array of `{ good, adequa
 Key paths (all under `v4/`):
 - `v4/mt/translations/async` – submit translation (POST, returns `requestId`)
 - `v4/mt/translations/async/{requestId}` – poll status (`INIT` / `TRANSLATING` / `DONE` / `FAILED`)
-- `v4/mt/translations/async/{requestId}/content` – retrieve translated segments + QE array
+- `v4/mt/translations/async/{requestId}/content` – retrieve translated segments (each is an XLIFF doc whose `<alt-trans>` carries the QE `match-quality` when QE was requested)
 - `v4/token` / `v4/token/user` – authenticate (API credentials / username+password)
 - `v4/accounts/users/self` / `v4/accounts/api-credentials/self` – fetch `accountId`
 - `v4/accounts/{accountId}/subscriptions/language-pairs` – list available language pairs
@@ -295,9 +303,19 @@ Edge **can** preserve inline tags via XLIFF — but **only** under the dedicated
 - **The current branch is the better serialization model**: the single-class `SegmentSerializer` (cleaner than the old `Latest_XLIFF` `XliffConverter` stack) is now used for **both** engines. No separate Edge marker/serialization seam is needed — the earlier "give Edge its own serialization" idea is obsolete.
 - **`EdgeTranslationRequestContent.InputFormat` is now `"application/x-xliff"`** (was `"text/x-line"`), so Edge consumes the same `SegmentSerializer` XLIFF that `PlainTextBatchTranslator` already produces for both engines.
 - **The XLIFF batch shape lives in `SegmentSerializer`, not in `EdgeService`** (option 1 seam refactor): the engine seam now passes `IReadOnlyList<SegmentSerializer>` instead of a pre-serialized `string[]`. `SegmentSerializer` owns its structure once — `CreateTransUnit(int id)` clones the stored `<source>` into a fresh `<trans-unit id="…">`, and the shared static `BuildXliffDocument(src, tgt, transUnits)` wraps any number of trans-units into the XLIFF 1.2 envelope. `SerializedSegment` (Cloud's per-segment string) is just `BuildXliffDocument(..., CreateTransUnit(1))`.
-- **`EdgeService.Translate` builds the consolidated document from structure (no reparse)**: `ConsolidateSegments(...)` composes `serializer.CreateTransUnit(i+1)` for each segment and calls `SegmentSerializer.BuildXliffDocument(...)` with the first serializer's `SourceLanguage`/`TargetLanguage`. The previous `ConsolidateXliffDocuments(...)` (which `XDocument.Parse`d each serialized string back, renumbered ids, and reparsed again just to recover language attributes) plus its `SourceLanguageOf`/`TargetLanguageOf`/`LanguageAttributeOf` helpers and the local `XliffNs` field were removed. `SplitConsolidatedXliffResponse(...)` stays — it parses the genuine external Edge response and maps each `<trans-unit>` back to its segment index by echoed id (missing ids → empty translation).
+- **Edge batching lives in a pure `EdgeXliffBatch` seam (TDD-extracted)**: the consolidate/split logic was lifted out of `EdgeService` into `Services/EdgeXliffBatch.cs`, a `public static` class with no I/O. `EdgeXliffBatch.Consolidate(IReadOnlyList<SegmentSerializer>)` composes `serializer.CreateTransUnit(i+1)` for each segment and calls `SegmentSerializer.BuildXliffDocument(...)` with the first serializer's `SourceLanguage`/`TargetLanguage`. `EdgeXliffBatch.Split(responseXliff, segmentCount)` parses the genuine external Edge response and maps each `<trans-unit>` back to its segment index by echoed id (missing/out-of-range ids → empty translation). `EdgeService.Translate` now just delegates to these two methods; its old private `ConsolidateSegments`/`SplitConsolidatedXliffResponse` and the now-unused `using System.Xml.Linq;` were removed. (The earlier `ConsolidateXliffDocuments(...)` reparse path plus its `SourceLanguageOf`/`TargetLanguageOf`/`LanguageAttributeOf` helpers and local `XliffNs` field had already been removed.)
 - **Response parsing**: under `application/x-xliff` Edge nests the result in `<alt-trans><target xml:lang="…">…</target></alt-trans>` (XLIFF 1.2). `SegmentSerializer.DeserializeSegment` already locates `<target>` via `Descendants()` (any depth) and matches `<g>`/`<x>` by `LocalName`, so it parses each extracted `<trans-unit>` fragment unchanged — no serializer change was required.
 - **Validation**: `TranslationRoundtripTest_Edge` was re-pointed at this XLIFF path (asserts tag anchor/type multisets, mirroring the Cloud test) and passes **11/11 live**, including the deeply-nested 8-tag "Face Exhaling" emoji case that previously failed under `text/x-line`. The temporary `EdgeInputFormatExperiment` / `EdgeBatchResponseShapeExperiment` files were deleted.
+
+### Unit tests — offline seam coverage
+
+The test project (`LanguageWeaverProviderTests`, `net48` / xUnit 2.9.3) now has a `UnitTests/` folder alongside the live `IntegrationTests/`. These run with **no network, JWT, or files** and pin the pure logic the integration tests can only assert against a real engine:
+
+- **`UnitTests/TestSegmentBuilder.cs`** — fluent in-memory `Segment` builder. Tags are constructed with explicit anchors via the SDL `new Tag(TagType, tagId, anchor)` constructor (`StartTag`/`EndTag`/`Placeholder`/`Paired`), so unit tests never touch Studio or disk.
+- **`UnitTests/EdgeXliffBatchTests.cs`** (9 tests) — drives `EdgeXliffBatch`: consolidate (empty → no trans-units, single → id 1, N → ids 1..N, inline `<g>`/`<x>` preserved, languages taken from the first serializer) and split (ids align by index, missing id → empty string, out-of-range id ignored, nested `<alt-trans><target>` retained).
+- **`UnitTests/SegmentSerializerTests.cs`** (13 tests) — characterizes `SegmentSerializer`: serialization shape (`source`/`target-language` on `<file>`, paired → `<g>`, standalone → `<x>`), deserialize edge cases (empty response → empty segment, no `<target>` → throws), and full in-memory round-trips via an `EchoAsTarget` helper that mirrors the Edge `<alt-trans><target>` shape. `RoundTrip_ReusesOriginalTagInstancesByAnchor` uses `Assert.Same` to lock in that original `Tag` instances are recovered by anchor. The `ExtractQualityEstimation_*` tests pin QE extraction against the real `genericqe` (Good/Poor) and `generic` (no `match-quality` → null) XLIFF captured live from the Cloud API, plus null/empty/whitespace inputs.
+
+Run them with `vstest.console.exe` (or VS Test Explorer); the two live `IntegrationTests` remain untouched and are skipped offline (they need a valid Edge/Cloud token).
 
 ---
 

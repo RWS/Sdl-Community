@@ -140,6 +140,8 @@ Returns full metadata and current state of a translation job.
 }
 ```
 
+> **Per-segment QE lives in the downloaded XLIFF, not here.** This status `qualityEstimation` is a single job-level number (and is returned as an empty object `{}` for models that do not emit QE). The authoritative per-segment quality estimate ships **inside the translated XLIFF** returned by `/download`, as the `match-quality` attribute on each `<alt-trans>` element (values `Good` / `Adequate` / `Poor`) — identical to the Cloud API. The plugin (`EdgeService.Translate`) reads QE from that attribute via `SegmentSerializer.ExtractQualityEstimation`, never from this field. Verified live: pair `EngFra_Generative-Gen-32888_Cloud` (`qeSupport: true`) returns `match-quality` per segment; pair `EngGer_AutoAdaptive_SRV_TNM` returns `<alt-trans>` with no `match-quality` and a status `qualityEstimation: {}`.
+
 **States & Substates**
 
 | State | Substates |
@@ -157,6 +159,8 @@ GET /api/v2/translations/{translationId}/download
 ```
 
 Downloads the translated output as a base64-encoded response.
+
+When the input was submitted as `application/x-xliff`, the decoded output is a consolidated XLIFF 1.2 document that echoes the request `<trans-unit>` ids. Each `<trans-unit>` wraps an `<alt-trans>` holding the `<target>`; when the language pair supports QE (`qeSupport: true`), that `<alt-trans>` also carries a `match-quality="Good|Adequate|Poor"` attribute — the per-segment quality estimate the plugin consumes.
 
 **Query Parameters**
 

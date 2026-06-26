@@ -77,6 +77,23 @@ public class SegmentSerializer
     }
 
     /// <summary>
+    /// Extracts the quality-estimation label that LanguageWeaver embeds in a translated XLIFF as the
+    /// <c>match-quality</c> attribute of the <c>&lt;alt-trans&gt;</c> element (values "Good", "Adequate",
+    /// "Poor"). This is the authoritative per-segment QE: it travels with the translated content itself,
+    /// so it stays aligned even when segments are batched. Returns <c>null</c> when the engine does not
+    /// emit QE (e.g. a non-QE model), in which case there is simply no estimation to report.
+    /// </summary>
+    public static string ExtractQualityEstimation(string xliff)
+    {
+        if (string.IsNullOrWhiteSpace(xliff))
+            return null;
+
+        var document = XDocument.Parse(xliff);
+        var altTrans = document.Descendants().FirstOrDefault(e => e.Name.LocalName == "alt-trans");
+        return altTrans?.Attribute("match-quality")?.Value;
+    }
+
+    /// <summary>
     /// Rebuilds a <see cref="Segment"/> from the XLIFF <c>&lt;target&gt;</c> returned by the
     /// translation engine. The original <see cref="Tag"/> instances captured during serialization
     /// are reused (looked up by anchor) so every tag's type and metadata is preserved exactly.

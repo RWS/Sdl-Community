@@ -24,7 +24,7 @@ namespace LanguageWeaverProviderTests.IntegrationTests
         private const string EdgeHost = "https://mt01.edge.languageweaver.com";
 
         private const string AccessToken =
-            "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3ODIzNTE1MTIsInRva2VuIjoiNjQ0ZmMwZTEtOTgyZi00MjAwLWIwNDgtMzBjNGE5MzQwMDZmIn0.kUmOpCBdNOM0tOoD4RU6AWoxXg0YAZk41XcCINYxfCY1w7466D-V3tGh-u36xZsO2Nui8JgAqnJWajFhW0i6XY7NS_n_cKfHaBK3CHfRrVSm7CXsey50n9eTr8GUXQiu94QKmmm3BT8IhFQh3sgnKWeqazdZHBAcySwHV4919I_WTCh9N-c833-6xZeU1khZIxOAcURaMpdYF5FAVgcmiLN4loypgQJKVYE-RlfFdB1RYJKakRPUBWqbODzR32Nw_nFUOs1Y-s-P2LirG2uZk7c8pBo-T2pKir0WRwAZ3i9F-aN-6NK43pZvn_fyia12BGvF6hTTmykHn3cjOqPT_Q";
+            "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3ODI0MjAzNDcsInRva2VuIjoiNjQ0ZmMwZTEtOTgyZi00MjAwLWIwNDgtMzBjNGE5MzQwMDZmIn0.VY4uo5ztaN0VGomroxInaE7E5qI0NcVluQjwLNUsPwQ4k7Jxa9gVoJ00BfXJ57viI0ve8Op8BgwSv9oICggjX7VpICJ7jdI-ATCP8Oy5XaVzdq3JvLkSleUziJHncf0PgYEXlhUg96LwnFzM5zYwMIOvzdMlmNZWhBOTzZd3UDIuSZGWydiiOr1szTt1Cct0pZ08B2QHGu1a9MCxvKTgrVBRF1s14ADPjDiUZF-jqT6-ahD-tVEytStEFuQmgQf9bym0ZRJ-z5PeELA5koNUjgqDGd1cR7cio_OKEZOxUMX4zg5Vnp90Ngy4ytdBrNnghjIlTTrE7mvO1_1cqD-e4Q";
 
         private const string LanguagePairId = "EngGer_AutoAdaptive_SRV_TNM";
         private const string SourceLang = "eng";
