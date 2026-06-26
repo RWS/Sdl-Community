@@ -154,6 +154,7 @@
 		<Reference Include="System.Data" />
 		<Reference Include="System.Xml" />
 		<Reference Include="System.Xml.Linq" />
+		<Reference Include="System.Xml.Linq" />
 		<Reference Include="System.Core" />
 		<Reference Include="WindowsBase" />
 	</ItemGroup>

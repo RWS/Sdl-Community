@@ -86,7 +86,7 @@ LanguageWeaverProvider/
 │   ├── Service.cs                  # Shared HTTP helpers (SendRequest, DeserializeResponse, ValidateTokenAsync)
 │   ├── CloudService.cs             # All Cloud API calls (auth, translate, QE, feedback, account)
 │   ├── EdgeService.cs              # All Edge API calls (auth, translate, QE, dictionaries, feedback)
-│   ├── ITranslationEngine.cs       # Abstraction over Cloud / Edge plain-text MT calls
+│   ├── ITranslationEngine.cs       # Abstraction over Cloud / Edge MT calls (seam takes IReadOnlyList<SegmentSerializer>)
 │   ├── CloudTranslationEngine.cs   # ITranslationEngine adapter for CloudService.Translate
 │   ├── EdgeTranslationEngine.cs    # ITranslationEngine adapter for EdgeService.Translate
 │   ├── IBatchTranslator.cs         # Batch-level abstraction returning EvaluatedSegment[]
@@ -96,7 +96,7 @@ LanguageWeaverProvider/
 │   ├── Model/EvaluatedSegment.cs   # Per-segment translation result (Segment + QE label) returned by IBatchTranslator
 │   ├── Model/CloudTranslationRequest.cs   # POST body for v4/mt/translations/async
 │   ├── Model/CloudTranslationStatus.cs    # GET status payload incl. qualityEstimation array + DominantLabel()
-│   ├── Model/EdgeTranslationRequestContent.cs  # POST body for Edge translate (inputFormat: text/html)
+│   ├── Model/EdgeTranslationRequestContent.cs  # POST body for Edge translate (inputFormat: application/x-xliff)
 │   └── CredentialManager.cs       # Reads/writes credentials to/from the Trados credential store
 │
 ├── Studio/
@@ -211,10 +211,10 @@ Each `PairMapping` links a `LanguagePair` to a chosen `PairModel` (the MT model 
 2. The method refreshes options from `ApplicationInitializer.TranslationOptions` and validates the token.
 3. Segments are extracted and optionally processed by the **pre-lookup editor** (`LWSegmentEditor`).
 4. Segments are split into batches and each batch is delegated to `IBatchTranslator.Translate(...)` (default: `PlainTextBatchTranslator`).
-5. The batch translator builds a `SegmentTagPlacer` per source segment, encoding inline tags as `<x id="N"/>` placeholders (with consecutive adjacent tags grouped into a single placeholder), and produces a `string[]` to send to the engine.
+5. The batch translator builds a `SegmentSerializer` per source segment (each owns its XLIFF `<source>` structure and inline `<g>`/`<x>` tags) and passes the `IReadOnlyList<SegmentSerializer>` straight to the engine — no pre-stringified `string[]`, so the engine decides its own wire shape from the structure.
 6. The configured `ITranslationEngine` (`CloudTranslationEngine` or `EdgeTranslationEngine`) calls the underlying static service:
-   - **Cloud**: `CloudService.Translate` → 3-step async at `{baseUri}v4/mt/translations/async` (submit → poll status → GET `/content`)
-   - **Edge**: `EdgeService.Translate` → POST to `{baseUri}api/v2/translations` (form-urlencoded with base64-encoded `\n`-joined input), poll, then GET `/download` and base64-decode
+   - **Cloud**: maps each serializer to its `SerializedSegment` (`string[]` of full XLIFF docs) → `CloudService.Translate` → 3-step async at `{baseUri}v4/mt/translations/async` (submit → poll status → GET `/content`)
+   - **Edge**: `EdgeService.Translate` builds ONE consolidated `application/x-xliff` document directly from the serializers via `SegmentSerializer.CreateTransUnit(i+1)` + `BuildXliffDocument(...)` (no reparse), POSTs base64 of it to `{baseUri}api/v2/translations` (form-urlencoded), polls, then GET `/download`, base64-decodes, and splits the response back per `<trans-unit>`
 7. Each `TranslationResult` (translated text + optional QE label) is rehydrated by the matching `SegmentTagPlacer` into a target `Segment` with the original `Tag` instances re-inserted.
 8. Results are returned as `EvaluatedSegment` (`{ Segment Translation, string QualityEstimation }`) and the QE score is stored in `ApplicationInitializer.RatedSegments`.
 9. The **post-lookup editor** is applied to the translated text.
@@ -277,6 +277,27 @@ All paths relative to the Edge server base URI (stored in `AccessToken.BaseUri`)
 | `/api/v2/dictionaries` | GET | List dictionaries (paged, 1000/page) |
 | `/api/v2/dictionaries/{id}/term` | POST | Add dictionary term |
 | `/api/v2/feedback` | POST | Submit feedback |
+
+---
+
+## Edge tag preservation — XLIFF input MIME matters (empirical findings)
+
+Edge **can** preserve inline tags via XLIFF — but **only** under the dedicated `application/x-xliff` input MIME. This was established with live experiments against `https://mt01.edge.languageweaver.com` (pair `EngGer_AutoAdaptive_SRV_TNM`) plus a live roundtrip integration test. Key facts:
+
+- **Request contract**: Edge's `POST /api/v2/translations` expects `application/x-www-form-urlencoded` (camelCase fields `languagePairId`, `title`, `input` (base64), `inputFormat`, optional `outputFormat`) — **not** JSON. Sending JSON returns `400 Bad Request`. Status is polled at `GET /api/v2/translations/{id}` until `state == "done"`; output is fetched from `GET /api/v2/translations/{id}/download` as a base64 body.
+- **`application/x-xliff` PRESERVES tags** ✅: submitting the `SegmentSerializer` XLIFF 1.2 document under `inputFormat = "application/x-xliff"` with `outputFormat` unset (or also `application/x-xliff`) makes Edge return an XLIFF 1.2 document whose `<alt-trans><target>` keeps **all** inline `<g id="N">…</g>` tags with their original ids, source casing intact (XML declaration not translated). This is exactly the format the working `Latest_XLIFF` branch used. The current branch's `SegmentSerializer` XLIFF therefore works on Edge — it just needs this MIME on the request.
+- **Generic markup MIMEs strip tags** ❌: `text/xml` and `text/html` inputs make Edge treat the payload as content-to-translate — it discards all inline `<g>`/`<x>` tags, translates the flattened text, and returns its **own** XLIFF 2.1 document with zero inline tags (`text/html` additionally re-segments into N units). Likewise `outputFormat = application/xliff` (note: no `x-`) forces that 2.1 flatten path even when the input was `application/x-xliff`. These are the combinations the first experiment tested — which is why it wrongly concluded "Edge can't preserve XLIFF tags". It never tried `application/x-xliff`.
+- **`text/x-line` is for marker text only**: feeding the XLIFF document under `text/x-line` makes Edge translate the literal XML declaration (`<?xml version="1.0"?>` → `<?xml Version="1,0"?>`) and only partially survives. `text/x-line` is correct **only** for `Segment.ToString()` Trados marker lines (`<1 id=5>…</1>`), not for XLIFF.
+- **Batching = ONE consolidated document**: Edge takes a single base64 `input`, so a batch must be ONE XLIFF 1.2 document containing N `<trans-unit id="1..N">` elements (CASE E — works, response echoes the ids with all tags preserved). Concatenating N standalone XLIFF documents joined with `\n` under `application/x-xliff` is rejected with **`400 Bad Request`** (CASE D). The response is one consolidated XLIFF doc that must be split back per `<trans-unit>` by id, **not** by `\n`.
+
+### Production fix — implemented & validated
+
+- **The current branch is the better serialization model**: the single-class `SegmentSerializer` (cleaner than the old `Latest_XLIFF` `XliffConverter` stack) is now used for **both** engines. No separate Edge marker/serialization seam is needed — the earlier "give Edge its own serialization" idea is obsolete.
+- **`EdgeTranslationRequestContent.InputFormat` is now `"application/x-xliff"`** (was `"text/x-line"`), so Edge consumes the same `SegmentSerializer` XLIFF that `PlainTextBatchTranslator` already produces for both engines.
+- **The XLIFF batch shape lives in `SegmentSerializer`, not in `EdgeService`** (option 1 seam refactor): the engine seam now passes `IReadOnlyList<SegmentSerializer>` instead of a pre-serialized `string[]`. `SegmentSerializer` owns its structure once — `CreateTransUnit(int id)` clones the stored `<source>` into a fresh `<trans-unit id="…">`, and the shared static `BuildXliffDocument(src, tgt, transUnits)` wraps any number of trans-units into the XLIFF 1.2 envelope. `SerializedSegment` (Cloud's per-segment string) is just `BuildXliffDocument(..., CreateTransUnit(1))`.
+- **`EdgeService.Translate` builds the consolidated document from structure (no reparse)**: `ConsolidateSegments(...)` composes `serializer.CreateTransUnit(i+1)` for each segment and calls `SegmentSerializer.BuildXliffDocument(...)` with the first serializer's `SourceLanguage`/`TargetLanguage`. The previous `ConsolidateXliffDocuments(...)` (which `XDocument.Parse`d each serialized string back, renumbered ids, and reparsed again just to recover language attributes) plus its `SourceLanguageOf`/`TargetLanguageOf`/`LanguageAttributeOf` helpers and the local `XliffNs` field were removed. `SplitConsolidatedXliffResponse(...)` stays — it parses the genuine external Edge response and maps each `<trans-unit>` back to its segment index by echoed id (missing ids → empty translation).
+- **Response parsing**: under `application/x-xliff` Edge nests the result in `<alt-trans><target xml:lang="…">…</target></alt-trans>` (XLIFF 1.2). `SegmentSerializer.DeserializeSegment` already locates `<target>` via `Descendants()` (any depth) and matches `<g>`/`<x>` by `LocalName`, so it parses each extracted `<trans-unit>` fragment unchanged — no serializer change was required.
+- **Validation**: `TranslationRoundtripTest_Edge` was re-pointed at this XLIFF path (asserts tag anchor/type multisets, mirroring the Cloud test) and passes **11/11 live**, including the deeply-nested 8-tag "Face Exhaling" emoji case that previously failed under `text/x-line`. The temporary `EdgeInputFormatExperiment` / `EdgeBatchResponseShapeExperiment` files were deleted.
 
 ---
 
@@ -368,7 +389,7 @@ A live integration test file that exercises the Language Weaver API directly (ou
 - Auth is bypassed entirely — a Bearer token is hardcoded in `AccessTokenValue`. Paste a current token there before running.
 - `SourceLang`, `TargetLang`, `Model`, and `Region` are hardcoded constants. Change them directly in the file.
 - The token is hardcoded (not an env var) because this is a private diagnostic tool, not CI.
-- Tests use `ITestOutputHelper` for all output. Run via `vstest.console.exe` (not `dotnet test`).
+- Run via `vstest.console.exe` (not `dotnet test`).
 
 **Tests:**
 - `TagPlacement_XML` / `TagPlacement_PLAIN` — send two representative segments under each format and log every raw HTTP response body.

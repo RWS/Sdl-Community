@@ -1,6 +1,5 @@
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Services.Model;
-using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using System;
 using System.Collections.Generic;
@@ -17,8 +16,7 @@ namespace LanguageWeaverProvider.Services
     /// </summary>
     public sealed class PlainTextBatchTranslator(
         ITranslationEngine translationEngine,
-        Func<AccessToken> accessTokenAccessor,
-        CultureCode targetCulture)
+        Func<AccessToken> accessTokenAccessor)
         : IBatchTranslator
     {
         private readonly Func<AccessToken> _accessTokenAccessor = accessTokenAccessor ?? throw new ArgumentNullException(nameof(accessTokenAccessor));
@@ -28,29 +26,30 @@ namespace LanguageWeaverProvider.Services
         {
             if (sourceSegments is null || sourceSegments.Count == 0) return [];
 
-            var placers = sourceSegments.Select(s => new SegmentTagPlacer(s)).ToArray();
-            var plainTexts = placers.Select(p => p.PreparedText).ToArray();
+            var segmentSerializers = sourceSegments
+                .Select(sourceSegment => new SegmentSerializer(sourceSegment, mappedPair.SourceCode, mappedPair.TargetCode))
+                .ToArray();
 
             var translationResults = _translationEngine
-                .TranslateAsync(_accessTokenAccessor(), mappedPair, plainTexts)
+                .TranslateAsync(_accessTokenAccessor(), mappedPair, segmentSerializers)
                 .Result;
 
             if (translationResults is null) return [];
 
-            var evaluated = new EvaluatedSegment[placers.Length];
-            for (var i = 0; i < placers.Length; i++)
+            var evaluated = new EvaluatedSegment[segmentSerializers.Length];
+            for (var i = 0; i < segmentSerializers.Length; i++)
             {
                 var translation = i < translationResults.Count ? translationResults[i] : null;
-                evaluated[i] = ToEvaluatedSegment(translation, placers[i]);
+                evaluated[i] = ToEvaluatedSegment(translation, segmentSerializers[i]);
             }
 
             return evaluated;
         }
 
-        private EvaluatedSegment ToEvaluatedSegment(TranslationResult result, SegmentTagPlacer placer)
+        private EvaluatedSegment ToEvaluatedSegment(TranslationResult result, SegmentSerializer segmentSerializer)
         {
             var translatedText = result?.Translation ?? string.Empty;
-            var targetSegment = placer.BuildTargetSegment(translatedText, targetCulture);
+            var targetSegment = segmentSerializer.DeserializeSegment(translatedText);
             return new EvaluatedSegment
             {
                 Translation = targetSegment,

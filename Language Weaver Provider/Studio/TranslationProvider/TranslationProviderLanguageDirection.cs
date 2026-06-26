@@ -16,6 +16,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
+using SegmentSerializer = LanguageWeaverProvider.Services.SegmentSerializer;
 
 namespace LanguageWeaverProvider;
 
@@ -36,7 +37,7 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
         TranslationProvider = translationProvider;
         _translationOptions = translationOptions;
         _languagePair = languagePair;
-        _batchTranslator = new PlainTextBatchTranslator(translationEngine, () => _translationOptions.AccessToken, languagePair.TargetCulture);
+        _batchTranslator = new PlainTextBatchTranslator(translationEngine, () => _translationOptions.AccessToken);
         CredentialManager.GetCredentials(translationOptions, true);
 
         if (_translationOptions.ProviderSettings.UsePrelookup)
@@ -94,6 +95,8 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
 
     public SearchResults[] SearchTranslationUnitsMasked(SearchSettings settings, TranslationUnit[] translationUnits, bool[] mask)
     {
+        //SegmentSerializer.CaptureSegmentsToFile(translationUnits.Select(tu => tu.SourceSegment).ToList(),
+        //    @"C:\TestData\Emoji");
         ApplicationInitializer.TranslationOptions ??= new Dictionary<string, ITranslationOptions>();
         if (ApplicationInitializer.TranslationOptions.TryGetValue(_translationOptions.Id, out var currentOptions))
         {

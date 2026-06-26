@@ -264,14 +264,14 @@ namespace LanguageWeaverProvider.Services
         private static CloudTranslationRequest CreateTranslationRequest(PairMapping mappedPair, string[] plainTextSegments)
         {
             var linguisticOptionsDictionary = mappedPair.LinguisticOptions?.ToDictionary(lo => lo.Id, lo => lo.SelectedValue);
-            var dictionaries = mappedPair.Dictionaries.Where(d => d.IsSelected).Select(d => d.DictionaryId).ToArray();
+            var dictionaries = mappedPair.Dictionaries?.Where(d => d.IsSelected).Select(d => d.DictionaryId).ToArray();
 
             return new CloudTranslationRequest
             {
                 SourceLanguageId = mappedPair.SourceCode,
                 TargetLanguageId = mappedPair.TargetCode,
                 Input = plainTextSegments,
-                InputFormat = "HTML",
+                InputFormat = "XLIFF",
                 Model = mappedPair.SelectedModel.Model,
                 Dictionaries = dictionaries,
                 LinguisticOptions = linguisticOptionsDictionary,
