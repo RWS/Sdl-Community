@@ -120,8 +120,16 @@ namespace LanguageWeaverProvider.Extensions
 
                 if (assignAccessToken)
                 {
-                    var accessToken = parsedObject[TokenKey].ToString();
-                    AssignAccessToken(translationOptions, accessToken);
+                    // A persisted provider may legitimately have no token (e.g. an EdgeSSO session that was never
+                    // established or has been cleared): the JSON then has no "accessToken" key. Read it null-safely
+                    // and skip assignment instead of letting parsedObject[TokenKey].ToString() throw an NRE that the
+                    // catch below silently swallows. AccessToken stays null and is surfaced as an actionable
+                    // "please sign in" message by Service.ValidateTokenAsync at point of use.
+                    var accessToken = parsedObject[TokenKey]?.ToString();
+                    if (!string.IsNullOrEmpty(accessToken))
+                    {
+                        AssignAccessToken(translationOptions, accessToken);
+                    }
                 }
             }
             catch { }

@@ -64,7 +64,20 @@ namespace LanguageWeaverProvider.Services
 
         public static async Task<bool> ValidateTokenAsync(ITranslationOptions translationOptions, bool showErrors = true)
         {
-            if (translationOptions.AccessToken is null) return false;
+            if (translationOptions.AccessToken is null)
+            {
+                // A persisted EdgeSSO provider with no token has never completed (or has lost) its interactive
+                // sign-in. There is no token to refresh and no silent renewal path, so treat it exactly like an
+                // expired session: signal the batch path to prompt re-sign-in and abort, instead of returning
+                // false and letting translation proceed with a null token (a confusing NRE deep in EdgeService).
+                if (translationOptions.PluginVersion == PluginVersion.LanguageWeaverEdge
+                 && translationOptions.AuthenticationType == AuthenticationType.EdgeSSO)
+                {
+                    throw new EdgeSessionExpiredException("Your Language Weaver Edge session has expired. Please sign in again to continue translating.");
+                }
+
+                return false;
+            }
 
             if (
                 translationOptions.AuthenticationType == AuthenticationType.CloudSSO
