@@ -16,7 +16,6 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
-using TranslationUnit = Sdl.LanguagePlatform.TranslationMemory.TranslationUnit;
 
 namespace LanguageWeaverProvider;
 
@@ -129,6 +128,8 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
             var evaluatedSegments = _batchTranslator.Translate(batchSegments, mappedPair);
             allEvaluatedSegments.AddRange(evaluatedSegments);
         }
+
+        if (!allEvaluatedSegments.Any()) return searchResults;
 
         var translatedSegments = allEvaluatedSegments.Select(seg => seg.Translation).ToList();
 
