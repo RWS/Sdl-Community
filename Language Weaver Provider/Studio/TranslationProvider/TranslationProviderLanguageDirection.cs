@@ -103,7 +103,21 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
             _translationOptions = currentOptions;
         }
 
-        Service.ValidateTokenAsync(_translationOptions, false);
+        // Block until validation/refresh completes so an expired token is replaced BEFORE we translate.
+        // SearchTranslationUnitsMasked is synchronous and the batch path already blocks on async via .Result,
+        // so awaiting synchronously here is consistent and prevents sending a stale (expired) token.
+        try
+        {
+            Service.ValidateTokenAsync(_translationOptions, false).GetAwaiter().GetResult();
+        }
+        catch (EdgeSessionExpiredException ex)
+        {
+            // EdgeSSO tokens can only be renewed through an interactive sign-in, which cannot run from this
+            // synchronous batch path. Surface a clear, actionable message and abort instead of sending an
+            // expired token that the server would reject with 401 Unauthorized.
+            ex.ShowDialog("Session expired", ex.Message);
+            return new SearchResults[mask.Length];
+        }
 
         ManageBatchTaskWindow(true);
         var searchResults = new SearchResults[mask.Length];

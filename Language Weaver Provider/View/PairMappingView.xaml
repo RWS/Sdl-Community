@@ -427,17 +427,26 @@
                     Width="176"
                     Height="32"
                     Margin="0 8 8 0" />
-            <Button Content="{x:Static root:PluginResources.PairMappingView_Buttons_Settings}"
-                    Style="{StaticResource Sdl.Button.SecondaryStyle}"
-                    Command="{Binding OpenSettingsViewCommand}"
-                    Visibility="{Binding ShowSettingsView, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+			<Button Content="{x:Static root:PluginResources.PairMappingView_Buttons_Settings}"
+					Style="{StaticResource Sdl.Button.SecondaryStyle}"
+					Command="{Binding OpenSettingsViewCommand}"
+					Visibility="{Binding ShowSettingsView, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverted}"
 					IsEnabled="{Binding LoadingAction, Converter={StaticResource EmptyStringToBooleanConverter}, ConverterParameter=Inverted}"
 					FontSize="11"
 					FontWeight="DemiBold"
-                    Width="120"
-                    Height="32"
-                    Margin="8 8 8 0" />
-        </StackPanel>
+					Width="120"
+					Height="32"
+					Margin="8 8 8 0" />
+			<Button Content="{x:Static root:PluginResources.PairMappingView_Buttons_SignInAgain}"
+					Style="{StaticResource Sdl.Button.SecondaryStyle}"
+					Command="{Binding SignInAgainCommand}"
+					IsEnabled="{Binding LoadingAction, Converter={StaticResource EmptyStringToBooleanConverter}, ConverterParameter=Inverted}"
+					FontSize="11"
+					FontWeight="DemiBold"
+					Width="120"
+					Height="32"
+					Margin="8 8 8 0" />
+		</StackPanel>
 
         <StackPanel Grid.Row="2"
                     Grid.Column="1"

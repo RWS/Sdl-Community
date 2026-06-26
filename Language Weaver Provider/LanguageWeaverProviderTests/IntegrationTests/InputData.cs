@@ -16,6 +16,8 @@ namespace LanguageWeaverProviderTests.IntegrationTests
             SourceSegments.AddRange(File.ReadAllLines(@"C:\TestData\SamplePhotoPrinter").Select(TestHelper.DeserializeSegmentFromBase64).ToList());
             SourceSegments.AddRange(File.ReadAllLines(@"C:\TestData\SecondSample").Select(TestHelper.DeserializeSegmentFromBase64).ToList());
             SourceSegments.AddRange(File.ReadAllLines(@"C:\TestData\Emoji").Select(TestHelper.DeserializeSegmentFromBase64).ToList());
+            SourceSegments.AddRange(File.ReadAllLines(@"C:\TestData\Subscript").Select(TestHelper.DeserializeSegmentFromBase64).ToList());
+            SourceSegments.AddRange(File.ReadAllLines(@"C:\TestData\SampleWithLockedTags").Select(TestHelper.DeserializeSegmentFromBase64).ToList());
 
             foreach (var segment in SourceSegments.Where(seg=>seg.HasTags))
                 yield return [segment];

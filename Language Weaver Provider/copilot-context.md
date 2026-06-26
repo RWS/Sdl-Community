@@ -83,9 +83,9 @@ LanguageWeaverProvider/
 │   └── …
 │
 ├── Services/
-│   ├── Service.cs                  # Shared HTTP helpers (SendRequest, DeserializeResponse, ValidateTokenAsync)
+│   ├── Service.cs                  # Shared HTTP helpers (SendRequest, DeserializeResponse, ValidateTokenAsync) + EdgeSessionExpired gate
 │   ├── CloudService.cs             # All Cloud API calls (auth, translate, QE, feedback, account)
-│   ├── EdgeService.cs              # All Edge API calls (auth, translate, QE, dictionaries, feedback)
+│   ├── EdgeService.cs              # All Edge API calls (auth, translate, QE, dictionaries, feedback); EnsureExpiryPopulated self-heals JWT expiry
 │   ├── EdgeXliffBatch.cs           # Pure (no-I/O) Edge XLIFF batching: Consolidate(serializers) / Split(response) — unit-tested
 │   ├── SegmentSerializer.cs        # Segment <-> XLIFF 1.2 (CreateTransUnit, BuildXliffDocument, DeserializeSegment, ExtractQualityEstimation) — shared by both engines
 │   ├── ITranslationEngine.cs       # Abstraction over Cloud / Edge MT calls (seam takes IReadOnlyList<SegmentSerializer>)
@@ -99,7 +99,7 @@ LanguageWeaverProvider/
 │   ├── Model/CloudTranslationRequest.cs   # POST body for v4/mt/translations/async
 │   ├── Model/CloudTranslationStatus.cs    # GET status payload (translationStatus, stats, language pairs) — used only to poll to DONE
 │   ├── Model/EdgeTranslationRequestContent.cs  # POST body for Edge translate (inputFormat: application/x-xliff)
-│   └── CredentialManager.cs       # Reads/writes credentials to/from the Trados credential store
+│   └── CredentialManager.cs       # Reads/writes credentials to/from the Trados credential store; self-heals stale token expiry on rehydration
 │
 ├── Studio/
 │   ├── TranslationProvider/
@@ -314,6 +314,7 @@ The test project (`LanguageWeaverProviderTests`, `net48` / xUnit 2.9.3) now has 
 - **`UnitTests/TestSegmentBuilder.cs`** — fluent in-memory `Segment` builder. Tags are constructed with explicit anchors via the SDL `new Tag(TagType, tagId, anchor)` constructor (`StartTag`/`EndTag`/`Placeholder`/`Paired`), so unit tests never touch Studio or disk.
 - **`UnitTests/EdgeXliffBatchTests.cs`** (9 tests) — drives `EdgeXliffBatch`: consolidate (empty → no trans-units, single → id 1, N → ids 1..N, inline `<g>`/`<x>` preserved, languages taken from the first serializer) and split (ids align by index, missing id → empty string, out-of-range id ignored, nested `<alt-trans><target>` retained).
 - **`UnitTests/SegmentSerializerTests.cs`** (13 tests) — characterizes `SegmentSerializer`: serialization shape (`source`/`target-language` on `<file>`, paired → `<g>`, standalone → `<x>`), deserialize edge cases (empty response → empty segment, no `<target>` → throws), and full in-memory round-trips via an `EchoAsTarget` helper that mirrors the Edge `<alt-trans><target>` shape. `RoundTrip_ReusesOriginalTagInstancesByAnchor` uses `Assert.Same` to lock in that original `Tag` instances are recovered by anchor. The `ExtractQualityEstimation_*` tests pin QE extraction against the real `genericqe` (Good/Poor) and `generic` (no `match-quality` → null) XLIFF captured live from the Cloud API, plus null/empty/whitespace inputs.
+- **`UnitTests/EdgeTokenExpiryTests.cs`** (6 tests) — drives `EdgeService.EnsureExpiryPopulated` (see *Token expiry self-heal*). One pinned regression test reproduces the live debugger state (an Edge SSO Bearer JWT whose `ExpiresAt` rehydrated as 0) and asserts it is repaired to `exp * 1000`, clock-independently. The other five each kill a distinct mutation of the guard logic: future-dated Bearer → positive validity, already-populated expiry not overwritten, Basic (JWT-shaped but `TokenType = "Basic"`) left at 0 by the Bearer guard, malformed Bearer left at 0 by the parse try/catch, and null → no throw.
 
 Run them with `vstest.console.exe` (or VS Test Explorer); the two live `IntegrationTests` remain untouched and are skipped offline (they need a valid Edge/Cloud token).
 
@@ -344,6 +345,17 @@ Run them with `vstest.console.exe` (or VS Test Explorer); the two live `Integrat
 2. **Windows Credential Manager** (`WindowsCredentialStore/CredentialStore.cs`) – persists credentials across sessions using P/Invoke (`advapi32.dll`).
 
 `CredentialManager` (in `Extensions/`) bridges these two stores.
+
+### Token expiry self-heal (Edge SSO)
+
+`AccessToken` carries two expiry fields — `ExpiresAt` (absolute, ms since epoch) and `ValidityInSeconds` — that are persisted **separately** from the JWT in the credential store. The authoritative expiry, however, is the `exp` claim **inside** the Edge SSO Bearer JWT itself. When a token is rehydrated from storage with `ExpiresAt = 0` (e.g. saved before expiry parsing existed, or assigned without running `SetAccessToken`), `Service.ValidateTokenAsync` would wrongly raise `EdgeSessionExpiredException` for a session whose JWT is still valid for hours.
+
+`EdgeService.EnsureExpiryPopulated(AccessToken)` repairs this: for a `Bearer` token with `ExpiresAt <= 0` it re-derives expiry from the JWT `exp` claim (`ExpiresAt = exp * 1000`, `ValidityInSeconds = max(0, exp - now)`). It is a no-op for already-populated tokens, non-`Bearer` (Basic/API-key) tokens, malformed JWTs, and null. It is called from two seams so handling is centralized:
+
+- `EdgeService.SetAccessToken(...)` — at the point a fresh token is built.
+- `CredentialManager.AssignAccessToken(...)` — right after the stored token JSON is deserialized, so stale cached values are repaired on load.
+
+> **ponytail:** the repair is in-memory only; it does not rewrite the credential store unless later logic explicitly calls `UpdateCredentials(...)` after a change.
 
 ---
 

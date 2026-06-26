@@ -408,6 +408,9 @@ Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
   <data name="PairMappingView_Buttons_Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
+  <data name="PairMappingView_Buttons_SignInAgain" xml:space="preserve">
+    <value>Sign in again</value>
+  </data>
   <data name="PairModel_Dictionary_NotSelected" xml:space="preserve">
     <value>Select dictionaries</value>
   </data>

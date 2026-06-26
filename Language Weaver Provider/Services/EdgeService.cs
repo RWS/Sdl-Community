@@ -349,7 +349,78 @@ namespace LanguageWeaverProvider.Services
         }
 
         private static void SetAccessToken(ITranslationOptions translationOptions, string token, string tokenType, Uri edgeUri)
-                                                            => translationOptions.AccessToken = new() { Token = token, TokenType = tokenType, BaseUri = edgeUri };
+        {
+            var accessToken = new AccessToken
+            {
+                Token = token,
+                TokenType = tokenType,
+                BaseUri = edgeUri
+            };
+
+            // Bearer tokens issued by Edge are JWTs whose payload carries an "exp" claim (seconds since Unix epoch).
+            // Basic tokens (API key auth) are opaque and have no expiry from the client's perspective; leave ExpiresAt = 0.
+            EnsureExpiryPopulated(accessToken);
+
+            translationOptions.AccessToken = accessToken;
+        }
+
+        /// <summary>
+        /// Populates <see cref="AccessToken.ExpiresAt"/> and <see cref="AccessToken.ValidityInSeconds"/> from the
+        /// JWT "exp" claim when they are missing. A Bearer token rehydrated from the credential store (or persisted
+        /// before expiry parsing existed) can come back with ExpiresAt = 0 even though the JWT itself is still valid;
+        /// the "exp" claim travels with the token and is the authoritative source of truth, so we re-derive from it
+        /// instead of treating a live session as expired. Basic (API key) tokens are opaque and left untouched.
+        /// </summary>
+        public static void EnsureExpiryPopulated(AccessToken accessToken)
+        {
+            if (accessToken is null || accessToken.ExpiresAt > 0)
+            {
+                return;
+            }
+
+            if (!string.Equals(accessToken.TokenType, "Bearer", StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
+            var expSeconds = TryGetJwtExpirySeconds(accessToken.Token);
+            if (expSeconds > 0)
+            {
+                accessToken.ExpiresAt = expSeconds * 1000L;
+                accessToken.ValidityInSeconds = Math.Max(0L, expSeconds - DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+            }
+        }
+
+        private static long TryGetJwtExpirySeconds(string token)
+        {
+            if (string.IsNullOrEmpty(token)) return 0;
+
+            var parts = token.Split('.');
+            if (parts.Length != 3) return 0;
+
+            try
+            {
+                var payloadJson = Encoding.UTF8.GetString(Base64UrlDecode(parts[1]));
+                var payload = JObject.Parse(payloadJson);
+                var expValue = payload["exp"];
+                return expValue?.Value<long?>() ?? 0;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        private static byte[] Base64UrlDecode(string base64Url)
+        {
+            var s = base64Url.Replace('-', '+').Replace('_', '/');
+            switch (s.Length % 4)
+            {
+                case 2: s += "=="; break;
+                case 3: s += "="; break;
+            }
+            return Convert.FromBase64String(s);
+        }
 
         private static async Task WaitForTranslationCompletion(AccessToken accessToken, string translationId)
         {

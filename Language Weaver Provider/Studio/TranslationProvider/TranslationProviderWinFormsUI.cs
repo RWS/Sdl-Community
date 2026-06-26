@@ -69,7 +69,9 @@ namespace LanguageWeaverProvider
 
         private PairMappingViewModel ShowPairMappingView(LanguagePair[] languagePairs, ITranslationOptions translationOptions)
         {
-            Service.ValidateTokenAsync(translationOptions);
+            // Route through the guarded path so an expired EdgeSSO session doesn't escape as an unobserved
+            // task exception; the pair-mapping view exposes a "Sign in again" button for remediation.
+            _ = Service.ValidateAndUpdateTokenAsync(translationOptions, null, showErrors: true);
             var pairMappingViewModel = new PairMappingViewModel(translationOptions, languagePairs);
             var pairMappingView = new PairMappingView() { DataContext = pairMappingViewModel };
             pairMappingViewModel.CloseEventRaised += pairMappingView.Close;
