@@ -1,5 +1,6 @@
 ﻿using LanguageMappingProvider;
 using LanguageWeaverProvider.Command;
+using LanguageWeaverProvider.Extensions;
 using LanguageWeaverProvider.LanguageMappingProvider;
 using LanguageWeaverProvider.LanguageMappingProvider.View;
 using LanguageWeaverProvider.LanguageMappingProvider.ViewModel;
@@ -93,6 +94,8 @@ namespace LanguageWeaverProvider.ViewModel
         public bool SaveChanges { get; private set; }
 
         public ICommand SaveCommand { get; private set; }
+
+        public ICommand SignInAgainCommand { get; private set; }
 
         public PairMapping SelectedPairMapping
         {
@@ -226,6 +229,7 @@ namespace LanguageWeaverProvider.ViewModel
             OpenSettingsViewCommand = new RelayCommand(OpenSettingsView);
             ResetAndIdentifyPairsCommand = new RelayCommand(ResetAndIdentifyPairs);
             OpenLanguageMappingProviderViewCommand = new RelayCommand(OpenLanguageMappingProviderView);
+            SignInAgainCommand = new RelayCommand(SignInAgain);
         }
 
         private void InitializeSettingsView()
@@ -359,6 +363,39 @@ namespace LanguageWeaverProvider.ViewModel
             _translationOptions.ProviderSettings.UsePostLookup = SettingsView.UsePostLookup;
             _translationOptions.ProviderSettings.PostLookupFilePath = SettingsView.PostLookupFilePath;
             CloseEventRaised.Invoke();
+        }
+
+        private void SignInAgain(object parameter)
+        {
+            var serviceName = _translationOptions.PluginVersion switch
+            {
+                PluginVersion.LanguageWeaverCloud => Constants.CloudService,
+                PluginVersion.LanguageWeaverEdge => Constants.EdgeService,
+                _ => null
+            };
+
+            if (serviceName is null)
+            {
+                return;
+            }
+
+            var credentialsMainViewModel = new CredentialsMainViewModel(_translationOptions);
+            var credentialsMainView = new CredentialsMainView { DataContext = credentialsMainViewModel };
+            credentialsMainViewModel.CloseEventRaised += credentialsMainView.Close;
+            credentialsMainViewModel.SelectLanguageWeaverServiceCommand.Execute(serviceName);
+            credentialsMainView.ShowDialog();
+
+            if (!credentialsMainViewModel.SaveChanges)
+            {
+                return;
+            }
+
+            if (ApplicationInitializer.CredentialStore is not null)
+            {
+                CredentialManager.UpdateCredentials(ApplicationInitializer.CredentialStore, _translationOptions);
+            }
+
+            CloseEventRaised?.Invoke();
         }
 
         private void SetHeader()

@@ -16,7 +16,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
-using TranslationUnit = Sdl.LanguagePlatform.TranslationMemory.TranslationUnit;
+using SegmentSerializer = LanguageWeaverProvider.Services.SegmentSerializer;
 
 namespace LanguageWeaverProvider;
 
@@ -37,7 +37,7 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
         TranslationProvider = translationProvider;
         _translationOptions = translationOptions;
         _languagePair = languagePair;
-        _batchTranslator = new PlainTextBatchTranslator(translationEngine, () => _translationOptions.AccessToken, languagePair.TargetCulture);
+        _batchTranslator = new PlainTextBatchTranslator(translationEngine, () => _translationOptions.AccessToken);
         CredentialManager.GetCredentials(translationOptions, true);
 
         if (_translationOptions.ProviderSettings.UsePrelookup)
@@ -95,13 +95,29 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
 
     public SearchResults[] SearchTranslationUnitsMasked(SearchSettings settings, TranslationUnit[] translationUnits, bool[] mask)
     {
+        //SegmentSerializer.CaptureSegmentsToFile(translationUnits.Select(tu => tu.SourceSegment).ToList(),
+        //    @"C:\TestData\Emoji");
         ApplicationInitializer.TranslationOptions ??= new Dictionary<string, ITranslationOptions>();
         if (ApplicationInitializer.TranslationOptions.TryGetValue(_translationOptions.Id, out var currentOptions))
         {
             _translationOptions = currentOptions;
         }
 
-        Service.ValidateTokenAsync(_translationOptions, false);
+        // Block until validation/refresh completes so an expired token is replaced BEFORE we translate.
+        // SearchTranslationUnitsMasked is synchronous and the batch path already blocks on async via .Result,
+        // so awaiting synchronously here is consistent and prevents sending a stale (expired) token.
+        try
+        {
+            Service.ValidateTokenAsync(_translationOptions, false).GetAwaiter().GetResult();
+        }
+        catch (EdgeSessionExpiredException ex)
+        {
+            // EdgeSSO tokens can only be renewed through an interactive sign-in, which cannot run from this
+            // synchronous batch path. Surface a clear, actionable message and abort instead of sending an
+            // expired token that the server would reject with 401 Unauthorized.
+            ex.ShowDialog("Session expired", ex.Message);
+            return new SearchResults[mask.Length];
+        }
 
         ManageBatchTaskWindow(true);
         var searchResults = new SearchResults[mask.Length];
@@ -129,6 +145,8 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
             var evaluatedSegments = _batchTranslator.Translate(batchSegments, mappedPair);
             allEvaluatedSegments.AddRange(evaluatedSegments);
         }
+
+        if (!allEvaluatedSegments.Any()) return searchResults;
 
         var translatedSegments = allEvaluatedSegments.Select(seg => seg.Translation).ToList();
 

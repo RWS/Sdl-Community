@@ -7,9 +7,12 @@ namespace LanguageWeaverProvider.Services.Model
 {
 	public class EdgeTranslationRequestContent
 	{
-        const string PlainTextMimeType = "text/html";
+		// Edge preserves inline <g>/<x> tags only under the dedicated XLIFF MIME. Generic markup
+		// MIMEs (text/xml, text/html) and the line format (text/x-line) make Edge translate the
+		// payload as content and strip the tags. Verified live against mt01.edge.languageweaver.com.
+		const string XliffMimeType = "application/x-xliff";
 
-        public EdgeTranslationRequestContent(PairMapping pairMapping, string input)
+		public EdgeTranslationRequestContent(PairMapping pairMapping, string input)
 		{
 			LanguagePairId = pairMapping.SelectedModel.Model;
 			Input = input;
@@ -28,7 +31,7 @@ namespace LanguageWeaverProvider.Services.Model
 		public string Input { get;  }
 
 		[JsonProperty("inputFormat")]
-		public string InputFormat => PlainTextMimeType;
+		public string InputFormat => XliffMimeType;
 
 		[JsonProperty("dictionaryIds")]
 		public string DictionaryIds { get; }

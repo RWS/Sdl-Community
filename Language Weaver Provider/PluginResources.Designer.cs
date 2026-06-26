@@ -922,7 +922,16 @@ namespace LanguageWeaverProvider {
                 return ResourceManager.GetString("PairMappingView_Buttons_Settings", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to Sign in again.
+        /// </summary>
+        public static string PairMappingView_Buttons_SignInAgain {
+            get {
+                return ResourceManager.GetString("PairMappingView_Buttons_SignInAgain", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Select dictionaries.
         /// </summary>

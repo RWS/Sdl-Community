@@ -228,16 +228,18 @@ namespace LanguageWeaverProvider.Services
         public static async Task<IReadOnlyList<TranslationResult>> Translate(AccessToken accessToken, PairMapping mappedPair, string[] plainTextSegments)
         {
             var translationResponse = await SendTranslationRequest(accessToken, mappedPair, plainTextSegments);
-            var translationStatus = await WaitForTranslationCompletion(accessToken, translationResponse.RequestId);
+            await WaitForTranslationCompletion(accessToken, translationResponse.RequestId);
             var content = await GetTranslationInfo<CloudTranslationResponse>(accessToken, translationResponse.RequestId, "content");
 
             var results = new List<TranslationResult>(content.Translation.Count);
             for (var i = 0; i < content.Translation.Count; i++)
             {
-                var qe = translationStatus.QualityEstimation != null && i < translationStatus.QualityEstimation.Count
-                    ? translationStatus.QualityEstimation[i].DominantLabel()
-                    : null;
-                results.Add(new TranslationResult { Translation = content.Translation[i], QualityEstimation = qe });
+                var translatedXliff = content.Translation[i];
+                results.Add(new TranslationResult
+                {
+                    Translation = translatedXliff,
+                    QualityEstimation = SegmentSerializer.ExtractQualityEstimation(translatedXliff)
+                });
             }
 
             return results;
@@ -264,14 +266,14 @@ namespace LanguageWeaverProvider.Services
         private static CloudTranslationRequest CreateTranslationRequest(PairMapping mappedPair, string[] plainTextSegments)
         {
             var linguisticOptionsDictionary = mappedPair.LinguisticOptions?.ToDictionary(lo => lo.Id, lo => lo.SelectedValue);
-            var dictionaries = mappedPair.Dictionaries.Where(d => d.IsSelected).Select(d => d.DictionaryId).ToArray();
+            var dictionaries = mappedPair.Dictionaries?.Where(d => d.IsSelected).Select(d => d.DictionaryId).ToArray();
 
             return new CloudTranslationRequest
             {
                 SourceLanguageId = mappedPair.SourceCode,
                 TargetLanguageId = mappedPair.TargetCode,
                 Input = plainTextSegments,
-                InputFormat = "HTML",
+                InputFormat = "XLIFF",
                 Model = mappedPair.SelectedModel.Model,
                 Dictionaries = dictionaries,
                 LinguisticOptions = linguisticOptionsDictionary,

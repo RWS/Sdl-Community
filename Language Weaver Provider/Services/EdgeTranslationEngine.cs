@@ -7,7 +7,7 @@ namespace LanguageWeaverProvider.Services
 {
     public class EdgeTranslationEngine : ITranslationEngine
     {
-        public Task<IReadOnlyList<TranslationResult>> TranslateAsync(AccessToken accessToken, PairMapping mappedPair, string[] plainTextSegments)
-            => EdgeService.Translate(accessToken, mappedPair, plainTextSegments);
+        public Task<IReadOnlyList<TranslationResult>> TranslateAsync(AccessToken accessToken, PairMapping mappedPair, IReadOnlyList<SegmentSerializer> segmentSerializers)
+            => EdgeService.Translate(accessToken, mappedPair, segmentSerializers);
     }
 }
