@@ -38,7 +38,6 @@ namespace Trados.Transcreate.Common
 
 				// Roll over the log every 10 MB
 				ArchiveAboveSize = 10000000,
-				ArchiveNumbering = ArchiveNumberingMode.Date
 			};
 
 			config.AddTarget(target);
