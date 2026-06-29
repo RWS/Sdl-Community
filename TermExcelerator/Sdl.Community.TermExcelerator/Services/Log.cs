@@ -29,7 +29,6 @@ namespace Sdl.Community.TermExcelerator.Services
 				FileName = Path.Combine(logDirectoryPath, "TermExcelerator.txt"),
 				// Roll over the log every 10 MB
 				ArchiveAboveSize = 10000000,
-				ArchiveNumbering = ArchiveNumberingMode.Date,
 
 				// Path.combine nor string.format like the {#####}, which is used to replace the date, therefore
 				// we need to do basic string concatenation.
