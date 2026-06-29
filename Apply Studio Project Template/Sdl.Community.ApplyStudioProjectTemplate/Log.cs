@@ -26,7 +26,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                 Name = "ApplyStudioProjectTemplate",
                 FileName = Path.Combine(logDirectoryPath, "ApplyStudioProjectTemplateLogs.txt"),
                 ArchiveEvery = FileArchivePeriod.Day,
-                ArchiveNumbering = ArchiveNumberingMode.Date,
                 Layout = "${logger}: ${longdate} ${level} ${message}  ${exception}"
             };
 
