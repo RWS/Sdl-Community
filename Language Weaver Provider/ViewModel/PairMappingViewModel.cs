@@ -224,20 +224,9 @@ namespace LanguageWeaverProvider.ViewModel
 
         public static PairModel SelectDefault(PluginVersion pluginVersion, IReadOnlyList<PairModel> models)
         {
-            // ponytail: Pro is detected by a case-insensitive substring match on Model, which can
-            // false-positive on an unrelated model code that embeds those letters (e.g. "improved",
-            // "approval"). Upgrade path: match an exact model token or a dedicated Pro flag once the
-            // API exposes a reliable Pro indicator.
-            if (pluginVersion == PluginVersion.LanguageWeaverCloud)
-            {
-                var proModel = models?.FirstOrDefault(model => model.Model?.IndexOf("pro", StringComparison.OrdinalIgnoreCase) >= 0);
-                if (proModel is not null)
-                {
-                    return proModel;
-                }
-            }
-
-            return models?.FirstOrDefault();
+            if (pluginVersion != PluginVersion.LanguageWeaverCloud) return models?.FirstOrDefault();
+            return models?.FirstOrDefault(model =>
+                model.Model?.IndexOf("pro", StringComparison.OrdinalIgnoreCase) >= 0) ?? models?.FirstOrDefault();
         }
 
         private void InitializeCommands()
