@@ -30,7 +30,6 @@ namespace Sdl.Community.AntidoteVerifier
                 Name = "AntidoteVerifier",
                 FileName = Path.Combine(logDirectoryPath, "AntidoteVerifier.Logs.txt"),
                 ArchiveEvery = FileArchivePeriod.Day,
-                ArchiveNumbering = ArchiveNumberingMode.Date,
                 Encoding = Encoding.UTF8,
                 Layout = "${logger}: ${longdate} ${level} ${message}  ${exception}"
             };
