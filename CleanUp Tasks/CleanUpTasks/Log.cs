@@ -28,7 +28,6 @@ namespace SDLCommunityCleanUpTasks
 				FileName = Path.Combine(logDirectoryPath, "CleanUpTasksLogs.txt"),
 				// Roll over the log every 10 MB
 				ArchiveAboveSize = 10000000,
-				ArchiveNumbering = ArchiveNumberingMode.Date,
 
 				// Path.combine nor string.format like the {#####}, which is used to replace the date, therefore
 				// we need to do basic string concatenation.
