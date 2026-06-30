@@ -7,13 +7,13 @@ resources:
 
 trigger: none
 
-pr:
-  branches:
-    include:
-     - Studio_2026
-  paths:
-    include:
-     - TermExcelerator/*
+#pr:
+#  branches:
+#    include:
+#     - Studio_2026
+#  paths:
+#    include:
+#     - TermExcelerator/*
 
 variables: 
 - group: 'TermExcelerator Sonar Version'
