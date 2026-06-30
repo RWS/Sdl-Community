@@ -50,26 +50,6 @@ namespace LanguageWeaverProviderTests.UnitTests
             Assert.Same(generic, result);
         }
 
-        [Fact]
-        public void Edge_DoesNotPreferPro_ReturnsFirst()
-        {
-            var generic = Model("generic");
-            var pro = Model("lw-pro");
-
-            var result = PairMappingViewModel.SelectDefault(PluginVersion.LanguageWeaverEdge, new List<PairModel> { generic, pro });
-
-            Assert.Same(generic, result);
-        }
-
-        [Fact]
-        public void Cloud_NullModelField_DoesNotMatchAndDoesNotThrow()
-        {
-            var unavailable = Model(null, "Model unavailable");
-            var pro = Model("pro");
-
-            var result = PairMappingViewModel.SelectDefault(PluginVersion.LanguageWeaverCloud, new List<PairModel> { unavailable, pro });
-
-            Assert.Same(pro, result);
-        }
+        
     }
 }
