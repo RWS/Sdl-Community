@@ -224,8 +224,8 @@ namespace LanguageWeaverProvider.ViewModel
 
         public static PairModel SelectDefault(PluginVersion pluginVersion, IReadOnlyList<PairModel> models)
         {
-            return models.FirstOrDefault(model => model.DisplayName.Trim().Equals("Pro")) ??
-                   models.FirstOrDefault(model => model.Model.ToLower().Contains("pro")) ??
+            return models.FirstOrDefault(model => model.DisplayName?.Trim().Equals("Pro") == true) ??
+                   models.FirstOrDefault(model => model.Model?.ToLower().Contains("pro") == true) ??
                    models.FirstOrDefault();
         }
 

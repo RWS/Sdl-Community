@@ -50,6 +50,27 @@ namespace LanguageWeaverProviderTests.UnitTests
             Assert.Same(generic, result);
         }
 
-        
+        [Fact]
+        public void Cloud_NullModelField_DoesNotThrow_FallsBack()
+        {
+            // Reproduces the "Loading resources..." hang: when a language pair has no matching
+            // engine, CreatePairMappings adds a placeholder whose Model is null. SelectDefault
+            // must not dereference it into a NullReferenceException.
+            var placeholder = new PairModel { Name = "Model unavailable", DisplayName = "Model unavailable" };
+
+            var result = PairMappingViewModel.SelectDefault(PluginVersion.LanguageWeaverCloud, new List<PairModel> { placeholder });
+
+            Assert.Same(placeholder, result);
+        }
+
+        [Fact]
+        public void Cloud_NullDisplayName_DoesNotThrow_FallsBack()
+        {
+            var noDisplayName = new PairModel { Name = "generic", Model = "generic" };
+
+            var result = PairMappingViewModel.SelectDefault(PluginVersion.LanguageWeaverCloud, new List<PairModel> { noDisplayName });
+
+            Assert.Same(noDisplayName, result);
+        }
     }
 }
