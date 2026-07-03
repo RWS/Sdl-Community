@@ -63,9 +63,11 @@ namespace Sdl.Community.StarTransit.Shared.Import
 
 		public void VisitTagPair(ITagPair tagPair)
 		{
-			PlainText.Append("<" + tagPair.StartTagProperties.TagContent + ">");
+			// TagContent already holds the full markup (e.g. "<SubSeg ...>" and "</SubSeg>"),
+			// matching how placeholders are serialised. Append it verbatim.
+			PlainText.Append(tagPair.StartTagProperties.TagContent);
 			VisitChildren(tagPair);
-			PlainText.Append("</" + tagPair.EndTagProperties.TagContent + ">");
+			PlainText.Append(tagPair.EndTagProperties.TagContent);
 		}
 
 		#region "left empty"
