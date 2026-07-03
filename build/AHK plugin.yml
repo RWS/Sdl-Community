@@ -37,6 +37,7 @@ variables:
 
 steps:
   - checkout: AppStoreApplicationsRepo
+  - checkout: self
   - template: build/jobs/build-sdlplugin.yml@AppStoreApplicationsRepo
   - template: build/jobs/publish-build-artifact-task.yml@AppStoreApplicationsRepo
 
