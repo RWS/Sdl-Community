@@ -1,4 +1,6 @@
-﻿using Sdl.Desktop.IntegrationApi;
+using System.Diagnostics;
+using CustomViewExample.Services;
+using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
@@ -6,76 +8,73 @@ using System.Windows;
 
 namespace CustomViewExample.Ribbon.Actions
 {
-
-    [RibbonGroup("CustomViewExample_MyEditorActionsGroup", "My Editor Group")]
+    [RibbonGroup("CustomViewExample_SegmentActionsGroup", "Segment Actions")]
     [RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.EditorReviewRibbonTabLocation))]
-    public class MyEditorActionsGroup : AbstractRibbonGroup
+    public class SegmentActionsGroup : AbstractRibbonGroup
     {
     }
 
-    [Action(Id = "CustomViewExample_MyAction1_Id", Name = "Action 1", Description = "Action 1 Description",
-		Icon = "wordLight_yellow", ContextByType = typeof(EditorController))]
-	[ActionLayout(typeof(MyEditorActionsGroup), 3, DisplayType.Large, "Action 1", true)]
-	internal class MyAction1 : AbstractAction
-	{
-		protected override void Execute()
-		{
-			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
-			if (editorController.ActiveDocument == null)
-			{
-				return;
-			}
-			var activeFile = editorController.ActiveDocument.ActiveFile;
-
-			// return false and nothing happens (with any file with any segment id)
-			var result = editorController.ActiveDocument.SetActiveSegmentPair(activeFile, "1", true);
-
-
-			MessageBox.Show("Selected Segment 1 (Action 1):" + result);
-		}
-	}
-
-    [Action(Id = "CustomViewExample_MyAction2_Id", Name = "Action 2", Description = "Action 2 Description",
-        ContextByType = typeof(EditorController))]
-    [ActionLayout(typeof(MyEditorActionsGroup), 0, DisplayType.Normal, "Action 2", true)]
-    internal class MyAction2 : AbstractAction
+    /// <summary>
+    /// Selects a segment in the active document via SetActiveSegmentPair, using the document
+    /// instance tracked by <see cref="EditorControllerService"/>.
+    /// Known issue: SetActiveSegmentPair returns false and nothing happens, with any file
+    /// and any segment id.
+    /// </summary>
+    internal abstract class SelectSegmentAction : AbstractAction
     {
+        protected abstract string SegmentId { get; }
+
         protected override void Execute()
         {
-            var editorController = SdlTradosStudio.Application.GetController<EditorController>();
-            if (editorController.ActiveDocument == null)
+            var service = EditorControllerService.Instance;
+
+            var document = service.ActiveDocument ?? service.EditorController.ActiveDocument;
+            if (document == null)
             {
+                MessageBox.Show("There is no active document.", "Select Segment " + SegmentId);
                 return;
             }
-            var activeFile = editorController.ActiveDocument.ActiveFile;
 
-            // return false and nothing happens (with any file with any segment id)
-            var result = editorController.ActiveDocument.SetActiveSegmentPair(activeFile, "2", true);
+            var activeFile = document.ActiveFile;
 
+            var result = document.SetActiveSegmentPair(activeFile, SegmentId, true);
 
-            MessageBox.Show("Selected Segment 2 (Action 2):" + result);
+            Trace.WriteLine("[CustomViewExample] SelectSegment: SetActiveSegmentPair(\""
+                            + activeFile?.Name + "\", \"" + SegmentId + "\") returned " + result);
+
+            MessageBox.Show("SetActiveSegmentPair for segment " + SegmentId
+                            + " in \"" + activeFile?.Name + "\" returned: " + result,
+                "Select Segment " + SegmentId);
         }
     }
 
-    [Action(Id = "CustomViewExample_MyAction3_Id", Name = "Action 3", Description = "Action 3 Description",
-        ContextByType = typeof(EditorController))]
-    [ActionLayout(typeof(MyEditorActionsGroup), 0, DisplayType.Normal, "Action 3", true)]
-    internal class MyAction3 : AbstractAction
+    [Action(Id = "CustomViewExample_SelectSegment1",
+        Name = "Select Segment 1",
+        Description = "Sets segment 1 as the active segment pair in the active document",
+        Icon = "wordLight_yellow", ContextByType = typeof(EditorController))]
+    [ActionLayout(typeof(SegmentActionsGroup), 3, DisplayType.Large, "Select Segment 1", true)]
+    internal class SelectSegment1Action : SelectSegmentAction
     {
-        protected override void Execute()
-        {
-            var editorController = SdlTradosStudio.Application.GetController<EditorController>();
-            if (editorController.ActiveDocument == null)
-            {
-                return;
-            }
-            var activeFile = editorController.ActiveDocument.ActiveFile;
+        protected override string SegmentId => "1";
+    }
 
-            // return false and nothing happens (with any file with any segment id)
-            var result = editorController.ActiveDocument.SetActiveSegmentPair(activeFile, "3", true);
+    [Action(Id = "CustomViewExample_SelectSegment2",
+        Name = "Select Segment 2",
+        Description = "Sets segment 2 as the active segment pair in the active document",
+        ContextByType = typeof(EditorController))]
+    [ActionLayout(typeof(SegmentActionsGroup), 0, DisplayType.Normal, "Select Segment 2", true)]
+    internal class SelectSegment2Action : SelectSegmentAction
+    {
+        protected override string SegmentId => "2";
+    }
 
-
-            MessageBox.Show("Selected Segment 3 (Action 3):" + result);
-        }
+    [Action(Id = "CustomViewExample_SelectSegment3",
+        Name = "Select Segment 3",
+        Description = "Sets segment 3 as the active segment pair in the active document",
+        ContextByType = typeof(EditorController))]
+    [ActionLayout(typeof(SegmentActionsGroup), 0, DisplayType.Normal, "Select Segment 3", true)]
+    internal class SelectSegment3Action : SelectSegmentAction
+    {
+        protected override string SegmentId => "3";
     }
 }
