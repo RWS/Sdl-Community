@@ -120,8 +120,16 @@ namespace LanguageWeaverProvider.Extensions
 
                 if (assignAccessToken)
                 {
-                    var accessToken = parsedObject[TokenKey].ToString();
-                    AssignAccessToken(translationOptions, accessToken);
+                    // A persisted provider may legitimately have no token (e.g. an EdgeSSO session that was never
+                    // established or has been cleared): the JSON then has no "accessToken" key. Read it null-safely
+                    // and skip assignment instead of letting parsedObject[TokenKey].ToString() throw an NRE that the
+                    // catch below silently swallows. AccessToken stays null and is surfaced as an actionable
+                    // "please sign in" message by Service.ValidateTokenAsync at point of use.
+                    var accessToken = parsedObject[TokenKey]?.ToString();
+                    if (!string.IsNullOrEmpty(accessToken))
+                    {
+                        AssignAccessToken(translationOptions, accessToken);
+                    }
                 }
             }
             catch { }
@@ -131,7 +139,15 @@ namespace LanguageWeaverProvider.Extensions
 
         private static void AssignAccessToken(ITranslationOptions translationOptions, string json)
         {
-            translationOptions.AccessToken = JsonConvert.DeserializeObject<AccessToken>(json);
+            var accessToken = JsonConvert.DeserializeObject<AccessToken>(json);
+
+            // Self-heal stale expiry: a Bearer token persisted before expiry parsing existed (or written by a path
+            // that did not run SetAccessToken) deserializes with ExpiresAt = 0. Treating that as expired forces a
+            // bogus "session expired" prompt even though the JWT is still valid for hours. Re-derive ExpiresAt/
+            // ValidityInSeconds from the token's own "exp" claim, which is the source of truth that travels with it.
+            EdgeService.EnsureExpiryPopulated(accessToken);
+
+            translationOptions.AccessToken = accessToken;
         }
 
         private static void AssignCredentials<T>(ITranslationOptions translationOptions, string credentials)

@@ -24,7 +24,6 @@ namespace LanguageWeaverProvider
                 Name = "LanguageWeaver",
                 FileName = Path.Combine(logDirectoryPath, "LanguageWeaverProvider.Logs.txt"),
                 ArchiveEvery = FileArchivePeriod.Day,
-                ArchiveNumbering = ArchiveNumberingMode.Date,
                 Encoding = Encoding.UTF8,
                 Layout = "${logger}: ${longdate} ${level} ${message}  ${exception}"
             };

@@ -20,7 +20,9 @@ namespace LanguageWeaverProvider.Send_feedback
             if (translationOptions is null) return null;
 
             CredentialManager.GetCredentials(translationOptions, true);
-            Service.ValidateTokenAsync(translationOptions, false);
+            // Route through the guarded path so an expired EdgeSSO session (which throws
+            // EdgeSessionExpiredException) is swallowed here instead of escaping as an unobserved task exception.
+            _ = Service.ValidateAndUpdateTokenAsync(translationOptions, null);
 
             var accessToken = translationOptions.AccessToken;
             return accessToken;

@@ -12,7 +12,6 @@ using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Services.Model;
 using LanguageWeaverProvider.Studio.FeedbackController.Model;
-using LanguageWeaverProvider.XliffConverter.Converter;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -28,7 +27,7 @@ namespace LanguageWeaverProvider.Services
         {
             var parameters = new Dictionary<string, string>
             {
-				{ "client_id", "F4NpOGG1sBaEzk379M6ZxX3gGa0iH1Ff"},
+                { "client_id", "F4NpOGG1sBaEzk379M6ZxX3gGa0iH1Ff"},
                 { "grant_type", "refresh_token" },
                 { "refresh_token", translationOptions.AccessToken?.RefreshToken }
             };
@@ -45,7 +44,7 @@ namespace LanguageWeaverProvider.Services
                 var result = await new HttpClient().SendAsync(httpRequest);
 
                 var content = result.Content.ReadAsStringAsync().Result;
-                
+
                 if (!result.IsSuccessStatusCode)
                 {
                     return false;
@@ -202,7 +201,7 @@ namespace LanguageWeaverProvider.Services
         private static async Task<string> GetUserInfo(AccessToken accessToken, string requestUri, string property)
         {
             var response = await Service.SendRequest(HttpMethod.Get, requestUri, accessToken);
-            var accountId = await Service.DeserializeResponse<string>(response, property);
+            var accountId = await response.DeserializeResponse<string>(property);
             return accountId;
         }
 
@@ -222,60 +221,67 @@ namespace LanguageWeaverProvider.Services
 
             var requestUri = $"{accessToken.BaseUri}v4/accounts/{accessToken.AccountId}/{resourceRequested}";
             var response = await Service.SendRequest(HttpMethod.Get, requestUri, accessToken);
-            var languagePairs = await Service.DeserializeResponse<List<T>>(response, property);
+            var languagePairs = await response.DeserializeResponse<List<T>>(property);
             return languagePairs;
         }
 
-        public static async Task<Xliff> Translate(AccessToken accessToken, PairMapping mappedPair, Xliff sourceXliff)
+        public static async Task<IReadOnlyList<TranslationResult>> Translate(AccessToken accessToken, PairMapping mappedPair, string[] plainTextSegments)
         {
-            try
+            var translationResponse = await SendTranslationRequest(accessToken, mappedPair, plainTextSegments);
+            await WaitForTranslationCompletion(accessToken, translationResponse.RequestId);
+            var content = await GetTranslationInfo<CloudTranslationResponse>(accessToken, translationResponse.RequestId, "content");
+
+            var results = new List<TranslationResult>(content.Translation.Count);
+            for (var i = 0; i < content.Translation.Count; i++)
             {
-                var translationResponse = await SendTranslationRequest(accessToken, mappedPair, sourceXliff);
-                await WaitForTranslationCompletion(accessToken, translationResponse.RequestId);
-                var translation = await GetTranslationInfo<CloudTranslationResponse>(accessToken, translationResponse.RequestId, "content");
-                var translatedSegment = translation.Translation.First();
-                return Converter.ParseXliffString(translatedSegment);
+                var translatedXliff = content.Translation[i];
+                results.Add(new TranslationResult
+                {
+                    Translation = translatedXliff,
+                    QualityEstimation = SegmentSerializer.ExtractQualityEstimation(translatedXliff)
+                });
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
+            return results;
         }
 
-        private static async Task<CloudTranslationRequestResponse> SendTranslationRequest(AccessToken accessToken, PairMapping mappedPair, Xliff sourceXliff)
+        private static async Task<CloudTranslationRequestResponse> SendTranslationRequest(AccessToken accessToken, PairMapping mappedPair, string[] plainTextSegments)
         {
             var requestUri = $"{accessToken.BaseUri}v4/mt/translations/async";
-            var translationRequestModel = CreateTranslationRequest(mappedPair, sourceXliff);
+            var translationRequestModel = CreateTranslationRequest(mappedPair, plainTextSegments);
             var translationRequestModelJson = JsonConvert.SerializeObject(translationRequestModel);
             var content = new StringContent(translationRequestModelJson, Encoding.UTF8, "application/json");
             var response = await Service.SendRequest(HttpMethod.Post, requestUri, accessToken, content);
-            var translationRequestResponse = await Service.DeserializeResponse<CloudTranslationRequestResponse>(response);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorResponse = await response.DeserializeResponse<List<LanguageWeaverErrorDetail>>();
+                throw new Exception($"{errorResponse[0].Code}: {errorResponse[0].Description}");
+            }
+
+            var translationRequestResponse = await response.DeserializeResponse<CloudTranslationRequestResponse>();
             return translationRequestResponse;
         }
 
-        private static CloudTranslationRequest CreateTranslationRequest(PairMapping mappedPair, Xliff sourceXliff)
+        private static CloudTranslationRequest CreateTranslationRequest(PairMapping mappedPair, string[] plainTextSegments)
         {
-            const string InputFormat = "xliff";
-
             var linguisticOptionsDictionary = mappedPair.LinguisticOptions?.ToDictionary(lo => lo.Id, lo => lo.SelectedValue);
-            var dictionaries = mappedPair.Dictionaries.Where(d => d.IsSelected).Select(d => d.DictionaryId).ToArray();
+            var dictionaries = mappedPair.Dictionaries?.Where(d => d.IsSelected).Select(d => d.DictionaryId).ToArray();
 
-            var translationRequestModel = new CloudTranslationRequest
+            return new CloudTranslationRequest
             {
                 SourceLanguageId = mappedPair.SourceCode,
                 TargetLanguageId = mappedPair.TargetCode,
-                Input = [sourceXliff.ToString()],
+                Input = plainTextSegments,
+                InputFormat = "XLIFF",
                 Model = mappedPair.SelectedModel.Model,
-                InputFormat = InputFormat,
                 Dictionaries = dictionaries,
                 LinguisticOptions = linguisticOptionsDictionary,
                 QualityEstimation = mappedPair.SelectedModel.QeSupport ? 1 : 0
             };
-
-            return translationRequestModel;
         }
 
-        private static async Task WaitForTranslationCompletion(AccessToken accessToken, string RequestId)
+        private static async Task<CloudTranslationStatus> WaitForTranslationCompletion(AccessToken accessToken, string RequestId)
         {
             CloudTranslationStatus translationStatus;
             bool isWaiting;
@@ -289,6 +295,8 @@ namespace LanguageWeaverProvider.Services
                     await Task.Delay(1000);
                 }
             } while (isWaiting);
+
+            return translationStatus;
         }
 
         private static async Task<T> GetTranslationInfo<T>(AccessToken accessToken, string requestId, string endpoint = null)
@@ -312,7 +320,7 @@ namespace LanguageWeaverProvider.Services
             if (response.IsSuccessStatusCode)
                 return;
 
-            var error = await response.DeserializeResponse<CloudFeedbackErrorDetail>("errors", 0);
+            var error = await response.DeserializeResponse<LanguageWeaverErrorDetail>("errors", 0);
             throw new Exception($"Code {error.Code}: {error.Description}.");
         }
 
@@ -327,7 +335,7 @@ namespace LanguageWeaverProvider.Services
             if (response.IsSuccessStatusCode)
                 return JObject.Parse(await response.Content.ReadAsStringAsync())["feedbackId"]?.ToString();
 
-            var error = await response.DeserializeResponse<CloudFeedbackErrorDetail>("errors", 0);
+            var error = await response.DeserializeResponse<LanguageWeaverErrorDetail>("errors", 0);
             throw new Exception($"Code {error.Code}: {error.Description}.");
         }
 

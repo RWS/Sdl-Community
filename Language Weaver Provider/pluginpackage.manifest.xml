@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
-	
+
 	<Author>Trados AppStore Team</Author>
 	<PlugInName>Language Weaver Provider</PlugInName>
 	<Description>Language Weaver Provider</Description>
-	
-  <Version>2.1.6.0</Version>
+
+	<Version>2.1.7.0</Version>
 	<RequiredProduct name="TradosStudio" minversion="18.1" maxversion="18.1.9" />
 
 	<Include>
 		<File>LanguageMappingProvider.dll</File>
 		<File>Dapper.StrongName.dll</File>
 	</Include>
-	
+
 </PluginPackage>

@@ -33,10 +33,10 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBoxResources.xaml" />
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/textblockresources.xaml" />
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ComboBoxResources.xaml" />
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/CheckBoxResources.xaml" />
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/LanguageWeaverProvider;component/Style/Buttons.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/LanguageWeaverProvider;component/Controls/ProgressIndicator.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/LanguageWeaverProvider;component/Controls/WatermarkTextBoxResources.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/LanguageWeaverProvider;component/Controls/WatermarkPasswordBoxResources.xaml" />
@@ -67,9 +67,7 @@
 			<converters:EmptyStringToVisibilityConverter x:Key="EmptyStringToVisibilityConverter" />
             <converters:EmptyCollectionToVisibilityConverter x:Key="EmptyCollectionToVisibilityConverter" />
 
-            <DataTemplate DataType="{x:Type viewModel:SettingsViewModel}">
-                <view:SettingsView />
-            </DataTemplate>
+            
 
         </ResourceDictionary>
     </Window.Resources>
@@ -134,7 +132,7 @@
                                        FontWeight="Light" />
 							
                             <Button Content="{x:Static root:PluginResources.PairMappingView_Buttons_Refresh}"
-                                    Style="{StaticResource TransparentButtonStyle}"
+                                    Style="{StaticResource Sdl.Button.EmbeddedStyle}"
 									Command="{Binding ResetAndIdentifyPairsCommand}"
 									CommandParameter="{x:Static root:PluginResources.PairMappingView_Buttons_Refresh}"
 									AutomationProperties.HelpText="{x:Static root:PluginResources.PairMappingView_Buttons_Refresh_ToolTip}"
@@ -150,7 +148,7 @@
                                        FontWeight="Light" />
 
 							<Button Content="{x:Static root:PluginResources.PairMappingView_Buttons_Reset}"
-									Style="{StaticResource TransparentButtonStyle}"
+									Style="{StaticResource Sdl.Button.EmbeddedStyle}"
 									Command="{Binding ResetAndIdentifyPairsCommand}"
 									CommandParameter="{x:Static root:PluginResources.PairMappingView_Buttons_Reset}"
 									AutomationProperties.HelpText="{x:Static root:PluginResources.PairMappingView_Buttons_Reset_ToolTip}"
@@ -429,17 +427,26 @@
                     Width="176"
                     Height="32"
                     Margin="0 8 8 0" />
-            <Button Content="{x:Static root:PluginResources.PairMappingView_Buttons_Settings}"
-                    Style="{StaticResource Sdl.Button.SecondaryStyle}"
-                    Command="{Binding OpenSettingsViewCommand}"
-                    Visibility="{Binding ShowSettingsView, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+			<Button Content="{x:Static root:PluginResources.PairMappingView_Buttons_Settings}"
+					Style="{StaticResource Sdl.Button.SecondaryStyle}"
+					Command="{Binding OpenSettingsViewCommand}"
+					Visibility="{Binding ShowSettingsView, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverted}"
 					IsEnabled="{Binding LoadingAction, Converter={StaticResource EmptyStringToBooleanConverter}, ConverterParameter=Inverted}"
 					FontSize="11"
 					FontWeight="DemiBold"
-                    Width="120"
-                    Height="32"
-                    Margin="8 8 8 0" />
-        </StackPanel>
+					Width="120"
+					Height="32"
+					Margin="8 8 8 0" />
+			<Button Content="{x:Static root:PluginResources.PairMappingView_Buttons_SignInAgain}"
+					Style="{StaticResource Sdl.Button.SecondaryStyle}"
+					Command="{Binding SignInAgainCommand}"
+					IsEnabled="{Binding LoadingAction, Converter={StaticResource EmptyStringToBooleanConverter}, ConverterParameter=Inverted}"
+					FontSize="11"
+					FontWeight="DemiBold"
+					Width="120"
+					Height="32"
+					Margin="8 8 8 0" />
+		</StackPanel>
 
         <StackPanel Grid.Row="2"
                     Grid.Column="1"

@@ -69,7 +69,9 @@ namespace LanguageWeaverProvider
 
         private PairMappingViewModel ShowPairMappingView(LanguagePair[] languagePairs, ITranslationOptions translationOptions)
         {
-            Service.ValidateTokenAsync(translationOptions);
+            // Route through the guarded path so an expired EdgeSSO session doesn't escape as an unobserved
+            // task exception; the pair-mapping view exposes a "Sign in again" button for remediation.
+            _ = Service.ValidateAndUpdateTokenAsync(translationOptions, null, showErrors: true);
             var pairMappingViewModel = new PairMappingViewModel(translationOptions, languagePairs);
             var pairMappingView = new PairMappingView() { DataContext = pairMappingViewModel };
             pairMappingViewModel.CloseEventRaised += pairMappingView.Close;
@@ -85,19 +87,12 @@ namespace LanguageWeaverProvider
                 false => JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState).ProviderName
             };
 
-            var images = translationProviderUri.AbsoluteUri switch
-            {
-                Constants.CloudFullScheme => (PluginResources.lwLogo_Cloud_Icon, PluginResources.lwLogo_Cloud16),
-                Constants.EdgeFullScheme => (PluginResources.lwLogo_Edge_Icon, PluginResources.lwLogo_Edge16),
-                _ => throw new ArgumentException("Unsupported PluginVersion value"),
-            };
-
             return new TranslationProviderDisplayInfo()
             {
                 Name = pluginName,
                 TooltipText = pluginName,
-                TranslationProviderIcon = images.Item1,
-                SearchResultImage = images.Item2
+                TranslationProviderIcon = PluginResources.LanguageWeaver_MainIcon,
+                SearchResultImage = PluginResources.lw_logo_main16
             };
         }
         public bool SupportsTranslationProviderUri(Uri translationProviderUri)

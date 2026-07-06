@@ -10,8 +10,8 @@ namespace LanguageWeaverProvider.Services.Model
 
 		[JsonProperty("input")]
 		public string[] Input { get; set; }
-
-		[JsonProperty("inputFormat")]
+        
+        [JsonProperty("inputFormat")]
 		public string InputFormat { get; set; }
 
 		[JsonProperty("model")]
