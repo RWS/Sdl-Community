@@ -32,10 +32,7 @@ variables:
   value: 'Release'
 - name: solution
   value: '**/Sdl.Community.AhkPlugin.sln'
-- name: pathToPublish
-  value: '$(PluginPath)\Sdl.Community.AhkPlugin.sdlplugin'
 
 steps:
   - template: build/jobs/build-sdlplugin.yml@AppStoreApplicationsRepo
   - template: build/jobs/publish-build-artifact-task.yml@AppStoreApplicationsRepo
-
