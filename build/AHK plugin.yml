@@ -3,7 +3,7 @@ resources:
   - repository: AppStoreApplicationsRepo
     type: git
     name: AppStoreApplications/AppStoreApplications
-    ref: 'Studio_2026_StudioType'
+    ref: 'Studio_2026'
 
 trigger:
   branches:
