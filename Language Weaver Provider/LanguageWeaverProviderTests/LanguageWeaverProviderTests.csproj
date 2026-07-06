@@ -4,7 +4,7 @@
     <TargetFramework>net48</TargetFramework>
     <IsPackable>false</IsPackable>
     <LangVersion>latest</LangVersion>
-    <TradosFolder>$(ProgramW6432)\Trados\Trados Studio\Studio19</TradosFolder>
+    <TradosFolder>$(ProgramW6432)\Trados\Trados Studio\Studio18</TradosFolder>
   </PropertyGroup>
 
   <ItemGroup>
