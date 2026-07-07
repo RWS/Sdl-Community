@@ -1,16 +1,16 @@
+resources:
+  repositories:
+  - repository: AppStoreApplicationsRepo
+    type: git
+    name: AppStoreApplications/AppStoreApplications
+    ref: 'Studio_2024_SR1'
 
-trigger:
-  branches:
-    include:
-     - master
-  paths:
-    include:
-     - Amazon Translate MT provider/*
+trigger: none
 
 pr:
   branches:
     include:
-     - master
+     - Studio_2024_SR1
   paths:
     include:
      - Amazon Translate MT provider/*
@@ -19,16 +19,14 @@ pool:
   vmImage : '$(DefaultBuildVm)'
 
 variables:
-- template: jobs/branch-variables.yml
+- template: build/branch-variables.yml@AppStoreApplicationsRepo
 - name: buildPlatform 
   value: 'Any CPU'
 - name: buildConfiguration
   value: 'Release'
 - name: solution
   value: '**/AmazonTranslateTradosPlugin.sln'
-- name: pathToPublish
-  value: '$(PluginPath)\Sdl.Community.AmazonTranslateTradosPlugin.sdlplugin'
 
 steps:
-  - template: jobs/build-sdlplugin.yml
-  - template: jobs/publish-build-artifact-task.yml
+  - template: build/jobs/build-sdlplugin.yml@AppStoreApplicationsRepo
+  - template: build/jobs/publish-build-artifact-task.yml@AppStoreApplicationsRepo

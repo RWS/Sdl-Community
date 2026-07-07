@@ -1,15 +1,16 @@
-trigger:
-  branches:
-    include:
-     - master
-  paths:
-    include:
-     - DSI Viewer/*
+resources:
+  repositories:
+  - repository: AppStoreApplicationsRepo
+    type: git
+    name: AppStoreApplications/AppStoreApplications
+    ref: 'Studio_2024_SR1'
+
+trigger: none
 
 pr:
   branches:
     include:
-     - master
+     - Studio_2024_SR1
   paths:
     include:
      - DSI Viewer/*
@@ -18,39 +19,14 @@ pool:
   vmImage : '$(DefaultBuildVm)'
 
 variables:
-- template: jobs/branch-variables.yml
+- template: build/branch-variables.yml@AppStoreApplicationsRepo
 - name: buildPlatform 
   value: 'Any CPU'
 - name: buildConfiguration
   value: 'Release'
 - name: solution
   value: '**/Sdl.Community.DsiViewer.sln'
-- name: pathToPublish
-  value: '$(PluginPath)\Sdl.Community.DsiViewer.sdlplugin'
-- name : SonarID
-  value : AppStore_DSI_Viewer
-- name : SonarName
-  value : 'DSI Viewer'
-- name : ProjectVersion
-  value : 4.0.1.0
 
 steps:
-  - task: SonarCloudPrepare@3
-    inputs:
-      SonarCloud: 'AppStorePlugins-ServiceConnection'
-      organization: 'sdl'
-      scannerMode: 'dotnet'
-      projectKey: $(SonarId)
-      projectName: $(SonarName)
-      projectVersion: $(ProjectVersion)
-
-  - template: jobs/build-sdlplugin.yml
-  - task: SonarCloudAnalyze@3
-    displayName: 'Run Code Analysis'
-
-  - task: SonarCloudPublish@3
-    inputs:
-      pollingTimeoutSec: '300'
-    displayName: 'Publish Quality Gate Result'
-
-  - template: jobs/publish-build-artifact-task.yml
+  - template: build/jobs/build-sdlplugin.yml@AppStoreApplicationsRepo
+  - template: build/jobs/publish-build-artifact-task.yml@AppStoreApplicationsRepo

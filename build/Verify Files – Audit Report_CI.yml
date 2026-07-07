@@ -1,15 +1,16 @@
-trigger:
-  branches:
-    include:
-     - master
-  paths:
-    include:
-     - Verify Files – Audit Report/*
+resources:
+  repositories:
+  - repository: AppStoreApplicationsRepo
+    type: git
+    name: AppStoreApplications/AppStoreApplications
+    ref: 'Studio_2024_SR1'
+
+trigger: none
 
 pr:
   branches:
     include:
-     - master
+     - Studio_2024_SR1
   paths:
     include:
      - Verify Files – Audit Report/*
@@ -18,7 +19,7 @@ pool:
   vmImage : '$(DefaultBuildVm)'
 
 variables:
-- template: jobs/branch-variables.yml
+- template: build/branch-variables.yml@AppStoreApplicationsRepo
 - name: buildPlatform 
   value: 'Any CPU'
 - name: buildConfiguration
@@ -27,5 +28,5 @@ variables:
   value: '**/VerifyFilesAuditReport.sln'
 
 steps:
-  - template: jobs/build-sdlplugin.yml
-  - template: jobs/publish-build-artifact-task.yml
+  - template: build/jobs/build-sdlplugin.yml@AppStoreApplicationsRepo
+  - template: build/jobs/publish-build-artifact-task.yml@AppStoreApplicationsRepo

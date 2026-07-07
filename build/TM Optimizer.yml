@@ -1,43 +1,32 @@
-trigger:
-  branches:
-    include:
-     - master
-  paths:
-    include:
-     - TM Optimizer/*
+resources:
+  repositories:
+  - repository: AppStoreApplicationsRepo
+    type: git
+    name: AppStoreApplications/AppStoreApplications
+    ref: 'Studio_2024_SR1'
+
+trigger: none
 
 pr:
   branches:
     include:
-     - master
+     - Studio_2024_SR1
   paths:
     include:
      - TM Optimizer/*
 
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
 variables:
-- group: 'SDLPLC Authenticode Credentials'
-- template: jobs/branch-variables.yml
-- name: buildPlatform
+- template: build/branch-variables.yml@AppStoreApplicationsRepo
+- name: buildPlatform 
   value: 'Any CPU'
 - name: buildConfiguration
   value: 'Release'
 - name: solution
   value: '**/Sdl.Community.TMOptimizer.sln'
 
-pool: 
- vmImage : '$(DefaultBuildVm)'
-
 steps:
-  - template: jobs/build-sdlplugin.yml
-  - template: tasks/sign-artifacts/prepare-signing.yml
-
-  - template: tasks/sign-artifacts/sign-single-artifact.yml
-    parameters:
-     fileToSign: '$(Build.Repository.LocalPath)\TM Optimizer\Sdl.Community.TMOptimizer.Installer\bin\$(buildConfiguration)\Sdl.Community.TMOptimizer.Installer.msi'
-     description: 'TMOptimizer'
-
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish Artifact'
-    inputs:
-      artifactName: TMOptimizerInstaller
-      pathToPublish: '$(Build.Repository.LocalPath)\TM Optimizer\Sdl.Community.TMOptimizer.Installer\bin\$(buildConfiguration)'
+  - template: build/jobs/build-sdlplugin.yml@AppStoreApplicationsRepo
+  - template: build/jobs/publish-build-artifact-task.yml@AppStoreApplicationsRepo
