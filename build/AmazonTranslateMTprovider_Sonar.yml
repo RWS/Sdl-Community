@@ -48,7 +48,6 @@ steps:
   - template: jobs/build-sdlplugin.yml
   - task: SonarCloudAnalyze@3
     displayName: 'Run Code Analysis'
-
   - task: SonarCloudPublish@3
     inputs:
       pollingTimeoutSec: '300'
