@@ -7,7 +7,8 @@ namespace SDLTM.Import.TellMe
 	public class SdlTmImportCommunitySupportAction:AbstractTellMeAction
 	{
 		public SdlTmImportCommunitySupportAction()
-		{
+		{ 
+
 			Name = "SDLTM Import Plus AppStore Forum";
 		}
 		public override void Execute()

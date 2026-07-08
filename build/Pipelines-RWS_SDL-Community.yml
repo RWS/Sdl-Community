@@ -8,7 +8,7 @@ resources:
 trigger:
   branches:
     include:
-      - Studio_2026
+      - Studio_2026_Commit
       - develop
       - feature/*
   paths:
