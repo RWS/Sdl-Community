@@ -1,11 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using NLog;
 using VerifyFilesAuditReport.Components.SettingsProvider.Model;
 using VerifyFilesAuditReport.Extension;
+using VerifyFilesAuditReport.Logging;
 
 namespace VerifyFilesAuditReport.Components.SettingsProvider.Verifiers.BaseClass
 {
     public class VerificationSettings : VerificationSettingsTreeNode
     {
+        protected static readonly Logger Logger = Log.GetLogger(typeof(VerificationSettings).FullName);
+
         public virtual Dictionary<string, string> SettingIdToUiStringMap { get; set; }
 
         public VerificationSettingsTreeNode this[string settingId] =>
@@ -53,7 +58,10 @@ namespace VerifyFilesAuditReport.Components.SettingsProvider.Verifiers.BaseClass
                 {
                     this[settingsCategoryKey].Value = settingsCategory.Value;
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    Logger.Warn(ex, $"Failed to apply setting '{settingsCategoryKey}'.");
+                }
             }
         }
 

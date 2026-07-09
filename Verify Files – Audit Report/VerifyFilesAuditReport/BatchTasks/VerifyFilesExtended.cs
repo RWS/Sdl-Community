@@ -1,13 +1,16 @@
-﻿using Sdl.FileTypeSupport.Framework.IntegrationApi;
+﻿using NLog;
+using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.ProjectAutomation.FileBased.Reports.Operations;
+using System;
 using System.IO;
 using System.Linq;
 using VerifyFilesAuditReport.Components.Report_Extender;
 using VerifyFilesAuditReport.Components.SegmentMetadata_Provider;
 using VerifyFilesAuditReport.Components.SettingsProvider;
+using VerifyFilesAuditReport.Logging;
 using Task = System.Threading.Tasks.Task;
 
 namespace VerifyFilesAuditReport.BatchTasks;
@@ -20,6 +23,8 @@ namespace VerifyFilesAuditReport.BatchTasks;
 [RequiresSettings(typeof(VerifyFilesExtendedSettings), typeof(VerifyFilesExtendedSettingsPage))]
 public class VerifyFilesExtended : AbstractFileContentProcessingAutomaticTask
 {
+
+    private static readonly Logger Logger = Log.GetLogger("Verify Files - Audit Report Task");
     public ContentVerifier ContentVerifier { get; set; } = new();
     public string XmlString { get; set; }
     private ReportExtender ReportExtender { get; } = new();
@@ -32,15 +37,27 @@ public class VerifyFilesExtended : AbstractFileContentProcessingAutomaticTask
         while (!Signal.Finished) await Task.Delay(500);
 
         Signal.Reset();
-        var extendedReport = ReportExtender.CreateReport(XmlString);
 
-        AddProjectFilesTotal(extendedReport);
-        if (Settings.IncludeVerificationDetails)
-            AddActiveQaProviders(extendedReport);
-        AddMetadataToSegments(extendedReport);
-        ApplySettings(extendedReport);
+        try
+        {
+            Logger.Info("Building extended verification report.");
 
-        CreateReport(extendedReport);
+            var extendedReport = ReportExtender.CreateReport(XmlString);
+
+            AddProjectFilesTotal(extendedReport);
+            if (Settings.IncludeVerificationDetails)
+                AddActiveQaProviders(extendedReport);
+            AddMetadataToSegments(extendedReport);
+            ApplySettings(extendedReport);
+
+            CreateReport(extendedReport);
+
+            Logger.Info("Extended verification report created.");
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(ex, "Failed to build the extended verification report.");
+        }
     }
 
     protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
@@ -50,6 +67,8 @@ public class VerifyFilesExtended : AbstractFileContentProcessingAutomaticTask
 
     protected override void OnInitializeTask()
     {
+        Logger.Info("Initializing Verify Files - Audit Report task.");
+
         Settings = GetSetting<VerifyFilesExtendedSettings>();
 
         var settingsBundle = Project.GetSettings();
@@ -107,22 +126,34 @@ public class VerifyFilesExtended : AbstractFileContentProcessingAutomaticTask
         AutomaticTask result = null;
         Task.Run(() =>
         {
-            result = Project.RunAutomaticTask
-            (
-                TaskFiles.GetIds(),
-                AutomaticTaskTemplateIds.VerifyFiles,
-                (_, _) => { }, (_, args) => Signal.SendMessage(args.Message)
-            );
+            try
+            {
+                result = Project.RunAutomaticTask
+                (
+                    TaskFiles.GetIds(),
+                    AutomaticTaskTemplateIds.VerifyFiles,
+                    (_, _) => { }, (_, args) => Signal.SendMessage(args.Message)
+                );
 
-            var reportId = result.Reports.First().Id;
+                var reportId = result.Reports.First().Id;
 
-            var reportFilePath = $"{Path.Combine(Path.GetTempPath(), Path.GetRandomFileName())}.xml";
-            Project.SaveTaskReportAs(reportId, reportFilePath, ReportFormat.Xml);
+                var reportFilePath = $"{Path.Combine(Path.GetTempPath(), Path.GetRandomFileName())}.xml";
+                Project.SaveTaskReportAs(reportId, reportFilePath, ReportFormat.Xml);
 
-            new ProjectReportsOperations((FileBasedProject)Project).RemoveReports([reportId]);
+                new ProjectReportsOperations((FileBasedProject)Project).RemoveReports([reportId]);
 
-            XmlString = File.ReadAllText(reportFilePath);
-            Signal.Finished = true;
+                XmlString = File.ReadAllText(reportFilePath);
+
+                Logger.Log(LogLevel.Info, $"Verify Files temp report saved at: {reportFilePath}");
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "Failed to generate the original verification report.");
+            }
+            finally
+            {
+                Signal.Finished = true;
+            }
         });
     }
 }
