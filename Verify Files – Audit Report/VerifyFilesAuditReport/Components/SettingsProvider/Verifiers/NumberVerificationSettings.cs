@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using VerifyFilesAuditReport.Components.SettingsProvider.Model;
 using VerifyFilesAuditReport.Components.SettingsProvider.Verifiers.BaseClass;
@@ -197,9 +198,10 @@ internal class NumberVerificationSettings : VerificationSettings, IVerificationS
                 regexExclusionList.Value = null;
             }
         }
-        catch
+        catch (Exception ex)
         {
             // If parsing fails, leave the value unchanged
+            Logger.Debug(ex, "Failed to parse number verifier regex exclusion list.");
         }
     }
 

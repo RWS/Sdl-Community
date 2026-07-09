@@ -2,22 +2,37 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using NLog;
 using Sdl.Core.Globalization;
 using Sdl.ProjectAutomation.Core;
+using VerifyFilesAuditReport.Logging;
 
 namespace VerifyFilesAuditReport.Components.SettingsProvider.Components
 {
     public class ProjectSettingsReader
     {
+        private static readonly Logger Logger = Log.GetLogger(typeof(ProjectSettingsReader).FullName);
+
         /// <summary>
         /// Reads all verification-related settings for the project (project-level SettingsBundle).
         /// </summary>
         public Dictionary<string, Dictionary<string, string>> ReadProjectVerificationSettings(IProject project, Language language = null)
         {
             var projectInfo = project.GetProjectInfo();
-            var sdlprojFilePath = Uri.UnescapeDataString(projectInfo.Uri.AbsolutePath);
+            var sdlprojFilePath = Uri.UnescapeDataString(projectInfo.Uri.LocalPath);
 
-            var doc = XDocument.Load(sdlprojFilePath);
+            Logger.Debug($"Reading verification settings from '{sdlprojFilePath}' ({(language == null ? "project-level" : language.ToString())}).");
+
+            XDocument doc;
+            try
+            {
+                doc = XDocument.Load(sdlprojFilePath);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, $"Failed to load project file '{sdlprojFilePath}'.");
+                throw;
+            }
 
             var result = new Dictionary<string, Dictionary<string, string>>();
             AddMissingCategories(result);
