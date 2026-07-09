@@ -15,7 +15,7 @@ namespace VerifyFilesAuditReport.Components.SettingsProvider.Components
         public Dictionary<string, Dictionary<string, string>> ReadProjectVerificationSettings(IProject project, Language language = null)
         {
             var projectInfo = project.GetProjectInfo();
-            var sdlprojFilePath = Uri.UnescapeDataString(projectInfo.Uri.AbsolutePath);
+            var sdlprojFilePath = Uri.UnescapeDataString(projectInfo.Uri.LocalPath);
 
             var doc = XDocument.Load(sdlprojFilePath);
 
