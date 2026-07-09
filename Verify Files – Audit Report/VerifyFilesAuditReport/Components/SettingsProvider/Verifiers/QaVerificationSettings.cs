@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using VerifyFilesAuditReport.Components.SettingsProvider.Model;
@@ -325,9 +326,10 @@ namespace VerifyFilesAuditReport.Components.SettingsProvider.Verifiers
                         pair.Name = "";
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
                     // If parsing fails, leave the value unchanged
+                    Logger.Debug(ex, "Failed to parse QA verifier regex rule.");
                 }
             }
         }
@@ -363,9 +365,10 @@ namespace VerifyFilesAuditReport.Components.SettingsProvider.Verifiers
                         }
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
                     // If parsing fails, leave the value unchanged
+                    Logger.Debug(ex, "Failed to parse QA verifier word list entry.");
                 }
             }
         }

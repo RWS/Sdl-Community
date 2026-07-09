@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using VerifyFilesAuditReport.Components.SettingsProvider.Model;
 using VerifyFilesAuditReport.Components.SettingsProvider.Verifiers.BaseClass;
@@ -79,9 +80,10 @@ namespace VerifyFilesAuditReport.Components.SettingsProvider.Verifiers
                     term.Value = $"{picklistName}: {picklistValue}";
                     term.Name = "";
                 }
-                catch
+                catch (Exception ex)
                 {
                     // If parsing fails, leave the value unchanged
+                    Logger.Debug(ex, "Failed to parse forbidden term definition.");
                 }
             }
 
