@@ -9,6 +9,7 @@ public class ContentVerifier : AbstractBilingualContentProcessor
 {
     public override void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
     {
+
         if (paragraphUnit.IsStructure)
             return;
         foreach (var _ in paragraphUnit.SegmentPairs)
