@@ -1,5 +1,4 @@
 ﻿using Sdl.FileTypeSupport.Framework.BilingualApi;
-using System.Collections.Generic;
 
 namespace Sdl.Community.AntidoteVerifier.Extensions
 {
@@ -63,7 +62,7 @@ namespace Sdl.Community.AntidoteVerifier.Extensions
             return ret;
         }
 
-        public static string GetString(this ISegment segment, bool includeSegments = false)
+        public static string GetString(this ISegment segment)
         {
             var textVisitor = new CustomTextCollectionVisitor(segment);
 
@@ -82,20 +81,6 @@ namespace Sdl.Community.AntidoteVerifier.Extensions
                 item.AcceptVisitor(textVisitor);
 
             textVisitor.ReplaceText(replacementText);
-        }
-
-        private static IEnumerable<IAbstractMarkupData> GetFlattenedElements(this ISegment segment)
-        {
-            foreach (var element in segment)
-            {
-                if (element is IAbstractMarkupDataContainer container)
-                    foreach (var subElement in container)
-                    {
-                        yield return subElement;
-                    }
-                else
-                    yield return element;
-            }
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Sdl.Community.AntidoteVerifier.Extensions;
-using Sdl.Community.AntidoteVerifier.Utils;
+using Sdl.Community.AntidoteVerifier.Extensions;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System.Collections.Generic;
@@ -7,64 +6,55 @@ using System.Linq;
 
 namespace Sdl.Community.AntidoteVerifier
 {
-    public struct RangeOfCharacterInfos
-    {
-        public int length;
-        public int start;
-    }
-
+    /// <summary>
+    /// Exposes one Studio document to the Antidote agent as a list of 1-based, non-empty target
+    /// segments. A fresh instance is bound to the active document on every launch. Unknown segment
+    /// indexes throw (dictionary indexer) — the Connectix layer relies on that to reject callbacks
+    /// for zones this document does not contain.
+    /// </summary>
     public class EditorService : IEditorService
     {
         private readonly IStudioDocument _document;
-        private readonly Dictionary<int, KeyValuePair<string, string>> _segmentMetadata;
+
+        // 1-based Antidote zone index -> stable Studio identity of the segment. Segment pairs are
+        // re-resolved from the document on every access because UpdateSegmentPair can replace the
+        // underlying instances while a correction is running.
+        private readonly Dictionary<int, SegmentIdentity> _segmentsByIndex =
+            new Dictionary<int, SegmentIdentity>();
 
         public EditorService(IStudioDocument document)
         {
             _document = document;
-            _segmentMetadata = new Dictionary<int, KeyValuePair<string, string>>();
-            Initialize();
+            IndexCorrectableSegments();
         }
 
         public void ActivateDocument()
         {
-            EditorController editorController = SdlTradosStudio.Application.GetController<EditorController>();
-            editorController.Activate(_document);
+            ApplicationContext.EditorController.Activate(_document);
         }
 
-        public bool CanReplace(int segmentId, int startPosition, int endPosition, string origString, string displayLanguage, ref string message, ref string explication)
+        public bool CanReplace(int segmentId, int startPosition, int endPosition, string origString,
+            string displayLanguage, ref string message, ref string explication)
         {
-            var ret = false;
-            var segmentPair = GetSegmentPair(segmentId);
-            if (segmentPair != null)
-            {
-                ret = segmentPair.Target.CanReplace(startPosition, endPosition, origString, displayLanguage, ref message, ref explication);
-            }
-            return ret;
+            var segmentPair = FindSegmentPair(segmentId);
+            return segmentPair != null &&
+                   segmentPair.Target.CanReplace(startPosition, endPosition, origString, displayLanguage,
+                       ref message, ref explication);
         }
 
         public int GetActiveSegmentId()
         {
-            var segmentId = int.Parse(_document.ActiveSegmentPair.Properties.Id.Id);
-            var paragraphUnitId = _document.ActiveSegmentPair.GetParagraphUnitProperties().ParagraphUnitId.Id;
-            foreach (var kvp in _segmentMetadata)
+            var active = _document.ActiveSegmentPair;
+            var segmentId = active.Properties.Id.Id;
+            var paragraphUnitId = active.GetParagraphUnitProperties().ParagraphUnitId.Id;
+
+            foreach (var entry in _segmentsByIndex)
             {
-                if (kvp.Value.Key.Equals(segmentId) && kvp.Value.Value.Equals(paragraphUnitId))
-                {
-                    return kvp.Key;
-                }
+                if (entry.Value.Matches(segmentId, paragraphUnitId))
+                    return entry.Key;
             }
 
             return 1;
-        }
-
-        public int GetCurrentSegmentId(int segmentNumber)
-        {
-            return segmentNumber;
-        }
-
-        public int GetDocumentId()
-        {
-            return DocumentIdGenerator.Instance.GetDocumentId(_document.ActiveFile.Id);
         }
 
         public string GetDocumentName()
@@ -72,68 +62,88 @@ namespace Sdl.Community.AntidoteVerifier
             return _document.ActiveFile.Name;
         }
 
+        public string GetDocumentPath()
+        {
+            // Stable identity for Antidote's correction cache (cacheIdType "forcePath"): the local
+            // file path uniquely and consistently identifies the document across launches. This
+            // restores the parity the old COM plugin had via DonneIdDocumentCourant/
+            // DocumentIdGenerator. Fall back to the display name for unsaved/virtual files that
+            // have no local path.
+            var localPath = _document.ActiveFile?.LocalFilePath;
+            return string.IsNullOrEmpty(localPath) ? _document.ActiveFile?.Name : localPath;
+        }
+
         public int GetDocumentNoOfSegments()
         {
-            return _segmentMetadata.Count();
+            return _segmentsByIndex.Count;
         }
 
         public string GetSegmentText(int index)
         {
-            var segmentPair = GetSegmentPair(index);
-            return segmentPair.Target.GetString();
-        }
-
-        public string GetSelection()
-        {
-            return _document.Selection.Target.ToString();
+            return FindSegmentPair(index).Target.GetString();
         }
 
         public void ReplaceTextInSegment(int segmentId, int startPosition, int endPosition, string replacementText)
         {
-            var segmentPair = GetSegmentPair(segmentId);
-            segmentPair?.Target.Replace(startPosition, endPosition, replacementText);
+            var segmentPair = FindSegmentPair(segmentId);
+            if (segmentPair == null)
+                return;
+
+            segmentPair.Target.Replace(startPosition, endPosition, replacementText);
             _document.UpdateSegmentPair(segmentPair);
         }
 
         public void SelectText(int index, int startPosition, int endPosition)
         {
-            var segmentPair = GetSegmentPair(index);
-
+            var segmentPair = FindSegmentPair(index);
             var paragraphUnitId = segmentPair.GetParagraphUnitProperties().ParagraphUnitId.Id;
 
             _document.SetActiveSegmentPair(paragraphUnitId, segmentPair.Properties.Id.Id);
         }
 
-        private ISegmentPair GetSegmentPair(int index)
+        private ISegmentPair FindSegmentPair(int index)
         {
-            var segmentUniqueIdentifier = _segmentMetadata[index];
+            // Throws KeyNotFoundException for an index outside this document — by design; see class docs.
+            var identity = _segmentsByIndex[index];
 
-            return _document.SegmentPairs
-                .FirstOrDefault(
-                        segmentPair =>
-                        {
-                            var segmentIdFound = segmentPair.Properties.Id.Id.Equals(segmentUniqueIdentifier.Key.ToString());
-                            var paragraphUnitId = segmentPair.GetParagraphUnitProperties().ParagraphUnitId.Id;
-                            return segmentIdFound && paragraphUnitId.Equals(segmentUniqueIdentifier.Value);
-                        });
+            return _document.SegmentPairs.FirstOrDefault(segmentPair =>
+                identity.Matches(
+                    segmentPair.Properties.Id.Id,
+                    segmentPair.GetParagraphUnitProperties().ParagraphUnitId.Id));
         }
 
-        private void Initialize()
+        private void IndexCorrectableSegments()
         {
-            _segmentMetadata.Clear();
+            _segmentsByIndex.Clear();
+            if (_document == null)
+                return;
 
             var index = 1;
-            for (var i = 0; i < _document?.FilteredSegmentPairsCount; i++)
+            foreach (var segmentPair in _document.FilteredSegmentPairs)
             {
-                var segmentPair = _document.FilteredSegmentPairs.ToList()[i];
-                var paragraphUnitId = segmentPair.GetParagraphUnitProperties().ParagraphUnitId.Id;
-                var currentId = segmentPair.Properties.Id.Id;
-
                 if (string.IsNullOrEmpty(segmentPair.Target.GetString()))
                     continue;
-                _segmentMetadata.Add(index, new KeyValuePair<string, string>(currentId, paragraphUnitId));
-                index++;
+
+                _segmentsByIndex.Add(index++, new SegmentIdentity(
+                    segmentPair.Properties.Id.Id,
+                    segmentPair.GetParagraphUnitProperties().ParagraphUnitId.Id));
             }
+        }
+
+        /// <summary>Studio's stable identity for one segment: its id within its paragraph unit.</summary>
+        private readonly struct SegmentIdentity
+        {
+            public SegmentIdentity(string segmentId, string paragraphUnitId)
+            {
+                SegmentId = segmentId;
+                ParagraphUnitId = paragraphUnitId;
+            }
+
+            public string SegmentId { get; }
+            public string ParagraphUnitId { get; }
+
+            public bool Matches(string segmentId, string paragraphUnitId)
+                => SegmentId.Equals(segmentId) && ParagraphUnitId.Equals(paragraphUnitId);
         }
     }
 }

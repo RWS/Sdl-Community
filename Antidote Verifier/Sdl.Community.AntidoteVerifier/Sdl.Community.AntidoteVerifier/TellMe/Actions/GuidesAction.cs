@@ -1,22 +1,17 @@
-﻿using Sdl.TellMe.ProviderApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System.Drawing;
 
 namespace Sdl.Community.AntidoteVerifier.TellMe.Actions
 {
-    public class GuidesAction : AbstractTellMeAction
+    public class GuidesAction : AntidoteToolTellMeAction
     {
-        public GuidesAction()
+        public GuidesAction() : base("Guides")
         {
-            Name = $"{PluginResources.Plugin_Name} Guides";
         }
-
-        public override string Category => string.Format(PluginResources.TellMe_Provider_Results, PluginResources.Plugin_Name);
 
         public override Icon Icon => PluginResources.guide;
 
-        public override bool IsAvailable => true;
-
-        public override void Execute() => SdlTradosStudio.Application.ExecuteAction<AntidoteGuideAction>();
+        protected override void ExecuteTool()
+            => SdlTradosStudio.Application.ExecuteAction<AntidoteGuideAction>();
     }
 }
