@@ -19,11 +19,18 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Antidote API\**" />
+    <EmbeddedResource Remove="Antidote API\**" />
+    <None Remove="Antidote API\**" />
+    <Page Remove="Antidote API\**" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="Resources\Information.png" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Interop.antido32Lib">
-      <HintPath>..\3rd party\Interop.antido32Lib.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(TradosFolder)\Newtonsoft.Json.dll</HintPath>
+      <Private>false</Private>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
       <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.dll</HintPath>
