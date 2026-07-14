@@ -32,9 +32,12 @@ public class VerifyFilesExtended : AbstractFileContentProcessingAutomaticTask
     private VerifyFilesExtendedSettings Settings { get; set; }
     private VerificationSettingsDataProvider VerificationSettingsDataProvider { get; set; } = new();
 
-    public async override void TaskComplete()
+    public override void TaskComplete()
     {
-        while (!Signal.Finished) await Task.Delay(500);
+        // Block until the background Verify Files run has delivered its report:
+        // returning earlier lets Studio finalize the task before the extended
+        // report is registered, so it would miss the task results window.
+        Signal.WhenFinished().GetAwaiter().GetResult();
 
         Signal.Reset();
 
@@ -152,7 +155,7 @@ public class VerifyFilesExtended : AbstractFileContentProcessingAutomaticTask
             }
             finally
             {
-                Signal.Finished = true;
+                Signal.Finish();
             }
         });
     }
