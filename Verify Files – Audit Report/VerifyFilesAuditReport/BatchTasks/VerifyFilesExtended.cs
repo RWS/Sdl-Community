@@ -1,17 +1,12 @@
-﻿using NLog;
+using System;
+using System.Linq;
+using NLog;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
-using Sdl.ProjectAutomation.FileBased;
-using Sdl.ProjectAutomation.FileBased.Reports.Operations;
-using System;
-using System.IO;
-using System.Linq;
-using VerifyFilesAuditReport.Components.Report_Extender;
-using VerifyFilesAuditReport.Components.SegmentMetadata_Provider;
-using VerifyFilesAuditReport.Components.SettingsProvider;
+using System.Threading.Tasks;
+using VerifyFilesAuditReport.Components.Reporting;
 using VerifyFilesAuditReport.Logging;
-using Task = System.Threading.Tasks.Task;
 
 namespace VerifyFilesAuditReport.BatchTasks;
 
@@ -23,34 +18,38 @@ namespace VerifyFilesAuditReport.BatchTasks;
 [RequiresSettings(typeof(VerifyFilesExtendedSettings), typeof(VerifyFilesExtendedSettingsPage))]
 public class VerifyFilesExtended : AbstractFileContentProcessingAutomaticTask
 {
+    private const string ReportName = "Capture QA Rule State";
+    private const string VerificationSettingsGroupId = "VerificationSettings";
+    private const string IncludeIgnoredMessagesSettingId = "IncludeIgnoredMessages";
 
     private static readonly Logger Logger = Log.GetLogger("Verify Files - Audit Report Task");
-    public ContentVerifier ContentVerifier { get; set; } = new();
-    public string XmlString { get; set; }
-    private ReportExtender ReportExtender { get; } = new();
-    private SegmentMetadataProvider SegmentMetadataProvider { get; set; } = new();
-    private VerifyFilesExtendedSettings Settings { get; set; }
-    private VerificationSettingsDataProvider VerificationSettingsDataProvider { get; set; } = new();
 
-    public async override void TaskComplete()
+    private readonly VerificationMessageChannel _messageChannel = new();
+    private readonly ContentVerifier _contentVerifier;
+    private readonly ExtendedReportBuilder _reportBuilder = new();
+
+    private Task<string> _originalReportXml;
+    private VerifyFilesExtendedSettings _settings;
+
+    public VerifyFilesExtended()
     {
-        while (!Signal.Finished) await Task.Delay(500);
+        _contentVerifier = new ContentVerifier(_messageChannel);
+    }
 
-        Signal.Reset();
-
+    public override void TaskComplete()
+    {
         try
         {
+            // Studio finalizes the task as soon as this method returns; the extended
+            // report must be registered before then or it misses the results window.
+            var originalReportXml = _originalReportXml.GetAwaiter().GetResult();
+
             Logger.Info("Building extended verification report.");
 
-            var extendedReport = ReportExtender.CreateReport(XmlString);
+            var extendedReportXml = _reportBuilder.Build(originalReportXml, Project,
+                _settings.IncludeVerificationDetails, _settings.ReportStatuses);
 
-            AddProjectFilesTotal(extendedReport);
-            if (Settings.IncludeVerificationDetails)
-                AddActiveQaProviders(extendedReport);
-            AddMetadataToSegments(extendedReport);
-            ApplySettings(extendedReport);
-
-            CreateReport(extendedReport);
+            CreateExtendedReport(extendedReportXml);
 
             Logger.Info("Extended verification report created.");
         }
@@ -58,102 +57,45 @@ public class VerifyFilesExtended : AbstractFileContentProcessingAutomaticTask
         {
             Logger.Error(ex, "Failed to build the extended verification report.");
         }
+        finally
+        {
+            _messageChannel.Dispose();
+        }
     }
 
     protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
     {
-        multiFileConverter.AddBilingualProcessor(ContentVerifier);
+        multiFileConverter.AddBilingualProcessor(_contentVerifier);
     }
 
     protected override void OnInitializeTask()
     {
         Logger.Info("Initializing Verify Files - Audit Report task.");
 
-        Settings = GetSetting<VerifyFilesExtendedSettings>();
+        _settings = GetSetting<VerifyFilesExtendedSettings>();
 
+        ApplyIncludeIgnoredMessagesSetting();
+
+        _originalReportXml = new OriginalReportProvider(_messageChannel)
+            .RunVerifyFilesAsync(Project, TaskFiles.GetIds());
+    }
+
+    private void ApplyIncludeIgnoredMessagesSetting()
+    {
         var settingsBundle = Project.GetSettings();
-        var verificationSettings = settingsBundle.GetSettingsGroup("VerificationSettings");
-        verificationSettings.GetSetting<bool>("IncludeIgnoredMessages").Value = Settings.IncludeIgnoredMessages;
+        var verificationSettings = settingsBundle.GetSettingsGroup(VerificationSettingsGroupId);
+        verificationSettings.GetSetting<bool>(IncludeIgnoredMessagesSettingId).Value = _settings.IncludeIgnoredMessages;
 
         Project.UpdateSettings(settingsBundle);
         Project.Save();
-
-        SetOriginalVerificationReport();
     }
 
-    private void AddActiveQaProviders(IExtendedReport extendedReport)
+    private void CreateExtendedReport(string extendedReportXml)
     {
-        var activeQaProvidersXmlString = VerificationSettingsDataProvider.GetVerificationSettings(Project);
-        extendedReport.AddActiveQaProviders(activeQaProvidersXmlString);
-    }
-
-    private void AddMetadataToSegments(IExtendedReport extendedReport)
-    {
-        var languageFiles = Project.GetTargetLanguageFiles().Where(lf=>lf.Role != FileRole.Reference);
-
-        foreach (var languageFile in languageFiles)
-        {
-            var statuses = SegmentMetadataProvider.GetAllSegmentStatuses(Project, languageFile.Id);
-            extendedReport.AddStatuses(statuses, languageFile.Id);
-        }
-    }
-
-    private void AddProjectFilesTotal(IExtendedReport extendedReport)
-    {
-        var projectFilesTotal = Project.GetTargetLanguageFiles().Length;
-        extendedReport.AddProjectFilesTotal(projectFilesTotal);
-    }
-
-    private void ApplySettings(IExtendedReport extendedReport)
-    {
-        var statuses = Settings.ReportStatuses;
-        extendedReport.FilterMessages(statuses);
-    }
-
-    private void CreateReport(IExtendedReport extendedReport)
-    {
-        var extendedReportXmlString = extendedReport.GetExtendedReportXmlString();
-
-        var noLanguages = TaskFiles.Select(f => f.Language).Distinct().Count();
-        if (noLanguages == 1)
-            CreateReport("Capture QA Rule State", "Capture QA Rule State", extendedReportXmlString, TaskFiles.First().GetLanguageDirection());
+        var languageCount = TaskFiles.Select(f => f.Language).Distinct().Count();
+        if (languageCount == 1)
+            CreateReport(ReportName, ReportName, extendedReportXml, TaskFiles.First().GetLanguageDirection());
         else
-            CreateReport("Capture QA Rule State", "Capture QA Rule State", extendedReportXmlString);
-    }
-
-    private void SetOriginalVerificationReport()
-    {
-        AutomaticTask result = null;
-        Task.Run(() =>
-        {
-            try
-            {
-                result = Project.RunAutomaticTask
-                (
-                    TaskFiles.GetIds(),
-                    AutomaticTaskTemplateIds.VerifyFiles,
-                    (_, _) => { }, (_, args) => Signal.SendMessage(args.Message)
-                );
-
-                var reportId = result.Reports.First().Id;
-
-                var reportFilePath = $"{Path.Combine(Path.GetTempPath(), Path.GetRandomFileName())}.xml";
-                Project.SaveTaskReportAs(reportId, reportFilePath, ReportFormat.Xml);
-
-                new ProjectReportsOperations((FileBasedProject)Project).RemoveReports([reportId]);
-
-                XmlString = File.ReadAllText(reportFilePath);
-
-                Logger.Log(LogLevel.Info, $"Verify Files temp report saved at: {reportFilePath}");
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex, "Failed to generate the original verification report.");
-            }
-            finally
-            {
-                Signal.Finished = true;
-            }
-        });
+            CreateReport(ReportName, ReportName, extendedReportXml);
     }
 }
