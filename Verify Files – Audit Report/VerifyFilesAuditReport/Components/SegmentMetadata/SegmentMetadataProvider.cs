@@ -28,25 +28,24 @@ public class SegmentMetadataProvider
         try
         {
             doc = XDocument.Load(sdlxliffPath);
+            return doc
+                .Descendants(XliffNs + "trans-unit")
+                .SelectMany(tu => tu
+                    .Elements(SdlNs + "seg-defs")
+                    .Elements(SdlNs + "seg")
+                    .Select(seg => new Segment
+                    {
+                        Id = (string)seg.Attribute("id"),
+                        Status = GetUiStatusString(seg)
+                    })
+                )
+                .ToList();
         }
         catch (Exception ex)
         {
             Logger.Error(ex, $"Failed to load sdlxliff file '{sdlxliffPath}'.");
-            throw;
+            return null;
         }
-
-        return doc
-            .Descendants(XliffNs + "trans-unit")
-            .SelectMany(tu => tu
-                .Elements(SdlNs + "seg-defs")
-                .Elements(SdlNs + "seg")
-                .Select(seg => new Segment
-                {
-                    Id = (string)seg.Attribute("id"),
-                    Status = GetUiStatusString(seg)
-                })
-            )
-            .ToList();
     }
 
     private static string GetSdlxliffPath(IProject project, Guid languageFileGuid)
