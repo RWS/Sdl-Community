@@ -1,27 +1,26 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using NLog;
 using Sdl.ProjectAutomation.Core;
-using VerifyFilesAuditReport.BatchTasks;
-using VerifyFilesAuditReport.Components.SegmentMetadata_Provider.Model;
+using VerifyFilesAuditReport.Components.SegmentMetadata.Model;
 using VerifyFilesAuditReport.Logging;
 
-namespace VerifyFilesAuditReport.Components.SegmentMetadata_Provider;
+namespace VerifyFilesAuditReport.Components.SegmentMetadata;
 
 public class SegmentMetadataProvider
 {
     private static readonly Logger Logger = Log.GetLogger(typeof(SegmentMetadataProvider).FullName);
+
+    private static readonly XNamespace XliffNs = "urn:oasis:names:tc:xliff:document:1.2";
+    private static readonly XNamespace SdlNs = "http://sdl.com/FileTypes/SdlXliff/1.0";
 
     public List<Segment> GetAllSegmentStatuses(IProject project, Guid languageFileGuid)
     {
         var sdlxliffPath = GetSdlxliffPath(project, languageFileGuid);
         if (sdlxliffPath is null)
             return null;
-
-        XNamespace xliffNs = "urn:oasis:names:tc:xliff:document:1.2";
-        XNamespace sdlNs = "http://sdl.com/FileTypes/SdlXliff/1.0";
 
         Logger.Debug($"Reading segment statuses from '{sdlxliffPath}'.");
 
@@ -36,11 +35,11 @@ public class SegmentMetadataProvider
             throw;
         }
 
-        var segments = doc
-            .Descendants(xliffNs + "trans-unit")
+        return doc
+            .Descendants(XliffNs + "trans-unit")
             .SelectMany(tu => tu
-                .Elements(sdlNs + "seg-defs")
-                .Elements(sdlNs + "seg")
+                .Elements(SdlNs + "seg-defs")
+                .Elements(SdlNs + "seg")
                 .Select(seg => new Segment
                 {
                     Id = (string)seg.Attribute("id"),
@@ -48,8 +47,6 @@ public class SegmentMetadataProvider
                 })
             )
             .ToList();
-
-        return segments;
     }
 
     private static string GetSdlxliffPath(IProject project, Guid languageFileGuid)
@@ -57,14 +54,14 @@ public class SegmentMetadataProvider
         var langFile = project.GetTargetLanguageFiles()
             .Single(f => f.Id == languageFileGuid);
 
-        return langFile.Role == FileRole.Reference 
-            ? null 
+        return langFile.Role == FileRole.Reference
+            ? null
             : langFile.LocalFilePath;
     }
 
     private static string GetUiStatusString(XElement seg)
     {
         var status = (string)seg.Attribute("conf") ?? (string)seg.Attribute("state") ?? "Not Translated";
-        return Constants.Statuses[status];
+        return SegmentStatuses.ToUiName(status);
     }
 }

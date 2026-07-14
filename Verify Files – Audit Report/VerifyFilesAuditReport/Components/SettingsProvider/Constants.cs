@@ -1,6 +1,6 @@
 ﻿namespace VerifyFilesAuditReport.Components.SettingsProvider
 {
-    public class Constants
+    public static class Constants
     {
         public const string Common = "Common";
 
