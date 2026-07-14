@@ -1,146 +1,119 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
-using VerifyFilesAuditReport.Components.SegmentMetadata_Provider.Model;
+using VerifyFilesAuditReport.Components.SegmentMetadata;
+using VerifyFilesAuditReport.Components.SegmentMetadata.Model;
 using VerifyFilesAuditReport.Components.SettingsProvider.Model;
 
-namespace VerifyFilesAuditReport.Components.Report_Extender;
+namespace VerifyFilesAuditReport.Components.Reporting;
 
-public class ExtendedReport(string originalXmlString) : IExtendedReport
+/// <summary>
+/// Wraps the XML report produced by the built-in Verify Files task and
+/// enriches it with the data that makes it auditable.
+/// </summary>
+public class ExtendedReport : IExtendedReport
 {
-    private string ActiveQaProvidersXml { get; set; }
-    private string OriginalXmlString { get; } = originalXmlString;
-    private string UpdatedXmlString { get; set; }
+    private readonly XmlDocument _document = new();
 
-    public void AddActiveQaProviders(VerificationProviderSettings qaProvidersXmlString)
+    public ExtendedReport(string originalXmlString)
     {
-        var projectVerifierSettings = qaProvidersXmlString.ProjectVerificationProviders;
+        _document.LoadXml(originalXmlString);
+    }
 
-        var serializer = new XmlSerializer(typeof(VerificationSettingsTreeNode));
-        using var stringWriter = new StringWriter();
+    public void AddActiveQaProviders(VerificationProviderSettings providerSettings)
+    {
+        var settingsXml = SerializeToXmlString(providerSettings.ProjectVerificationProviders);
 
-        var settings = new XmlWriterSettings
+        var fragment = _document.CreateDocumentFragment();
+        fragment.InnerXml = settingsXml;
+
+        _document.DocumentElement?.AppendChild(fragment);
+    }
+
+    public void AddProjectFilesTotal(int projectFilesTotal)
+    {
+        var projectNode = _document.SelectSingleNode("//taskInfo/project");
+        if (projectNode == null)
+            return;
+
+        var attribute = projectNode.Attributes["projectFilesTotal"];
+        if (attribute == null)
         {
-            OmitXmlDeclaration = true,
-            Indent = false
-        };
+            attribute = _document.CreateAttribute("projectFilesTotal");
+            projectNode.Attributes.Append(attribute);
+        }
 
-        using var xmlWriter = XmlWriter.Create(stringWriter, settings);
-
-        var namespaces = new XmlSerializerNamespaces();
-        namespaces.Add("", ""); // Remove default namespace
-
-        serializer.Serialize(xmlWriter, projectVerifierSettings, namespaces);
-        ActiveQaProvidersXml = stringWriter.ToString();
+        attribute.Value = projectFilesTotal.ToString();
     }
 
     public void AddStatuses(List<Segment> statuses, Guid languageFileId)
     {
-        var xmlDoc = new XmlDocument();
-        xmlDoc.LoadXml(UpdatedXmlString ?? OriginalXmlString);
+        if (statuses == null)
+            return;
 
-        var statusLookup = statuses.ToDictionary(s => s.Id, s => s.Status);
-
-        var fileNode = xmlDoc.SelectSingleNode($"//file[@guid='{languageFileId}']");
+        var fileNode = _document.SelectSingleNode($"//file[@guid='{languageFileId}']");
         var messageNodes = fileNode?.SelectNodes(".//Message");
         if (messageNodes == null)
             return;
 
+        var statusLookup = statuses.ToDictionary(s => s.Id, s => s.Status);
+
         foreach (XmlNode messageNode in messageNodes)
         {
-            var segmentIdNode = messageNode.SelectSingleNode("SegmentId");
-            if (segmentIdNode == null)
-                continue;
-
-            var segmentId = segmentIdNode.InnerText;
-            if (!statusLookup.TryGetValue(segmentId, out var status))
+            var segmentId = messageNode.SelectSingleNode("SegmentId")?.InnerText;
+            if (segmentId == null || !statusLookup.TryGetValue(segmentId, out var status))
                 continue;
 
             var statusNode = messageNode.SelectSingleNode("Status");
             if (statusNode == null)
             {
-                statusNode = xmlDoc.CreateElement("Status");
+                statusNode = _document.CreateElement("Status");
                 messageNode.AppendChild(statusNode);
             }
 
             statusNode.InnerText = status ?? string.Empty;
         }
-
-        UpdatedXmlString = xmlDoc.OuterXml;
     }
 
     public void FilterMessages(List<string> statuses)
     {
-        if (statuses == null || !statuses.Any() || statuses.Count == 8)
+        if (statuses == null || !statuses.Any() || statuses.Count == SegmentStatuses.UiNames.Count)
             return;
 
-        var xmlDoc = new XmlDocument();
-        xmlDoc.LoadXml(UpdatedXmlString ?? OriginalXmlString);
-
-        var messageNodes = xmlDoc.SelectNodes("//Message");
+        var messageNodes = _document.SelectNodes("//Message");
         if (messageNodes == null)
             return;
 
-        var statusesSet = new HashSet<string>(statuses, StringComparer.OrdinalIgnoreCase);
+        var statusesToKeep = new HashSet<string>(statuses, StringComparer.OrdinalIgnoreCase);
         foreach (XmlNode messageNode in messageNodes)
         {
             var statusNode = messageNode.SelectSingleNode("Status");
-            if (statusNode != null && statusesSet.Contains(statusNode.InnerText))
+            if (statusNode != null && statusesToKeep.Contains(statusNode.InnerText))
                 continue;
 
-            // Remove the message node if it does not match the statuses
-            var parent = messageNode.ParentNode;
-            parent?.RemoveChild(messageNode);
+            messageNode.ParentNode?.RemoveChild(messageNode);
         }
-        UpdatedXmlString = xmlDoc.OuterXml;
     }
 
-    public void AddProjectFilesTotal(int projectFilesTotal)
+    public string GetExtendedReportXmlString() => _document.OuterXml;
+
+    private static string SerializeToXmlString(VerificationSettingsTreeNode settings)
     {
-        // Use the most up-to-date XML string
-        var xmlString = UpdatedXmlString ?? OriginalXmlString;
+        var serializer = new XmlSerializer(typeof(VerificationSettingsTreeNode));
 
-        var xmlDoc = new XmlDocument();
-        xmlDoc.LoadXml(xmlString);
-
-        // Find the <taskInfo>/<project> element
-        var projectNode = xmlDoc.SelectSingleNode("//taskInfo/project");
-        if (projectNode == null)
-            return;
-
-        // Add or update the projectFilesTotal attribute
-        var attr = projectNode.Attributes["projectFilesTotal"];
-        if (attr == null)
+        using var stringWriter = new StringWriter();
+        using (var xmlWriter = XmlWriter.Create(stringWriter,
+                   new XmlWriterSettings { OmitXmlDeclaration = true, Indent = false }))
         {
-            attr = xmlDoc.CreateAttribute("projectFilesTotal");
-            projectNode.Attributes.Append(attr);
+            var namespaces = new XmlSerializerNamespaces();
+            namespaces.Add("", "");
+
+            serializer.Serialize(xmlWriter, settings, namespaces);
         }
-        attr.Value = projectFilesTotal.ToString();
 
-        // Save the updated XML
-        UpdatedXmlString = xmlDoc.OuterXml;
-    }
-
-    public string GetExtendedReportXmlString()
-    {
-        var xmlString = UpdatedXmlString ?? OriginalXmlString;
-
-        if (string.IsNullOrEmpty(ActiveQaProvidersXml))
-            return xmlString;
-
-        // Insert the QA provider settings into the original report
-        // This assumes the original XML has a root element where we can add the settings
-        var closingTagIndex = xmlString.LastIndexOf("</task>");
-        if (closingTagIndex <= 0)
-            return xmlString;
-
-        var afterClosingTagIndex = closingTagIndex;
-        var beforeClosing = xmlString.Substring(0, afterClosingTagIndex);
-        var afterClosing = xmlString.Substring(closingTagIndex);
-
-        return $"{beforeClosing}{ActiveQaProvidersXml}{afterClosing}";
+        return stringWriter.ToString();
     }
 }

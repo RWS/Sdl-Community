@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Sdl.Core.Globalization;
 using Sdl.ProjectAutomation.Core;
@@ -9,17 +9,7 @@ namespace VerifyFilesAuditReport.Components.SettingsProvider;
 
 public class VerificationSettingsDataProvider
 {
-    private static List<string> DefaultVerifiers { get; } =
-    [
-        Constants.QaVerificationSettings,
-        Constants.SettingsTagVerifier,
-        Constants.SettingsTermVerifier
-    ];
-
     private ProjectSettingsReader ProjectSettingsReader { get; } = new();
-
-    public static List<string> GetVerifiersList() =>
-            DefaultVerifiers.Concat(PluginManagerWrapper.GetInstalledThirdPartyVerifiers()).ToList();
 
     public VerificationProviderSettings GetVerificationSettings(IProject project) =>
         new()
@@ -34,17 +24,20 @@ public class VerificationSettingsDataProvider
 
     private VerificationSettingsTreeNode GetVerificationSettings(IProject project, Language language)
     {
-        var settingsXml = new VerificationSettingsTreeNode();
         var projectVerificationSettings = ProjectSettingsReader.ReadProjectVerificationSettings(project, language);
-        var verifiersList = GetVerifiersList();
-        foreach (var verifier in verifiersList)
+
+        var settingsRoot = new VerificationSettingsTreeNode { Name = Constants.VerificationSettings };
+        foreach (var verifierId in VerifierCatalog.GetActiveVerifierIds())
         {
-            var verifierSettingsObject = CategoryMap.CreateVerificationSettings(verifier);
-            verifierSettingsObject.LoadSettings(projectVerificationSettings?[verifier]);
-            settingsXml.Values.Add(verifierSettingsObject.ToSettingsValue());
+            var verifierSettings = VerifierCatalog.CreateSettings(verifierId);
+
+            verifierSettings.LoadSettings(projectVerificationSettings.TryGetValue(verifierId, out var settings)
+                ? settings
+                : new Dictionary<string, string>());
+
+            settingsRoot.Values.Add(verifierSettings.ToSettingsValue());
         }
 
-        settingsXml.Name = "Verification Settings";
-        return settingsXml;
+        return settingsRoot;
     }
 }
