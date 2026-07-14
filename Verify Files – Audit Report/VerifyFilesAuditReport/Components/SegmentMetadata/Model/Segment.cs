@@ -1,8 +1,7 @@
-﻿namespace VerifyFilesAuditReport.Components.SegmentMetadata_Provider.Model
+namespace VerifyFilesAuditReport.Components.SegmentMetadata.Model;
+
+public class Segment
 {
-    public class Segment
-    {
-        public string Id { get; set; }
-        public string Status { get; set; }
-    }
+    public string Id { get; set; }
+    public string Status { get; set; }
 }

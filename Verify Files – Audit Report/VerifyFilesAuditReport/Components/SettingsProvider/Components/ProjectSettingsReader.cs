@@ -35,7 +35,6 @@ namespace VerifyFilesAuditReport.Components.SettingsProvider.Components
             }
 
             var result = new Dictionary<string, Dictionary<string, string>>();
-            AddMissingCategories(result);
 
             string settingsBundleGuid;
             if (language == null)
@@ -115,19 +114,6 @@ namespace VerifyFilesAuditReport.Components.SettingsProvider.Components
             }
 
             return result;
-        }
-
-        //TODO Remove hard-coding
-        private static void AddMissingCategories(Dictionary<string, Dictionary<string, string>> result)
-        {
-            if (!result.ContainsKey(Constants.SettingsTagVerifier))
-                result[Constants.SettingsTagVerifier] = new();
-            if (!result.ContainsKey(Constants.SettingsTermVerifier))
-                result[Constants.SettingsTermVerifier] = new();
-            if (!result.ContainsKey(Constants.QaVerificationSettings))
-                result[Constants.QaVerificationSettings] = new();
-            if (!result.ContainsKey(Constants.NumberVerifierSettings))
-                result[Constants.NumberVerifierSettings] = new();
         }
     }
 }

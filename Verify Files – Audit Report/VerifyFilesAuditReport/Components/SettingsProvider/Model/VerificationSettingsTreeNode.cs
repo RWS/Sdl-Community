@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace VerifyFilesAuditReport.Components.SettingsProvider.Model;
@@ -12,9 +12,6 @@ public class VerificationSettingsTreeNode
     [XmlAttribute]
     public string Name { get; set; }
 
-    //[XmlText]
-    //public string Value { get; set; }
-
     [XmlElement("Setting")]
     public List<VerificationSettingsTreeNode> Values { get; set; } = [];
 
@@ -22,38 +19,19 @@ public class VerificationSettingsTreeNode
     {
         node ??= this;
 
-        if (node.Name == valueName) return node;
-        if (node.Values == null) return null;
+        if (node.Name == valueName)
+            return node;
+
+        if (node.Values == null)
+            return null;
 
         foreach (var value in node.Values)
         {
-            if (value.Name == valueName)
-                return value;
-
-            if (value.Values == null) continue;
-
-            var foundInValue = FindSettingValueInValueRecursive(valueName, value);
-            if (foundInValue != null)
-                return foundInValue;
+            var found = FindSettingValueRecursive(valueName, value);
+            if (found != null)
+                return found;
         }
 
-        return null;
-    }
-
-    private VerificationSettingsTreeNode FindSettingValueInValueRecursive(string valueName, VerificationSettingsTreeNode value)
-    {
-        if (value.Values != null)
-        {
-            foreach (var nestedValue in value.Values)
-            {
-                if (nestedValue.Name == valueName)
-                    return nestedValue;
-
-                var found = FindSettingValueInValueRecursive(valueName, nestedValue);
-                if (found != null)
-                    return found;
-            }
-        }
         return null;
     }
 }

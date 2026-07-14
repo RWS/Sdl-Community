@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
-using Sdl.Core.Settings;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using VerifyFilesAuditReport.BatchTasks.UI;
-using VerifyFilesAuditReport.Components.SegmentMetadata_Provider;
-using VerifyFilesAuditReport.Components.SegmentMetadata_Provider.Model;
+using VerifyFilesAuditReport.Components.SegmentMetadata;
+using VerifyFilesAuditReport.Components.SegmentMetadata.Model;
 
 namespace VerifyFilesAuditReport.BatchTasks
 {
@@ -14,12 +13,10 @@ namespace VerifyFilesAuditReport.BatchTasks
     {
         private VerifyFilesExtendedSettingsView Control { get; set; }
         private SegmentMetadataProvider SegmentMetadataProvider { get; } = new();
-        private VerifyFilesExtendedSettings VerifyFilesExtendedSettings { get; set; }
 
         public override object GetControl()
         {
             var controller = SdlTradosStudio.Application.GetController<ProjectsController>();
-
             var currentProject = controller.SelectedProjects.FirstOrDefault() ?? controller.CurrentProject;
 
             var languageFiles = currentProject.GetTargetLanguageFiles().Where(lf => lf.Role != FileRole.Reference);
@@ -32,18 +29,15 @@ namespace VerifyFilesAuditReport.BatchTasks
                 statuses.AddRange(langFileStatuses);
             }
 
-            VerifyFilesExtendedSettings = ((ISettingsBundle)DataSource).GetSettingsGroup<VerifyFilesExtendedSettings>();
             Control = base.GetControl() as VerifyFilesExtendedSettingsView;
-
-            var distinctStatuses = statuses.Select(s => s.Status).Distinct().ToList();
-            Control.AllStatuses = distinctStatuses;
+            Control.SetAvailableStatuses(statuses.Select(s => s.Status).Distinct());
 
             return Control;
         }
 
         public override void Save()
         {
-            VerifyFilesExtendedSettings = Control.GetSettings();
+            Control.GetSettings();
             base.Save();
         }
     }
