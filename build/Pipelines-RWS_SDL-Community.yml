@@ -3,12 +3,12 @@ resources:
   - repository: AppStoreApplicationsRepo
     type: git
     name: AppStoreApplications/AppStoreApplications
-    ref: 'Studio_2026'
+    ref: 'Studio_2026_Run'
 
 trigger:
   branches:
     include:
-      - Studio_2026
+      - Studio_2026_Run
       - develop
       - feature/*
   paths:
@@ -26,10 +26,5 @@ variables:
   value: 'Release'
 
 steps:
-- checkout: self
-  fetchDepth: 0
-
-- template: build/jobs/InCommitsSerchForSLN.yml@AppStoreApplicationsRepo
-
 - template: build/jobs/build-sdlplugin.yml@AppStoreApplicationsRepo
 - template: build/jobs/publish-build-artifact-task.yml@AppStoreApplicationsRepo

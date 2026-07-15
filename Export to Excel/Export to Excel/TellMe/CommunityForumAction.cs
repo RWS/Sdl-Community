@@ -10,6 +10,7 @@ namespace Sdl.Community.ExportToExcel.TellMe
         private static readonly Icon _icon = PluginResources.TellMe_Forum;
         private static readonly bool _isAvailable = true;
 
+
         public CommunityForumAction() : base(_actionName, _icon, _helpKeywords, _isAvailable, url: _url) { }
     }
 }
