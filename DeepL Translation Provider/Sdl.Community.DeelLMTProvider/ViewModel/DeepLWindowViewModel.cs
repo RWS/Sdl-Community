@@ -3,6 +3,7 @@ using Sdl.Community.DeepLMTProvider.Client;
 using Sdl.Community.DeepLMTProvider.Command;
 using Sdl.Community.DeepLMTProvider.Interface;
 using Sdl.Community.DeepLMTProvider.Model;
+using Sdl.Community.DeepLMTProvider.Service;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -44,6 +45,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             SplitSentencesType = deepLTranslationOptions.SplitSentenceHandling;
             PreserveFormatting = deepLTranslationOptions.PreserveFormatting;
             IgnoreTags = deepLTranslationOptions.IgnoreTagsParameter;
+            UseLocalCache = deepLTranslationOptions.UseLocalCache;
 
             Options = deepLTranslationOptions;
 
@@ -68,6 +70,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             TagType = deepLTranslationOptions.TagHandling;
             SplitSentencesType = deepLTranslationOptions.SplitSentenceHandling;
             IgnoreTags = deepLTranslationOptions.IgnoreTagsParameter;
+            UseLocalCache = deepLTranslationOptions.UseLocalCache;
 
             PasswordChangedTimer.Elapsed += OnPasswordChanged;
 
@@ -97,6 +100,8 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         }
 
         public ICommand CancelCommand => new ParameterlessCommand(DetachEvents);
+
+        public ICommand ClearCacheCommand => new ParameterlessCommand(ClearCache);
 
         public bool HasValidationErrors
         {
@@ -174,6 +179,12 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         }
 
         public SplitSentences SplitSentencesType
+        {
+            get;
+            set => SetField(ref field, value);
+        }
+
+        public bool UseLocalCache
         {
             get;
             set => SetField(ref field, value);
@@ -335,6 +346,16 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                 : glossaries.FirstOrDefault(g => g.Id == glossaryId);
         }
 
+        private void ClearCache()
+        {
+            if (!MessageService.ShowDialog(
+                    "Delete all locally cached DeepL translations? They will be requested from DeepL again on the next lookup.",
+                    "Clear cache"))
+                return;
+
+            DeepLTranslationCache.Instance.Clear();
+        }
+
         private void AskUserToRestart()
         {
             var editorController = SdlTradosStudio.Application.GetController<EditorController>();
@@ -451,6 +472,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             Options.TagHandling = TagType;
             Options.SplitSentenceHandling = SplitSentencesType;
             Options.IgnoreTagsParameter = IgnoreTags;
+            Options.UseLocalCache = UseLocalCache;
 
             var glossaryIds = Options.LanguagePairOptions.ToDictionary(
                 lpo => (lpo.LanguagePair.SourceCulture.Name, lpo.LanguagePair.TargetCulture.Name),

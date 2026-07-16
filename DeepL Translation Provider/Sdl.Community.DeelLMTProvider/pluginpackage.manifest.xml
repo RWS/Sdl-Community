@@ -5,4 +5,7 @@
 	<Description>This plugin provides machine translation results from the DeepL Translator.</Description>
 	<Author>Trados AppStore Team</Author>
 	<RequiredProduct name="TradosStudio" minversion="19.0" maxversion="19.0.9" />
+	<Include>
+		<File>Trados.LocalCache.dll</File>
+	</Include>
 </PluginPackage>

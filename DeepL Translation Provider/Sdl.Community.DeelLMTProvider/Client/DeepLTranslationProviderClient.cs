@@ -43,7 +43,8 @@ namespace Sdl.Community.DeepLMTProvider.Client
         public IReadOnlyList<(string Translation, string ErrorMessage)> TranslateBatch(
             LanguagePair languageDirection,
             IReadOnlyList<string> sourceTexts,
-            DeepLSettings deepLSettings)
+            DeepLSettings deepLSettings,
+            bool useLocalCache = true)
         {
             var (sourceLanguage, _, _) = LanguageValidationService.GetDeepLLanguageCode(languageDirection.SourceCulture, true);
             var (targetLanguage, _, _) = LanguageValidationService.GetDeepLLanguageCode(languageDirection.TargetCulture, false);
@@ -61,9 +62,31 @@ namespace Sdl.Community.DeepLMTProvider.Client
                 : deepLSettings.Formality.ToString().ToLowerInvariant();
 
             var results = new (string Translation, string ErrorMessage)[sourceTexts.Count];
+
+            // Serve cache hits per segment; only the misses go to DeepL.
+            // Gated per call (not via ILocalCache.IsEnabled) so concurrent language
+            // directions with different settings don't race on the shared instance.
+            var cacheKeys = new string[sourceTexts.Count];
+            var pendingIndices = new List<int>(sourceTexts.Count);
+            for (var i = 0; i < sourceTexts.Count; i++)
+            {
+                if (useLocalCache)
+                {
+                    cacheKeys[i] = BuildCacheKey(sourceLanguage, targetLanguage, modelType, tagHandling, formality, deepLSettings, sourceTexts[i]);
+                    if (DeepLTranslationCache.Instance.TryGet(cacheKeys[i], out var cachedTranslation))
+                    {
+                        results[i] = (cachedTranslation, null);
+                        continue;
+                    }
+                }
+
+                pendingIndices.Add(i);
+            }
+
+            var pendingTexts = pendingIndices.Select(index => sourceTexts[index]).ToList();
             var batchStartIndex = 0;
 
-            foreach (var batch in BuildBatches(sourceTexts))
+            foreach (var batch in BuildBatches(pendingTexts))
             {
                 var deeplRequestParameters = new DeeplRequestParameters
                 {
@@ -93,7 +116,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
                     {
                         var errorMessage = !string.IsNullOrWhiteSpace(responseBody) ? responseBody : response.ReasonPhrase;
                         for (var i = 0; i < batch.Count; i++)
-                            results[batchStartIndex + i] = (null, errorMessage);
+                            results[pendingIndices[batchStartIndex + i]] = (null, errorMessage);
                     }
                     else
                     {
@@ -103,7 +126,12 @@ namespace Sdl.Community.DeepLMTProvider.Client
                             var translation = translatedObject?.Translations?.Count > i
                                 ? translatedObject.Translations[i].Text
                                 : null;
-                            results[batchStartIndex + i] = (translation, null);
+
+                            var sourceIndex = pendingIndices[batchStartIndex + i];
+                            results[sourceIndex] = (translation, null);
+
+                            if (useLocalCache && !string.IsNullOrEmpty(translation))
+                                DeepLTranslationCache.Instance.Set(cacheKeys[sourceIndex], translation);
                         }
                     }
                 }
@@ -111,13 +139,39 @@ namespace Sdl.Community.DeepLMTProvider.Client
                 {
                     var inner = ex is AggregateException aEx ? aEx.InnerExceptions.FirstOrDefault() ?? ex : ex;
                     for (var i = 0; i < batch.Count; i++)
-                        results[batchStartIndex + i] = (null, inner.Message);
+                        results[pendingIndices[batchStartIndex + i]] = (null, inner.Message);
                 }
 
                 batchStartIndex += batch.Count;
             }
 
             return results;
+        }
+
+        private static string BuildCacheKey(
+            string sourceLanguage,
+            string targetLanguage,
+            string modelType,
+            string tagHandling,
+            string formality,
+            DeepLSettings deepLSettings,
+            string sourceText)
+        {
+            return new Trados.LocalCache.CacheKeyBuilder()
+                .Add("provider", "deepl")
+                .Add("src", sourceLanguage)
+                .Add("tgt", targetLanguage)
+                .Add("model", modelType)
+                .Add("tagHandling", tagHandling)
+                .Add("formality", formality)
+                .Add("glossary", deepLSettings.GlossaryId)
+                .Add("style", deepLSettings.StyleId)
+                .Add("tm", deepLSettings.TranslationMemoryId)
+                .Add("preserveFormatting", deepLSettings.PreserveFormatting)
+                .Add("splitSentences", deepLSettings.SplitSentencesHandling.GetApiValue())
+                .AddValues("ignoreTags", deepLSettings.IgnoreTags)
+                .Add("content", sourceText)
+                .Build();
         }
 
         private static void ApplyDeepLRestrictions(DeeplRequestParameters deeplRequestParameters)
