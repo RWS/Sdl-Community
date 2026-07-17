@@ -98,6 +98,24 @@ public class ExtendedReport : IExtendedReport
         }
     }
 
+    public IReadOnlyCollection<Guid> GetFileIdsWithMessages()
+    {
+        var fileIds = new HashSet<Guid>();
+
+        var fileNodes = _document.SelectNodes("//file[@guid]");
+        if (fileNodes == null)
+            return fileIds;
+
+        foreach (XmlNode fileNode in fileNodes)
+        {
+            if (fileNode.SelectSingleNode(".//Message") != null &&
+                Guid.TryParse(fileNode.Attributes?["guid"]?.Value, out var fileId))
+                fileIds.Add(fileId);
+        }
+
+        return fileIds;
+    }
+
     public string GetExtendedReportXmlString() => _document.OuterXml;
 
     private static string SerializeToXmlString(VerificationSettingsTreeNode settings)
