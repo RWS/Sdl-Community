@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Xml.Linq;
-using Sdl.Core.Globalization;
+//using Sdl.Core.Globalization;
 using Sdl.ProjectAutomation.Core;
 using VerifyFilesAuditReport.Components.SettingsProvider.Components;
 using VerifyFilesAuditReport.Components.SettingsProvider.Model;
@@ -20,18 +19,18 @@ public class VerificationSettingsDataProvider
 
         return new VerificationProviderSettings
         {
-            ProjectVerificationProviders = GetVerificationSettings(projectDocument, null, activeVerifierIds),
-            LanguageVerificationProviders = project.GetProjectInfo().TargetLanguages.ToDictionary(
-                language => language.DisplayName,
-                language => GetVerificationSettings(projectDocument, language, activeVerifierIds))
+            ProjectVerificationProviders = GetVerificationSettings(projectDocument, /*null,*/ activeVerifierIds),
+            //LanguageVerificationProviders = project.GetProjectInfo().TargetLanguages.ToDictionary(
+            //    language => language.DisplayName,
+            //    language => GetVerificationSettings(projectDocument, language, activeVerifierIds))
         };
     }
 
-    private VerificationSettingsTreeNode GetVerificationSettings(XDocument projectDocument, Language language,
+    private VerificationSettingsTreeNode GetVerificationSettings(XDocument projectDocument, /*Language language,*/
         List<string> activeVerifierIds)
     {
         var projectVerificationSettings =
-            ProjectSettingsReader.ReadProjectVerificationSettings(projectDocument, language?.ToString());
+            ProjectSettingsReader.ReadProjectVerificationSettings(projectDocument /*, language?.ToString()*/);
 
         var settingsRoot = new VerificationSettingsTreeNode { Name = Constants.VerificationSettings };
         foreach (var verifierId in activeVerifierIds)

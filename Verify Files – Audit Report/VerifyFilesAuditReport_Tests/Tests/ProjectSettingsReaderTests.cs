@@ -59,14 +59,14 @@ public class ProjectSettingsReaderTests
         Assert.Equal("""<Setting Id="Nested"><Sub>x</Sub></Setting>""", settings["QAVerificationSettings"]["Nested"]);
     }
 
-    [Fact]
-    public void ReadProjectVerificationSettings_ReadsLanguageSpecificBundle()
-    {
-        var settings = _reader.ReadProjectVerificationSettings(_document, "de-DE");
+    //[Fact]
+    //public void ReadProjectVerificationSettings_ReadsLanguageSpecificBundle()
+    //{
+    //    var settings = _reader.ReadProjectVerificationSettings(_document, "de-DE");
 
-        Assert.Equal("False", settings["SettingsTagVerifier"]["AddedTagsErrorLevel"]);
-        Assert.DoesNotContain("QAVerificationSettings", settings.Keys);
-    }
+    //    Assert.Equal("False", settings["SettingsTagVerifier"]["AddedTagsErrorLevel"]);
+    //    Assert.DoesNotContain("QAVerificationSettings", settings.Keys);
+    //}
 
     [Fact]
     public void ReadProjectVerificationSettings_AddsTrimmedTermbaseName()

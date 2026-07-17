@@ -35,15 +35,14 @@ namespace VerifyFilesAuditReport.Components.SettingsProvider.Components
         }
 
         /// <summary>
-        /// Reads all verification-related settings from the given project document,
-        /// project-level when <paramref name="targetLanguageCode"/> is null, language-specific otherwise.
+        /// Reads all verification-related settings from the given project document (project-level bundle).
         /// </summary>
         public Dictionary<string, Dictionary<string, string>> ReadProjectVerificationSettings(
-            XDocument projectDocument, string targetLanguageCode = null)
+            XDocument projectDocument /*, string targetLanguageCode = null*/)
         {
             var result = new Dictionary<string, Dictionary<string, string>>();
 
-            var settingsBundleGuid = GetSettingsBundleGuid(projectDocument, targetLanguageCode);
+            var settingsBundleGuid = GetSettingsBundleGuid(projectDocument /*, targetLanguageCode*/);
             if (string.IsNullOrEmpty(settingsBundleGuid))
                 return result;
 
@@ -70,15 +69,15 @@ namespace VerifyFilesAuditReport.Components.SettingsProvider.Components
             return result;
         }
 
-        private static string GetSettingsBundleGuid(XDocument projectDocument, string targetLanguageCode)
+        private static string GetSettingsBundleGuid(XDocument projectDocument /*, string targetLanguageCode*/)
         {
-            if (targetLanguageCode == null)
-                return projectDocument.Root?.Attribute("SettingsBundleGuid")?.Value;
+            //if (targetLanguageCode == null)
+            return projectDocument.Root?.Attribute("SettingsBundleGuid")?.Value;
 
-            var languageDirection = projectDocument.Descendants("LanguageDirection")
-                .FirstOrDefault(ld => (string)ld.Attribute("TargetLanguageCode") == targetLanguageCode);
+            //var languageDirection = projectDocument.Descendants("LanguageDirection")
+            //    .FirstOrDefault(ld => (string)ld.Attribute("TargetLanguageCode") == targetLanguageCode);
 
-            return languageDirection?.Attribute("SettingsBundleGuid")?.Value;
+            //return languageDirection?.Attribute("SettingsBundleGuid")?.Value;
         }
 
         private static Dictionary<string, string> ReadSettingsGroup(XElement group)
