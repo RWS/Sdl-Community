@@ -46,7 +46,7 @@ public class VerifyFilesExtended : AbstractFileContentProcessingAutomaticTask
             // Studio finalizes the task as soon as this method returns; the extended
             // report must be registered before then or it misses the results window.
             var originalReportXml = _originalReportXml.GetAwaiter().GetResult();
-            Logger.Info($"Waited {stopwatch.ElapsedMilliseconds} ms for the built-in Verify Files report.");
+            Logger.Info($"Waited an additional {stopwatch.ElapsedMilliseconds} ms after file processing for the built-in Verify Files report.");
 
             stopwatch.Restart();
             var extendedReportXml = _reportBuilder.Build(originalReportXml, Project,
