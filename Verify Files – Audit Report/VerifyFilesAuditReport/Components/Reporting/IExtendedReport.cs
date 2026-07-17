@@ -11,5 +11,6 @@ public interface IExtendedReport
     void AddProjectFilesTotal(int projectFilesTotal);
     void AddStatuses(List<Segment> statuses, Guid languageFileId);
     void FilterMessages(List<string> statuses);
+    IReadOnlyCollection<Guid> GetFileIdsWithMessages();
     string GetExtendedReportXmlString();
 }
