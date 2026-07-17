@@ -28,9 +28,12 @@ public class ExtendedReportBuilder(
         if (includeVerificationDetails)
             report.AddActiveQaProviders(verificationSettingsProvider.GetVerificationSettings(project));
 
-        foreach (var languageFile in targetLanguageFiles.Where(lf => lf.Role != FileRole.Reference))
+        // Only files with messages get status stamps, so the others are never read.
+        var fileIdsWithMessages = report.GetFileIdsWithMessages();
+        foreach (var languageFile in targetLanguageFiles.Where(lf =>
+                     lf.Role != FileRole.Reference && fileIdsWithMessages.Contains(lf.Id)))
         {
-            var statuses = segmentMetadataProvider.GetAllSegmentStatuses(project, languageFile.Id);
+            var statuses = segmentMetadataProvider.GetAllSegmentStatuses(languageFile.LocalFilePath);
             report.AddStatuses(statuses, languageFile.Id);
         }
 
