@@ -33,7 +33,7 @@ public class ExtendedReportBuilder(
         foreach (var languageFile in targetLanguageFiles.Where(lf =>
                      lf.Role != FileRole.Reference && fileIdsWithMessages.Contains(lf.Id)))
         {
-            var statuses = segmentMetadataProvider.GetAllSegmentStatuses(project, languageFile.Id);
+            var statuses = segmentMetadataProvider.GetAllSegmentStatuses(languageFile.LocalFilePath);
             report.AddStatuses(statuses, languageFile.Id);
         }
 

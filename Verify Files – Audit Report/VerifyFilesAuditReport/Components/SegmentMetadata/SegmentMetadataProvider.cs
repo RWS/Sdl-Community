@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Xml;
 using NLog;
-using Sdl.ProjectAutomation.Core;
 using VerifyFilesAuditReport.Components.SegmentMetadata.Model;
 using VerifyFilesAuditReport.Logging;
 
@@ -16,10 +14,9 @@ public class SegmentMetadataProvider
     private const string XliffNamespace = "urn:oasis:names:tc:xliff:document:1.2";
     private const string SdlNamespace = "http://sdl.com/FileTypes/SdlXliff/1.0";
 
-    public List<Segment> GetAllSegmentStatuses(IProject project, Guid languageFileGuid)
+    public List<Segment> GetAllSegmentStatuses(string sdlxliffPath)
     {
-        var sdlxliffPath = GetSdlxliffPath(project, languageFileGuid);
-        if (sdlxliffPath is null)
+        if (string.IsNullOrEmpty(sdlxliffPath))
             return null;
 
         Logger.Debug($"Reading segment statuses from '{sdlxliffPath}'.");
@@ -85,15 +82,5 @@ public class SegmentMetadataProvider
             Id = reader.GetAttribute("id"),
             Status = SegmentStatuses.ToUiName(status)
         };
-    }
-
-    private static string GetSdlxliffPath(IProject project, Guid languageFileGuid)
-    {
-        var langFile = project.GetTargetLanguageFiles()
-            .Single(f => f.Id == languageFileGuid);
-
-        return langFile.Role == FileRole.Reference
-            ? null
-            : langFile.LocalFilePath;
     }
 }
