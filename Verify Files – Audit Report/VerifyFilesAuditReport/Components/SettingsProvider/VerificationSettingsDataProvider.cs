@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 using Sdl.Core.Globalization;
 using Sdl.ProjectAutomation.Core;
 using VerifyFilesAuditReport.Components.SettingsProvider.Components;
@@ -11,23 +12,29 @@ public class VerificationSettingsDataProvider
 {
     private ProjectSettingsReader ProjectSettingsReader { get; } = new();
 
-    public VerificationProviderSettings GetVerificationSettings(IProject project) =>
-        new()
-        {
-            ProjectVerificationProviders = GetVerificationSettings(project, null),
-            LanguageVerificationProviders = GetLanguageVerificationSettings(project)
-        };
-
-    private Dictionary<string, VerificationSettingsTreeNode> GetLanguageVerificationSettings(IProject project) =>
-        project.GetProjectInfo().TargetLanguages.ToDictionary(language => language.DisplayName,
-            language => GetVerificationSettings(project, language));
-
-    private VerificationSettingsTreeNode GetVerificationSettings(IProject project, Language language)
+    public VerificationProviderSettings GetVerificationSettings(IProject project)
     {
-        var projectVerificationSettings = ProjectSettingsReader.ReadProjectVerificationSettings(project, language);
+        // Loaded and resolved once; reused for the project-level and every per-language extraction.
+        var projectDocument = ProjectSettingsReader.LoadProjectDocument(project);
+        var activeVerifierIds = VerifierCatalog.GetActiveVerifierIds();
+
+        return new VerificationProviderSettings
+        {
+            ProjectVerificationProviders = GetVerificationSettings(projectDocument, null, activeVerifierIds),
+            LanguageVerificationProviders = project.GetProjectInfo().TargetLanguages.ToDictionary(
+                language => language.DisplayName,
+                language => GetVerificationSettings(projectDocument, language, activeVerifierIds))
+        };
+    }
+
+    private VerificationSettingsTreeNode GetVerificationSettings(XDocument projectDocument, Language language,
+        List<string> activeVerifierIds)
+    {
+        var projectVerificationSettings =
+            ProjectSettingsReader.ReadProjectVerificationSettings(projectDocument, language?.ToString());
 
         var settingsRoot = new VerificationSettingsTreeNode { Name = Constants.VerificationSettings };
-        foreach (var verifierId in VerifierCatalog.GetActiveVerifierIds())
+        foreach (var verifierId in activeVerifierIds)
         {
             var verifierSettings = VerifierCatalog.CreateSettings(verifierId);
 
