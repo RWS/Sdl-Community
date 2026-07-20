@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using NLog;
@@ -25,6 +26,8 @@ public class OriginalReportProvider(VerificationMessageChannel messageChannel)
         {
             try
             {
+                var stopwatch = Stopwatch.StartNew();
+
                 var verifyFilesTask = project.RunAutomaticTask
                 (
                     taskFileIds,
@@ -32,7 +35,10 @@ public class OriginalReportProvider(VerificationMessageChannel messageChannel)
                     (_, _) => { }, (_, args) => messageChannel.Post(args.Message)
                 );
 
-                return HarvestReport(project, verifyFilesTask);
+                var reportXml = HarvestReport(project, verifyFilesTask);
+                Logger.Info($"Built-in Verify Files run (including report harvest) took {stopwatch.ElapsedMilliseconds} ms.");
+
+                return reportXml;
             }
             catch (Exception ex)
             {

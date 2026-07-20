@@ -167,6 +167,27 @@ public class ExtendedReportTests
     }
 
     [Fact]
+    public void GetFileIdsWithMessages_ReturnsOnlyFilesWithMessages()
+    {
+        var emptyFileGuid = "7a1d3c9e-0000-0000-0000-000000000002";
+        var xml = SampleReportXml.Replace("</task>",
+            $"""<file guid="{emptyFileGuid}" name="clean.docx.sdlxliff" /></task>""");
+        var report = new ExtendedReport(xml);
+
+        var fileIds = report.GetFileIdsWithMessages();
+
+        Assert.Equal([Guid.Parse(FileGuid)], fileIds);
+    }
+
+    [Fact]
+    public void GetFileIdsWithMessages_EmptyWhenNoMessages()
+    {
+        var report = new ExtendedReport("<task><file guid='7a1d3c9e-0000-0000-0000-000000000003' /></task>");
+
+        Assert.Empty(report.GetFileIdsWithMessages());
+    }
+
+    [Fact]
     public void AddActiveQaProviders_AppendsSettingsToReportRoot()
     {
         var report = new ExtendedReport(SampleReportXml);

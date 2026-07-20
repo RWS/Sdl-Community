@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using NLog;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
@@ -40,18 +41,21 @@ public class VerifyFilesExtended : AbstractFileContentProcessingAutomaticTask
     {
         try
         {
+            var stopwatch = Stopwatch.StartNew();
+
             // Studio finalizes the task as soon as this method returns; the extended
             // report must be registered before then or it misses the results window.
             var originalReportXml = _originalReportXml.GetAwaiter().GetResult();
+            Logger.Info($"Waited an additional {stopwatch.ElapsedMilliseconds} ms after file processing for the built-in Verify Files report.");
 
-            Logger.Info("Building extended verification report.");
-
+            stopwatch.Restart();
             var extendedReportXml = _reportBuilder.Build(originalReportXml, Project,
                 _settings.IncludeVerificationDetails, _settings.ReportStatuses);
+            Logger.Info($"Built the extended report in {stopwatch.ElapsedMilliseconds} ms.");
 
+            stopwatch.Restart();
             CreateExtendedReport(extendedReportXml);
-
-            Logger.Info("Extended verification report created.");
+            Logger.Info($"Studio persisted the extended report in {stopwatch.ElapsedMilliseconds} ms.");
         }
         catch (Exception ex)
         {
