@@ -21,8 +21,8 @@
     <None Remove="Resources\Information.png" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Interop.antido32Lib">
-      <HintPath>..\3rd party\Interop.antido32Lib.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(TradosFolder)\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
       <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.dll</HintPath>

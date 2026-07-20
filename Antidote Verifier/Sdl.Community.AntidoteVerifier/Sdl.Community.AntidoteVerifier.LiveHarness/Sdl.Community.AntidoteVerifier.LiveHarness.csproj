@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+	<OutputType>Exe</OutputType>
+	<TargetFramework>net48</TargetFramework>
+	<PlatformTarget>x64</PlatformTarget>
+	<!-- WPF so the harness can host a real Application/Dispatcher, driving the plugin through the same
+		 UI-thread marshalling ConnectixSession.Launch uses in Studio (the path that actually broke). -->
+	<UseWPF>true</UseWPF>
+	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+	<TradosFolder>$(ProgramW6432)\Trados\Trados Studio\Studio19</TradosFolder>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<ProjectReference Include="..\Sdl.Community.AntidoteVerifier\Sdl.Community.AntidoteVerifier.csproj" />
+  </ItemGroup>
+
+  <!-- The plugin references these from the Trados folder (Newtonsoft with Private=false), so the
+	   standalone harness pulls its own runtime copies to match the plugin's exact versions. -->
+  <ItemGroup>
+	<Reference Include="Newtonsoft.Json">
+	  <HintPath>$(TradosFolder)\Newtonsoft.Json.dll</HintPath>
+	  <Private>true</Private>
+	</Reference>
+	<Reference Include="NLog">
+	  <HintPath>$(TradosFolder)\NLog.dll</HintPath>
+	  <Private>true</Private>
+	</Reference>
+  </ItemGroup>
+</Project>
