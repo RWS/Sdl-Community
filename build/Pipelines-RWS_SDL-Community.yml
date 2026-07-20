@@ -26,10 +26,5 @@ variables:
   value: 'Release'
 
 steps:
-- checkout: self
-  fetchDepth: 0
-
-- template: build/jobs/InCommitsSerchForSLN.yml@AppStoreApplicationsRepo
-
 - template: build/jobs/build-sdlplugin.yml@AppStoreApplicationsRepo
 - template: build/jobs/publish-build-artifact-task.yml@AppStoreApplicationsRepo
