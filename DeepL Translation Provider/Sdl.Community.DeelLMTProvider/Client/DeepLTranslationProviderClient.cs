@@ -63,9 +63,9 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
             var results = new (string Translation, string ErrorMessage)[sourceTexts.Count];
 
-            // Serve cache hits per segment; only the misses go to DeepL.
-            // Gated per call (not via ILocalCache.IsEnabled) so concurrent language
-            // directions with different settings don't race on the shared instance.
+            // Caching is gated per call, not via ILocalCache.IsEnabled: language
+            // directions with different settings run concurrently and would race
+            // on the shared instance's flag.
             var cacheKeys = new string[sourceTexts.Count];
             var pendingIndices = new List<int>(sourceTexts.Count);
             for (var i = 0; i < sourceTexts.Count; i++)
@@ -207,10 +207,25 @@ namespace Sdl.Community.DeepLMTProvider.Client
         private static HttpResponseMessage IsValidApiKey() =>
             AppInitializer.Client.GetAsync($"{BaseUrl}/usage").Result;
 
+        public static HttpResponseMessage ValidateApiKey()
+        {
+            try
+            {
+                IsApiKeyValidResponse = IsValidApiKey();
+            }
+            catch (Exception ex)
+            {
+                Logger.Warn(ex, "API key validation request failed; DeepL may be unreachable. Continuing with validity unknown.");
+                IsApiKeyValidResponse = null;
+            }
+
+            return IsApiKeyValidResponse;
+        }
+
         private static void OnApiKeyChanged()
         {
             AppInitializer.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("DeepL-Auth-Key", ApiKey);
-            IsApiKeyValidResponse = IsValidApiKey();
+            IsApiKeyValidResponse = null;
             LanguageClientV3.ClearCache();
         }
 

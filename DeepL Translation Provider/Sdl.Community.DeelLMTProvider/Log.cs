@@ -38,7 +38,6 @@ namespace Sdl.Community.DeepLMTProvider
 
             config.AddTarget(target);
             config.AddRuleForAllLevels(target, "*DeepL*");
-            // The standalone cache library logs under its own namespace.
             config.AddRuleForAllLevels(target, "Trados.LocalCache.*");
 
             LogManager.ReconfigExistingLoggers();

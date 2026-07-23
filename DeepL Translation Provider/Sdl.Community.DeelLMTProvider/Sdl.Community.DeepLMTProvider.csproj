@@ -118,9 +118,7 @@
 		<WCFMetadata Include="Connected Services\" />
 	</ItemGroup>
 	<ItemGroup>
-		<Reference Include="Trados.LocalCache">
-			<HintPath>..\3rd party\Trados.LocalCache.dll</HintPath>
-		</Reference>
+		<PackageReference Include="Trados.LocalCache" Version="1.0.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />

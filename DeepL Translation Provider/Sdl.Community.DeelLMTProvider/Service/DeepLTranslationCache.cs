@@ -4,12 +4,6 @@ using Trados.LocalCache;
 
 namespace Sdl.Community.DeepLMTProvider.Service
 {
-    /// <summary>
-    /// Process-wide local translation cache backed by
-    /// %AppData%\Trados AppStore\DeepL\Cache\translation-cache.sqlite.
-    /// Payloads are the plain translated text; keys are built per segment in
-    /// <see cref="Client.DeepLTranslationProviderClient"/>.
-    /// </summary>
     public static class DeepLTranslationCache
     {
         private static readonly Lazy<ILocalCache> Cache = new(CreateCache);

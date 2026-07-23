@@ -251,7 +251,11 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             List<DeepLStyle> allStyles = [];
             List<TranslationMemoryInfo> allTMs = [];
 
-            if (DeepLTranslationProviderClient.IsApiKeyValidResponse.IsSuccessStatusCode)
+            if (DeepLTranslationProviderClient.IsApiKeyValidResponse == null &&
+                !string.IsNullOrEmpty(DeepLTranslationProviderClient.ApiKey))
+                DeepLTranslationProviderClient.ValidateApiKey();
+
+            if (DeepLTranslationProviderClient.IsApiKeyValidResponse?.IsSuccessStatusCode == true)
             {
                 glossaries = await GetGlossaries();
                 allStyles = await GetStyles();
@@ -455,6 +459,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         private void OnPasswordChanged(object sender, EventArgs e)
         {
             DeepLTranslationProviderClient.ApiKey = ApiKey;
+            DeepLTranslationProviderClient.ValidateApiKey();
             SetApiKeyValidityLabel();
             Dispatcher_LoadLanguagePairSettings();
         }
@@ -462,6 +467,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         private void Save()
         {
             DeepLTranslationProviderClient.ApiKey = ApiKey;
+            DeepLTranslationProviderClient.ValidateApiKey();
             SetApiKeyValidityLabel();
 
             Options.SendPlainText = SendPlainText;
@@ -497,9 +503,15 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                 if (isApiKeyValidResponse?.IsSuccessStatusCode ?? false)
                     return;
 
-                SetValidationBlockMessage(isApiKeyValidResponse?.StatusCode == HttpStatusCode.Forbidden
+                if (isApiKeyValidResponse == null)
+                {
+                    SetValidationBlockMessage("DeepL could not be reached. Check your internet connection and try again.");
+                    return;
+                }
+
+                SetValidationBlockMessage(isApiKeyValidResponse.StatusCode == HttpStatusCode.Forbidden
                     ? "Authorization failed. Please supply a valid API Key."
-                    : $"{isApiKeyValidResponse?.StatusCode}");
+                    : $"{isApiKeyValidResponse.StatusCode}");
 
                 return;
             }
