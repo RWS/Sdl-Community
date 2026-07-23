@@ -59,20 +59,17 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
                     uriOpener);
             }
 
-            // Trial active: only show if 7–1 days remaining
+            // The account-portal response identifies an active trial but does not provide an end date.
             if (data.IsTrial && !data.IsTrialExpired)
             {
-                if (data.TrialRemainingDays > 7)
-                    return null;
-
                 if (data.IsAdmin)
                 {
                     return new SubscriptionViewModel(
                         "Cohere Subscription",
                         new SubscriptionOptions
                         {
-                            Title = "Trados LLM trial ending soon",
-                            Description = $"Your Trados LLM (powered by Cohere) trial ends in {data.TrialRemainingDays} day(s). \n\nPurchase the add-on to keep using the LLM without interruption.",
+                            Title = "Trados LLM trial active",
+                            Description = "Your Trados LLM (powered by Cohere) trial is active. \n\nPurchase the add-on to keep using the LLM without interruption when the trial ends.",
                             ShowPrimary = true,
                             PrimaryContent = "Buy now",
                             SecondaryUri = "https://example.com/",
@@ -88,8 +85,8 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
                   "Cohere Subscription",
                   new SubscriptionOptions
                   {
-                      Title = "Trados LLM trial ending soon",
-                      Description = $"Your organization’s Trados LLM trial ends in {data.TrialRemainingDays} day(s). \n\nContact your administrator to purchase the add-on and avoid interruption.",
+                      Title = "Trados LLM trial active",
+                      Description = "Your organization’s Trados LLM trial is active. \n\nContact your administrator to purchase the add-on before the trial ends.",
                       ShowPrimary = true,
                       PrimaryContent = "OK",
                       ShowSecondary = true,

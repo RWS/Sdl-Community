@@ -74,7 +74,7 @@
 	<ItemGroup>
 	  <Page Remove="Style\Buttons.xaml" />
 	</ItemGroup>
-	
+
 	<ItemGroup>
 		<Reference Include="System.Reactive">
 			<HintPath>$(TradosFolder)\System.Reactive.dll</HintPath>
