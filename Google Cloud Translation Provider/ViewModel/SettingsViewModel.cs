@@ -25,6 +25,7 @@ public class SettingsViewModel : BaseViewModel, ISettingsControlViewModel
     private bool _reSendDraft;
     private bool _useCustomProviderName;
     private bool _useLanguageMappingProvider;
+    private bool _useLocalCache;
 
     private bool _persistV3Project;
     private string _v3Path;
@@ -35,6 +36,7 @@ public class SettingsViewModel : BaseViewModel, ISettingsControlViewModel
     private string _customProviderName;
 
     private ICommand _clearCommand;
+    private ICommand _clearCacheCommand;
     private ICommand _browseFileCommand;
     private ICommand _browseFolderCommand;
 
@@ -204,7 +206,20 @@ public class SettingsViewModel : BaseViewModel, ISettingsControlViewModel
         }
     }
 
+    public bool UseLocalCache
+    {
+        get => _useLocalCache;
+        set
+        {
+            if (_useLocalCache == value) return;
+            _useLocalCache = value;
+            OnPropertyChanged(nameof(UseLocalCache));
+        }
+    }
+
     public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
+
+    public ICommand ClearCacheCommand => _clearCacheCommand ??= new RelayCommand(ClearCache);
 
     public ICommand BrowseFileCommand => _browseFileCommand ??= new RelayCommand(BrowseFile);
 
@@ -249,7 +264,22 @@ public class SettingsViewModel : BaseViewModel, ISettingsControlViewModel
         PostLookupFileName = _options.PostLookupFilename;
         CustomProviderName = _options.CustomProviderName;
         UseCustomProviderName = _options.UseCustomProviderName;
+        UseLocalCache = _options.UseLocalCache;
         DownloadPath ??= _options.DownloadPath ?? Constants.AppDataFolder;
+    }
+
+    private void ClearCache(object parameter)
+    {
+        var confirmed = System.Windows.MessageBox.Show(
+            "Delete all locally cached Google Cloud Translation translations?",
+            "Clear cache",
+            System.Windows.MessageBoxButton.YesNo,
+            System.Windows.MessageBoxImage.Question) == System.Windows.MessageBoxResult.Yes;
+
+        if (confirmed)
+        {
+            GoogleAPI.GoogleTranslationCache.Instance.Clear();
+        }
     }
 
     private void Clear(object parameter)

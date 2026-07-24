@@ -292,6 +292,7 @@ public class MainWindowViewModel : BaseViewModel
             TranslationOptions.PostLookupFilename = _settingsViewModel.PostLookupFileName;
             TranslationOptions.CustomProviderName = providerName;
             TranslationOptions.UseCustomProviderName = _settingsViewModel.UseCustomProviderName && !string.IsNullOrEmpty(TranslationOptions.CustomProviderName);
+            TranslationOptions.UseLocalCache = _settingsViewModel.UseLocalCache;
         }
 
         if (TranslationOptions is not null && TranslationOptions.LanguagesSupported is null)

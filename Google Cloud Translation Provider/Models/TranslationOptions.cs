@@ -60,6 +60,8 @@ namespace GoogleCloudTranslationProvider.Models
 		#region Settings
 		public bool UseCustomProviderName { get; set; }
 
+		public bool UseLocalCache { get; set; } = true;
+
 		public string CustomProviderName { get; set; }
 
 		public bool ResendDrafts { get; set; }

@@ -9,6 +9,7 @@ using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GoogleCloudTranslationProvider.Studio;
 
@@ -227,22 +228,68 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
 
     private string Lookup(string sourcetext, ITranslationOptions options, string format)
     {
+        var useCache = options.UseLocalCache;
+        var cacheKey = useCache ? BuildCacheKey(options, sourcetext, format) : null;
+        if (useCache && GoogleTranslationCache.Instance.TryGet(cacheKey, out var cached))
+        {
+            return cached;
+        }
+
+        string translation;
         if (options.SelectedGoogleVersion is ApiVersion.V3)
         {
             _googleV3Api = new V3Connector(options);
-            return _googleV3Api.TranslateText(_languageDirection.SourceCulture, _languageDirection.TargetCulture, sourcetext, format);
-        }
-
-        if (_googleV2Api is null)
-        {
-            _googleV2Api = new V2Connector(options.ApiKey, _htmlUtil);
+            translation = _googleV3Api.TranslateText(_languageDirection.SourceCulture, _languageDirection.TargetCulture, sourcetext, format);
         }
         else
         {
-            _googleV2Api.ApiKey = options.ApiKey;
+            if (_googleV2Api is null)
+            {
+                _googleV2Api = new V2Connector(options.ApiKey, _htmlUtil);
+            }
+            else
+            {
+                _googleV2Api.ApiKey = options.ApiKey;
+            }
+
+            translation = _googleV2Api.Translate(_languageDirection, sourcetext, format);
         }
 
-        return _googleV2Api.Translate(_languageDirection, sourcetext, format);
+        if (useCache && !string.IsNullOrEmpty(translation))
+        {
+            GoogleTranslationCache.Instance.Set(cacheKey, translation);
+        }
+
+        return translation;
+    }
+
+    private string BuildCacheKey(ITranslationOptions options, string sourcetext, string format)
+    {
+        var builder = new Trados.LocalCache.CacheKeyBuilder()
+            .Add("provider", "googlecloud")
+            .Add("version", options.SelectedGoogleVersion)
+            .Add("src", _languageDirection.SourceCulture.Name)
+            .Add("tgt", _languageDirection.TargetCulture.Name)
+            .Add("format", format)
+            .Add("content", sourcetext);
+
+        if (options.SelectedGoogleVersion is ApiVersion.V3)
+        {
+            var pairResource = options.LanguageMappingPairs?.FirstOrDefault(x =>
+                x.LanguagePair.SourceCulture.Name == _languageDirection.SourceCulture.Name &&
+                x.LanguagePair.TargetCulture.Name == _languageDirection.TargetCulture.Name);
+
+            builder.Add("project", options.ProjectId)
+                .Add("location", options.ProjectLocation)
+                .Add("model", pairResource?.SelectedModel?.ModelPath)
+                .Add("glossary", pairResource?.SelectedGlossary?.Glossary?.Name);
+        }
+        else
+        {
+            builder.Add("apiKey", options.ApiKey);
+        }
+
+        return builder.Build();
     }
     #region Unused
     /// <summary>

@@ -18,7 +18,9 @@ namespace GoogleCloudTranslationProvider.Interfaces
 		bool IsTellMeAction { get; set; }
 
 		bool UseCustomProviderName { get; set; }
-		
+
+		bool UseLocalCache { get; set; }
+
 		string PreLookupFileName { get; set; }
 		
 		string PostLookupFileName { get; set; }
@@ -28,6 +30,8 @@ namespace GoogleCloudTranslationProvider.Interfaces
 		ICommand BrowseFileCommand { get; }
 
 		ICommand ClearCommand { get; }
+
+		ICommand ClearCacheCommand { get; }
 
 		bool SettingsAreValid();
 	}
