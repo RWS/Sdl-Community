@@ -94,6 +94,7 @@ namespace LanguageWeaverProvider
 			ITranslationEngine engine = TranslationOptions.PluginVersion == PluginVersion.LanguageWeaverEdge
 				? new EdgeTranslationEngine()
 				: new CloudTranslationEngine();
+			engine = new CachingTranslationEngine(engine, TranslationOptions);
 			return new TranslationProviderLanguageDirection(this, TranslationOptions, languageDirection, engine);
 		}
 

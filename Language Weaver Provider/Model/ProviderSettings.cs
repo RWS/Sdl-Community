@@ -19,5 +19,7 @@
 		public bool UsePostLookup { get; set; } = false;
 
 		public string PostLookupFilePath { get; set; }
+
+		public bool UseLocalCache { get; set; } = true;
 	}
 }

@@ -5,12 +5,13 @@
 	<PlugInName>Language Weaver Provider</PlugInName>
 	<Description>Language Weaver Provider</Description>
 
-	<Version>3.0.9.0</Version>
+	<Version>3.0.10.0</Version>
 	<RequiredProduct name="TradosStudio" minversion="19.0" maxversion="19.0.9" />
 
 	<Include>
 		<File>LanguageMappingProvider.dll</File>
 		<File>Dapper.StrongName.dll</File>
+		<File>Trados.LocalCache.dll</File>
 	</Include>
 
 </PluginPackage>
