@@ -25,6 +25,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 
 		public ICommand CloseCommand { get; private set; }
 		public ICommand ClearCommand { get; private set; }
+		public ICommand ClearCacheCommand { get; private set; }
 		public ICommand BrowseFileCommand { get; private set; }
 		public ICommand ApplyChangesCommand { get; private set; }
 
@@ -62,8 +63,23 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		{
 			CloseCommand = new RelayCommand(Close);
 			ClearCommand = new RelayCommand(Clear);
+			ClearCacheCommand = new RelayCommand(ClearCache);
 			BrowseFileCommand = new RelayCommand(BrowseFile);
 			ApplyChangesCommand = new RelayCommand(ApplyChanges, ChangesHasBeenAplied);
+		}
+
+		private void ClearCache(object parameter)
+		{
+			var confirmed = System.Windows.MessageBox.Show(
+				"Delete all locally cached Microsoft Translator translations?",
+				"Clear cache",
+				System.Windows.MessageBoxButton.YesNo,
+				System.Windows.MessageBoxImage.Question) == System.Windows.MessageBoxResult.Yes;
+
+			if (confirmed)
+			{
+				Service.MicrosoftTranslatorCache.Instance.Clear();
+			}
 		}
 
 		private bool ChangesHasBeenAplied(object parameter)

@@ -113,6 +113,14 @@
 									   ClearButtonParameter="PostLookupFilePath"
 									   ButtonContent="Browse"
 									   Margin="0 4" />
+
+				<controls:ToggleOption Checked="{Binding ProviderSettings.UseLocalCache, Mode=TwoWay}"
+									   CheckBoxContent="Use cached results"
+									   DescriptionText="When this option is enabled, translations already received for identical segments and settings are reused from a local cache instead of requested again, and remain available when Microsoft Translator is offline."
+									   TextBoxVisible="False"
+									   ButtonContent="Clear cache"
+									   ButtonCommand="{Binding ClearCacheCommand}"
+									   Margin="0 4" />
 			</StackPanel>
 		</ScrollViewer>
 

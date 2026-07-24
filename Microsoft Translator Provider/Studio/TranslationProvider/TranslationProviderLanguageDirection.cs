@@ -220,17 +220,46 @@ namespace MicrosoftTranslatorProvider
 
 		private string Lookup(string sourcetext)
 		{
-			var sourcelang = _languagePair.SourceCultureName.ToString();
-			var targetlang = _languagePair.TargetCultureName.ToString();
-
 			var pairMapped = _translationOptions.PairModels.FirstOrDefault(x => x.TradosLanguagePair.SourceCultureName == _languagePair.SourceCultureName && x.TradosLanguagePair.TargetCultureName == _languagePair.TargetCultureName);
+
+			var useCache = _translationOptions.ProviderSettings.UseLocalCache;
+			var cacheKey = useCache ? BuildCacheKey(pairMapped, sourcetext) : null;
+			if (useCache && MicrosoftTranslatorCache.Instance.TryGet(cacheKey, out var cached))
+			{
+				return cached;
+			}
+
 			var translation = _translationOptions.AuthenticationType switch
 			{
 				AuthenticationType.Microsoft => MicrosoftService.TranslateAsync(pairMapped, sourcetext, _translationOptions.MicrosoftCredentials).Result,
 				AuthenticationType.PrivateEndpoint => PrivateEndpointService.Translate(_translationOptions.PrivateEndpoint, _translationOptions.ProxySettings, pairMapped, sourcetext)
 			};
 
+			if (useCache && !string.IsNullOrEmpty(translation))
+			{
+				MicrosoftTranslatorCache.Instance.Set(cacheKey, translation);
+			}
+
 			return translation;
+		}
+
+		private string BuildCacheKey(PairModel pairMapped, string sourcetext)
+		{
+			var builder = new Trados.LocalCache.CacheKeyBuilder()
+				.Add("provider", "microsofttranslator")
+				.Add("auth", _translationOptions.AuthenticationType)
+				.Add("src", pairMapped?.SourceLanguageCode)
+				.Add("tgt", pairMapped?.TargetLanguageCode)
+				.Add("model", pairMapped?.Model)
+				.Add("content", sourcetext);
+
+			if (_translationOptions.AuthenticationType == AuthenticationType.PrivateEndpoint && _translationOptions.PrivateEndpoint is { } endpoint)
+			{
+				builder.Add("endpoint", endpoint.Endpoint)
+					.AddValues("params", endpoint.Parameters?.Select(p => $"{p.Key}={p.Value}"));
+			}
+
+			return builder.Build();
 		}
 
 
