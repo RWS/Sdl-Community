@@ -13,6 +13,7 @@ namespace MicrosoftTranslatorProvider.Model
 		bool _usePostLookup = false;
 		string _postLookupFilePath = null;
 		bool _configureLanguages = false;
+		bool _useLocalCache = true;
 
 		public bool UseCustomName
 		{
@@ -100,6 +101,16 @@ namespace MicrosoftTranslatorProvider.Model
 			set
 			{
 				_configureLanguages = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public bool UseLocalCache
+		{
+			get => _useLocalCache;
+			set
+			{
+				_useLocalCache = value;
 				OnPropertyChanged();
 			}
 		}

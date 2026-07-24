@@ -26,6 +26,7 @@ namespace MicrosoftTranslatorProvider.Helpers
 
 			LogManager.Configuration.AddTarget(target);
 			LogManager.Configuration.AddRuleForAllLevels(target, "*MicrosoftTranslatorProvider*");
+			LogManager.Configuration.AddRuleForAllLevels(target, "Trados.LocalCache.*");
 			LogManager.ReconfigExistingLoggers();
 		}
 	}
