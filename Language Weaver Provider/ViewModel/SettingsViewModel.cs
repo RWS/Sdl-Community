@@ -16,6 +16,7 @@ namespace LanguageWeaverProvider.ViewModel
         private string _preLookupFilePath;
         private bool _resendDrafts;
         private bool _useCustomName;
+        private bool _useLocalCache;
         private bool _usePostLookup;
         private bool _usePreLookup;
 
@@ -37,6 +38,8 @@ namespace LanguageWeaverProvider.ViewModel
         }
 
         public ICommand BrowseFileCommand { get; private set; }
+
+        public ICommand ClearCacheCommand { get; private set; }
 
         public string CustomName
         {
@@ -97,6 +100,16 @@ namespace LanguageWeaverProvider.ViewModel
             set
             {
                 _useCustomName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool UseLocalCache
+        {
+            get => _useLocalCache;
+            set
+            {
+                _useLocalCache = value;
                 OnPropertyChanged();
             }
         }
@@ -210,6 +223,21 @@ namespace LanguageWeaverProvider.ViewModel
         {
             BrowseFileCommand = new RelayCommand(BrowseFile);
             SaveCommand = new RelayCommand(SaveChanges);
+            ClearCacheCommand = new RelayCommand(ClearCache);
+        }
+
+        private void ClearCache(object parameter)
+        {
+            var confirmed = System.Windows.MessageBox.Show(
+                "Delete all locally cached Language Weaver translations?",
+                "Clear cache",
+                System.Windows.MessageBoxButton.YesNo,
+                System.Windows.MessageBoxImage.Question) == System.Windows.MessageBoxResult.Yes;
+
+            if (confirmed)
+            {
+                Services.LanguageWeaverCache.Instance.Clear();
+            }
         }
 
         private void SaveChanges(object parameter)
@@ -223,6 +251,7 @@ namespace LanguageWeaverProvider.ViewModel
             TranslationOptions.ProviderSettings.UsePostLookup = UsePostLookup;
             TranslationOptions.ProviderSettings.PreLookupFilePath = PreLookupFilePath;
             TranslationOptions.ProviderSettings.PostLookupFilePath = PostLookupFilePath;
+            TranslationOptions.ProviderSettings.UseLocalCache = UseLocalCache;
         }
 
         private void SetSettings()
@@ -237,6 +266,7 @@ namespace LanguageWeaverProvider.ViewModel
             UsePostLookup = TranslationOptions.ProviderSettings.UsePostLookup;
             PreLookupFilePath = TranslationOptions.ProviderSettings.PreLookupFilePath;
             PostLookupFilePath = TranslationOptions.ProviderSettings.PostLookupFilePath;
+            UseLocalCache = TranslationOptions.ProviderSettings.UseLocalCache;
         }
 
         private void ValidateLookupFile(string filePath, string propertyName)

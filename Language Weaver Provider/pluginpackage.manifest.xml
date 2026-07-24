@@ -11,6 +11,7 @@
 	<Include>
 		<File>LanguageMappingProvider.dll</File>
 		<File>Dapper.StrongName.dll</File>
+		<File>Trados.LocalCache.dll</File>
 	</Include>
 
 </PluginPackage>

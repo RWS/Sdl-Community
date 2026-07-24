@@ -47,6 +47,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <StackPanel Grid.Row="0" VerticalAlignment="Center"
@@ -222,6 +223,35 @@
                               CommandParameter="PostLookupFilePath"
                               IsEnabled="{Binding UsePostLookup}"
                               Padding="0" Content="Browse"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="9" VerticalAlignment="Center"
+                          Margin="15,2,5,2" Orientation="Horizontal">
+                    <CheckBox
+                    IsChecked="{Binding UseLocalCache}"
+                    VerticalAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Content="Use cached results"/>
+                    <Image Source="../Resources/Information.png"
+                 Height="16" HorizontalAlignment="Left"
+                 RenderOptions.BitmapScalingMode="NearestNeighbor"
+                 RenderOptions.EdgeMode="Aliased"
+                 VerticalAlignment="Center"
+                 Margin="5,0,0,0">
+                        <Image.ToolTip>
+                            <StackPanel>
+                                <TextBlock MaxWidth="600" TextWrapping="Wrap"
+                                 Text="When this option is enabled, translations already received for identical segments and settings are reused from a local cache instead of requested again, and remain available when Language Weaver is offline."/>
+                            </StackPanel>
+                        </Image.ToolTip>
+                    </Image>
+                    <Button HorizontalAlignment="Left"
+                          Width="90"
+                          Height="24"
+                          Cursor="Hand"
+                          Margin="15,0,0,0"
+                          Command="{Binding ClearCacheCommand}"
+                          Padding="0" Content="Clear cache"/>
                 </StackPanel>
             </Grid>
 

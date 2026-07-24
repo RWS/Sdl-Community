@@ -30,6 +30,7 @@ namespace LanguageWeaverProvider
 
             config.AddTarget(target);
             config.AddRuleForAllLevels(target, "*LanguageWeaverProvider*");
+            config.AddRuleForAllLevels(target, "Trados.LocalCache.*");
 
             LogManager.ReconfigExistingLoggers();
         }
