@@ -147,6 +147,19 @@
 						 Width="400"
 						 Margin="8 0 0 0" />
 			</StackPanel>
+
+			<CheckBox Content="Use cached results"
+					  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+					  IsChecked="{Binding UseLocalCache}"
+					  Cursor="Hand"
+					  Margin="0 12 0 0" />
+			<Button Content="Clear cache"
+					Style="{StaticResource Sdl.Button.DialogStyle}"
+					Command="{Binding ClearCacheCommand}"
+					HorizontalAlignment="Left"
+					Cursor="Hand"
+					Width="120"
+					Margin="0 2 0 0" />
 		</StackPanel>
 		<!--</Project settings>-->
 	</StackPanel>

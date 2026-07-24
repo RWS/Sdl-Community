@@ -21,6 +21,8 @@ namespace GoogleCloudTranslationProvider.Interfaces
 
 		bool UseCustomProviderName { get; set; }
 
+		bool UseLocalCache { get; set; }
+
 		string CustomProviderName { get; set; }
 
 		string PostLookupFilename { get; set; }

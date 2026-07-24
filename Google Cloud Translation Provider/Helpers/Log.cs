@@ -29,6 +29,7 @@ namespace GoogleCloudTranslationProvider.Helpers
 			var config = LogManager.Configuration;
 			config.AddTarget(target);
 			config.AddRuleForAllLevels(target, "*GoogleCloudTranslationProvider*");
+			config.AddRuleForAllLevels(target, "Trados.LocalCache.*");
 			LogManager.ReconfigExistingLoggers();
 		}
 	}
