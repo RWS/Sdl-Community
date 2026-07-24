@@ -255,7 +255,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                 _languagePairOptions?.SelectedTranslationMemory?.Id);
 
             var sourceTexts = eligibleSegments.Select(s => s.SourceText).ToList();
-            var translationResults = _connecter.TranslateBatch(_languageDirection, sourceTexts, deepLSettings);
+            var translationResults = _connecter.TranslateBatch(_languageDirection, sourceTexts, deepLSettings, _options.UseLocalCache);
 
             var errorMessages = new List<ErrorItem>();
             for (var i = 0; i < eligibleSegments.Count; i++)

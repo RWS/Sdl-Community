@@ -3,6 +3,7 @@ using Sdl.Community.DeepLMTProvider.Client;
 using Sdl.Community.DeepLMTProvider.Command;
 using Sdl.Community.DeepLMTProvider.Interface;
 using Sdl.Community.DeepLMTProvider.Model;
+using Sdl.Community.DeepLMTProvider.Service;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -44,6 +45,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             SplitSentencesType = deepLTranslationOptions.SplitSentenceHandling;
             PreserveFormatting = deepLTranslationOptions.PreserveFormatting;
             IgnoreTags = deepLTranslationOptions.IgnoreTagsParameter;
+            UseLocalCache = deepLTranslationOptions.UseLocalCache;
 
             Options = deepLTranslationOptions;
 
@@ -68,6 +70,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             TagType = deepLTranslationOptions.TagHandling;
             SplitSentencesType = deepLTranslationOptions.SplitSentenceHandling;
             IgnoreTags = deepLTranslationOptions.IgnoreTagsParameter;
+            UseLocalCache = deepLTranslationOptions.UseLocalCache;
 
             PasswordChangedTimer.Elapsed += OnPasswordChanged;
 
@@ -97,6 +100,8 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         }
 
         public ICommand CancelCommand => new ParameterlessCommand(DetachEvents);
+
+        public ICommand ClearCacheCommand => new ParameterlessCommand(ClearCache);
 
         public bool HasValidationErrors
         {
@@ -179,6 +184,12 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             set => SetField(ref field, value);
         }
 
+        public bool UseLocalCache
+        {
+            get;
+            set => SetField(ref field, value);
+        }
+
         public TagFormat TagType
         {
             get;
@@ -240,7 +251,11 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             List<DeepLStyle> allStyles = [];
             List<TranslationMemoryInfo> allTMs = [];
 
-            if (DeepLTranslationProviderClient.IsApiKeyValidResponse.IsSuccessStatusCode)
+            if (DeepLTranslationProviderClient.IsApiKeyValidResponse == null &&
+                !string.IsNullOrEmpty(DeepLTranslationProviderClient.ApiKey))
+                DeepLTranslationProviderClient.ValidateApiKey();
+
+            if (DeepLTranslationProviderClient.IsApiKeyValidResponse?.IsSuccessStatusCode == true)
             {
                 glossaries = await GetGlossaries();
                 allStyles = await GetStyles();
@@ -333,6 +348,16 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             return string.IsNullOrWhiteSpace(glossaryId)
                 ? glossaries.FirstOrDefault(g => g.Name == PluginResources.NoGlossary)
                 : glossaries.FirstOrDefault(g => g.Id == glossaryId);
+        }
+
+        private void ClearCache()
+        {
+            if (!MessageService.ShowDialog(
+                    "Delete all locally cached DeepL translations? They will be requested from DeepL again on the next lookup.",
+                    "Clear cache"))
+                return;
+
+            DeepLTranslationCache.Instance.Clear();
         }
 
         private void AskUserToRestart()
@@ -434,6 +459,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         private void OnPasswordChanged(object sender, EventArgs e)
         {
             DeepLTranslationProviderClient.ApiKey = ApiKey;
+            DeepLTranslationProviderClient.ValidateApiKey();
             SetApiKeyValidityLabel();
             Dispatcher_LoadLanguagePairSettings();
         }
@@ -441,6 +467,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         private void Save()
         {
             DeepLTranslationProviderClient.ApiKey = ApiKey;
+            DeepLTranslationProviderClient.ValidateApiKey();
             SetApiKeyValidityLabel();
 
             Options.SendPlainText = SendPlainText;
@@ -451,6 +478,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             Options.TagHandling = TagType;
             Options.SplitSentenceHandling = SplitSentencesType;
             Options.IgnoreTagsParameter = IgnoreTags;
+            Options.UseLocalCache = UseLocalCache;
 
             var glossaryIds = Options.LanguagePairOptions.ToDictionary(
                 lpo => (lpo.LanguagePair.SourceCulture.Name, lpo.LanguagePair.TargetCulture.Name),
@@ -475,9 +503,15 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                 if (isApiKeyValidResponse?.IsSuccessStatusCode ?? false)
                     return;
 
-                SetValidationBlockMessage(isApiKeyValidResponse?.StatusCode == HttpStatusCode.Forbidden
+                if (isApiKeyValidResponse == null)
+                {
+                    SetValidationBlockMessage("DeepL could not be reached. Check your internet connection and try again.");
+                    return;
+                }
+
+                SetValidationBlockMessage(isApiKeyValidResponse.StatusCode == HttpStatusCode.Forbidden
                     ? "Authorization failed. Please supply a valid API Key."
-                    : $"{isApiKeyValidResponse?.StatusCode}");
+                    : $"{isApiKeyValidResponse.StatusCode}");
 
                 return;
             }

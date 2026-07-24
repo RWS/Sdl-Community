@@ -38,6 +38,7 @@ namespace Sdl.Community.DeepLMTProvider
 
             config.AddTarget(target);
             config.AddRuleForAllLevels(target, "*DeepL*");
+            config.AddRuleForAllLevels(target, "Trados.LocalCache.*");
 
             LogManager.ReconfigExistingLoggers();
         }

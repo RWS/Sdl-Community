@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using NLog;
+using Sdl.Community.DeepLMTProvider.Service;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -112,10 +113,44 @@ namespace Sdl.Community.DeepLMTProvider.Client
             if (Cache.TryGetValue(key, out var cached))
                 return cached;
 
+            var persistentKey = BuildPersistentCacheKey(product, apiKey);
+            if (DeepLTranslationCache.Instance.TryGet(persistentKey, out var persistedJson))
+            {
+                List<LanguageV3Response> persisted = null;
+                try
+                {
+                    persisted = JsonConvert.DeserializeObject<List<LanguageV3Response>>(persistedJson);
+                }
+                catch (JsonException ex)
+                {
+                    Logger.Warn(ex, $"Persisted language list for '{product}' is unreadable; fetching live.");
+                }
+
+                if (persisted != null)
+                {
+                    Cache[key] = persisted;
+                    return persisted;
+                }
+            }
+
             var languages = await FetchFromApiAsync(product, apiKey);
+
+            // Persisted regardless of the UseLocalCache option: that option covers
+            // billable translation content, while this is provider metadata the
+            // offline path depends on.
+            DeepLTranslationCache.Instance.Set(persistentKey, JsonConvert.SerializeObject(languages));
+
             Cache[key] = languages;
             return languages;
         }
+
+        private static string BuildPersistentCacheKey(string product, string apiKey) =>
+            new Trados.LocalCache.CacheKeyBuilder()
+                .Add("provider", "deepl")
+                .Add("kind", "languages")
+                .Add("product", product)
+                .Add("apiKey", apiKey)
+                .Build();
 
         private static Task<List<LanguageV3Response>> GetGlossaryLanguagesAsync(string apiKey)
             => GetCachedLanguagesAsync("glossary", apiKey);

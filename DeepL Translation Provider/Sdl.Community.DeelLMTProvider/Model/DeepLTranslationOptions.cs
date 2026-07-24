@@ -21,5 +21,6 @@ namespace Sdl.Community.DeepLMTProvider.Model
 
         public TagFormat TagHandling { get; set; }
         public Uri Uri { get; set; }
+        public bool UseLocalCache { get; set; } = true;
     }
 }

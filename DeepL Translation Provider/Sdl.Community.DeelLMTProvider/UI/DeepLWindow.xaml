@@ -161,6 +161,21 @@
                                       ToolTip="{x:Static deepLmtProvider:PluginResources.ResendDraft_Tooltip}"
                                       IsChecked="{Binding ResendDraft}"
                                       Content="Resend Draft" />
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+                                          VerticalContentAlignment="Center"
+                                          Margin="15,0,0,5"
+                                          x:Name="UseLocalCache"
+                                          ToolTip="Reuse translations already received for identical segments and settings from a local cache, instead of requesting them from DeepL again"
+                                          IsChecked="{Binding UseLocalCache}"
+                                          Content="Use cached results" />
+                                <Button Style="{StaticResource Sdl.Button.SecondaryStyle}"
+                                        Content="Clear cache"
+                                        ToolTip="Delete all locally cached DeepL translations"
+                                        Command="{Binding ClearCacheCommand}"
+                                        Margin="10,0,0,5"
+                                        Cursor="Hand" />
+                            </StackPanel>
 
                            
                             <StackPanel Orientation="Horizontal">
