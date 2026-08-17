@@ -1,6 +1,7 @@
-﻿using LanguageWeaverProvider.CohereSubscription.Workflow.Interfaces;
+using LanguageWeaverProvider.CohereSubscription.Workflow.Interfaces;
 using LanguageWeaverProvider.CohereSubscription.Workflow.Model;
 using LanguageWeaverProvider.Infrastructure.Http.Services;
+using NLog;
 using Sdl.LanguageCloud.IdentityApi;
 using System;
 using System.Collections.Generic;
@@ -9,35 +10,137 @@ using System.Threading.Tasks;
 
 namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
 {
+    /// <summary>
+    /// Resolves the signed-in user's Language Weaver (Cohere / Trados LLM) entitlement.
+    ///
+    /// The lookup is two hops, because the entitlement endpoint is keyed on the Account Portal identity
+    /// rather than the Trados one:
+    ///
+    ///   1. <c>GET {lcHost}/lc-api/gw-account-web/accounts/{tradosAccountId}</c> -> <c>businessAccountId</c>
+    ///   2. <c>GET {accountPortal}/account-portal/v1/weaver/details/{businessAccountId}</c> -> <see cref="LanguageWeaverDetails"/>
+    ///
+    /// The details endpoint originally required a <c>recurlyAccountId</c>, which cost a third request to
+    /// translate <c>businessAccountId</c> -> <c>recurlyId</c>. That hop was removed on the service side: the
+    /// endpoint now accepts <c>businessAccountId</c> directly and returns the same body.
+    ///
+    /// Every failure path returns <c>null</c>, which the decision service renders as "no pop-up". That is the
+    /// specified behaviour for an undeterminable entitlement (DET-421, case E): show the user nothing, record
+    /// the reason in the log, and re-evaluate on the next startup.
+    /// </summary>
     public class CohereSubscriptionWorkflow : ICohereSubscriptionWorkflowService
     {
-        private const string AccountPortalDetailsPath = "account-portal/v1/weaver/details/";
         private const string AccountPortalApiBaseUrl = "https://account-portal-api.sdl.com/";
+        private const string AccountPortalDetailsPath = "account-portal/v1/weaver/details/";
+
+        // Documented host for this endpoint. Whether US-region accounts need a different one is still open with
+        // the service team, so the request address is logged to make a wrong choice visible in the field.
+        private const string LanguageCloudAccountsUrl = "https://eu.cloud.trados.com/lc-api/gw-account-web/accounts/";
+
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        // One client for the lifetime of the plug-in: a per-call HttpClient leaks a socket per request.
+        private static readonly HttpClient HttpClient = new HttpClient();
 
         public async Task<CohereSubscriptionData> ExecuteAsync()
         {
             var languageCloudIdentity = LanguageCloudIdentityApi.Instance;
-            if (languageCloudIdentity is null ||
-                string.IsNullOrWhiteSpace(languageCloudIdentity.AccessToken) ||
-                string.IsNullOrWhiteSpace(languageCloudIdentity.ActiveTenantId))
+            if (languageCloudIdentity is null
+             || string.IsNullOrWhiteSpace(languageCloudIdentity.AccessToken)
+             || string.IsNullOrWhiteSpace(languageCloudIdentity.ActiveTenantId))
+            {
+                // Not signed in to Language Cloud yet. The startup manager stays subscribed, so this is
+                // re-evaluated when the user activates a view after signing in.
+                Logger.Debug("[Cohere] No Language Cloud session (token or active tenant missing); skipping entitlement check.");
+                return null;
+            }
+
+            var authorizationHeaders = new Dictionary<string, string>
+            {
+                ["Authorization"] = $"Bearer {languageCloudIdentity.AccessToken}"
+            };
+
+            var businessAccountId = await GetBusinessAccountId(
+                languageCloudIdentity.ActiveTenantId, authorizationHeaders);
+            if (string.IsNullOrWhiteSpace(businessAccountId))
             {
                 return null;
             }
 
-            var recurlyAccountId = Uri.EscapeDataString(languageCloudIdentity.ActiveTenantId);
-            var requestUri = new Uri(new Uri(AccountPortalApiBaseUrl), AccountPortalDetailsPath + recurlyAccountId).AbsoluteUri;
-            var headers = new Dictionary<string, string>
+            var details = await GetLanguageWeaverDetails(businessAccountId, authorizationHeaders);
+            if (details is null)
             {
-                ["Authorization"] = $"Bearer {languageCloudIdentity.AccessToken}"
-            };
-            var service = new GenericHTTPService<object, LanguageWeaverDetails>(
-                new HttpClient(), headers, HttpMethod.Get, requestUri);
+                return null;
+            }
+
+            var data = MapDetails(details);
+            Logger.Info(
+                "[Cohere] Entitlement resolved: detected={0}, paid={1}, trial={2}, trialExpired={3}.",
+                data.IsCohereDetected, data.IsPaid, data.IsTrial, data.IsTrialExpired);
+
+            return data;
+        }
+
+        /// <summary>
+        /// Hop 1: exchanges the Trados account id (the identity API's active tenant) for the Account Portal
+        /// <c>businessAccountId</c>. Returns <c>null</c> when the account was not provisioned through Account
+        /// Portal, since there is then no entitlement record to read.
+        /// </summary>
+        private static async Task<string> GetBusinessAccountId(
+            string tradosAccountId, Dictionary<string, string> headers)
+        {
+            var requestUri = LanguageCloudAccountsUrl + Uri.EscapeDataString(tradosAccountId);
+            Logger.Debug("[Cohere] Resolving businessAccountId via {0}", requestUri);
+
+            var service = new GenericHTTPService<object, LanguageCloudAccount>(
+                HttpClient, headers, HttpMethod.Get, requestUri);
             var response = await service.SendRequest(null);
 
-            return response.Success && response.Response is not null
-                ? MapDetails(response.Response)
-                : null;
+            if (!response.Success || response.Response is null)
+            {
+                Logger.Warn(
+                    "[Cohere] Could not read the Language Cloud account from {0}: {1}",
+                    requestUri, DescribeErrors(response?.Errors));
+                return null;
+            }
+
+            var businessAccountId = response.Response.BusinessAccountId;
+            if (string.IsNullOrWhiteSpace(businessAccountId))
+            {
+                Logger.Info(
+                    "[Cohere] Account has no businessAccountId (not provisioned through Account Portal); no entitlement to evaluate.");
+                return null;
+            }
+
+            return businessAccountId;
         }
+
+        /// <summary>
+        /// Hop 2: reads the Language Weaver entitlement for the given Account Portal business account.
+        /// </summary>
+        private static async Task<LanguageWeaverDetails> GetLanguageWeaverDetails(
+            string businessAccountId, Dictionary<string, string> headers)
+        {
+            var requestUri = new Uri(
+                new Uri(AccountPortalApiBaseUrl),
+                AccountPortalDetailsPath + Uri.EscapeDataString(businessAccountId)).AbsoluteUri;
+
+            var service = new GenericHTTPService<object, LanguageWeaverDetails>(
+                HttpClient, headers, HttpMethod.Get, requestUri);
+            var response = await service.SendRequest(null);
+
+            if (!response.Success || response.Response is null)
+            {
+                Logger.Warn(
+                    "[Cohere] Could not read Language Weaver details from {0}: {1}",
+                    requestUri, DescribeErrors(response?.Errors));
+                return null;
+            }
+
+            return response.Response;
+        }
+
+        private static string DescribeErrors(IEnumerable<string> errors)
+            => errors is null ? "no details" : string.Join("; ", errors);
 
         public static CohereSubscriptionData MapDetails(LanguageWeaverDetails details)
         {
@@ -46,18 +149,24 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
                 return null;
             }
 
-            var trialStatus = details.TrialStatus ?? string.Empty;
-            var isTrial = trialStatus.IndexOf("trial", StringComparison.OrdinalIgnoreCase) >= 0;
-            var isTrialExpired = isTrial &&
-                (trialStatus.IndexOf("expired", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                 trialStatus.IndexOf("ended", StringComparison.OrdinalIgnoreCase) >= 0);
+            // Status values are those documented for the details endpoint: NOT_STARTED, IN_PROGRESS, and the
+            // terminal states a started trial ends in. Matching on the literal word "trial" would miss every
+            // one of them.
+            var trialStatus = (details.TrialStatus ?? string.Empty).Trim();
+            var isTrialRunning = trialStatus.Equals("IN_PROGRESS", StringComparison.OrdinalIgnoreCase);
+            var isTrialOver = trialStatus.Equals("CANCELLED", StringComparison.OrdinalIgnoreCase)
+                           || trialStatus.Equals("EXPIRED", StringComparison.OrdinalIgnoreCase)
+                           || trialStatus.Equals("ENDED", StringComparison.OrdinalIgnoreCase);
 
             return new CohereSubscriptionData
             {
-                IsCohereDetected = details.IsProActive || isTrial,
-                IsPaid = details.IsProActive && !isTrial,
-                IsTrial = isTrial,
-                IsTrialExpired = isTrialExpired,
+                IsCohereDetected = details.IsProActive || isTrialRunning || isTrialOver,
+                // Converting to paid cancels the trial, so an active Pro add-on sits alongside a terminal
+                // trial status. Pro therefore decides "paid" on its own: pairing it with the trial state
+                // would show a paying customer the "trial expired" prompt.
+                IsPaid = details.IsProActive,
+                IsTrial = isTrialRunning || isTrialOver,
+                IsTrialExpired = isTrialOver,
                 // The endpoint does not include role information. Treat the user as non-admin so the prompt
                 // never presents subscription actions that the current user may not be authorized to perform.
                 IsAdmin = false

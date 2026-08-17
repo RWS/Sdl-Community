@@ -1,4 +1,5 @@
 ﻿using LanguageWeaverProvider.CohereSubscription.Settings.Interfaces;
+using NLog;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions.Internal;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -12,6 +13,8 @@ namespace LanguageWeaverProvider.CohereSubscription
 {
     public class CohereStartupManager
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         private readonly CohereSubscriptionOrchestrator _cohereOrchestrator;
         private readonly ICohereSubscriptionSettingsService _settings;
         private readonly List<AbstractViewController> _controllers;
@@ -50,7 +53,12 @@ namespace LanguageWeaverProvider.CohereSubscription
                     RemoveSubscriber();
                 }
             }
-            catch (Exception) { }
+            catch (Exception ex)
+            {
+                // Never let a failed entitlement check surface to the user or bring down view activation
+                // (DET-421, case E): swallow it here, but record why so the failure is diagnosable.
+                Logger.Error(ex, "[Cohere] Subscription check failed during view activation.");
+            }
         }
 
         private void AddSubscriber()
