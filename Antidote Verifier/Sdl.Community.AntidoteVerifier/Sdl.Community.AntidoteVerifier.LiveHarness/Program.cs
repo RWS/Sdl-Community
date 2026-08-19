@@ -526,6 +526,8 @@ namespace Sdl.Community.AntidoteVerifier.LiveHarness
                 return _document.Segments[index - 1];
             }
 
+            public IReadOnlyList<string> GetSegmentTexts() => _document.Segments.ToArray();
+
             public bool CanReplace(int index, int startPosition, int endPosition, string origString,
                 string displayLanguage, ref string message, ref string explication)
             {
