@@ -35,7 +35,18 @@ namespace Sdl.Community.AntidoteVerifier
             };
 
             config.AddTarget(target);
-            config.AddRuleForAllLevels(target, "*AntidoteVerifier*");
+            // Debug and above, deliberately NOT Trace: the transport logs whole frames verbatim at
+            // Trace, and one getTextZones response holds the text of every segment (~2 MB on a
+            // 12,000-segment document), re-sent whenever Antidote's window moves or the editor
+            // scrolls. Debug keeps an abbreviated frame instead (see FrameLog). The live harness
+            // configures its own Trace rule when a verbatim capture is wanted.
+            // Support capture: set ANTIDOTE_VERIFIER_TRACE=1 before starting Studio to get the frames
+            // back verbatim for one session.
+            var traceRequested = string.Equals(
+                Environment.GetEnvironmentVariable("ANTIDOTE_VERIFIER_TRACE"), "1", StringComparison.Ordinal);
+
+            config.AddRule(traceRequested ? LogLevel.Trace : LogLevel.Debug, LogLevel.Fatal, target,
+                "*AntidoteVerifier*");
 
             LogManager.ReconfigExistingLoggers();
         }

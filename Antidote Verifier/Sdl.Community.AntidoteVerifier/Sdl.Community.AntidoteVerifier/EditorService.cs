@@ -1,6 +1,7 @@
 using Sdl.Community.AntidoteVerifier.Extensions;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,14 +12,14 @@ namespace Sdl.Community.AntidoteVerifier
     /// segments. A fresh instance is bound to the active document on every launch. Unknown segment
     /// indexes throw (dictionary indexer) — the Connectix layer relies on that to reject callbacks
     /// for zones this document does not contain.
+    /// Segment pairs are resolved from the document on demand and never held between calls, so a
+    /// correction is never applied to a stale copy of a segment the user edited in the meantime.
     /// </summary>
     public class EditorService : IEditorService
     {
         private readonly IStudioDocument _document;
 
-        // 1-based Antidote zone index -> stable Studio identity of the segment. Segment pairs are
-        // re-resolved from the document on every access because UpdateSegmentPair can replace the
-        // underlying instances while a correction is running.
+        // 1-based Antidote zone index -> stable Studio identity of the segment.
         private readonly Dictionary<int, SegmentIdentity> _segmentsByIndex =
             new Dictionary<int, SegmentIdentity>();
 
@@ -44,13 +45,18 @@ namespace Sdl.Community.AntidoteVerifier
 
         public int GetActiveSegmentId()
         {
-            var active = _document.ActiveSegmentPair;
-            var segmentId = active.Properties.Id.Id;
-            var paragraphUnitId = active.GetParagraphUnitProperties().ParagraphUnitId.Id;
+            // The editor has no active pair while Antidote's own window holds focus — which is exactly
+            // when zone refreshes arrive. Throwing here would abort the whole getTextZones handler, and
+            // ConnectixAgent answers a failed callback with NOTHING, leaving the corrector waiting.
+            var activePair = _document.ActiveSegmentPair;
+            if (activePair == null)
+                return 1;
+
+            var activeIdentity = IdentityOf(activePair);
 
             foreach (var entry in _segmentsByIndex)
             {
-                if (entry.Value.Matches(segmentId, paragraphUnitId))
+                if (entry.Value.Equals(activeIdentity))
                     return entry.Key;
             }
 
@@ -80,7 +86,32 @@ namespace Sdl.Community.AntidoteVerifier
 
         public string GetSegmentText(int index)
         {
-            return FindSegmentPair(index).Target.GetString();
+            // An index this document never had still throws (see FindSegmentPair). A known index whose
+            // pair no longer resolves returns null instead, which the correction callbacks already read
+            // as a plain "no" — better than failing the frame and answering nothing at all.
+            return FindSegmentPair(index)?.Target.GetString();
+        }
+
+        /// <summary>
+        /// Text of every correctable segment, in zone-index order. Walks the document ONCE.
+        /// Resolving each segment separately (a full scan of the document's segment pairs per
+        /// segment, with a GetParagraphUnitProperties() call per comparison) made a single zone
+        /// refresh cost O(segments²) — and Antidote asks for every zone again whenever its window
+        /// moves or the editor scrolls, which froze medium documents for minutes.
+        /// </summary>
+        public IReadOnlyList<string> GetSegmentTexts()
+        {
+            var segmentPairsByIdentity = MapSegmentPairs();
+            var texts = new string[_segmentsByIndex.Count];
+
+            for (var index = 1; index <= texts.Length; index++)
+            {
+                if (_segmentsByIndex.TryGetValue(index, out var identity) &&
+                    segmentPairsByIdentity.TryGetValue(identity, out var segmentPair))
+                    texts[index - 1] = segmentPair.Target.GetString();
+            }
+
+            return texts;
         }
 
         public void ReplaceTextInSegment(int segmentId, int startPosition, int endPosition, string replacementText)
@@ -96,20 +127,38 @@ namespace Sdl.Community.AntidoteVerifier
         public void SelectText(int index, int startPosition, int endPosition)
         {
             var segmentPair = FindSegmentPair(index);
+            if (segmentPair == null)
+                return;
+
             var paragraphUnitId = segmentPair.GetParagraphUnitProperties().ParagraphUnitId.Id;
 
             _document.SetActiveSegmentPair(paragraphUnitId, segmentPair.Properties.Id.Id);
         }
 
+        // Single-segment resolution for the correction callbacks (allowEdit / replace / select).
+        // Those arrive a few at a time, so one scan each is fine; the whole-document path is
+        // GetSegmentTexts.
         private ISegmentPair FindSegmentPair(int index)
         {
             // Throws KeyNotFoundException for an index outside this document — by design; see class docs.
             var identity = _segmentsByIndex[index];
 
-            return _document.SegmentPairs.FirstOrDefault(segmentPair =>
-                identity.Matches(
-                    segmentPair.Properties.Id.Id,
-                    segmentPair.GetParagraphUnitProperties().ParagraphUnitId.Id));
+            return _document.SegmentPairs.FirstOrDefault(segmentPair => IdentityOf(segmentPair).Equals(identity));
+        }
+
+        // One pass over the document's segment pairs, keyed by identity. Keeps the FIRST pair for a
+        // given identity, matching the single-lookup FirstOrDefault behaviour.
+        private Dictionary<SegmentIdentity, ISegmentPair> MapSegmentPairs()
+        {
+            var map = new Dictionary<SegmentIdentity, ISegmentPair>();
+            foreach (var segmentPair in _document.SegmentPairs)
+            {
+                var identity = IdentityOf(segmentPair);
+                if (!map.ContainsKey(identity))
+                    map.Add(identity, segmentPair);
+            }
+
+            return map;
         }
 
         private void IndexCorrectableSegments()
@@ -124,14 +173,19 @@ namespace Sdl.Community.AntidoteVerifier
                 if (string.IsNullOrEmpty(segmentPair.Target.GetString()))
                     continue;
 
-                _segmentsByIndex.Add(index++, new SegmentIdentity(
-                    segmentPair.Properties.Id.Id,
-                    segmentPair.GetParagraphUnitProperties().ParagraphUnitId.Id));
+                _segmentsByIndex.Add(index++, IdentityOf(segmentPair));
             }
         }
 
+        private static SegmentIdentity IdentityOf(ISegmentPair segmentPair)
+        {
+            return new SegmentIdentity(
+                segmentPair.Properties.Id.Id,
+                segmentPair.GetParagraphUnitProperties().ParagraphUnitId.Id);
+        }
+
         /// <summary>Studio's stable identity for one segment: its id within its paragraph unit.</summary>
-        private readonly struct SegmentIdentity
+        private readonly struct SegmentIdentity : IEquatable<SegmentIdentity>
         {
             public SegmentIdentity(string segmentId, string paragraphUnitId)
             {
@@ -142,8 +196,19 @@ namespace Sdl.Community.AntidoteVerifier
             public string SegmentId { get; }
             public string ParagraphUnitId { get; }
 
-            public bool Matches(string segmentId, string paragraphUnitId)
-                => SegmentId.Equals(segmentId) && ParagraphUnitId.Equals(paragraphUnitId);
+            public bool Equals(SegmentIdentity other)
+                => string.Equals(SegmentId, other.SegmentId, StringComparison.Ordinal)
+                   && string.Equals(ParagraphUnitId, other.ParagraphUnitId, StringComparison.Ordinal);
+
+            public override bool Equals(object obj) => obj is SegmentIdentity other && Equals(other);
+
+            public override int GetHashCode()
+            {
+                unchecked
+                {
+                    return ((SegmentId?.GetHashCode() ?? 0) * 397) ^ (ParagraphUnitId?.GetHashCode() ?? 0);
+                }
+            }
         }
     }
 }
