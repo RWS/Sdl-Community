@@ -46,6 +46,21 @@ namespace Sdl.Community.AntidoteVerifier.Tests
         }
 
         [Fact]
+        public void ZonesToCorrect_reads_the_whole_document_in_one_batch_call()
+        {
+            // Performance guard. Antidote re-requests every zone whenever its window moves or the
+            // editor scrolls, and resolving segments one by one made each refresh O(segments^2) in
+            // EditorService -- minutes of freeze on medium documents (community report, Aug 2026).
+            var editor = new FakeEditorService("first", "second", "third");
+            var agent = CreateAgent(editor);
+
+            agent.ZonesToCorrect(forActiveSelection: false);
+
+            Assert.Equal(1, editor.GetSegmentTextsCalls);
+            Assert.Equal(0, editor.GetSegmentTextCalls);
+        }
+
+        [Fact]
         public void ZonesToCorrect_returns_empty_when_no_segments()
         {
             var agent = CreateAgent(new FakeEditorService());

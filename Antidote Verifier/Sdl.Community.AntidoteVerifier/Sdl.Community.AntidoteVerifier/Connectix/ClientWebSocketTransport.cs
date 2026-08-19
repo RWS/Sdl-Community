@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using NLog;
+using Sdl.Community.AntidoteVerifier.Connectix.Protocol;
 
 namespace Sdl.Community.AntidoteVerifier.Connectix
 {
@@ -52,7 +53,7 @@ namespace Sdl.Community.AntidoteVerifier.Connectix
             _sendLock.Wait();
             try
             {
-                Logger.Debug("-> AgentConnectix: {0}", frameJson);
+                LogFrame("->", frameJson);
                 var bytes = Encoding.UTF8.GetBytes(frameJson);
                 _socket.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, _cts.Token)
                     .GetAwaiter().GetResult();
@@ -65,6 +66,17 @@ namespace Sdl.Community.AntidoteVerifier.Connectix
             {
                 _sendLock.Release();
             }
+        }
+
+        // Verbatim at Trace, abbreviated at Debug: see FrameLog. Studio enables Debug and above, so a
+        // zone refresh no longer writes the whole zone list to disk on every frame; the live harness
+        // enables Trace and still captures every frame in full.
+        private static void LogFrame(string direction, string frameJson)
+        {
+            if (Logger.IsTraceEnabled)
+                Logger.Trace("{0} AgentConnectix: {1}", direction, frameJson);
+            else if (Logger.IsDebugEnabled)
+                Logger.Debug("{0} AgentConnectix: {1}", direction, FrameLog.Abbreviate(frameJson));
         }
 
         private async Task ReceiveLoopAsync(CancellationToken token)
@@ -92,7 +104,7 @@ namespace Sdl.Community.AntidoteVerifier.Connectix
                     while (!result.EndOfMessage);
 
                     var frame = message.ToString();
-                    Logger.Debug("<- AgentConnectix: {0}", frame);
+                    LogFrame("<-", frame);
                     FrameReceived?.Invoke(frame);
                 }
             }

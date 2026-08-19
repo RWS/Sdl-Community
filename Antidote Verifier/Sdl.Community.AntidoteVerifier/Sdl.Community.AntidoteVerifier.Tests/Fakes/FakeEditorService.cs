@@ -27,6 +27,11 @@ namespace Sdl.Community.AntidoteVerifier.Tests.Fakes
         public int ActivateCalls { get; private set; }
         public (int Index, int Start, int End)? LastSelect { get; private set; }
 
+        // Counted so tests can assert HOW the agent reads the document: the corrector path must
+        // batch-read (one GetSegmentTexts), never resolve segment by segment.
+        public int GetSegmentTextCalls { get; private set; }
+        public int GetSegmentTextsCalls { get; private set; }
+
         public IReadOnlyList<string> Segments => _segments;
 
         public int GetDocumentNoOfSegments() => _segments.Count;
@@ -35,8 +40,15 @@ namespace Sdl.Community.AntidoteVerifier.Tests.Fakes
 
         public string GetSegmentText(int index)
         {
+            GetSegmentTextCalls++;
             if (index < 1 || index > _segments.Count) return null;
             return _segments[index - 1];
+        }
+
+        public IReadOnlyList<string> GetSegmentTexts()
+        {
+            GetSegmentTextsCalls++;
+            return _segments.ToArray();
         }
 
         public bool CanReplace(int index, int startPosition, int endPosition, string origString,

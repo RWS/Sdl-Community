@@ -101,10 +101,21 @@ namespace Sdl.Community.AntidoteVerifier.Connectix
                     return new List<TextZone> { BuildZone(active, editor, index, true) };
                 }
 
-                // Corrector: every correctable segment, focusing the active one.
-                var zones = new List<TextZone>(count);
-                for (var index = 1; index <= count; index++)
-                    zones.Add(BuildZone(active, editor, index, index == activeIndex));
+                // Corrector: every correctable segment, focusing the active one. Read in one call
+                // so the editor walks the document once -- Antidote re-requests all zones on
+                // window moves and scrolling, so this runs far more often than once per launch.
+                var texts = editor.GetSegmentTexts();
+                var zones = new List<TextZone>(texts.Count);
+                for (var index = 1; index <= texts.Count; index++)
+                {
+                    zones.Add(new TextZone
+                    {
+                        Text = texts[index - 1],
+                        ZoneId = active.MakeZoneId(index),
+                        ZoneIsFocused = index == activeIndex
+                    });
+                }
+
                 return zones;
             });
         }
