@@ -13,13 +13,17 @@ public class FuzzyRange
         var ranges = new List<string> { "All" };
         if (string.IsNullOrWhiteSpace(projectId))
         {
-            MessageBox.Show(
-                "Fuzzy ranges cannot be used for this comparison\nGet project analysis bands failed: projectId is not set.",
-                "Comparison", MessageBoxButton.OK, MessageBoxImage.Warning);
+            ShowAnalysisBandsWarning("projectId is not set.");
             return ranges;
         }
 
         var analysisBands = GetProjectAnalysisBandsFromId(projectId);
+        if (analysisBands is null || analysisBands.Count == 0)
+        {
+            ShowAnalysisBandsWarning("the project this report was created from is not open in Studio.");
+            return ranges;
+        }
+
         ranges.AddRange(GetFuzzyRanges(analysisBands));
 
         return ranges;
@@ -30,13 +34,17 @@ public class FuzzyRange
         var ranges = new List<string> { "All" };
         if (string.IsNullOrWhiteSpace(originalProjectPath))
         {
-            MessageBox.Show(
-                "Fuzzy ranges cannot be used for this comparison\nGet project analysis bands failed: original project path is not set.",
-                "Comparison", MessageBoxButton.OK, MessageBoxImage.Warning);
+            ShowAnalysisBandsWarning("original project path is not set.");
             return ranges;
         }
 
         var analysisBands = GetProjectAnalysisBandsFromProjectPath(originalProjectPath);
+        if (analysisBands is null || analysisBands.Count == 0)
+        {
+            ShowAnalysisBandsWarning("no analysis bands were found in the project file.");
+            return ranges;
+        }
+
         ranges.AddRange(GetFuzzyRanges(analysisBands));
 
         return ranges;
@@ -78,9 +86,17 @@ public class FuzzyRange
         return false;
     }
 
+    private static void ShowAnalysisBandsWarning(string reason) =>
+        MessageBox.Show(
+            $"Fuzzy ranges cannot be used for this comparison\nGet project analysis bands failed: {reason}",
+            "Comparison", MessageBoxButton.OK, MessageBoxImage.Warning);
+
     private static List<string> GetFuzzyRanges(List<string> analysisBands)
     {
         var ranges = new List<string>();
+        if (analysisBands is null || analysisBands.Count == 0)
+            return ranges;
+
         for (var index = 0; index < analysisBands.Count - 1; index++)
             ranges.Add($"{analysisBands[index]} - {analysisBands[index + 1]}");
         ranges.Add($"> {analysisBands[analysisBands.Count - 1]}");
