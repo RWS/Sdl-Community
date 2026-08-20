@@ -24,7 +24,24 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
         public ReportViewer()
         {
             InitializeComponent();
+
+            // Painted whenever the control has no document of its own to show; left unset it comes out black.
+            WebView2Browser.DefaultBackgroundColor = System.Drawing.Color.White;
         }
+
+        /// <summary>
+        /// Shown while no report is selected. The colour scheme and the colours are declared explicitly:
+        /// a document that states neither is rendered by WebView2 on the dark Chromium canvas whenever
+        /// Studio/Windows runs a dark theme, which is what made the empty viewer look black.
+        /// </summary>
+        private const string NoReportSelectedHtml =
+            "<!DOCTYPE html><html><head><meta charset='utf-8'>" +
+            "<meta name='color-scheme' content='light'>" +
+            "<style>" +
+            "html,body{height:100%;margin:0;background:#ffffff;color:#4d4d4d;font-family:'Segoe UI',Segoe,Tahoma,sans-serif;}" +
+            ".message{display:flex;justify-content:center;align-items:center;height:100vh;font-size:24px;}" +
+            "</style></head>" +
+            "<body><div class='message'>Please select a report</div></body></html>";
 
         public event Action<object, CoreWebView2WebMessageReceivedEventArgs> WebMessageReceived;
 
@@ -145,8 +162,8 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
         {
             if (string.IsNullOrWhiteSpace(path))
             {
-                var htmlContent = "<html><body><div style='display:flex;justify-content:center;align-items:center;height:100vh;font-size:24px;'>Please select a report</div></body></html>";
-                WebView2Browser.CoreWebView2?.NavigateToString(htmlContent);
+                await EnsureBrowserIsLoaded();
+                WebView2Browser.CoreWebView2?.NavigateToString(NoReportSelectedHtml);
             }
             else
             {
@@ -260,7 +277,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
                 await EnsureBrowserIsLoaded();
             }
 
-            Navigate(null);
+            await Navigate(null);
         }
 
         private async Task LoadScripts()

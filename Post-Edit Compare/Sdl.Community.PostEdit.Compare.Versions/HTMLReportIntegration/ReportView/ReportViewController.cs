@@ -189,6 +189,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
             catch (Exception e)
             {
                 ReportExplorer.SelectedReport = null;
+                ErrorHandler.LogError(e);
                 ErrorHandler.ShowError($"Error loading the selected report: {e.Message}");
             }
         }
