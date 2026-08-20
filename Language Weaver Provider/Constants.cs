@@ -43,6 +43,12 @@
 		public const string LanguageWeaverEUPortal = "https://portal.languageweaver.com/login";
 		public const string LanguageWeaverUSPortal = "https://us.portal.languageweaver.com/login";
 
+		// Trados LLM / Language Weaver Pro add-on. No public URL starts the trial - activation happens in the
+		// RWS Account Portal - so both commercial actions land on the pricing page, where the add-on and its
+		// price are presented. See COHERE_CONTEXT.md on the outstanding Account Portal deep links.
+		public const string LanguageWeaverProPricingUrl = "https://www.trados.com/pricing/freelance-translators/";
+		public const string LanguageWeaverProLearnMoreUrl = "https://www.trados.com/ecosystem/language-weaver-for-trados/";
+
 		// LW Cloud API Region
 		public static string CloudEUUrl = "https://api.languageweaver.com/";
 		public static string CloudUSUrl = "https://us.api.languageweaver.com/";

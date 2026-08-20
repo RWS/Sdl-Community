@@ -205,6 +205,24 @@ namespace LanguageWeaverProvider.Services
             return accountId;
         }
 
+        /// <summary>
+        /// Reads the signed-in user's role on the Language Weaver account (for example "ADMIN"), from the same
+        /// endpoint that resolves the account id. Returns <c>null</c> when no role is available — the request
+        /// failed, or the credential identifies an application rather than a person, as API-credential logins do.
+        /// </summary>
+        public static async Task<string> GetUserRole(AccessToken accessToken)
+        {
+            var response = await Service.SendRequest(
+                HttpMethod.Get, $"{accessToken.BaseUri}v4/accounts/users/self", accessToken);
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            var content = await response.Content.ReadAsStringAsync();
+            return JObject.Parse(content)["userRole"]?.ToString();
+        }
+
         public static async Task<List<T>> GetResources<T>(AccessToken accessToken, CloudResources resource)
         {
             const string LanguagePairsEndPoint = "subscriptions/language-pairs";
