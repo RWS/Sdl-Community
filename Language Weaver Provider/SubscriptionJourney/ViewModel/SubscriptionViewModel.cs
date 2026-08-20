@@ -34,27 +34,20 @@ namespace LanguageWeaverProvider.SubscriptionJourney.ViewModel
             ShowSecondaryButton = subscriptionOptions.ShowSecondary;
             SecondaryButtonContent = subscriptionOptions.SecondaryContent ?? string.Empty;
             CancelContent = subscriptionOptions.CancelContent ?? string.Empty;
-            PrimaryCommand = new RelayCommand(_ =>
+            // A button either navigates or not, but it always dismisses the prompt: leaving the dialog up
+            // behind the freshly opened browser tab strands the user on a window they already acted on.
+            ICommand Act(string uri) => new RelayCommand(_ =>
             {
-                if (!string.IsNullOrWhiteSpace(subscriptionOptions.PrimaryUri))
+                if (!string.IsNullOrWhiteSpace(uri))
                 {
-                    uriOpener.OpenUri(subscriptionOptions.PrimaryUri);
-                    return;
+                    uriOpener.OpenUri(uri);
                 }
 
                 RequestClose?.Invoke();
             });
 
-            SecondaryCommand = new RelayCommand(_ =>
-            {
-                if (!string.IsNullOrWhiteSpace(subscriptionOptions.SecondaryUri))
-                {
-                    uriOpener.OpenUri(subscriptionOptions.SecondaryUri);
-                    return;
-                }
-
-                RequestClose?.Invoke();
-            });
+            PrimaryCommand = Act(subscriptionOptions.PrimaryUri);
+            SecondaryCommand = Act(subscriptionOptions.SecondaryUri);
         }
 
         public event Action RequestClose;

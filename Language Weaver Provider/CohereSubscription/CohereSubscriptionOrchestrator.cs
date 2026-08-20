@@ -17,6 +17,7 @@ namespace LanguageWeaverProvider.CohereSubscription
         private readonly ICohereSubscriptionDecisionService _decisionService;
 
         private bool _hasShownThisSession;
+        private bool _isRunning;
 
         public CohereSubscriptionOrchestrator(
             ICohereSubscriptionSettingsService settings,
@@ -30,31 +31,34 @@ namespace LanguageWeaverProvider.CohereSubscription
 
         public async Task<bool> RunAsync()
         {
-            if (_hasShownThisSession)
+            if (_hasShownThisSession || _isRunning || _settings.GetDoNotShowAgain())
                 return false;
 
-            if (_settings.GetDoNotShowAgain())
-                return false;
-
-            var data = await _workflow.ExecuteAsync();
-
-            var viewModel = _decisionService.BuildViewModel(data);
-            if (viewModel == null)
-                return false;
-
-            var view = new CohereSubscriptionWindow
+            _isRunning = true;
+            try
             {
-                DataContext = viewModel
-            };
+                var data = await _workflow.ExecuteAsync();
+                var viewModel = _decisionService.BuildViewModel(data);
+                if (viewModel == null)
+                    return false;
 
-            _ = view.ShowDialog();
+                var view = new CohereSubscriptionWindow
+                {
+                    DataContext = viewModel
+                };
 
-            //_hasShownThisSession = true;
+                _hasShownThisSession = true;
+                _ = view.ShowDialog();
 
-            if (viewModel?.DoNotShowThisAgain == true)
-                _settings.SetDoNotShowAgain(true);
+                if (viewModel.DoNotShowThisAgain)
+                    _settings.SetDoNotShowAgain(true);
 
-            return false;
+                return true;
+            }
+            finally
+            {
+                _isRunning = false;
+            }
         }
     }
 }
