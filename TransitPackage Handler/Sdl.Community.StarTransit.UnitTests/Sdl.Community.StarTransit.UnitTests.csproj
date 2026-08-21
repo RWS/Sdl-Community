@@ -49,6 +49,9 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="TestingFiles\MachineTranslatedSegments.DEU">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="TestingFiles\693203001_Trumpf_ID_IND.PPF">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
