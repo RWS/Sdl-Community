@@ -15,6 +15,8 @@ namespace Sdl.Community.StarTransit.Shared.Import
 {
 	public class TransitParser : AbstractBilingualFileTypeComponent, IBilingualParser, INativeContentCycleAware, ISettingsAware
 	{
+		private const string MachineTranslationOriginSystem = "STAR Transit MT";
+
 		private IFileProperties _fileProperties;
 		private readonly IFileService _fileService = new FileService();
 		private XmlDocument _trgDocument;
@@ -140,9 +142,9 @@ namespace Sdl.Community.StarTransit.Shared.Import
 				var segmentPairProperties = ItemFactory.CreateSegmentPairProperties();
 				var tuOrg = ItemFactory.CreateTranslationOrigin();
 
-				// assign the appropriate confirmation level to the segment pair            
+				// assign the appropriate confirmation level to the segment pair
 				segmentPairProperties.ConfirmationLevel = CreateConfirmationLevel(dataAttributeHexCode);
-				tuOrg.MatchPercent = CreateMatchValue(item);
+				SetTranslationOrigin(tuOrg, item);
 
 				// add source segment to paragraph unit
 				var srcSegment = CreateSegment(_srcDocument.SelectSingleNode("//Seg[@SegID='" + id + "']"),
@@ -160,11 +162,6 @@ namespace Sdl.Community.StarTransit.Shared.Import
 					item.SelectSingleNode(".").InnerText = "";
 					var trgSegment = CreateSegment(item.SelectSingleNode("."), segmentPairProperties, false);
 					paragraphUnit.Target.Add(trgSegment);
-				}
-
-				if (tuOrg.MatchPercent > 0)
-				{
-					tuOrg.OriginType = DefaultTranslationOrigin.TranslationMemory;
 				}
 
 				segmentPairProperties.TranslationOrigin = tuOrg;
@@ -199,18 +196,31 @@ namespace Sdl.Community.StarTransit.Shared.Import
 			return sdlxliffLevel;
 		}
 
-		private byte CreateMatchValue(XmlNode segmentXml)
+		/// <summary>
+		/// Records where the pretranslation of a segment came from, so that machine translated segments are not
+		/// presented to the translator as translation memory matches.
+		/// </summary>
+		private void SetTranslationOrigin(ITranslationOrigin translationOrigin, XmlNode segmentXml)
 		{
-			byte matchValue = 0;
-			if (segmentXml is null) return matchValue;
-			var data = segmentXml.SelectSingleNode("./@Data").InnerText;
+			if (segmentXml is null) return;
+			var data = segmentXml.SelectSingleNode("./@Data")?.InnerText;
+			if (string.IsNullOrEmpty(data) || string.IsNullOrEmpty(segmentXml.SelectSingleNode(".")?.InnerText)) return;
 
-			if (data.Contains("\\") && segmentXml.SelectSingleNode(".").InnerText != "")
+			var segmentData = new TransitSegmentData(data);
+			if (segmentData.IsMachineTranslated)
 			{
-				matchValue = 100;
+				//Transit does not record a match rate for machine translation, and Studio expects none for it either
+				translationOrigin.MatchPercent = 0;
+				translationOrigin.OriginType = DefaultTranslationOrigin.MachineTranslation;
+				translationOrigin.OriginSystem = MachineTranslationOriginSystem;
+				return;
 			}
 
-			return matchValue;
+			translationOrigin.MatchPercent = segmentData.MatchRate;
+			if (translationOrigin.MatchPercent > 0)
+			{
+				translationOrigin.OriginType = DefaultTranslationOrigin.TranslationMemory;
+			}
 		}
 
 		// helper function for creating segment objects
