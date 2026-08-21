@@ -231,13 +231,13 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             _connecter.Translate(_languageDirection, sourceText,
                 new(
                     _languagePairOptions?.Formality ?? Formality.Default,
-                    _languagePairOptions?.SelectedGlossary.Id,
+                    _languagePairOptions?.SelectedGlossary?.Id,
                     _options.TagHandling,
                     _options.SplitSentenceHandling,
                     _options.PreserveFormatting,
                     _options.IgnoreTagsParameter,
                     _languagePairOptions?.ModelType ?? ModelType.Prefer_Quality_Optimized,
-                    _languagePairOptions?.SelectedStyle.ID));
+                    _languagePairOptions?.SelectedStyle?.ID));
 
         private List<PreTranslateSegment> TranslateSegments(List<PreTranslateSegment> preTranslateSegments)
         {
