@@ -1,30 +1,134 @@
+using LanguageWeaverProvider.CohereSubscription.Workflow.Model;
 using LanguageWeaverProvider.CohereSubscription.Workflow.Services;
 using Xunit;
 
 namespace LanguageWeaverProviderTests.UnitTests
 {
     /// <summary>
-    /// Pins the mapping from the two observable facts — whether the account holds Pro (GENERICPLUS) language
-    /// pairs, and the signed-in user's role — onto the prompt's decision inputs.
+    /// Pins the mapping from the account-portal details response onto the pop-up decision inputs.
+    /// The <c>trialStatus</c> values used here are the ones the details endpoint actually returns
+    /// (NOT_STARTED / IN_PROGRESS / CANCELLED), not invented labels.
     /// </summary>
     public class CohereSubscriptionWorkflowTests
     {
         [Fact]
-        public void ProLanguagePairs_AreMappedAsPaid()
+        public void ActiveProSubscription_IsMappedAsPaid()
         {
-            var data = CohereSubscriptionWorkflow.MapEntitlement(hasProLanguagePairs: true, userRole: "ADMIN");
+            var data = CohereSubscriptionWorkflow.MapDetails(new LanguageWeaverDetails
+            {
+                IsProActive = true,
+                TrialStatus = "NOT_STARTED"
+            });
+
+            Assert.True(data.IsCohereDetected);
+            Assert.True(data.IsPaid);
+            Assert.False(data.IsTrial);
+            // No role was supplied, so it is unknown rather than known-to-be-non-admin.
+            Assert.True(data.IsAdmin);
+        }
+
+        [Fact]
+        public void PaidAfterTrialConversion_IsStillPaid()
+        {
+            // Converting to paid cancels the trial, so this is the ordinary state of a paying customer.
+            // Reading it as an expired trial would prompt someone who has already bought the add-on.
+            var data = CohereSubscriptionWorkflow.MapDetails(new LanguageWeaverDetails
+            {
+                IsProActive = true,
+                TrialStatus = "CANCELLED"
+            });
 
             Assert.True(data.IsPaid);
             Assert.True(data.IsCohereDetected);
         }
 
         [Fact]
-        public void NoProLanguagePairs_AreMappedAsNotDetected()
+        public void TrialInProgress_IsMappedAsAnActiveTrial()
         {
+            var data = CohereSubscriptionWorkflow.MapDetails(new LanguageWeaverDetails
+            {
+                TrialStatus = "IN_PROGRESS"
+            });
+
+            Assert.True(data.IsCohereDetected);
+            Assert.True(data.IsTrial);
+            Assert.False(data.IsTrialExpired);
+            Assert.False(data.IsPaid);
+        }
+
+        [Fact]
+        public void CancelledTrialWithoutPro_IsMappedAsExpired()
+        {
+            var data = CohereSubscriptionWorkflow.MapDetails(new LanguageWeaverDetails
+            {
+                TrialStatus = "CANCELLED"
+            });
+
+            Assert.True(data.IsCohereDetected);
+            Assert.True(data.IsTrial);
+            Assert.True(data.IsTrialExpired);
+            Assert.False(data.IsPaid);
+        }
+
+        [Fact]
+        public void NoTrialAndNoPro_IsMappedAsNotDetected()
+        {
+            var data = CohereSubscriptionWorkflow.MapDetails(new LanguageWeaverDetails
+            {
+                IsProActive = false,
+                TrialStatus = "NOT_STARTED"
+            });
+
+            Assert.False(data.IsCohereDetected);
+            Assert.False(data.IsPaid);
+            Assert.False(data.IsTrial);
+        }
+
+        [Fact]
+        public void NeverTrialed_WithoutProPairs_IsOfferedTheTrial()
+        {
+            // No Account Portal record means no trial has ever been started, so this is the case the prompt
+            // exists for. The trial flags are false by knowledge, not by ignorance.
             var data = CohereSubscriptionWorkflow.MapEntitlement(hasProLanguagePairs: false, userRole: "ADMIN");
 
-            Assert.False(data.IsPaid);
             Assert.False(data.IsCohereDetected);
+            Assert.False(data.IsPaid);
+            Assert.False(data.IsTrial);
+            Assert.False(data.IsTrialExpired);
+        }
+
+        [Fact]
+        public void NeverTrialed_WithProPairs_IsPaid()
+        {
+            // An account can hold Pro without ever trialing, so Pro pairs still mean paid here.
+            var data = CohereSubscriptionWorkflow.MapEntitlement(hasProLanguagePairs: true, userRole: "ADMIN");
+
+            Assert.True(data.IsCohereDetected);
+            Assert.True(data.IsPaid);
+            Assert.False(data.IsTrial);
+        }
+
+        [Theory]
+        [InlineData("ADMIN")]
+        [InlineData("admin")]
+        public void AdminRole_IsRecognisedOnTheNeverTrialedPath(string userRole)
+        {
+            Assert.True(CohereSubscriptionWorkflow.MapEntitlement(false, userRole).IsAdmin);
+        }
+
+        [Theory]
+        [InlineData("USER")]
+        public void NonAdminRole_IsNotAdminOnTheNeverTrialedPath(string userRole)
+        {
+            Assert.False(CohereSubscriptionWorkflow.MapEntitlement(false, userRole).IsAdmin);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void UnreadableRole_IsAdminOnTheNeverTrialedPath(string userRole)
+        {
+            Assert.True(CohereSubscriptionWorkflow.MapEntitlement(false, userRole).IsAdmin);
         }
 
         [Theory]
@@ -32,32 +136,52 @@ namespace LanguageWeaverProviderTests.UnitTests
         [InlineData("admin")]
         public void AdminRole_IsRecognisedRegardlessOfCasing(string userRole)
         {
-            Assert.True(CohereSubscriptionWorkflow.MapEntitlement(false, userRole).IsAdmin);
+            var data = CohereSubscriptionWorkflow.MapDetails(
+                new LanguageWeaverDetails { TrialStatus = "NOT_STARTED" }, userRole);
+
+            Assert.True(data.IsAdmin);
         }
 
         [Theory]
         [InlineData("USER")]
+        public void NonAdminRole_IsNotAdmin(string userRole)
+        {
+            // A role that was actually read and is not ADMIN must never read as admin: those users would
+            // otherwise be offered account-management actions they cannot perform.
+            var data = CohereSubscriptionWorkflow.MapDetails(
+                new LanguageWeaverDetails { TrialStatus = "NOT_STARTED" }, userRole);
+
+            Assert.False(data.IsAdmin);
+        }
+
+        [Theory]
         [InlineData("")]
         [InlineData(null)]
-        public void NonAdminOrMissingRole_IsNotAdmin(string userRole)
+        public void UnreadableRole_IsTreatedAsAdmin(string userRole)
         {
-            // A missing role must never read as admin: API-credential logins identify an application rather
-            // than a person and carry no role, and those users must not be offered account-management actions.
-            Assert.False(CohereSubscriptionWorkflow.MapEntitlement(true, userRole).IsAdmin);
+            // An account never provisioned into Language Weaver has no readable role from any source:
+            // v4/accounts/users/self answers 403 "user ... does not exist", and neither the account-web body
+            // nor the sign-in JWT carries a role. Reading that absence as non-admin made the admin
+            // "start a trial" prompt unreachable for the never-trialed accounts it is written for, and told
+            // account owners to ask an administrator who does not exist.
+            var data = CohereSubscriptionWorkflow.MapDetails(
+                new LanguageWeaverDetails { TrialStatus = "NOT_STARTED" }, userRole);
+
+            Assert.False(data.IsCohereDetected);
+            Assert.False(data.IsPaid);
+            Assert.True(data.IsAdmin);
         }
 
         [Fact]
-        public void TrialState_IsNeverAsserted()
+        public void MissingTrialStatus_IsMappedAsNotDetected()
         {
-            // Documents a known gap rather than desired behaviour: no source currently exposes trial state,
-            // so both flags stay false and the two trial cases collapse into the neighbouring ones.
-            var entitled = CohereSubscriptionWorkflow.MapEntitlement(true, "ADMIN");
-            var notEntitled = CohereSubscriptionWorkflow.MapEntitlement(false, "ADMIN");
+            // The endpoint returns NOT_STARTED defaults when no details exist; a null status must not be
+            // read as a trial in any state.
+            var data = CohereSubscriptionWorkflow.MapDetails(new LanguageWeaverDetails());
 
-            Assert.False(entitled.IsTrial);
-            Assert.False(entitled.IsTrialExpired);
-            Assert.False(notEntitled.IsTrial);
-            Assert.False(notEntitled.IsTrialExpired);
+            Assert.False(data.IsCohereDetected);
+            Assert.False(data.IsTrial);
+            Assert.False(data.IsTrialExpired);
         }
     }
 }

@@ -6,51 +6,88 @@ The **Language Weaver Provider** Trados Studio plug-in contains a Cohere subscri
 
 Specs: [DET-421](https://rws-dev.atlassian.net/browse/DET-421) (epic), [DET-555](https://rws-dev.atlassian.net/browse/DET-555) (state retrieval), and [Account Portal - Language Weaver Pro subscriptions](https://rws-dev.atlassian.net/wiki/spaces/ECO/pages/2415755416/Account+Portal+-+Language+Weaver+Pro+subscriptions).
 
-## Which identity this uses, and why
+## Which identity this uses
 
-Entitlement is read with **the credentials of the Language Weaver Cloud provider the user has configured** — never the Trados Studio sign-in.
+Everything is resolved from the **Trados Studio sign-in** (`LanguageCloudIdentityApi.Instance`). The configured Language Weaver provider and its credentials are not consulted at all — the prompt works whether or not any provider exists.
 
-Those are two different identities in two different id spaces: Studio holds a Trados account id (24-char hex), the provider holds a Language Weaver account id (numeric). They can belong to different accounts — a user may be signed into Studio as themselves while the provider is configured against a client's account — so an entitlement read through Studio cannot be shown to say anything about the account the user is actually translating with.
-
-An earlier revision resolved entitlement through the Studio sign-in via a two-hop Account Portal lookup (`gw-account-web/accounts/{tradosAccountId}` to `businessAccountId` to `/account-portal/v1/weaver/details/`). That is **removed**. With it went `LanguageCloudAccount.cs`, `LanguageWeaverDetails.cs`, and the `Sdl.LanguageCloud.IdentityApi` assembly reference, which had been added for this feature and had no other consumer in the plug-in.
+This is deliberate and was reversed once. An interim revision read entitlement from the provider's own credentials, which avoided an identity mismatch (Studio holds a Trados account id, 24-char hex; a provider holds a Language Weaver account id, numeric — and they can belong to different accounts). But the Language Weaver side exposes no trial state, and trial state drives two of the four DET-421 cases. Only the Account Portal route carries it, and that route is keyed on the Trados identity. The mismatch that motivated the interim revision no longer arises — see "No configured provider is involved" below.
 
 ## How entitlement is resolved
 
 `CohereSubscription\Workflow\Services\CohereSubscriptionWorkflow.cs`
 
-Both facts come from data the plug-in already fetches, using the provider's own `AccessToken`:
+**`businessAccountId` is a signal, not just a lookup key.** The Account Portal record is created when a trial starts, so an account that has never started one has no `businessAccountId` at all. Its absence therefore *means* "never trialed" — which is exactly the state the prompt exists to address. Treating it as a failure, as an earlier revision did, made the feature structurally unable to serve its primary case: it could only speak to users who had already done the thing it was trying to persuade them to do.
+
+The resolution branches on it:
+
+```text
+hop 1 -> businessAccountId
+
+  null : never trialed. Trial flags are false by knowledge, not ignorance.
+         Read the account's own language pairs to see whether Pro is already
+         held (an account can be provisioned with Pro without ever trialing):
+             Pro pairs present -> paid, stay silent
+             no Pro pairs      -> case A, offer the trial
+             no account id     -> undeterminable, stay silent
+
+  set  : hop 2 -> trialStatus + isProActive -> cases B, C, D
+```
+
+Neither source covers all four cases alone, and the split falls exactly on the trial boundary:
+
+| Case | Never trialed (language pairs) | Has trial record (Account Portal) |
+| --- | --- | --- |
+| A. Never trialed, offer trial | yes | unreachable — no `businessAccountId` |
+| B. Trial active | not distinguishable | yes |
+| C. Trial expired | not distinguishable | yes |
+| D. Paid | yes | yes |
+
+The two hops, used when a trial record exists:
+
+```text
+1. GET https://eu.cloud.trados.com/lc-api/gw-account-web/accounts/{ActiveTenantId}
+      -> businessAccountId
+
+2. GET https://account-portal-api.sdl.com/account-portal/v1/weaver/details/{businessAccountId}
+      -> LanguageWeaverDetails { accountId, trialStatus, groupId, isProActive }
+```
+
+Plus a third call for the role:
+
+```text
+3. GET https://api.languageweaver.com/v4/accounts/users/self   -> userRole
+```
+
+Hop 3 works from the Trados identity because the Studio sign-in token is issued by the same Auth0 application and audience (`https://api.sdl.com`) that the Language Weaver Cloud API accepts — verified against a live token. Neither the account-web nor the account-portal response carries a role, so this is the only known source.
+
+`recurlyId` is **not** involved. The details endpoint originally required a `recurlyAccountId`, costing a third Account Portal request; that hop was removed service-side and the endpoint now takes `businessAccountId` directly.
+
+**Hop 1's body is wrapped.** The account object is nested under an `account` property — `{"account":{"id":"…","businessAccountId":"…"}}` — so it deserializes into `LanguageCloudAccountResponse`, not straight into `LanguageCloudAccount`. Getting this wrong is silent and total: Newtonsoft finds no top-level `businessAccountId`, leaves it null, raises nothing, and every account reads as "not provisioned through Account Portal". That bug disabled the entire trial branch until 24 Aug 2026 — cases B, C and D had never once executed. `LanguageCloudAccountResponseTests` pins the shape, including a test that reproduces the flat-deserialization failure directly.
 
 | Fact | Source | Signal |
 | --- | --- | --- |
-| Has the add-on | `v4/accounts/{accountId}/subscriptions/language-pairs` via `CloudService.GetResources<PairModel>` | any pair with `Type == "GENERICPLUS"` |
-| Is an admin | `v4/accounts/users/self` via `CloudService.GetUserRole` | `userRole == "ADMIN"` |
+| Paid | `/weaver/details/` | `isProActive` |
+| Trial state | `/weaver/details/` | `trialStatus`: `NOT_STARTED`, `IN_PROGRESS`, or a terminal value (`CANCELLED` / `EXPIRED` / `ENDED`) |
+| Is an admin | `v4/accounts/users/self` | `userRole == "ADMIN"` |
 
-`GENERICPLUS` (`model: "pro"`, `displayName: "Pro"`) is the Language Weaver Pro tier, which is what the add-on grants — the Account Portal trial feature is literally `GENERIC_PLUS_LANGUAGE_PAIRS`. `PairModel` already carried `Type`, so no new model or endpoint was needed.
+Two traps when editing `MapDetails`:
 
-`v4/accounts/users/self` was already called by `CloudService.SetAccountId`, which read only `accountId` and discarded the rest of the payload; `userRole` was in it all along.
+- **`isProActive` decides "paid" on its own.** Converting a trial to paid *cancels* the trial, so `isProActive=true` alongside a terminal `trialStatus` is the ordinary state of a paying customer. Pairing the two conditions shows a paying customer the "trial expired" prompt.
+- **Do not match on the substring `trial`.** None of the real status values contain it.
 
-Any failure returns `null`, which the decision service renders as no prompt — the specified behaviour for an undeterminable entitlement (DET-421, case E): show nothing, log the reason, re-evaluate next startup.
+Any failure returns `null`, which the decision service renders as no prompt — the specified behaviour for an undeterminable entitlement (DET-421, case E): show nothing, log the reason, re-evaluate next startup. A null role is treated as non-admin.
 
-## Scope
+## No configured provider is involved
 
-Only **Language Weaver Cloud** providers are evaluated. Edge providers never prompt: the add-on is a cloud commerce concept sold through Account Portal and cannot apply to an on-prem Edge server. With no authenticated cloud provider configured, nothing is shown.
+Everything runs off the Trados sign-in. A configured Language Weaver provider is never consulted, and the prompt works whether or not one exists.
 
-With several cloud providers configured, the first authenticated one is used — the prompt is a single account-level message, so any authenticated cloud account answers "does this organisation have the add-on".
+The language-pair check on the never-trialed branch does not need the provider's credentials — it needs an LW-authenticated token and an account id, and both come from the Trados sign-in. The token is accepted by the Language Weaver Cloud API because Studio's sign-in and the plug-in's own RWS ID SSO are issued by the same Auth0 application, audience (`https://api.sdl.com`) and scopes; verified against a live token. The account id comes from `users/self` in the same request as the role.
 
-## Known gap: trial state
+That also means both branches describe the same account, so the identity mismatch an earlier revision had — entitlement read from one account while translation happens on another — does not arise.
 
-Nothing currently exposes whether an account is on a trial, when it started, or when it ends. `MapEntitlement` therefore leaves both trial flags false, which collapses two of the four DET-421 cases:
+## Known gap: trial days
 
-| DET-421 case | Behaviour | Status |
-| --- | --- | --- |
-| D. Paid, no prompt | has Pro pairs | correct |
-| A. Not detected, prompt | no Pro pairs | correct |
-| B. Trial active, "ends in {X} days" | reads as paid; stays silent | **collapsed** |
-| C. Trial expired, "buy now" | reads as never-had-it; offers a trial | **collapsed** |
-
-Neither collapse shows the user anything untrue — both miss an upsell. An account mid-trial holds Pro pairs and so is silently treated as paid; an expired trial is offered a free trial again.
-
-The trial-state branches and their approved copy remain in `CohereSubscriptionDecisionService` so they light up as soon as a signal exists. Candidate source: subscriptions carry `startDate`/`endDate`, so a trial may surface as a short-dated subscription — unverified, and Account Portal documentation suggests trial pairs attach to the *group* while paid pairs attach to the *subscription*, which would look different.
+`/weaver/details/` returns `trialStatus` but no start or end date, so DET-421's "14–8 days remaining: no pop-up / 7–1 days: show *ends in {X} day(s)*" rule cannot be implemented. An active trial prompts at any point in its 14 days, with copy that omits `{X}`. Either date would unblock it — DET-555 notes remaining days is calculable client-side.
 
 ## Startup and prompt lifecycle
 
@@ -62,7 +99,7 @@ The trial-state branches and their approved copy remain in `CohereSubscriptionDe
 - `_hasShownThisSession` limits the prompt to one per Studio session.
 - Persists the **Do not show this again** selection.
 
-The manager only unsubscribes once a prompt has actually been shown, so a check that finds no configured provider is retried on the next view activation — which covers configuring a provider after Studio has launched.
+The manager only unsubscribes once a prompt has actually been shown, so a check that resolves to "no prompt" is retried on the next view activation — which covers signing in to Language Cloud after Studio has launched. It also means an account that legitimately warrants no prompt (a paying customer, say) re-queries on every view switch for the whole session; see follow-ups.
 
 Suppression setting:
 
@@ -74,19 +111,31 @@ Delete that file to reset **Do not show this again** during manual testing.
 
 ## Manual testing
 
-The prompt appears only for an account **without** Pro language pairs, on a configured and authenticated Language Weaver Cloud provider. An account that already holds `GENERICPLUS` pairs is treated as paid and stays silent — check the log first if nothing appears:
+**Which branch you exercise depends on whether the account has ever started a trial.** An account with no Account Portal record takes the never-trialed branch (case A, the discovery prompt); one that has started a trial at some point takes the Account Portal branch (cases B, C, D). Signing in to Trados Studio is the only precondition either way — no Language Weaver provider is needed.
+
+Do not infer an account's state from older log lines. Until the hop-1 envelope fix, *every* account logged "no businessAccountId", so any conclusion drawn from entries before 24 Aug 2026 about which accounts are provisioned is unreliable.
+
+If no prompt appears, the log says which branch ran and why. Both request URLs and the resolved entitlement are recorded:
 
 ```text
 %APPDATA%\Trados AppStore\Language Weaver\Logs\LanguageWeaverProvider.Logs.txt
 ```
 
 1. Build and deploy to Trados Studio 19. **Close Studio first** — it locks the plug-in assemblies and the packaging step fails with `PFE402: Access to the path ... is denied`.
-2. Configure a Language Weaver Cloud provider and authenticate it.
+2. Sign in to Trados Language Cloud so `LanguageCloudIdentityApi` has a token and an active tenant. No Language Weaver provider needs to be configured.
 3. Activate a Studio view such as Welcome, Projects, Files, or Editor.
 4. Select **Do not show this again**, restart Studio, confirm the dialog does not recur.
 5. Switch rapidly between views; only one prompt should appear.
 
-To exercise the admin and non-admin variants without two accounts, break on the `return` in `CohereSubscriptionWorkflow.ExecuteAsync` and edit the mapped result in the Immediate window.
+To reach a state the account cannot produce, break on `return response.Response;` in `GetLanguageWeaverDetails` and set values in the Immediate window before continuing:
+
+```csharp
+response.Response.IsProActive = false; response.Response.TrialStatus = "NOT_STARTED";  // not detected
+response.Response.IsProActive = false; response.Response.TrialStatus = "IN_PROGRESS";  // trial active
+response.Response.IsProActive = false; response.Response.TrialStatus = "CANCELLED";    // trial expired
+```
+
+For the admin and non-admin variants, override the role returned by `GetSelf` the same way.
 
 ## Build and test
 
@@ -99,7 +148,7 @@ Use the Visual Studio MSBuild and `vstest.console.exe`, not the `dotnet` CLI —
 
 ## Follow-ups
 
-1. **Trial state** — as above. The only remaining functional gap.
+1. **Trial days** — as above. `trialStatus` distinguishes active from expired, but with no dates the "14–8 days silent / 7–1 days show `{X}`" rule cannot be implemented. Ask the service team for a trial start or end date.
 2. **CTA deep links.** Buttons now navigate to public product pages, held in `Constants`:
 
    | Button | Destination |
@@ -110,8 +159,9 @@ Use the Visual Studio MSBuild and `vstest.console.exe`, not the `dotnet` CLI —
 
    These are marketing pages, not what DET-421 ultimately asks for. The trial is actually activated in the RWS Account Portal (`PUT /account-portal/v1/weaver/trial/{recurlyAccountId}`), and no public URL starts it, so "Start free trial" currently lands the user on pricing rather than starting anything. DET-555 scopes deep-link generation and portal navigation out and that work has no ticket yet. When it happens, both identifiers such a link needs (`businessAccountId`, `businessSubscriptionId`) arrive together in one `gw-account-web/accounts/{tradosAccountId}` response, so no extra "account context" endpoint is required.
 
-7. **Public naming.** The dialog copy approved in Confluence says "Trados LLM, powered by Cohere". The public pricing page never mentions Cohere — the product is branded **Language Weaver Pro**, "RWS's own LLM built specifically for translation". Six user-facing strings in `CohereSubscriptionDecisionService` name a vendor the customer-facing site does not. Worth settling with product before the prompts ship.
-3. **Eligibility gate.** DET-421 scopes the journey to Trados Go / Freelance accounts. No such check exists; any configured cloud account is evaluated.
-4. **`AuthenticationType.CloudAPI`.** API-credential logins identify an application rather than a person and resolve identity through `v4/accounts/api-credentials/self`, which may carry no `userRole`. A missing role is treated as non-admin, which is the safe default, but the endpoint has not been checked.
-5. **`GenericHTTPService`** (`Infrastructure\Http\`) now has no consumers — it existed only for the removed two-hop lookup. Left in place deliberately; delete if nothing else claims it.
-6. **Open product questions** from DET-421, never answered: whether to offer both "Start Free Trial" and "Buy Now" or trial only, and whether "Don't show again" is permanent or resets on entitlement state change (currently permanent).
+3. **Public naming.** The dialog copy names the product **Trados LLM**, "powered by Cohere" — the wording approved in Confluence, and what currently ships. The customer-facing site uses neither phrase: the product is branded **Language Weaver Pro**, and the pricing page never mentions Cohere at all (the launch announcements do credit it, as "in partnership with Cohere"). So a user reading "Trados LLM" in the prompt and clicking Buy now lands on a page selling something under a different name. Six strings in `CohereSubscriptionDecisionService`; worth settling with whoever owns the Confluence copy before the prompts ship.
+4. **Eligibility gate.** DET-421 scopes the journey to Trados Go / Freelance accounts. No such check exists; any account that resolves an entitlement is evaluated.
+5. **Region.** Both the account-web host and the `users/self` host are hardcoded to EU. A US-region account will fail hop 1, and resolve no role, so it simply gets no prompt — the safe direction, but untested. The request URLs are logged so a wrong host is visible in the field.
+6. **Repeated lookups.** `RunAsync` only unsubscribes after a dialog is actually shown, so any account that resolves to "no prompt" — every paying customer included — re-runs the whole lookup on every view activation for the rest of the session. Unsubscribing whenever the entitlement resolves successfully would fix it.
+7. **Silent role failures.** `GetSelf` returns `(null, null)` on a non-success response without logging, so a failed role lookup is indistinguishable from a genuinely non-admin user. One log line would separate them.
+8. **Open product questions** from DET-421, never answered: whether to offer both "Start Free Trial" and "Buy Now" or trial only, and whether "Don't show again" is permanent or resets on entitlement state change (currently permanent).

@@ -27,8 +27,8 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
                         "Cohere Subscription",
                         new SubscriptionOptions()
                         {
-                            Title = "Try Language Weaver Pro free for 14 days",
-                            Description = "Language Weaver Pro is RWS's most advanced AI translation solution, built in partnership with Cohere. It ranked first in 31 of 32 languages in benchmarking tests. \n\nStart a 14-day free trial, or add it to your subscription at any time.",
+                            Title = "Try the best translation LLM in the world!",
+                            Description = "Unleash unprecedented translation power with the Trados LLM, powered by Cohere and Language Weaver. \n\nStart a 14‑day free trial or buy the add-on anytime.",
                             ShowPrimary = true,
                             PrimaryContent = "Start free trial",
                             PrimaryUri = Constants.LanguageWeaverProPricingUrl,
@@ -46,8 +46,8 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
                     "Cohere Subscription",
                     new SubscriptionOptions
                     {
-                        Title = "Language Weaver Pro is available for your organization",
-                        Description = "Language Weaver Pro is RWS's most advanced AI translation solution, built in partnership with Cohere, and can be enabled on your Language Weaver account. \n\nAsk your administrator to start a 14-day free trial or add it to your subscription.",
+                        Title = "Trados LLM available for your organization",
+                        Description = "The brand new Trados LLM (powered by Cohere) can be enabled on your Language Weaver account. \n\nAsk your administrator to start a 14‑day free trial or purchase the add-on.",
                         ShowPrimary = true,
                         PrimaryContent = "OK",
                         ShowSecondary = true,
@@ -68,8 +68,8 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
                         "Cohere Subscription",
                         new SubscriptionOptions
                         {
-                            Title = "Your Language Weaver Pro trial is active",
-                            Description = "Add Language Weaver Pro to your subscription to keep using it without interruption when the trial ends.",
+                            Title = "Trados LLM trial active",
+                            Description = "Your Trados LLM (powered by Cohere) trial is active. \n\nPurchase the add-on to keep using the LLM without interruption when the trial ends.",
                             ShowPrimary = true,
                             PrimaryContent = "Buy now",
                             PrimaryUri = Constants.LanguageWeaverProPricingUrl,
@@ -85,8 +85,8 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
                   "Cohere Subscription",
                   new SubscriptionOptions
                   {
-                      Title = "Your Language Weaver Pro trial is active",
-                      Description = "Your organization’s Language Weaver Pro trial is active. \n\nContact your administrator to add it to your subscription before the trial ends.",
+                      Title = "Trados LLM trial active",
+                      Description = "Your organization’s Trados LLM trial is active. \n\nContact your administrator to purchase the add-on before the trial ends.",
                       ShowPrimary = true,
                       PrimaryContent = "OK",
                       ShowSecondary = true,
@@ -107,8 +107,8 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
                         "Cohere Subscription",
                         new SubscriptionOptions
                         {
-                            Title = "Your Language Weaver Pro trial has ended",
-                            Description = "Your 14-day Language Weaver Pro trial has ended. \n\nAdd it to your subscription to continue using it.",
+                            Title = "Trados LLM trial expired",
+                            Description = "Your 14‑day Trados LLM trial has ended. \n\nPurchase the add-on to continue using the LLM.",
                             ShowPrimary = true,
                             PrimaryContent = "Buy now",
                             PrimaryUri = Constants.LanguageWeaverProPricingUrl,
@@ -122,8 +122,8 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
                     "Cohere Subscription",
                     new SubscriptionOptions
                     {
-                        Title = "Your Language Weaver Pro trial has ended",
-                        Description = "Your organization’s Language Weaver Pro trial has ended. \n\nContact your administrator to add it to your subscription to restore access.",
+                        Title = "Trados LLM trial expired",
+                        Description = "Your organization’s Trados LLM trial has ended. \n\nContact your administrator to purchase the add-on to restore access.",
                         ShowPrimary = true,
                         PrimaryContent = "OK",
                         ShowSecondary = true,
