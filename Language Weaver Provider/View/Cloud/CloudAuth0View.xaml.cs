@@ -42,6 +42,11 @@ namespace LanguageWeaverProvider.View.Cloud
 				await WebView2Browser.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(BrowserScript);
 			}
 
+			// The user data folder is persisted between sessions, so Auth0's own session cookie survives and
+			// silently re-authenticates the previous RWS ID - leaving no way to sign in as somebody else.
+			// Opening this window is always an explicit request to sign in, so start from a clean session.
+			WebView2Browser.CoreWebView2.CookieManager.DeleteAllCookies();
+
 			WebView2Browser.CoreWebView2.Navigate(uri);
 		}
 
