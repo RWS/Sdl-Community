@@ -50,7 +50,9 @@
 		public const string LanguageWeaverProLearnMoreUrl = "https://www.trados.com/ecosystem/language-weaver-for-trados/";
 
 		// LW Cloud API Region
-		public static string CloudEUUrl = "https://api.languageweaver.com/";
+		// UAT. There is no US UAT host, so only the EU region can be exercised against UAT.
+		//   production: https://api.languageweaver.com/
+		public static string CloudEUUrl = "https://uat.api.languageweaver.com/";
 		public static string CloudUSUrl = "https://us.api.languageweaver.com/";
 
 		// Segment metadata

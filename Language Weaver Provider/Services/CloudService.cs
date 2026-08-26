@@ -23,11 +23,15 @@ namespace LanguageWeaverProvider.Services
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
+        // UAT. Must match the tenant that issued the authorization code in CloudAuth0Config.
+        //   production: https://sdl-prod.eu.auth0.com/oauth/token
+        private const string Auth0TokenUrl = "https://sdl-preprod.eu.auth0.com/oauth/token";
+
         public static async Task<bool> RefreshAuth0Token(ITranslationOptions translationOptions)
         {
             var parameters = new Dictionary<string, string>
             {
-                { "client_id", "F4NpOGG1sBaEzk379M6ZxX3gGa0iH1Ff"},
+                { "client_id", "OltQlVmK6N9Y04bNMmFxoXmGleLMmdxB"},
                 { "grant_type", "refresh_token" },
                 { "refresh_token", translationOptions.AccessToken?.RefreshToken }
             };
@@ -35,7 +39,7 @@ namespace LanguageWeaverProvider.Services
             using var httpRequest = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
-                RequestUri = new Uri("https://sdl-prod.eu.auth0.com/oauth/token"),
+                RequestUri = new Uri(Auth0TokenUrl),
                 Content = new FormUrlEncodedContent(parameters)
             };
 
@@ -81,7 +85,7 @@ namespace LanguageWeaverProvider.Services
                 param["code_verifier"] = auth0Config.CodeVerifier;
                 param["grant_type"] = "authorization_code";
 
-                var requestUri = new Uri("https://sdl-prod.eu.auth0.com/oauth/token");
+                var requestUri = new Uri(Auth0TokenUrl);
                 var formUrlEncodedContent = new FormUrlEncodedContent(param);
                 using var httpRequest = new HttpRequestMessage()
                 {
