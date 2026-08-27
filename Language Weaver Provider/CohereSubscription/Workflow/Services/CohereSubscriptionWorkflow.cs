@@ -33,16 +33,12 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
     /// </summary>
     public class CohereSubscriptionWorkflow : ICohereSubscriptionWorkflowService
     {
-        // UAT hosts, in use while the feature is being tested. Swap the two constants below back to the
-        // production values kept alongside them to point the workflow at live again.
-        //   production: https://account-portal-api.sdl.com/
-        //   production: https://eu.cloud.trados.com/lc-api/gw-account-web/accounts/
-        private const string AccountPortalApiBaseUrl = "https://uat-account-portal-api.sdl.com/";
+        private static string AccountPortalApiBaseUrl => CloudEnvironment.Current.AccountPortalApiBaseUrl;
         private const string AccountPortalDetailsPath = "account-portal/v1/weaver/details/";
 
         // Documented host for this endpoint. Whether US-region accounts need a different one is still open with
         // the service team, so the request address is logged to make a wrong choice visible in the field.
-        private const string LanguageCloudAccountsUrl = "https://eu.uat-cloud.trados.com/lc-api/gw-account-web/accounts/";
+        private static string LanguageCloudAccountsUrl => CloudEnvironment.Current.LanguageCloudAccountsUrl;
 
         private const string AdminRole = "ADMIN";
         private const string ProLanguagePairType = "GENERICPLUS";

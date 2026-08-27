@@ -23,15 +23,15 @@ namespace LanguageWeaverProvider.Services
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        // UAT. Must match the tenant that issued the authorization code in CloudAuth0Config.
-        //   production: https://sdl-prod.eu.auth0.com/oauth/token
-        private const string Auth0TokenUrl = "https://sdl-preprod.eu.auth0.com/oauth/token";
+        // Must match the tenant that issued the authorization code in CloudAuth0Config, so both come from
+        // the same CloudEnvironment entry.
+        private static string Auth0TokenUrl => CloudEnvironment.Current.Auth0TokenUrl;
 
         public static async Task<bool> RefreshAuth0Token(ITranslationOptions translationOptions)
         {
             var parameters = new Dictionary<string, string>
             {
-                { "client_id", "OltQlVmK6N9Y04bNMmFxoXmGleLMmdxB"},
+                { "client_id", CloudEnvironment.Current.Auth0ClientId },
                 { "grant_type", "refresh_token" },
                 { "refresh_token", translationOptions.AccessToken?.RefreshToken }
             };
@@ -363,7 +363,7 @@ namespace LanguageWeaverProvider.Services
 
         public static async Task<bool> CreateDictionaryTerm(AccessToken accessToken, PairDictionary pairDictionary, DictionaryTerm newDictionaryTerm)
         {
-            var requestUri = $"https://api.languageweaver.com/v4/accounts/{accessToken.AccountId}/dictionaries/{pairDictionary.DictionaryId}/terms";
+            var requestUri = $"{accessToken.BaseUri}v4/accounts/{accessToken.AccountId}/dictionaries/{pairDictionary.DictionaryId}/terms";
             var content = JsonConvert.SerializeObject(newDictionaryTerm);
             var stringContent = new StringContent(content, new UTF8Encoding(), "application/json");
 
