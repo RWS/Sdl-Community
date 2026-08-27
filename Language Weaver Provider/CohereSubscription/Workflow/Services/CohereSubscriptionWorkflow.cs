@@ -108,6 +108,12 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
             }
 
             var data = MapDetails(details, userRole, businessAccountId, businessSubscriptionId);
+            if (data is null)
+            {
+                // A deliberate cancellation: no prompt, and nothing to report beyond what MapDetails logged.
+                return null;
+            }
+
             Logger.Info(
                 "[Cohere] Entitlement resolved: detected={0}, paid={1}, trial={2}, trialExpired={3}, admin={4}.",
                 data.IsCohereDetected, data.IsPaid, data.IsTrial, data.IsTrialExpired, data.IsAdmin);
@@ -290,19 +296,34 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
             // one of them.
             var trialStatus = (details.TrialStatus ?? string.Empty).Trim();
             var isTrialRunning = trialStatus.Equals("IN_PROGRESS", StringComparison.OrdinalIgnoreCase);
-            var isTrialOver = trialStatus.Equals("CANCELLED", StringComparison.OrdinalIgnoreCase)
-                           || trialStatus.Equals("EXPIRED", StringComparison.OrdinalIgnoreCase)
-                           || trialStatus.Equals("ENDED", StringComparison.OrdinalIgnoreCase);
+
+            // CANCELLED means somebody deliberately cancelled - a trial or a paid subscription, and the
+            // endpoint gives nothing to tell those apart. Either way the decision was intentional, so we do
+            // not sell back to them: returning null renders no prompt at all (DET-421 case E).
+            //
+            // Note this must be an explicit early return rather than dropping CANCELLED from the terminal
+            // set below: leaving it in place but out of IsCohereDetected would read as "never had Cohere"
+            // and offer someone who just cancelled a 14-day free trial.
+            if (!details.IsProActive
+             && trialStatus.Equals("CANCELLED", StringComparison.OrdinalIgnoreCase))
+            {
+                Logger.Info("[Cohere] Subscription was cancelled deliberately; showing no prompt.");
+                return null;
+            }
+
+            // What is left is a trial that ran its course rather than one somebody stopped.
+            var hasEnded = trialStatus.Equals("EXPIRED", StringComparison.OrdinalIgnoreCase)
+                        || trialStatus.Equals("ENDED", StringComparison.OrdinalIgnoreCase);
 
             return new CohereSubscriptionData
             {
-                IsCohereDetected = details.IsProActive || isTrialRunning || isTrialOver,
+                IsCohereDetected = details.IsProActive || isTrialRunning || hasEnded,
                 // Converting to paid cancels the trial, so an active Pro add-on sits alongside a terminal
                 // trial status. Pro therefore decides "paid" on its own: pairing it with the trial state
-                // would show a paying customer the "trial expired" prompt.
+                // would show a paying customer the "trial ended" prompt.
                 IsPaid = details.IsProActive,
-                IsTrial = isTrialRunning || isTrialOver,
-                IsTrialExpired = isTrialOver,
+                IsTrial = isTrialRunning || hasEnded,
+                IsTrialExpired = hasEnded,
                 // An unreadable role reads as admin, not non-admin: see IsAdminOrUnknown.
                 IsAdmin = IsAdminOrUnknown(userRole),
                 BusinessAccountId = businessAccountId,

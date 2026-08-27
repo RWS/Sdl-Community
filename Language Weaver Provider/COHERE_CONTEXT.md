@@ -72,8 +72,16 @@ Hop 3 works from the Trados identity because the Studio sign-in token is issued 
 
 Two traps when editing `MapDetails`:
 
-- **`isProActive` decides "paid" on its own.** Converting a trial to paid *cancels* the trial, so `isProActive=true` alongside a terminal `trialStatus` is the ordinary state of a paying customer. Pairing the two conditions shows a paying customer the "trial expired" prompt.
+- **`isProActive` decides "paid" on its own.** Converting a trial to paid *cancels* the trial, so `isProActive=true` alongside a terminal `trialStatus` is the ordinary state of a paying customer. Pairing the two conditions shows a paying customer the "trial ended" prompt.
 - **Do not match on the substring `trial`.** None of the real status values contain it.
+
+### `CANCELLED` shows no prompt
+
+`CANCELLED` means somebody deliberately cancelled — a trial or a paid subscription, and the endpoint carries nothing to tell those apart (a cancelled account returns exactly `{"trialStatus":"CANCELLED","isProActive":null}`). Either way the decision was intentional, so `MapDetails` returns `null` and no prompt is shown. Only `EXPIRED` / `ENDED` — a trial that ran its course — produce the "trial ended" prompt.
+
+The suppression is an explicit early return, not merely the absence of `CANCELLED` from the terminal set. Dropping it from that set would leave `IsCohereDetected` false, which reads as "never had Cohere" and offers a 14-day free trial to someone who just cancelled one. `ACancelledAccount_IsNeverOfferedAFreeTrial` pins this.
+
+Status values observed live so far are `NOT_STARTED`, `IN_PROGRESS` and `CANCELLED`; `EXPIRED` and `ENDED` come from the documented vocabulary and have not yet been seen in a real response. Whether a naturally-lapsed trial reports `EXPIRED` or `CANCELLED` is unconfirmed — if it turns out to be the latter, the trial-ended prompt never fires and the service team should be asked for the authoritative list.
 
 Any failure returns `null`, which the decision service renders as no prompt — the specified behaviour for an undeterminable entitlement (DET-421, case E): show nothing, log the reason, re-evaluate next startup. A null role is treated as non-admin.
 
@@ -132,7 +140,8 @@ To reach a state the account cannot produce, break on `return response.Response;
 ```csharp
 response.Response.IsProActive = false; response.Response.TrialStatus = "NOT_STARTED";  // not detected
 response.Response.IsProActive = false; response.Response.TrialStatus = "IN_PROGRESS";  // trial active
-response.Response.IsProActive = false; response.Response.TrialStatus = "CANCELLED";    // trial expired
+response.Response.IsProActive = false; response.Response.TrialStatus = "EXPIRED";      // trial ended
+response.Response.IsProActive = false; response.Response.TrialStatus = "CANCELLED";    // no prompt
 ```
 
 For the admin and non-admin variants, override the role returned by `GetSelf` the same way.

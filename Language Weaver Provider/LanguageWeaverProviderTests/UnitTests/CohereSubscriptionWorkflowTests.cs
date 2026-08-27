@@ -6,8 +6,8 @@ namespace LanguageWeaverProviderTests.UnitTests
 {
     /// <summary>
     /// Pins the mapping from the account-portal details response onto the pop-up decision inputs.
-    /// The <c>trialStatus</c> values used here are the ones the details endpoint actually returns
-    /// (NOT_STARTED / IN_PROGRESS / CANCELLED), not invented labels.
+    /// The <c>trialStatus</c> values used here are the ones the details endpoint documents
+    /// (NOT_STARTED / IN_PROGRESS / CANCELLED / EXPIRED / ENDED), not invented labels.
     /// </summary>
     public class CohereSubscriptionWorkflowTests
     {
@@ -31,13 +31,15 @@ namespace LanguageWeaverProviderTests.UnitTests
         public void PaidAfterTrialConversion_IsStillPaid()
         {
             // Converting to paid cancels the trial, so this is the ordinary state of a paying customer.
-            // Reading it as an expired trial would prompt someone who has already bought the add-on.
+            // Reading it as an ended trial would prompt someone who has already bought the add-on, and the
+            // CANCELLED suppression must not swallow them either - hence its !IsProActive guard.
             var data = CohereSubscriptionWorkflow.MapDetails(new LanguageWeaverDetails
             {
                 IsProActive = true,
                 TrialStatus = "CANCELLED"
             });
 
+            Assert.NotNull(data);
             Assert.True(data.IsPaid);
             Assert.True(data.IsCohereDetected);
         }
@@ -56,18 +58,51 @@ namespace LanguageWeaverProviderTests.UnitTests
             Assert.False(data.IsPaid);
         }
 
-        [Fact]
-        public void CancelledTrialWithoutPro_IsMappedAsExpired()
+        [Theory]
+        [InlineData("EXPIRED")]
+        [InlineData("ENDED")]
+        public void TrialThatRanItsCourse_IsMappedAsEnded(string trialStatus)
         {
             var data = CohereSubscriptionWorkflow.MapDetails(new LanguageWeaverDetails
             {
-                TrialStatus = "CANCELLED"
+                TrialStatus = trialStatus
             });
 
             Assert.True(data.IsCohereDetected);
             Assert.True(data.IsTrial);
             Assert.True(data.IsTrialExpired);
             Assert.False(data.IsPaid);
+        }
+
+        [Fact]
+        public void DeliberateCancellation_ShowsNoPromptAtAll()
+        {
+            // Pinned from a live UAT response for an account that cancelled:
+            // {"accountId":1227,"trialStatus":"CANCELLED","groupId":"...","isProActive":null}
+            // CANCELLED means somebody chose to stop - a trial or a paid subscription, and the endpoint gives
+            // nothing to tell those apart. Either way the decision was deliberate, so we do not sell back to
+            // them. A null result renders no prompt.
+            var data = CohereSubscriptionWorkflow.MapDetails(new LanguageWeaverDetails
+            {
+                TrialStatus = "CANCELLED",
+                IsProActive = false // what JSON null deserialises to
+            });
+
+            Assert.Null(data);
+        }
+
+        [Fact]
+        public void ACancelledAccount_IsNeverOfferedAFreeTrial()
+        {
+            // Guards the reason the suppression is an explicit early return rather than simply dropping
+            // CANCELLED from the terminal set: that would read as "never had Cohere" and offer a 14-day free
+            // trial to someone who just cancelled one.
+            var data = CohereSubscriptionWorkflow.MapDetails(new LanguageWeaverDetails
+            {
+                TrialStatus = "CANCELLED"
+            });
+
+            Assert.Null(data);
         }
 
         [Fact]

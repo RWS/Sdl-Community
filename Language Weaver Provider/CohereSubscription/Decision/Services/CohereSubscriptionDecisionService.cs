@@ -1,5 +1,6 @@
 ﻿using LanguageWeaverProvider.CohereSubscription.Decision.Interfaces;
 using LanguageWeaverProvider.CohereSubscription.Workflow.Model;
+using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.SubscriptionJourney.Model;
 using LanguageWeaverProvider.SubscriptionJourney.Services;
 using LanguageWeaverProvider.SubscriptionJourney.ViewModel;
@@ -8,6 +9,14 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
 {
     public class CohereSubscriptionDecisionService : ICohereSubscriptionDecisionService
     {
+        /// <summary>
+        /// The active-trial prompt is withheld until /weaver/details/ carries a trial start or end date.
+        /// Without one the pop-up cannot honour DET-421's day-based schedule or name the days remaining, so it
+        /// would fire at any point in the 14 days saying nothing actionable. Flip to true once
+        /// <see cref="CohereSubscriptionData.TrialRemainingDays"/> is populated.
+        /// </summary>
+        private const bool ActiveTrialPromptEnabled = false;
+
         public SubscriptionViewModel BuildViewModel(CohereSubscriptionData data)
         {
             if (data == null)
@@ -68,46 +77,22 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
                     uriOpener);
             }
 
-            // Unreachable while nothing exposes trial state; the workflow leaves both trial flags false.
+            // Suspended until the service exposes a trial start or end date. DET-421 asks for silence on days
+            // 14-8 and "ends in {X} day(s)" from day 7, but /weaver/details/ returns trialStatus with no dates
+            // (see COHERE_CONTEXT.md, "Known gap: trial days"), so the only implementable behaviour was to
+            // prompt at any point in the 14 days with the {X} omitted - too eager, and unable to say the one
+            // thing that makes it useful. Better to say nothing until a date is available.
+            //
+            // To restore: set ActiveTrialPromptEnabled to true once TrialRemainingDays is populated.
             if (data.IsTrial && !data.IsTrialExpired)
             {
-                if (data.IsAdmin)
-                {
-                    return new SubscriptionViewModel(
-                        "Cohere Subscription",
-                        new SubscriptionOptions
-                        {
-                            Title = "Trados LLM trial active",
-                            Description = "Your Trados LLM (powered by Cohere) trial is active. \n\nPurchase the add-on to keep using the LLM without interruption when the trial ends.",
-                            ShowPrimary = true,
-                            PrimaryContent = "Buy now",
-                            PrimaryUri = accountUri,
-                            ShowSecondary = false,
-                            CancelContent = "Cancel",
-                            IsDoNotShowAgainVisible = true,
-                        },
-                        uriOpener);
-
-                }
-
-                return new SubscriptionViewModel(
-                  "Cohere Subscription",
-                  new SubscriptionOptions
-                  {
-                      Title = "Trados LLM trial active",
-                      Description = "Your organization’s Trados LLM trial is active. \n\nContact your administrator to purchase the add-on before the trial ends.",
-                      ShowPrimary = true,
-                      PrimaryContent = "OK",
-                      ShowSecondary = true,
-                      SecondaryContent = "Learn more",
-                      SecondaryUri = Constants.LanguageWeaverProLearnMoreUrl,
-                      CancelContent = "Cancel",
-                      IsDoNotShowAgainVisible = true,
-                  },
-                  uriOpener);
+                return ActiveTrialPromptEnabled
+                    ? BuildActiveTrialViewModel(data, accountUri, uriOpener)
+                    : null;
             }
 
-            // Trial expired
+            // Trial ended of its own accord. Deliberate cancellations never reach here - the workflow
+            // returns null for those, so no prompt is built at all.
             if (data.IsTrial && data.IsTrialExpired)
             {
                 if (data.IsAdmin)
@@ -116,8 +101,8 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
                         "Cohere Subscription",
                         new SubscriptionOptions
                         {
-                            Title = "Trados LLM trial expired",
-                            Description = "Your 14‑day Trados LLM trial has ended. \n\nPurchase the add-on to continue using the LLM.",
+                            Title = "Trados LLM trial ended",
+                            Description = "Your Trados LLM (powered by Cohere) trial has ended. \n\nPurchase the add-on to continue using the LLM.",
                             ShowPrimary = true,
                             PrimaryContent = "Buy now",
                             PrimaryUri = accountUri,
@@ -131,7 +116,7 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
                     "Cohere Subscription",
                     new SubscriptionOptions
                     {
-                        Title = "Trados LLM trial expired",
+                        Title = "Trados LLM trial ended",
                         Description = "Your organization’s Trados LLM trial has ended. \n\nContact your administrator to purchase the add-on to restore access.",
                         ShowPrimary = true,
                         PrimaryContent = "OK",
@@ -144,6 +129,48 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// The active-trial prompt, preserved verbatim but not currently reachable: see
+        /// <see cref="ActiveTrialPromptEnabled"/>. The copy omits the days remaining, which is precisely why it
+        /// is withheld - DET-421 wants "ends in {X} day(s)", and no date is available to compute {X}.
+        /// </summary>
+        private static SubscriptionViewModel BuildActiveTrialViewModel(CohereSubscriptionData data, string accountUri, IUriOpener uriOpener)
+        {
+            if (data.IsAdmin)
+            {
+                return new SubscriptionViewModel(
+                    "Cohere Subscription",
+                    new SubscriptionOptions
+                    {
+                        Title = "Trados LLM trial active",
+                        Description = "Your Trados LLM (powered by Cohere) trial is active. \n\nPurchase the add-on to keep using the LLM without interruption when the trial ends.",
+                        ShowPrimary = true,
+                        PrimaryContent = "Buy now",
+                        PrimaryUri = accountUri,
+                        ShowSecondary = false,
+                        CancelContent = "Cancel",
+                        IsDoNotShowAgainVisible = true,
+                    },
+                    uriOpener);
+            }
+
+            return new SubscriptionViewModel(
+                "Cohere Subscription",
+                new SubscriptionOptions
+                {
+                    Title = "Trados LLM trial active",
+                    Description = "Your organization’s Trados LLM trial is active. \n\nContact your administrator to purchase the add-on before the trial ends.",
+                    ShowPrimary = true,
+                    PrimaryContent = "OK",
+                    ShowSecondary = true,
+                    SecondaryContent = "Learn more",
+                    SecondaryUri = Constants.LanguageWeaverProLearnMoreUrl,
+                    CancelContent = "Cancel",
+                    IsDoNotShowAgainVisible = true,
+                },
+                uriOpener);
         }
     }
 }
