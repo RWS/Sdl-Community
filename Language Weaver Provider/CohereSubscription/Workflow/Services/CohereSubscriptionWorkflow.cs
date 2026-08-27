@@ -52,12 +52,11 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
         {
             var languageCloudIdentity = LanguageCloudIdentityApi.Instance;
             if (languageCloudIdentity is null
-             || string.IsNullOrWhiteSpace(languageCloudIdentity.AccessToken)
-             || string.IsNullOrWhiteSpace(languageCloudIdentity.ActiveTenantId))
+             || string.IsNullOrWhiteSpace(languageCloudIdentity.AccessToken))
             {
                 // Not signed in to Language Cloud yet. The startup manager stays subscribed, so this is
                 // re-evaluated when the user activates a view after signing in.
-                Logger.Debug("[Cohere] No Language Cloud session (token or active tenant missing); skipping entitlement check.");
+                Logger.Debug("[Cohere] No Language Cloud session (no access token); skipping entitlement check.");
                 return null;
             }
 
@@ -85,8 +84,13 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
                 Logger.Info("[Cohere] No Language Weaver role for this sign-in; treating the user as an administrator.");
             }
 
-            var businessAccountId = await GetBusinessAccountId(
-                languageCloudIdentity.ActiveTenantId, authorizationHeaders);
+            // The active tenant is only ever needed to look up the Account Portal record. It can legitimately be
+            // empty for a valid session (no tenant selected yet), and that is not a reason to abandon the check:
+            // the token above already identifies the user, so fall through to the no-trial-history path, which
+            // answers from the account's own language pairs instead.
+            var businessAccountId = string.IsNullOrWhiteSpace(languageCloudIdentity.ActiveTenantId)
+                ? null
+                : await GetBusinessAccountId(languageCloudIdentity.ActiveTenantId, authorizationHeaders);
 
             if (string.IsNullOrWhiteSpace(businessAccountId))
             {
