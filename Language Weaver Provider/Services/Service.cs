@@ -86,8 +86,26 @@ namespace LanguageWeaverProvider.Services
                 return await CloudService.RefreshAuth0Token(translationOptions);
             }
 
+            // The Trados sign-in token is owned and renewed by Studio, so there is no refresh token the plug-in
+            // may present. Re-read the current token instead: Studio has usually already renewed it in the
+            // background, and only when the fresh token is also expired must the user be prompted.
+            if (translationOptions.AuthenticationType == AuthenticationType.CloudStudio
+             && IsTimestampExpired(translationOptions.AccessToken.ExpiresAt))
+            {
+                var refreshedToken = StudioIdentityService.GetCurrentToken();
+                if (refreshedToken is null || IsTimestampExpired(StudioIdentityService.GetExpiryFromToken(refreshedToken)))
+                {
+                    return false;
+                }
+
+                translationOptions.AccessToken.Token = refreshedToken;
+                translationOptions.AccessToken.ExpiresAt = StudioIdentityService.GetExpiryFromToken(refreshedToken);
+                return true;
+            }
+
             if (translationOptions.PluginVersion == PluginVersion.LanguageWeaverCloud
              && translationOptions.AuthenticationType != AuthenticationType.CloudSSO
+             && translationOptions.AuthenticationType != AuthenticationType.CloudStudio
              && IsTimestampExpired(translationOptions.AccessToken?.ExpiresAt))
             {
                 return await CloudService.AuthenticateUser(translationOptions, translationOptions.AuthenticationType, showErrors);

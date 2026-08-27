@@ -155,6 +155,57 @@ namespace LanguageWeaverProvider.Services
             }
         }
 
+        /// <summary>
+        /// Authenticates using the RWS ID session Trados Studio already holds, so the user is not asked to sign
+        /// in a second time. Returns <c>false</c> when Studio has no session or the account cannot be resolved.
+        /// </summary>
+        public static async Task<bool> AuthenticateWithStudioIdentity(ITranslationOptions translationOptions, string selectedRegion, bool showErrors = true)
+        {
+            try
+            {
+                var accessToken = StudioIdentityService.CreateAccessToken(selectedRegion);
+                if (accessToken is null)
+                {
+                    Logger.Log(LogLevel.Info, "No Trados sign-in session available to reuse.");
+                    if (showErrors)
+                    {
+                        ErrorHandling.ShowDialog(null, "Authentication failed", "You are not signed in to Trados. Sign in to Trados and try again.");
+                    }
+
+                    return false;
+                }
+
+                var (accountId, _) = await GetSelf(accessToken);
+                if (string.IsNullOrEmpty(accountId))
+                {
+                    // The Trados sign-in is valid but the identity has no Language Weaver account behind it.
+                    Logger.Log(LogLevel.Info, "The Trados sign-in has no associated Language Weaver account.");
+                    if (showErrors)
+                    {
+                        ErrorHandling.ShowDialog(null, "Authentication failed", "Your Trados account is not set up for Language Weaver. Use another sign-in option.");
+                    }
+
+                    return false;
+                }
+
+                accessToken.AccountId = accountId;
+                translationOptions.AccessToken = accessToken;
+                translationOptions.AuthenticationType = AuthenticationType.CloudStudio;
+                translationOptions.CloudCredentials ??= new();
+                translationOptions.CloudCredentials.AccountRegion = selectedRegion;
+                translationOptions.CloudCredentials.AccountId = accountId;
+                Logger.Log(LogLevel.Info, "Authentication with the Trados sign-in successful.");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                var message = $"{ex.Message}. {Environment.StackTrace}.";
+                Logger.Log(LogLevel.Error, message);
+                if (showErrors) ex.ShowDialog("Authentication failed", message, true);
+                return false;
+            }
+        }
+
         private static async Task SetAccountId(ITranslationOptions translationOptions, string uri, CloudCredentials cloudCredentials = null)
         {
             var requesturi = translationOptions.AuthenticationType switch
@@ -162,6 +213,7 @@ namespace LanguageWeaverProvider.Services
                 AuthenticationType.CloudCredentials => $"{uri}v4/accounts/users/self",
                 AuthenticationType.CloudAPI => $"{uri}v4/accounts/api-credentials/self",
                 AuthenticationType.CloudSSO => $"{uri}v4/accounts/users/self",
+                AuthenticationType.CloudStudio => $"{uri}v4/accounts/users/self",
             };
 
             var accountId = await GetUserInfo(translationOptions.AccessToken, requesturi, "accountId");

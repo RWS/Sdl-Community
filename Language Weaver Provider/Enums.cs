@@ -17,7 +17,13 @@ namespace LanguageWeaverProvider
 		CloudSSO = 3,
 		EdgeCredentials = 4,
 		EdgeApiKey = 5,
-		EdgeSSO = 6
+		EdgeSSO = 6,
+
+		/// <summary>
+		/// Reuses the RWS ID session Trados Studio already holds, instead of running a second interactive sign-in.
+		/// The token is owned and renewed by Studio, so the plug-in re-reads it rather than refreshing it itself.
+		/// </summary>
+		CloudStudio = 7
 	}
 
 	public enum Direction

@@ -391,7 +391,10 @@ namespace LanguageWeaverProvider.Services
             }
         }
 
-        private static long TryGetJwtExpirySeconds(string token)
+        /// <summary>
+        /// Reads the "exp" claim of a JWT, in Unix epoch seconds, or 0 when it cannot be read.
+        /// </summary>
+        internal static long TryGetJwtExpirySeconds(string token)
         {
             if (string.IsNullOrEmpty(token)) return 0;
 
