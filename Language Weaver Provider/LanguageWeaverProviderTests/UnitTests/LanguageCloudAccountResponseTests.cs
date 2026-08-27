@@ -46,5 +46,28 @@ namespace LanguageWeaverProviderTests.UnitTests
 
             Assert.Null(flat.BusinessAccountId);
         }
+
+        [Fact]
+        public void BusinessSubscriptionId_IsReadFromInsideTheAccountEnvelope()
+        {
+            // Trimmed from a live UAT response for an Account Portal account. The field sits alongside
+            // businessAccountId and was being discarded because the model did not map it.
+            var response = JsonConvert.DeserializeObject<LanguageCloudAccountResponse>(
+                "{\"account\":{\"id\":\"6a8d88cd37f4a6113b6217e2\"," +
+                "\"businessAccountId\":\"6a8d8867e3ba8a1312c63ea7\"," +
+                "\"businessSubscriptionId\":\"zhpz9he3dfbq\",\"accountType\":\"ENTERPRISE\"}}");
+
+            Assert.Equal("zhpz9he3dfbq", response.Account.BusinessSubscriptionId);
+        }
+
+        [Fact]
+        public void NullBusinessSubscriptionId_IsTolerated()
+        {
+            // Observed on a live ACTIVE/ENTERPRISE account, so this is a supported state rather than an error.
+            var response = JsonConvert.DeserializeObject<LanguageCloudAccountResponse>(LiveResponse);
+
+            Assert.Equal("6a69bcd2c2e2163a8f392e5f", response.Account.BusinessAccountId);
+            Assert.Null(response.Account.BusinessSubscriptionId);
+        }
     }
 }

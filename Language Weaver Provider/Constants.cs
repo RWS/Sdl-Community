@@ -51,6 +51,10 @@
 
 		// An account provisioned through Account Portal is managed there rather than in the Language Weaver
 		// portal, so the prompt links it to its own tenant page. Append the businessAccountId.
+		//
+		// Deeper links are not usable from here: opening one externally makes Account Portal re-run its auth
+		// bootstrap, which discards the requested path and lands on the dashboard regardless of an existing
+		// session. Verified against the add-on page in UAT. Only the dashboard survives external entry.
 		public static string AccountPortalTenantUrl = Model.CloudEnvironment.Current.AccountPortalUrl + "t/";
 		public const string LanguageWeaverProLearnMoreUrl = "https://www.trados.com/ecosystem/language-weaver-for-trados/";
 

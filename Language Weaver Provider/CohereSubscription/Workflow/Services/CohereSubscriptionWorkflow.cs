@@ -88,9 +88,9 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
             // empty for a valid session (no tenant selected yet), and that is not a reason to abandon the check:
             // the token above already identifies the user, so fall through to the no-trial-history path, which
             // answers from the account's own language pairs instead.
-            var businessAccountId = string.IsNullOrWhiteSpace(languageCloudIdentity.ActiveTenantId)
-                ? null
-                : await GetBusinessAccountId(languageCloudIdentity.ActiveTenantId, authorizationHeaders);
+            var (businessAccountId, businessSubscriptionId) = string.IsNullOrWhiteSpace(languageCloudIdentity.ActiveTenantId)
+                ? (null, null)
+                : await GetAccountPortalIds(languageCloudIdentity.ActiveTenantId, authorizationHeaders);
 
             if (string.IsNullOrWhiteSpace(businessAccountId))
             {
@@ -107,7 +107,7 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
                 return null;
             }
 
-            var data = MapDetails(details, userRole, businessAccountId);
+            var data = MapDetails(details, userRole, businessAccountId, businessSubscriptionId);
             Logger.Info(
                 "[Cohere] Entitlement resolved: detected={0}, paid={1}, trial={2}, trialExpired={3}, admin={4}.",
                 data.IsCohereDetected, data.IsPaid, data.IsTrial, data.IsTrialExpired, data.IsAdmin);
@@ -117,10 +117,15 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
 
         /// <summary>
         /// Hop 1: exchanges the Trados account id (the identity API's active tenant) for the Account Portal
-        /// <c>businessAccountId</c>. Returns <c>null</c> when the account was not provisioned through Account
-        /// Portal, since there is then no entitlement record to read.
+        /// <c>businessAccountId</c>, along with the <c>businessSubscriptionId</c>. The account id is
+        /// <c>null</c> when the account was not provisioned through Account Portal, since there is then no
+        /// entitlement record to read. The subscription id is not used for linking - Account Portal discards a
+        /// deep path on external entry - but is carried so it is available without another round trip.
+        /// The account id is <c>null</c> when the account was not provisioned through Account Portal, since
+        /// there is then no entitlement record to read. The subscription id can be null on its own even for a
+        /// provisioned account, which only costs the deep link, not the entitlement check.
         /// </summary>
-        private static async Task<string> GetBusinessAccountId(
+        private static async Task<(string BusinessAccountId, string BusinessSubscriptionId)> GetAccountPortalIds(
             string tradosAccountId, Dictionary<string, string> headers)
         {
             var requestUri = LanguageCloudAccountsUrl + Uri.EscapeDataString(tradosAccountId);
@@ -135,7 +140,7 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
                 Logger.Warn(
                     "[Cohere] Could not read the Language Cloud account from {0}: {1}",
                     requestUri, DescribeErrors(response?.Errors));
-                return null;
+                return (null, null);
             }
 
             var businessAccountId = response.Response.Account.BusinessAccountId;
@@ -143,10 +148,10 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
             {
                 Logger.Info(
                     "[Cohere] Account has no businessAccountId (not provisioned through Account Portal); no entitlement to evaluate.");
-                return null;
+                return (null, null);
             }
 
-            return businessAccountId;
+            return (businessAccountId, response.Response.Account.BusinessSubscriptionId);
         }
 
         /// <summary>
@@ -273,7 +278,7 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
         private static string DescribeErrors(IEnumerable<string> errors)
             => errors is null ? "no details" : string.Join("; ", errors);
 
-        public static CohereSubscriptionData MapDetails(LanguageWeaverDetails details, string userRole = null, string businessAccountId = null)
+        public static CohereSubscriptionData MapDetails(LanguageWeaverDetails details, string userRole = null, string businessAccountId = null, string businessSubscriptionId = null)
         {
             if (details is null)
             {
@@ -300,7 +305,8 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
                 IsTrialExpired = isTrialOver,
                 // An unreadable role reads as admin, not non-admin: see IsAdminOrUnknown.
                 IsAdmin = IsAdminOrUnknown(userRole),
-                BusinessAccountId = businessAccountId
+                BusinessAccountId = businessAccountId,
+                BusinessSubscriptionId = businessSubscriptionId
             };
         }
     }

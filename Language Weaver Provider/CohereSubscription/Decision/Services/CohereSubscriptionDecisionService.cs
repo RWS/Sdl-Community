@@ -21,8 +21,9 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
 
             // An account provisioned through Account Portal is administered on its own tenant page there;
             // one without such a record has nothing to link to, so it goes to the Language Weaver portal
-            // account page instead. Only the trial action differs - buying is the public pricing page either way.
-            var startTrialUri = string.IsNullOrWhiteSpace(data.BusinessAccountId)
+            // account page instead. Both actions land on the same dashboard: buying and starting a trial are
+            // both done from there, and neither can be deep-linked from outside the portal.
+            var accountUri = string.IsNullOrWhiteSpace(data.BusinessAccountId)
                 ? Constants.LanguageWeaverProStartTrialUrl
                 : Constants.AccountPortalTenantUrl + data.BusinessAccountId;
 
@@ -39,10 +40,10 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
                             Description = "Unleash unprecedented translation power with the Trados LLM, powered by Cohere and Language Weaver. \n\nStart a 14‑day free trial or buy the add-on anytime.",
                             ShowPrimary = true,
                             PrimaryContent = "Start free trial",
-                            PrimaryUri = startTrialUri,
+                            PrimaryUri = accountUri,
                             ShowSecondary = true,
                             SecondaryContent = "Buy now",
-                            SecondaryUri = Constants.LanguageWeaverProPricingUrl,
+                            SecondaryUri = accountUri,
                             CancelContent = "Cancel",
                             IsDoNotShowAgainVisible = true,
                         },
@@ -80,7 +81,7 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
                             Description = "Your Trados LLM (powered by Cohere) trial is active. \n\nPurchase the add-on to keep using the LLM without interruption when the trial ends.",
                             ShowPrimary = true,
                             PrimaryContent = "Buy now",
-                            PrimaryUri = Constants.LanguageWeaverProPricingUrl,
+                            PrimaryUri = accountUri,
                             ShowSecondary = false,
                             CancelContent = "Cancel",
                             IsDoNotShowAgainVisible = true,
@@ -119,7 +120,7 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
                             Description = "Your 14‑day Trados LLM trial has ended. \n\nPurchase the add-on to continue using the LLM.",
                             ShowPrimary = true,
                             PrimaryContent = "Buy now",
-                            PrimaryUri = Constants.LanguageWeaverProPricingUrl,
+                            PrimaryUri = accountUri,
                             ShowSecondary = false,
                             CancelContent = "Cancel",
                             IsDoNotShowAgainVisible = true,

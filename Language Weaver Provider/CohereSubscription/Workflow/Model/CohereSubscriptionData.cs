@@ -15,5 +15,13 @@
         /// lets the prompt link a provisioned account straight to its own portal page.
         /// </summary>
         public string BusinessAccountId { get; set; }
+
+        /// <summary>
+        /// The Account Portal identifier of the account's subscription. Can be <c>null</c> even when
+        /// <see cref="BusinessAccountId"/> is present. Not used for linking, since Account Portal discards a
+        /// deep path when the URL is opened from outside the portal; kept because it identifies the
+        /// subscription the add-on would be bought against.
+        /// </summary>
+        public string BusinessSubscriptionId { get; set; }
     }
 }

@@ -26,5 +26,13 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Model
         /// </summary>
         [JsonProperty("businessAccountId")]
         public string BusinessAccountId { get; set; }
+
+        /// <summary>
+        /// Account Portal identifier for the account's subscription. Can be null even on an active enterprise
+        /// account, so callers must cope with its absence rather than assume a provisioned account always has
+        /// one.
+        /// </summary>
+        [JsonProperty("businessSubscriptionId")]
+        public string BusinessSubscriptionId { get; set; }
     }
 }
