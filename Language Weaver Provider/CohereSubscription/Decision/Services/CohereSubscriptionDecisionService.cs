@@ -18,6 +18,14 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
                 return null;
 
             var uriOpener = new UriOpener();
+
+            // An account provisioned through Account Portal is administered on its own tenant page there;
+            // one without such a record has nothing to link to, so it goes to the Language Weaver portal
+            // account page instead. Only the trial action differs - buying is the public pricing page either way.
+            var startTrialUri = string.IsNullOrWhiteSpace(data.BusinessAccountId)
+                ? Constants.LanguageWeaverProStartTrialUrl
+                : Constants.AccountPortalTenantUrl + data.BusinessAccountId;
+
             // Cohere not detected
             if (!data.IsCohereDetected)
             {
@@ -31,7 +39,7 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
                             Description = "Unleash unprecedented translation power with the Trados LLM, powered by Cohere and Language Weaver. \n\nStart a 14‑day free trial or buy the add-on anytime.",
                             ShowPrimary = true,
                             PrimaryContent = "Start free trial",
-                            PrimaryUri = Constants.LanguageWeaverProPricingUrl,
+                            PrimaryUri = startTrialUri,
                             ShowSecondary = true,
                             SecondaryContent = "Buy now",
                             SecondaryUri = Constants.LanguageWeaverProPricingUrl,

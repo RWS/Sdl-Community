@@ -213,12 +213,33 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 				return;
 			}
 
-			SelectedRegion = TranslationOptions.CloudCredentials.AccountRegion ??= Constants.CloudEUUrl;
+			SelectedRegion = TranslationOptions.CloudCredentials.AccountRegion = NormalizeRegion(TranslationOptions.CloudCredentials.AccountRegion);
 			UserName = TranslationOptions.CloudCredentials.UserName;
 			UserPassword = TranslationOptions.CloudCredentials.UserPassword;
 			ClientId = TranslationOptions.CloudCredentials.ClientID;
 			ClientSecret = TranslationOptions.CloudCredentials.ClientSecret;
 			ConnectionCode = TranslationOptions.CloudCredentials.ConnectionCode;
+		}
+
+		/// <summary>
+		/// Maps a persisted account region onto one of the current environment's hosts.
+		/// <para>
+		/// The region is stored as a full host, so a credential saved against one environment keeps that
+		/// environment's URL after <see cref="Model.CloudEnvironment.Current"/> is switched. The region radio
+		/// buttons compare the bound value against the current hosts, so an unrecognised one matches neither
+		/// and the selector renders blank even though a region is set. Anything that is not a host of the
+		/// current environment is therefore treated as unset and falls back to EU; a valid US selection is
+		/// left alone.
+		/// </para>
+		/// </summary>
+		public static string NormalizeRegion(string accountRegion)
+		{
+			if (string.Equals(accountRegion, Constants.CloudUSUrl, StringComparison.OrdinalIgnoreCase))
+			{
+				return Constants.CloudUSUrl;
+			}
+
+			return Constants.CloudEUUrl;
 		}
 
 		private void SelectAuthenticationType(object parameter)

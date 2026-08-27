@@ -28,6 +28,9 @@ namespace LanguageWeaverProvider.Model
             CloudEUUrl = "https://api.languageweaver.com/",
             CloudUSUrl = "https://us.api.languageweaver.com/",
             AccountPortalApiBaseUrl = "https://account-portal-api.sdl.com/",
+            AccountPortalUrl = "https://account.rws.com/",
+            LanguageWeaverEUPortalUrl = "https://portal.languageweaver.com/",
+            LanguageWeaverUSPortalUrl = "https://us.portal.languageweaver.com/",
             LanguageCloudAccountsUrl = "https://eu.cloud.trados.com/lc-api/gw-account-web/accounts/"
         };
 
@@ -46,6 +49,9 @@ namespace LanguageWeaverProvider.Model
             CloudEUUrl = "https://uat.api.languageweaver.com/",
             CloudUSUrl = "https://us.api.languageweaver.com/",
             AccountPortalApiBaseUrl = "https://uat-account-portal-api.sdl.com/",
+            AccountPortalUrl = "https://uat-account.rws.com/",
+            LanguageWeaverEUPortalUrl = "https://uat.portal.languageweaver.com/",
+            LanguageWeaverUSPortalUrl = "https://us.portal.languageweaver.com/",
             LanguageCloudAccountsUrl = "https://eu.uat-cloud.trados.com/lc-api/gw-account-web/accounts/"
         };
 
@@ -60,7 +66,7 @@ namespace LanguageWeaverProvider.Model
         /// this first would read Production before it was assigned and leave every endpoint null.
         /// </para>
         /// </summary>
-        public static CloudEnvironment Current { get; set; } = Production;
+        public static CloudEnvironment Current { get; set; } = Uat;
 
         public string Name { get; private set; }
 
@@ -81,6 +87,20 @@ namespace LanguageWeaverProvider.Model
         public string CloudUSUrl { get; private set; }
 
         public string AccountPortalApiBaseUrl { get; private set; }
+
+        /// <summary>
+        /// The Account Portal web site, as opposed to <see cref="AccountPortalApiBaseUrl"/> which is its API.
+        /// This is what the entitlement prompt links a provisioned account to.
+        /// </summary>
+        public string AccountPortalUrl { get; private set; }
+
+        /// <summary>
+        /// The Language Weaver portal web sites. There is no UAT US host, so the US value stays on production
+        /// in every profile and only the EU region can be exercised against UAT.
+        /// </summary>
+        public string LanguageWeaverEUPortalUrl { get; private set; }
+
+        public string LanguageWeaverUSPortalUrl { get; private set; }
 
         public string LanguageCloudAccountsUrl { get; private set; }
     }

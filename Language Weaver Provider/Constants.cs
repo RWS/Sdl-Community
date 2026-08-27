@@ -39,14 +39,19 @@
 		// Database
 		public const string DatabaseName = "languageweaver";
 
-		// LW Portal
-		public const string LanguageWeaverEUPortal = "https://portal.languageweaver.com/login";
-		public const string LanguageWeaverUSPortal = "https://us.portal.languageweaver.com/login";
+		// LW Portal. Hosts come from CloudEnvironment; switch environments there, not here.
+		public static string LanguageWeaverEUPortal = Model.CloudEnvironment.Current.LanguageWeaverEUPortalUrl + "login";
+		public static string LanguageWeaverUSPortal = Model.CloudEnvironment.Current.LanguageWeaverUSPortalUrl + "login";
 
-		// Trados LLM / Language Weaver Pro add-on. No public URL starts the trial - activation happens in the
-		// RWS Account Portal - so both commercial actions land on the pricing page, where the add-on and its
-		// price are presented. See COHERE_CONTEXT.md on the outstanding Account Portal deep links.
+		// Trados LLM / Language Weaver Pro add-on. Buying is presented on the public pricing page, where the
+		// add-on and its price are shown. Starting a trial is a different action: it is activated from the
+		// account's own Language Weaver settings, so it has its own URL rather than reusing the pricing page.
 		public const string LanguageWeaverProPricingUrl = "https://www.trados.com/pricing/freelance-translators/";
+		public static string LanguageWeaverProStartTrialUrl = Model.CloudEnvironment.Current.LanguageWeaverEUPortalUrl + "settings/account";
+
+		// An account provisioned through Account Portal is managed there rather than in the Language Weaver
+		// portal, so the prompt links it to its own tenant page. Append the businessAccountId.
+		public static string AccountPortalTenantUrl = Model.CloudEnvironment.Current.AccountPortalUrl + "t/";
 		public const string LanguageWeaverProLearnMoreUrl = "https://www.trados.com/ecosystem/language-weaver-for-trados/";
 
 		// LW Cloud API Region. Set by CloudEnvironment; switch environments there, not here.

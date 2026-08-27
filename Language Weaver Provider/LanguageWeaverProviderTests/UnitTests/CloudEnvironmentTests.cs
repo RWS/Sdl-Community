@@ -32,6 +32,8 @@ namespace LanguageWeaverProviderTests.UnitTests
             Assert.Equal("https://www.rws.com", production.Auth0RedirectUri);
             Assert.Equal("https://api.languageweaver.com/", production.CloudEUUrl);
             Assert.Equal("https://account-portal-api.sdl.com/", production.AccountPortalApiBaseUrl);
+            Assert.Equal("https://account.rws.com/", production.AccountPortalUrl);
+            Assert.Equal("https://portal.languageweaver.com/", production.LanguageWeaverEUPortalUrl);
             Assert.Equal("https://eu.cloud.trados.com/lc-api/gw-account-web/accounts/", production.LanguageCloudAccountsUrl);
         }
 
@@ -47,6 +49,8 @@ namespace LanguageWeaverProviderTests.UnitTests
             Assert.Equal("https://www.sdl.com", uat.Auth0RedirectUri);
             Assert.Equal("https://uat.api.languageweaver.com/", uat.CloudEUUrl);
             Assert.Equal("https://uat-account-portal-api.sdl.com/", uat.AccountPortalApiBaseUrl);
+            Assert.Equal("https://uat-account.rws.com/", uat.AccountPortalUrl);
+            Assert.Equal("https://uat.portal.languageweaver.com/", uat.LanguageWeaverEUPortalUrl);
             Assert.Equal("https://eu.uat-cloud.trados.com/lc-api/gw-account-web/accounts/", uat.LanguageCloudAccountsUrl);
         }
 
@@ -83,6 +87,8 @@ namespace LanguageWeaverProviderTests.UnitTests
             Assert.Contains("preprod", uat.Auth0Audience);
             Assert.Contains("uat", uat.CloudEUUrl);
             Assert.Contains("uat", uat.AccountPortalApiBaseUrl);
+            Assert.Contains("uat", uat.AccountPortalUrl);
+            Assert.Contains("uat", uat.LanguageWeaverEUPortalUrl);
             Assert.Contains("uat", uat.LanguageCloudAccountsUrl);
             Assert.NotEqual(production.Auth0ClientId, uat.Auth0ClientId);
         }
@@ -97,6 +103,9 @@ namespace LanguageWeaverProviderTests.UnitTests
                 production.CloudEUUrl,
                 production.CloudUSUrl,
                 production.AccountPortalApiBaseUrl,
+                production.AccountPortalUrl,
+                production.LanguageWeaverEUPortalUrl,
+                production.LanguageWeaverUSPortalUrl,
                 production.LanguageCloudAccountsUrl
             ];
         }

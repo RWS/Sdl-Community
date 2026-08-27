@@ -107,7 +107,7 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
                 return null;
             }
 
-            var data = MapDetails(details, userRole);
+            var data = MapDetails(details, userRole, businessAccountId);
             Logger.Info(
                 "[Cohere] Entitlement resolved: detected={0}, paid={1}, trial={2}, trialExpired={3}, admin={4}.",
                 data.IsCohereDetected, data.IsPaid, data.IsTrial, data.IsTrialExpired, data.IsAdmin);
@@ -273,7 +273,7 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
         private static string DescribeErrors(IEnumerable<string> errors)
             => errors is null ? "no details" : string.Join("; ", errors);
 
-        public static CohereSubscriptionData MapDetails(LanguageWeaverDetails details, string userRole = null)
+        public static CohereSubscriptionData MapDetails(LanguageWeaverDetails details, string userRole = null, string businessAccountId = null)
         {
             if (details is null)
             {
@@ -299,7 +299,8 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
                 IsTrial = isTrialRunning || isTrialOver,
                 IsTrialExpired = isTrialOver,
                 // An unreadable role reads as admin, not non-admin: see IsAdminOrUnknown.
-                IsAdmin = IsAdminOrUnknown(userRole)
+                IsAdmin = IsAdminOrUnknown(userRole),
+                BusinessAccountId = businessAccountId
             };
         }
     }
