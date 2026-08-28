@@ -288,8 +288,14 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 				sb.Append(file.CrossRep.Words).Append(csvSeparator);
 			}
 
-			// the 100% match is actually a sum of Exact, Perfect and InContextExact matches
-			sb.Append((file.Exact.Words + file.Perfect.Words + file.InContextExact.Words).ToString()).Append(csvSeparator);
+            // Include Perfect and InContextExact in the 100% match when they are not exported as separate columns
+			var match100 = file.Exact.Words;
+			if (!optionalInformation.IncludePerfectMatch)
+				match100 += file.Perfect.Words;
+			if(!optionalInformation.IncludeContextMatch)
+				match100 += file.InContextExact.Words;
+
+			sb.Append((match100).ToString()).Append(csvSeparator);
 
 			foreach (var fuzzy in file.Fuzzies.OrderByDescending(fz => fz.Max))
 			{
