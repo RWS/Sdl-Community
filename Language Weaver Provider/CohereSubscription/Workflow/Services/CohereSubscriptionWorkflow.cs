@@ -22,6 +22,9 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
     ///
     ///   1. <c>GET {lcHost}/lc-api/gw-account-web/accounts/{tradosAccountId}</c> -> <c>businessAccountId</c>
     ///   2. <c>GET {accountPortal}/account-portal/v1/weaver/details/{businessAccountId}</c> -> <see cref="LanguageWeaverDetails"/>
+    ///   3. <c>GET {accountPortal}/account-portal/v1/weaver/trial</c>, with <c>X-Tenant: {businessAccountId}</c>
+    ///      -> <see cref="TrialPeriod"/>. Trial branch only, and only for the dates: entitlement is already
+    ///      settled by hop 2.
     ///
     /// The details endpoint originally required a <c>recurlyAccountId</c>, which cost a third request to
     /// translate <c>businessAccountId</c> -> <c>recurlyId</c>. That hop was removed on the service side: the
@@ -35,6 +38,10 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
     {
         private static string AccountPortalApiBaseUrl => CloudEnvironment.Current.AccountPortalApiBaseUrl;
         private const string AccountPortalDetailsPath = "account-portal/v1/weaver/details/";
+
+        // Takes no path parameter: the account is named by the X-Tenant header instead.
+        private const string AccountPortalTrialPath = "account-portal/v1/weaver/trial";
+        private const string TenantHeader = "X-Tenant";
 
         // Documented host for this endpoint. Whether US-region accounts need a different one is still open with
         // the service team, so the request address is logged to make a wrong choice visible in the field.
@@ -114,9 +121,17 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
                 return null;
             }
 
+            // Only an account mid-trial has a countdown to show, so the extra request is confined to that case.
+            if (data.IsTrial && !data.IsTrialExpired)
+            {
+                var trialPeriod = await GetTrialPeriod(businessAccountId, authorizationHeaders);
+                data.TrialRemainingDays = trialPeriod?.RemainingDays();
+            }
+
             Logger.Info(
-                "[Cohere] Entitlement resolved: detected={0}, paid={1}, trial={2}, trialExpired={3}, admin={4}.",
-                data.IsCohereDetected, data.IsPaid, data.IsTrial, data.IsTrialExpired, data.IsAdmin);
+                "[Cohere] Entitlement resolved: detected={0}, paid={1}, trial={2}, trialExpired={3}, admin={4}, trialDaysLeft={5}.",
+                data.IsCohereDetected, data.IsPaid, data.IsTrial, data.IsTrialExpired, data.IsAdmin,
+                data.TrialRemainingDays.HasValue ? data.TrialRemainingDays.Value.ToString() : "unknown");
 
             return data;
         }
@@ -279,6 +294,45 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
                 Logger.Warn(ex, "[Cohere] Could not read the user's Language Weaver account or role.");
                 return (null, null);
             }
+        }
+
+        /// <summary>
+        /// Hop 3, on the trial branch only: reads the trial period so the prompt can say how many days are
+        /// left. The account is named by the <c>X-Tenant</c> header - this endpoint takes no path parameter.
+        /// <para>
+        /// The header carries the Account Portal <c>businessAccountId</c>, the same identifier the sibling
+        /// <c>/weaver/details/{businessAccountId}</c> endpoint is keyed on - not the Trados tenant id that
+        /// hop 1 uses. Sending the Trados id here answers 403 <c>NOT_AUTHORIZED_EXCEPTION</c>, with a valid
+        /// token and a live trial.
+        /// </para>
+        /// <para>
+        /// Returns <c>null</c> on any failure. That is deliberately not fatal: the entitlement is already
+        /// known from the details response by this point, and losing the countdown should cost the number in
+        /// the copy, not the whole prompt.
+        /// </para>
+        /// </summary>
+        private static async Task<TrialPeriod> GetTrialPeriod(string businessAccountId, Dictionary<string, string> headers)
+        {
+            var requestUri = new Uri(new Uri(AccountPortalApiBaseUrl), AccountPortalTrialPath).AbsoluteUri;
+
+            var trialHeaders = new Dictionary<string, string>(headers)
+            {
+                [TenantHeader] = businessAccountId
+            };
+
+            var service = new GenericHTTPService<object, TrialPeriod>(
+                HttpClient, trialHeaders, HttpMethod.Get, requestUri);
+            var response = await service.SendRequest(null);
+
+            if (!response.Success || response.Response is null)
+            {
+                Logger.Warn(
+                    "[Cohere] Could not read the trial period from {0}: {1}",
+                    requestUri, DescribeErrors(response?.Errors));
+                return null;
+            }
+
+            return response.Response;
         }
 
         private static string DescribeErrors(IEnumerable<string> errors)

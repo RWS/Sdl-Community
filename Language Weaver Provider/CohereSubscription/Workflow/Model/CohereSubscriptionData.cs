@@ -6,7 +6,12 @@
         public bool IsPaid { get; set; }
         public bool IsTrial { get; set; }
         public bool IsTrialExpired { get; set; }
-        public int TrialRemainingDays { get; set; }
+        /// <summary>
+        /// Whole calendar days until the trial ends, or <c>null</c> when unknown - the trial endpoint was
+        /// unreachable, or sent no usable date. Null and 0 are different things: 0 means the trial ends today,
+        /// null means we cannot say, and the prompt must not claim a number it does not have.
+        /// </summary>
+        public int? TrialRemainingDays { get; set; }
         public bool IsAdmin { get; set; }
 
         /// <summary>
