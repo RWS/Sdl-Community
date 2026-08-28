@@ -311,9 +311,10 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
                 return null;
             }
 
-            // What is left is a trial that ran its course rather than one somebody stopped.
-            var hasEnded = trialStatus.Equals("EXPIRED", StringComparison.OrdinalIgnoreCase)
-                        || trialStatus.Equals("ENDED", StringComparison.OrdinalIgnoreCase);
+            // What is left is a trial that ran its course rather than one somebody stopped. ENDED is the only
+            // such status: the service confirmed the full vocabulary is NOT_STARTED, IN_PROGRESS, CANCELLED
+            // and ENDED.
+            var hasEnded = trialStatus.Equals("ENDED", StringComparison.OrdinalIgnoreCase);
 
             return new CohereSubscriptionData
             {

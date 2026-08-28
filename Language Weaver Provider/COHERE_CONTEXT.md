@@ -67,7 +67,7 @@ Hop 3 works from the Trados identity because the Studio sign-in token is issued 
 | Fact | Source | Signal |
 | --- | --- | --- |
 | Paid | `/weaver/details/` | `isProActive` |
-| Trial state | `/weaver/details/` | `trialStatus`: `NOT_STARTED`, `IN_PROGRESS`, or a terminal value (`CANCELLED` / `EXPIRED` / `ENDED`) |
+| Trial state | `/weaver/details/` | `trialStatus`: `NOT_STARTED`, `IN_PROGRESS`, `ENDED` or `CANCELLED` — the four values confirmed by the service team |
 | Is an admin | `v4/accounts/users/self` | `userRole == "ADMIN"` |
 
 Two traps when editing `MapDetails`:
@@ -81,7 +81,7 @@ Two traps when editing `MapDetails`:
 
 The suppression is an explicit early return, not merely the absence of `CANCELLED` from the terminal set. Dropping it from that set would leave `IsCohereDetected` false, which reads as "never had Cohere" and offers a 14-day free trial to someone who just cancelled one. `ACancelledAccount_IsNeverOfferedAFreeTrial` pins this.
 
-Status values observed live so far are `NOT_STARTED`, `IN_PROGRESS` and `CANCELLED`; `EXPIRED` and `ENDED` come from the documented vocabulary and have not yet been seen in a real response. Whether a naturally-lapsed trial reports `EXPIRED` or `CANCELLED` is unconfirmed — if it turns out to be the latter, the trial-ended prompt never fires and the service team should be asked for the authoritative list.
+Status values are confirmed by the service team as exactly four: `NOT_STARTED`, `IN_PROGRESS`, `ENDED` and `CANCELLED`. The two terminal values differ by intent, which is the whole basis of the rule above — `ENDED` is a trial that ran out, `CANCELLED` is somebody choosing to stop. There is no `EXPIRED`.
 
 Any failure returns `null`, which the decision service renders as no prompt — the specified behaviour for an undeterminable entitlement (DET-421, case E): show nothing, log the reason, re-evaluate next startup. A null role is treated as non-admin.
 
@@ -140,7 +140,7 @@ To reach a state the account cannot produce, break on `return response.Response;
 ```csharp
 response.Response.IsProActive = false; response.Response.TrialStatus = "NOT_STARTED";  // not detected
 response.Response.IsProActive = false; response.Response.TrialStatus = "IN_PROGRESS";  // trial active
-response.Response.IsProActive = false; response.Response.TrialStatus = "EXPIRED";      // trial ended
+response.Response.IsProActive = false; response.Response.TrialStatus = "ENDED";        // trial ended
 response.Response.IsProActive = false; response.Response.TrialStatus = "CANCELLED";    // no prompt
 ```
 

@@ -6,8 +6,8 @@ namespace LanguageWeaverProviderTests.UnitTests
 {
     /// <summary>
     /// Pins the mapping from the account-portal details response onto the pop-up decision inputs.
-    /// The <c>trialStatus</c> values used here are the ones the details endpoint documents
-    /// (NOT_STARTED / IN_PROGRESS / CANCELLED / EXPIRED / ENDED), not invented labels.
+    /// The <c>trialStatus</c> values used here are the four the service confirmed it returns
+    /// (NOT_STARTED / IN_PROGRESS / CANCELLED / ENDED), not invented labels.
     /// </summary>
     public class CohereSubscriptionWorkflowTests
     {
@@ -58,14 +58,14 @@ namespace LanguageWeaverProviderTests.UnitTests
             Assert.False(data.IsPaid);
         }
 
-        [Theory]
-        [InlineData("EXPIRED")]
-        [InlineData("ENDED")]
-        public void TrialThatRanItsCourse_IsMappedAsEnded(string trialStatus)
+        [Fact]
+        public void TrialThatRanItsCourse_IsMappedAsEnded()
         {
+            // ENDED is the only terminal status that is not a deliberate stop: the service confirmed the
+            // vocabulary is NOT_STARTED, IN_PROGRESS, CANCELLED, ENDED.
             var data = CohereSubscriptionWorkflow.MapDetails(new LanguageWeaverDetails
             {
-                TrialStatus = trialStatus
+                TrialStatus = "ENDED"
             });
 
             Assert.True(data.IsCohereDetected);
