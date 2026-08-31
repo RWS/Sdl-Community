@@ -124,7 +124,7 @@ namespace LanguageWeaverProviderTests.UnitTests
         {
             // No Account Portal record means no trial has ever been started, so this is the case the prompt
             // exists for. The trial flags are false by knowledge, not by ignorance.
-            var data = CohereSubscriptionWorkflow.MapEntitlement(hasProLanguagePairs: false, userRole: "ADMIN");
+            var data = CohereSubscriptionWorkflow.MapEntitlement(hasProLanguagePairs: false);
 
             Assert.False(data.IsCohereDetected);
             Assert.False(data.IsPaid);
@@ -136,75 +136,22 @@ namespace LanguageWeaverProviderTests.UnitTests
         public void NeverTrialed_WithProPairs_IsPaid()
         {
             // An account can hold Pro without ever trialing, so Pro pairs still mean paid here.
-            var data = CohereSubscriptionWorkflow.MapEntitlement(hasProLanguagePairs: true, userRole: "ADMIN");
+            var data = CohereSubscriptionWorkflow.MapEntitlement(hasProLanguagePairs: true);
 
             Assert.True(data.IsCohereDetected);
             Assert.True(data.IsPaid);
             Assert.False(data.IsTrial);
         }
 
-        [Theory]
-        [InlineData("ADMIN")]
-        [InlineData("admin")]
-        public void AdminRole_IsRecognisedOnTheNeverTrialedPath(string userRole)
+        [Fact]
+        public void EveryEligibleAccount_IsTreatedAsAdmin()
         {
-            Assert.True(CohereSubscriptionWorkflow.MapEntitlement(false, userRole).IsAdmin);
-        }
-
-        [Theory]
-        [InlineData("USER")]
-        public void NonAdminRole_IsNotAdminOnTheNeverTrialedPath(string userRole)
-        {
-            Assert.False(CohereSubscriptionWorkflow.MapEntitlement(false, userRole).IsAdmin);
-        }
-
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        public void UnreadableRole_IsAdminOnTheNeverTrialedPath(string userRole)
-        {
-            Assert.True(CohereSubscriptionWorkflow.MapEntitlement(false, userRole).IsAdmin);
-        }
-
-        [Theory]
-        [InlineData("ADMIN")]
-        [InlineData("admin")]
-        public void AdminRole_IsRecognisedRegardlessOfCasing(string userRole)
-        {
-            var data = CohereSubscriptionWorkflow.MapDetails(
-                new LanguageWeaverDetails { TrialStatus = "NOT_STARTED" }, userRole);
-
-            Assert.True(data.IsAdmin);
-        }
-
-        [Theory]
-        [InlineData("USER")]
-        public void NonAdminRole_IsNotAdmin(string userRole)
-        {
-            // A role that was actually read and is not ADMIN must never read as admin: those users would
-            // otherwise be offered account-management actions they cannot perform.
-            var data = CohereSubscriptionWorkflow.MapDetails(
-                new LanguageWeaverDetails { TrialStatus = "NOT_STARTED" }, userRole);
-
-            Assert.False(data.IsAdmin);
-        }
-
-        [Theory]
-        [InlineData("")]
-        [InlineData(null)]
-        public void UnreadableRole_IsTreatedAsAdmin(string userRole)
-        {
-            // An account never provisioned into Language Weaver has no readable role from any source:
-            // v4/accounts/users/self answers 403 "user ... does not exist", and neither the account-web body
-            // nor the sign-in JWT carries a role. Reading that absence as non-admin made the admin
-            // "start a trial" prompt unreachable for the never-trialed accounts it is written for, and told
-            // account owners to ask an administrator who does not exist.
-            var data = CohereSubscriptionWorkflow.MapDetails(
-                new LanguageWeaverDetails { TrialStatus = "NOT_STARTED" }, userRole);
-
-            Assert.False(data.IsCohereDetected);
-            Assert.False(data.IsPaid);
-            Assert.True(data.IsAdmin);
+            // The Language Weaver portal is no longer interrogated for a role, and the Account Portal record
+            // carries none, so admin is assumed for every account that gets this far. Only Go and Freelance
+            // licences reach this point at all.
+            Assert.True(CohereSubscriptionWorkflow.MapEntitlement(false).IsAdmin);
+            Assert.True(CohereSubscriptionWorkflow
+                .MapDetails(new LanguageWeaverDetails { TrialStatus = "NOT_STARTED" }).IsAdmin);
         }
 
         [Fact]

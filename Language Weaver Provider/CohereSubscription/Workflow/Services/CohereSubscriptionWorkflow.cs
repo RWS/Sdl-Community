@@ -17,18 +17,22 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
     /// <summary>
     /// Resolves the signed-in user's Language Weaver (Cohere / Trados LLM) entitlement.
     ///
-    /// The lookup is two hops, because the entitlement endpoint is keyed on the Account Portal identity
+    /// Everything is read from Account Portal. The Language Weaver portal is deliberately not consulted:
+    /// it is no longer an accepted source for the user's role, so every eligible account is treated as an
+    /// administrator until a role source on Account Portal exists.
+    ///
+    /// The lookup is three hops, because the entitlement endpoint is keyed on the Account Portal identity
     /// rather than the Trados one:
     ///
     ///   1. <c>GET {lcHost}/lc-api/gw-account-web/accounts/{tradosAccountId}</c> -> <c>businessAccountId</c>
+    ///      and <c>productOffering</c>, the Trados licence that decides eligibility.
     ///   2. <c>GET {accountPortal}/account-portal/v1/weaver/details/{businessAccountId}</c> -> <see cref="LanguageWeaverDetails"/>
     ///   3. <c>GET {accountPortal}/account-portal/v1/weaver/trial</c>, with <c>X-Tenant: {businessAccountId}</c>
     ///      -> <see cref="TrialPeriod"/>. Trial branch only, and only for the dates: entitlement is already
     ///      settled by hop 2.
     ///
-    /// The details endpoint originally required a <c>recurlyAccountId</c>, which cost a third request to
-    /// translate <c>businessAccountId</c> -> <c>recurlyId</c>. That hop was removed on the service side: the
-    /// endpoint now accepts <c>businessAccountId</c> directly and returns the same body.
+    /// Only Trados Go and Trados Freelance licences are eligible for Language Weaver Pro, so hop 1 also acts
+    /// as a gate: an ineligible or unknown licence ends the check before any entitlement request is made.
     ///
     /// Every failure path returns <c>null</c>, which the decision service renders as "no pop-up". That is the
     /// specified behaviour for an undeterminable entitlement (DET-421, case E): show the user nothing, record
@@ -47,8 +51,19 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
         // the service team, so the request address is logged to make a wrong choice visible in the field.
         private static string LanguageCloudAccountsUrl => CloudEnvironment.Current.LanguageCloudAccountsUrl;
 
-        private const string AdminRole = "ADMIN";
         private const string ProLanguagePairType = "GENERICPLUS";
+
+        /// <summary>
+        /// The Trados licences eligible for Language Weaver Pro. Confirmed against live accounts: a Go account
+        /// reports <c>trados_go</c> and a Freelance one <c>trados_live_freelance</c> - note the inconsistent
+        /// <c>live</c> segment, which is why these are recorded values rather than a derived pattern.
+        /// </summary>
+        private static readonly HashSet<string> EligibleProductOfferings =
+            new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
+                "trados_go",
+                "trados_live_freelance"
+            };
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
@@ -72,49 +87,43 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
                 ["Authorization"] = $"Bearer {languageCloudIdentity.AccessToken}"
             };
 
-            // The Trados sign-in token is accepted by the Language Weaver Cloud API — same Auth0 application
-            // and audience — so the user's own Language Weaver account and role resolve from it directly,
-            // with no configured provider involved.
-            var languageWeaverToken = new AccessToken
+            // The active tenant is only ever needed to look up the Account Portal record. It can legitimately be
+            // empty for a valid session (no tenant selected yet), in which case there is nothing to evaluate:
+            // both the entitlement and the licence are read from that record.
+            if (string.IsNullOrWhiteSpace(languageCloudIdentity.ActiveTenantId))
             {
-                Token = languageCloudIdentity.AccessToken,
-                TokenType = "Bearer",
-                BaseUri = new Uri(Constants.CloudEUUrl)
-            };
-
-            var (accountId, userRole) = await GetSelf(languageWeaverToken);
-            languageWeaverToken.AccountId = accountId;
-            if (string.IsNullOrWhiteSpace(userRole))
-            {
-                // Expected for an account that was never provisioned into Language Weaver: users/self answers
-                // 403 "user ... does not exist". The role is unknown, not non-admin; see IsAdminOrUnknown.
-                Logger.Info("[Cohere] No Language Weaver role for this sign-in; treating the user as an administrator.");
+                Logger.Debug("[Cohere] No active tenant on this sign-in; entitlement is undeterminable.");
+                return null;
             }
 
-            // The active tenant is only ever needed to look up the Account Portal record. It can legitimately be
-            // empty for a valid session (no tenant selected yet), and that is not a reason to abandon the check:
-            // the token above already identifies the user, so fall through to the no-trial-history path, which
-            // answers from the account's own language pairs instead.
-            var (businessAccountId, businessSubscriptionId) = string.IsNullOrWhiteSpace(languageCloudIdentity.ActiveTenantId)
-                ? (null, null)
-                : await GetAccountPortalIds(languageCloudIdentity.ActiveTenantId, authorizationHeaders);
+            var account = await GetAccountPortalIds(languageCloudIdentity.ActiveTenantId, authorizationHeaders);
 
-            if (string.IsNullOrWhiteSpace(businessAccountId))
+            // Only Go and Freelance licences are eligible for Language Weaver Pro. Anything else is out of
+            // scope for this prompt, so it is dropped before any entitlement request is made.
+            if (!IsEligibleLicence(account.ProductOffering))
+            {
+                Logger.Info(
+                    "[Cohere] Licence '{0}' is not eligible for Language Weaver Pro; no prompt will be shown.",
+                    account.ProductOffering ?? "unknown");
+                return null;
+            }
+
+            if (string.IsNullOrWhiteSpace(account.BusinessAccountId))
             {
                 // Not a failure. The Account Portal record is created when a trial starts, so its absence
-                // means this account has never started one — precisely the state the prompt exists to
-                // address. The trial endpoint cannot answer for such an account, but the account's own
-                // language pairs still say whether Pro is already held.
-                return await ResolveWithoutTrialHistory(languageWeaverToken, userRole);
+                // means this account has never started one - precisely the state the prompt exists to
+                // address. There is no trial history to read, and no Pro to detect without it.
+                Logger.Info("[Cohere] Eligible licence with no Account Portal record; treating as never trialed.");
+                return MapEntitlement(hasProLanguagePairs: false);
             }
 
-            var details = await GetLanguageWeaverDetails(businessAccountId, authorizationHeaders);
+            var details = await GetLanguageWeaverDetails(account.BusinessAccountId, authorizationHeaders);
             if (details is null)
             {
                 return null;
             }
 
-            var data = MapDetails(details, userRole, businessAccountId, businessSubscriptionId);
+            var data = MapDetails(details, account.BusinessAccountId, account.BusinessSubscriptionId);
             if (data is null)
             {
                 // A deliberate cancellation: no prompt, and nothing to report beyond what MapDetails logged.
@@ -124,7 +133,7 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
             // Only an account mid-trial has a countdown to show, so the extra request is confined to that case.
             if (data.IsTrial && !data.IsTrialExpired)
             {
-                var trialPeriod = await GetTrialPeriod(businessAccountId, authorizationHeaders);
+                var trialPeriod = await GetTrialPeriod(account.BusinessAccountId, authorizationHeaders);
                 data.TrialRemainingDays = trialPeriod?.RemainingDays();
             }
 
@@ -146,11 +155,11 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
         /// there is then no entitlement record to read. The subscription id can be null on its own even for a
         /// provisioned account, which only costs the deep link, not the entitlement check.
         /// </summary>
-        private static async Task<(string BusinessAccountId, string BusinessSubscriptionId)> GetAccountPortalIds(
+        private static async Task<LanguageCloudAccount> GetAccountPortalIds(
             string tradosAccountId, Dictionary<string, string> headers)
         {
             var requestUri = LanguageCloudAccountsUrl + Uri.EscapeDataString(tradosAccountId);
-            Logger.Debug("[Cohere] Resolving businessAccountId via {0}", requestUri);
+            Logger.Debug("[Cohere] Resolving the Account Portal record via {0}", requestUri);
 
             var service = new GenericHTTPService<object, LanguageCloudAccountResponse>(
                 HttpClient, headers, HttpMethod.Get, requestUri);
@@ -161,19 +170,23 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
                 Logger.Warn(
                     "[Cohere] Could not read the Language Cloud account from {0}: {1}",
                     requestUri, DescribeErrors(response?.Errors));
-                return (null, null);
+
+                // An empty record reads as an unknown licence, which the caller drops. That is the intended
+                // outcome for an unreadable account: say nothing rather than guess at eligibility.
+                return new LanguageCloudAccount();
             }
 
-            var businessAccountId = response.Response.Account.BusinessAccountId;
-            if (string.IsNullOrWhiteSpace(businessAccountId))
-            {
-                Logger.Info(
-                    "[Cohere] Account has no businessAccountId (not provisioned through Account Portal); no entitlement to evaluate.");
-                return (null, null);
-            }
-
-            return (businessAccountId, response.Response.Account.BusinessSubscriptionId);
+            return response.Response.Account;
         }
+
+        /// <summary>
+        /// Whether the account's Trados licence is eligible for Language Weaver Pro. An unknown or absent
+        /// licence is not eligible: eligibility must be positively established, since the alternative is
+        /// prompting users who cannot buy the add-on at all.
+        /// </summary>
+        private static bool IsEligibleLicence(string productOffering)
+            => !string.IsNullOrWhiteSpace(productOffering)
+            && EligibleProductOfferings.Contains(productOffering);
 
         /// <summary>
         /// Hop 2: reads the Language Weaver entitlement for the given Account Portal business account.
@@ -201,50 +214,10 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
         }
 
         /// <summary>
-        /// Resolves entitlement for an account with no Account Portal record, i.e. one that has never started a
-        /// trial. Trial state is knowably absent here rather than unknown, so the only open question is whether
-        /// Pro is already held — an account can be provisioned with it without ever trialing. That is answered
-        /// from the configured provider's own credentials: the account's language pairs carry a tier, and Pro
-        /// pairs are typed GENERICPLUS (the add-on's trial feature is GENERIC_PLUS_LANGUAGE_PAIRS).
-        /// </summary>
-        private static async Task<CohereSubscriptionData> ResolveWithoutTrialHistory(
-            AccessToken languageWeaverToken, string userRole)
-        {
-            if (string.IsNullOrWhiteSpace(languageWeaverToken.AccountId))
-            {
-                Logger.Debug("[Cohere] No trial record and no Language Weaver account for this sign-in; entitlement is undeterminable.");
-                return null;
-            }
-
-            try
-            {
-                var languagePairs = await CloudService.GetResources<PairModel>(
-                    languageWeaverToken, CloudResources.LanguagePairs);
-                if (languagePairs is null)
-                {
-                    Logger.Warn("[Cohere] Could not read the account's language pairs; entitlement is undeterminable.");
-                    return null;
-                }
-
-                var data = MapEntitlement(languagePairs.Any(IsProLanguagePair), userRole);
-                Logger.Info(
-                    "[Cohere] No trial record; entitlement resolved for account {0}: detected={1}, admin={2}.",
-                    languageWeaverToken.AccountId, data.IsCohereDetected, data.IsAdmin);
-
-                return data;
-            }
-            catch (Exception ex)
-            {
-                Logger.Warn(ex, "[Cohere] Language-pair lookup failed; no prompt will be shown.");
-                return null;
-            }
-        }
-
-        /// <summary>
         /// Maps an account that has never started a trial. Both trial flags are false by knowledge rather than
         /// by ignorance: no Account Portal record exists, and that record is created when a trial starts.
         /// </summary>
-        public static CohereSubscriptionData MapEntitlement(bool hasProLanguagePairs, string userRole)
+        public static CohereSubscriptionData MapEntitlement(bool hasProLanguagePairs)
         {
             return new CohereSubscriptionData
             {
@@ -252,48 +225,8 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
                 IsPaid = hasProLanguagePairs,
                 IsTrial = false,
                 IsTrialExpired = false,
-                IsAdmin = IsAdminOrUnknown(userRole)
+                IsAdmin = true
             };
-        }
-
-        /// <summary>
-        /// A role that could not be read is unknown, not known-to-be-non-admin. An account that was never
-        /// provisioned into Language Weaver — which is every never-trialed account, i.e. exactly the population
-        /// the "start a trial" prompt exists for — has no readable role from any source in this flow:
-        /// <c>v4/accounts/users/self</c> answers 403 <c>user ... does not exist</c>, and neither the account-web
-        /// body nor the sign-in JWT carries a role claim. Treating that as non-admin makes the admin prompt
-        /// unreachable for the users it is written for, and tells an account owner to ask an administrator who
-        /// does not exist. Only a role that was actually read and is not <c>ADMIN</c> suppresses the admin variant.
-        /// </summary>
-        private static bool IsAdminOrUnknown(string userRole)
-            => string.IsNullOrWhiteSpace(userRole)
-            || AdminRole.Equals(userRole, StringComparison.OrdinalIgnoreCase);
-
-        private static bool IsProLanguagePair(PairModel languagePair)
-            => ProLanguagePairType.Equals(languagePair?.Type, StringComparison.OrdinalIgnoreCase);
-
-
-        /// <summary>
-        /// Reads the signed-in user's role on the Language Weaver account. The Trados sign-in token is issued
-        /// by the same Auth0 application and audience the Language Weaver Cloud API accepts, so the role can be
-        /// resolved from the Trados identity alone, with no configured provider involved.
-        ///
-        /// The account-portal details response carries no role, and neither does the account-web response, so
-        /// this is the only known source. A null role is treated as non-admin by <see cref="MapDetails"/>.
-        /// </summary>
-        private static async Task<(string AccountId, string UserRole)> GetSelf(AccessToken languageWeaverToken)
-        {
-            try
-            {
-                return await CloudService.GetSelf(languageWeaverToken);
-            }
-            catch (Exception ex)
-            {
-                // Both values are optional: a missing role reads as non-admin, and a missing account id only
-                // costs the never-trialed branch its Pro check. Neither is worth aborting the whole check for.
-                Logger.Warn(ex, "[Cohere] Could not read the user's Language Weaver account or role.");
-                return (null, null);
-            }
         }
 
         /// <summary>
@@ -338,7 +271,7 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
         private static string DescribeErrors(IEnumerable<string> errors)
             => errors is null ? "no details" : string.Join("; ", errors);
 
-        public static CohereSubscriptionData MapDetails(LanguageWeaverDetails details, string userRole = null, string businessAccountId = null, string businessSubscriptionId = null)
+        public static CohereSubscriptionData MapDetails(LanguageWeaverDetails details, string businessAccountId = null, string businessSubscriptionId = null)
         {
             if (details is null)
             {
@@ -379,8 +312,9 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
                 IsPaid = details.IsProActive,
                 IsTrial = isTrialRunning || hasEnded,
                 IsTrialExpired = hasEnded,
-                // An unreadable role reads as admin, not non-admin: see IsAdminOrUnknown.
-                IsAdmin = IsAdminOrUnknown(userRole),
+                // Every eligible account is treated as an administrator: the Account Portal record carries no
+                // role, and the Language Weaver portal is no longer consulted for one.
+                IsAdmin = true,
                 BusinessAccountId = businessAccountId,
                 BusinessSubscriptionId = businessSubscriptionId
             };

@@ -34,5 +34,13 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Model
         /// </summary>
         [JsonProperty("businessSubscriptionId")]
         public string BusinessSubscriptionId { get; set; }
+
+        /// <summary>
+        /// The Trados licence this account holds, e.g. <c>trados_go</c> or <c>trados_live_freelance</c>.
+        /// This is the only field in the response that identifies the product: <c>accountType</c> reads
+        /// <c>ENTERPRISE</c> on Go and Freelance accounts alike, so it cannot be used to tell them apart.
+        /// </summary>
+        [JsonProperty("productOffering")]
+        public string ProductOffering { get; set; }
     }
 }
