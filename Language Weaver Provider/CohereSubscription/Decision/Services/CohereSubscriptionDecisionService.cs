@@ -1,4 +1,5 @@
 ﻿using LanguageWeaverProvider.CohereSubscription.Decision.Interfaces;
+using LanguageWeaverProvider.CohereSubscription.Settings.Services;
 using LanguageWeaverProvider.CohereSubscription.Workflow.Model;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.SubscriptionJourney.Model;
@@ -11,9 +12,20 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
     {
         /// <summary>
         /// The active-trial prompt appears once the trial has this many days left or fewer. DET-421 asks for
-        /// silence on days 14-8 and a countdown from day 7.
+        /// silence on days 14-8 and a countdown from day 7. Supplied by the developer settings file so the
+        /// countdown can be exercised by hand without a rebuild; it defaults to the DET-421 value.
         /// </summary>
-        private const int TrialPromptFromDaysRemaining = 7;
+        private readonly int _trialPromptFromDaysRemaining;
+
+        public CohereSubscriptionDecisionService()
+            : this(DeveloperSettingsService.DefaultTrialPromptFromDaysRemaining)
+        {
+        }
+
+        public CohereSubscriptionDecisionService(int trialPromptFromDaysRemaining)
+        {
+            _trialPromptFromDaysRemaining = trialPromptFromDaysRemaining;
+        }
 
         public SubscriptionViewModel BuildViewModel(CohereSubscriptionData data)
         {
@@ -83,7 +95,7 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
             // is the behaviour this schedule exists to avoid.
             if (data.IsTrial && !data.IsTrialExpired)
             {
-                if (!data.TrialRemainingDays.HasValue || data.TrialRemainingDays.Value > TrialPromptFromDaysRemaining)
+                if (!data.TrialRemainingDays.HasValue || data.TrialRemainingDays.Value > _trialPromptFromDaysRemaining)
                 {
                     return null;
                 }

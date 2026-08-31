@@ -7,6 +7,8 @@ using System.Windows;
 using LanguageWeaverProvider.CohereSubscription;
 using LanguageWeaverProvider.CohereSubscription.Decision;
 using LanguageWeaverProvider.CohereSubscription.Settings;
+using LanguageWeaverProvider.CohereSubscription.Settings.Model;
+using LanguageWeaverProvider.CohereSubscription.Settings.Services;
 using LanguageWeaverProvider.CohereSubscription.Workflow;
 using LanguageWeaverProvider.CohereSubscription.Workflow.Interfaces;
 using LanguageWeaverProvider.Model;
@@ -40,10 +42,17 @@ namespace LanguageWeaverProvider
         public static IDictionary<string, ITranslationOptions> TranslationOptions { get; set; } = new Dictionary<string, ITranslationOptions>();
         public static bool IsStandalone { get; set; }
 
+        private DeveloperSettings _developerSettings;
+
         public void Execute()
         {
             CurrentAppVersion = GetAssemblyFileVersion();
             Log.Setup();
+
+            // Before anything can read an endpoint or sign in. Sign-in fixes the Auth0 tenant for the rest
+            // of the session, so switching environments after this point would leave a token that the other
+            // environment cannot honour.
+            _developerSettings = DeveloperSettingsServiceFactory.Create().Apply();
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings
             {
                 NullValueHandling = NullValueHandling.Ignore
@@ -57,7 +66,9 @@ namespace LanguageWeaverProvider
         {
             var cohereSettingsService = CohereSubscriptionSettingsServiceFactory.Create();
             var cohereWorkflowService = CohereWorkflowServiceFactory.Create();
-            var cohereDecisionService = CohereSubscriptionDecisionServiceFactory.Create();
+            var cohereDecisionService = CohereSubscriptionDecisionServiceFactory.Create(
+                _developerSettings?.TrialPromptFromDaysRemaining
+                ?? DeveloperSettingsService.DefaultTrialPromptFromDaysRemaining);
 
             var cohereOrchestrator = new CohereSubscriptionOrchestrator(
                 cohereSettingsService, cohereWorkflowService, cohereDecisionService);

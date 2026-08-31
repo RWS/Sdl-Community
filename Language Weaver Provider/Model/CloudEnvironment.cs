@@ -60,13 +60,15 @@ namespace LanguageWeaverProvider.Model
         }
 
         /// <summary>
-        /// The Cloud environment the plug-in runs against. This is the only line to edit when switching.
+        /// The Cloud environment the plug-in runs against. Ships as production and is set at start-up from
+        /// the developer settings file; there is no longer any reason to edit this line, which is what used
+        /// to leave a UAT pin behind in a commit.
         /// <para>
         /// Declared after the profiles on purpose: static field initializers run in textual order, so putting
         /// this first would read Production before it was assigned and leave every endpoint null.
         /// </para>
         /// </summary>
-        public static CloudEnvironment Current { get; set; } = Uat;
+        public static CloudEnvironment Current { get; set; } = Production;
 
         public string Name { get; private set; }
 

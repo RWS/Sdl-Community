@@ -9,5 +9,7 @@ namespace LanguageWeaverProvider.Model.Interface
     public interface IPathInfo
     {
         public string SettingsPath { get; }
+
+        public string DeveloperSettingsPath { get; }
     }
 }

@@ -10,6 +10,7 @@ namespace LanguageWeaverProvider.Model
         private const string ApplicationPathName = "Language Weaver";
         private const string SettingsPathName = "Settings";
         private const string SettingsFileName = "CohereSubscriptionSettings.json";
+        private const string DeveloperSettingsFileName = "DeveloperSettings.json";
         private string _appstoreFolderPath;
         private string _applicationFolderPath;
         private string _settingsFolderPath;
@@ -74,6 +75,8 @@ namespace LanguageWeaverProvider.Model
         }
 
         public string SettingsPath => Path.Combine(SettingsFolderPath, SettingsFileName);
+
+        public string DeveloperSettingsPath => Path.Combine(SettingsFolderPath, DeveloperSettingsFileName);
     }
 
 }

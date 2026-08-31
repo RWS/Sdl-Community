@@ -6,9 +6,9 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision
 {
     public class CohereSubscriptionDecisionServiceFactory
     {
-        public static ICohereSubscriptionDecisionService Create()
+        public static ICohereSubscriptionDecisionService Create(int trialPromptFromDaysRemaining)
         {
-            return new CohereSubscriptionDecisionService();
+            return new CohereSubscriptionDecisionService(trialPromptFromDaysRemaining);
         }
     }
 }
