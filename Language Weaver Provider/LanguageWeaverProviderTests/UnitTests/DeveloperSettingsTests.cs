@@ -104,13 +104,14 @@ namespace LanguageWeaverProviderTests.UnitTests
         }
 
         [Fact]
-        public void AnOmittedThreshold_LeavesTheDecisionServiceOnItsDefault()
+        public void AnOmittedThreshold_ResolvesToTheShippedDefault()
         {
+            // Load always returns a usable value, so no caller has to repeat the fallback.
             _storage.Save(_pathInfo.DeveloperSettingsPath, new DeveloperSettings { Environment = "UAT" });
 
             var settings = CreateService().Load();
 
-            Assert.Null(settings.TrialPromptFromDaysRemaining);
+            Assert.Equal(7, settings.TrialPromptFromDaysRemaining);
         }
 
         [Fact]

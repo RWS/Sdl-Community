@@ -1,5 +1,4 @@
 ﻿using LanguageWeaverProvider.CohereSubscription.Decision.Interfaces;
-using LanguageWeaverProvider.CohereSubscription.Settings.Services;
 using LanguageWeaverProvider.CohereSubscription.Workflow.Model;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.SubscriptionJourney.Model;
@@ -11,14 +10,18 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
     public class CohereSubscriptionDecisionService : ICohereSubscriptionDecisionService
     {
         /// <summary>
-        /// The active-trial prompt appears once the trial has this many days left or fewer. DET-421 asks for
-        /// silence on days 14-8 and a countdown from day 7. Supplied by the developer settings file so the
-        /// countdown can be exercised by hand without a rebuild; it defaults to the DET-421 value.
+        /// DET-421: silence on days 14-8, then a countdown from day 7. This is the shipped rule; the
+        /// developer settings file may override it so the countdown can be exercised without a rebuild.
+        /// </summary>
+        public const int DefaultTrialPromptFromDaysRemaining = 7;
+
+        /// <summary>
+        /// The active-trial prompt appears once the trial has this many days left or fewer.
         /// </summary>
         private readonly int _trialPromptFromDaysRemaining;
 
         public CohereSubscriptionDecisionService()
-            : this(DeveloperSettingsService.DefaultTrialPromptFromDaysRemaining)
+            : this(DefaultTrialPromptFromDaysRemaining)
         {
         }
 

@@ -1,3 +1,4 @@
+using LanguageWeaverProvider.CohereSubscription.Decision.Services;
 using LanguageWeaverProvider.CohereSubscription.Settings.Interfaces;
 using LanguageWeaverProvider.CohereSubscription.Settings.Model;
 using LanguageWeaverProvider.Model;
@@ -9,13 +10,6 @@ namespace LanguageWeaverProvider.CohereSubscription.Settings.Services
 {
     public class DeveloperSettingsService : IDeveloperSettingsService
     {
-        /// <summary>
-        /// The shipped behaviour, used both when the file is absent and when a value in it cannot be
-        /// understood. Keeping them here rather than at the call sites means a half-filled file still
-        /// produces the production journey.
-        /// </summary>
-        public const int DefaultTrialPromptFromDaysRemaining = 7;
-
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private readonly IPathInfo _pathInfo;
@@ -32,7 +26,7 @@ namespace LanguageWeaverProvider.CohereSubscription.Settings.Services
             var defaults = new DeveloperSettings
             {
                 Environment = CloudEnvironment.Production.Name,
-                TrialPromptFromDaysRemaining = DefaultTrialPromptFromDaysRemaining
+                TrialPromptFromDaysRemaining = CohereSubscriptionDecisionService.DefaultTrialPromptFromDaysRemaining
             };
 
             try
@@ -50,11 +44,14 @@ namespace LanguageWeaverProvider.CohereSubscription.Settings.Services
                 }
 
                 // A file written by hand can be missing keys or carry a typo. Each value falls back on its
-                // own so that one bad entry does not discard the rest.
+                // own so that one bad entry does not discard the rest, and every value is resolved here so
+                // that callers never have to repeat the fallback.
                 settings.Environment = ResolveEnvironment(settings.Environment).Name;
-                if (settings.TrialPromptFromDaysRemaining < 0)
+                if (!settings.TrialPromptFromDaysRemaining.HasValue
+                 || settings.TrialPromptFromDaysRemaining < 0)
                 {
-                    settings.TrialPromptFromDaysRemaining = null;
+                    settings.TrialPromptFromDaysRemaining =
+                        CohereSubscriptionDecisionService.DefaultTrialPromptFromDaysRemaining;
                 }
 
                 return settings;

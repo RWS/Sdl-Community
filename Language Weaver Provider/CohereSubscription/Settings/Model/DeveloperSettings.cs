@@ -23,6 +23,11 @@ namespace LanguageWeaverProvider.CohereSubscription.Settings.Model
         /// The active-trial pop-up appears once the trial has this many days left or fewer. The threshold is
         /// inclusive at both ends: the default of 7 prompts from "7 days left" down to and including the
         /// final day.
+        /// <para>
+        /// Nullable so that an omitted key can be told apart from a deliberate 0, which is a legitimate
+        /// setting meaning "prompt only on the last day". A value read back from
+        /// <see cref="Interfaces.IDeveloperSettingsService.Load"/> is always populated.
+        /// </para>
         /// </summary>
         public int? TrialPromptFromDaysRemaining { get; set; }
     }

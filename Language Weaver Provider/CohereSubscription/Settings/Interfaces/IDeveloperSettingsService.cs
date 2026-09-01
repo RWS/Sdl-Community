@@ -6,7 +6,8 @@ namespace LanguageWeaverProvider.CohereSubscription.Settings.Interfaces
     {
         /// <summary>
         /// Reads the developer settings, writing the file with production defaults if it is not there yet.
-        /// Always returns a fully populated instance.
+        /// Always returns a fully populated instance: every value is resolved to a usable one, so callers
+        /// never have to apply a fallback of their own.
         /// </summary>
         DeveloperSettings Load();
 

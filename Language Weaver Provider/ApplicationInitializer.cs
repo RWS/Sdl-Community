@@ -67,8 +67,7 @@ namespace LanguageWeaverProvider
             var cohereSettingsService = CohereSubscriptionSettingsServiceFactory.Create();
             var cohereWorkflowService = CohereWorkflowServiceFactory.Create();
             var cohereDecisionService = CohereSubscriptionDecisionServiceFactory.Create(
-                _developerSettings?.TrialPromptFromDaysRemaining
-                ?? DeveloperSettingsService.DefaultTrialPromptFromDaysRemaining);
+                _developerSettings.TrialPromptFromDaysRemaining.Value);
 
             var cohereOrchestrator = new CohereSubscriptionOrchestrator(
                 cohereSettingsService, cohereWorkflowService, cohereDecisionService);
