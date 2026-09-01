@@ -183,6 +183,28 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <!-- These designers live in the Sdl.Community.CleanUpTasks namespace, which differs from the
+         RootNamespace, so the manifest resource names have to be set explicitly. -->
+    <EmbeddedResource Update="CleanUpSourceSettingsControl.resx">
+      <LogicalName>Sdl.Community.CleanUpTasks.CleanUpSourceSettingsControl.resources</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Update="CleanUpTargetSettingsControl.resx">
+      <LogicalName>Sdl.Community.CleanUpTasks.CleanUpTargetSettingsControl.resources</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Update="ConversionFileView.resx">
+      <LogicalName>Sdl.Community.CleanUpTasks.ConversionFileView.resources</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Update="ConversionsSettingsControl.resx">
+      <LogicalName>Sdl.Community.CleanUpTasks.ConversionsSettingsControl.resources</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Update="SegmentLockerControl.resx">
+      <LogicalName>Sdl.Community.CleanUpTasks.SegmentLockerControl.resources</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Update="TagsSettingsControl.resx">
+      <LogicalName>Sdl.Community.CleanUpTasks.TagsSettingsControl.resources</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="Resources\Information.png" />
     <EmbeddedResource Include="CleanupSource.xsl" />
     <Content Include="broom.ico" />
