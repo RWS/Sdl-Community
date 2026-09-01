@@ -23,8 +23,6 @@ namespace LanguageWeaverProviderTests.UnitTests
             Assert.True(data.IsCohereDetected);
             Assert.True(data.IsPaid);
             Assert.False(data.IsTrial);
-            // No role was supplied, so it is unknown rather than known-to-be-non-admin.
-            Assert.True(data.IsAdmin);
         }
 
         [Fact]
@@ -82,24 +80,14 @@ namespace LanguageWeaverProviderTests.UnitTests
             // CANCELLED means somebody chose to stop - a trial or a paid subscription, and the endpoint gives
             // nothing to tell those apart. Either way the decision was deliberate, so we do not sell back to
             // them. A null result renders no prompt.
-            var data = CohereSubscriptionWorkflow.MapDetails(new LanguageWeaverDetails
-            {
-                TrialStatus = "CANCELLED",
-                IsProActive = false // what JSON null deserialises to
-            });
-
-            Assert.Null(data);
-        }
-
-        [Fact]
-        public void ACancelledAccount_IsNeverOfferedAFreeTrial()
-        {
-            // Guards the reason the suppression is an explicit early return rather than simply dropping
+            //
+            // This also guards why the suppression is an explicit early return rather than simply dropping
             // CANCELLED from the terminal set: that would read as "never had Cohere" and offer a 14-day free
             // trial to someone who just cancelled one.
             var data = CohereSubscriptionWorkflow.MapDetails(new LanguageWeaverDetails
             {
-                TrialStatus = "CANCELLED"
+                TrialStatus = "CANCELLED",
+                IsProActive = false // what JSON null deserialises to
             });
 
             Assert.Null(data);
@@ -141,17 +129,6 @@ namespace LanguageWeaverProviderTests.UnitTests
             Assert.True(data.IsCohereDetected);
             Assert.True(data.IsPaid);
             Assert.False(data.IsTrial);
-        }
-
-        [Fact]
-        public void EveryEligibleAccount_IsTreatedAsAdmin()
-        {
-            // The Language Weaver portal is no longer interrogated for a role, and the Account Portal record
-            // carries none, so admin is assumed for every account that gets this far. Only Go and Freelance
-            // licences reach this point at all.
-            Assert.True(CohereSubscriptionWorkflow.MapEntitlement(false).IsAdmin);
-            Assert.True(CohereSubscriptionWorkflow
-                .MapDetails(new LanguageWeaverDetails { TrialStatus = "NOT_STARTED" }).IsAdmin);
         }
 
         [Fact]

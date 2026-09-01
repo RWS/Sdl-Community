@@ -19,6 +19,9 @@ namespace LanguageWeaverProviderTests.UnitTests
             TrialRemainingDays = daysRemaining
         };
 
+        /// <summary>
+        /// 8 is the last silent day. The threshold is inclusive, so 7 is the first day that prompts.
+        /// </summary>
         [Theory]
         [InlineData(14)]
         [InlineData(10)]
@@ -40,14 +43,6 @@ namespace LanguageWeaverProviderTests.UnitTests
             var viewModel = new CohereSubscriptionDecisionService().BuildViewModel(TrialWith(daysRemaining));
 
             Assert.NotNull(viewModel);
-        }
-
-        [Fact]
-        public void SevenDaysLeft_IsTheFirstDayThatPrompts()
-        {
-            // The threshold is inclusive; 8 is the last silent day.
-            Assert.Null(new CohereSubscriptionDecisionService().BuildViewModel(TrialWith(8)));
-            Assert.NotNull(new CohereSubscriptionDecisionService().BuildViewModel(TrialWith(7)));
         }
 
         [Fact]

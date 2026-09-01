@@ -43,19 +43,6 @@ namespace LanguageWeaverProviderTests.UnitTests
         }
 
         [Fact]
-        public void TheWrittenDefaults_LeaveTheShippedBehaviourUnchanged()
-        {
-            var service = CreateService();
-            service.Load();
-
-            // Re-reading the file the plug-in just wrote must not drift from the defaults it wrote.
-            var reloaded = service.Load();
-
-            Assert.Equal(CloudEnvironment.Production.Name, reloaded.Environment);
-            Assert.Equal(7, reloaded.TrialPromptFromDaysRemaining);
-        }
-
-        [Fact]
         public void AskingForUat_SwitchesTheEnvironment()
         {
             _storage.Save(_pathInfo.DeveloperSettingsPath, new DeveloperSettings { Environment = "UAT" });

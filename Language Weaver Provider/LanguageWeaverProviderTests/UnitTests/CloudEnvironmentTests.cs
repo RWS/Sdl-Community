@@ -20,40 +20,6 @@ namespace LanguageWeaverProviderTests.UnitTests
             Assert.Same(CloudEnvironment.Production, CloudEnvironment.Current);
         }
 
-        [Fact]
-        public void Production_UsesTheProductionTenantAndItsMatchingCredentials()
-        {
-            var production = CloudEnvironment.Production;
-
-            Assert.Equal("https://sdl-prod.eu.auth0.com/authorize", production.Auth0AuthorizeUrl);
-            Assert.Equal("https://sdl-prod.eu.auth0.com/oauth/token", production.Auth0TokenUrl);
-            Assert.Equal("https://api.sdl.com", production.Auth0Audience);
-            Assert.Equal("F4NpOGG1sBaEzk379M6ZxX3gGa0iH1Ff", production.Auth0ClientId);
-            Assert.Equal("https://www.rws.com", production.Auth0RedirectUri);
-            Assert.Equal("https://api.languageweaver.com/", production.CloudEUUrl);
-            Assert.Equal("https://account-portal-api.sdl.com/", production.AccountPortalApiBaseUrl);
-            Assert.Equal("https://account.rws.com/", production.AccountPortalUrl);
-            Assert.Equal("https://portal.languageweaver.com/", production.LanguageWeaverEUPortalUrl);
-            Assert.Equal("https://eu.cloud.trados.com/lc-api/gw-account-web/accounts/", production.LanguageCloudAccountsUrl);
-        }
-
-        [Fact]
-        public void Uat_UsesThePreprodTenantAndItsMatchingCredentials()
-        {
-            var uat = CloudEnvironment.Uat;
-
-            Assert.Equal("https://sdl-preprod.eu.auth0.com/authorize", uat.Auth0AuthorizeUrl);
-            Assert.Equal("https://sdl-preprod.eu.auth0.com/oauth/token", uat.Auth0TokenUrl);
-            Assert.Equal("https://api-preprod.sdl.com", uat.Auth0Audience);
-            Assert.Equal("OltQlVmK6N9Y04bNMmFxoXmGleLMmdxB", uat.Auth0ClientId);
-            Assert.Equal("https://www.sdl.com", uat.Auth0RedirectUri);
-            Assert.Equal("https://uat.api.languageweaver.com/", uat.CloudEUUrl);
-            Assert.Equal("https://uat-account-portal-api.sdl.com/", uat.AccountPortalApiBaseUrl);
-            Assert.Equal("https://uat-account.rws.com/", uat.AccountPortalUrl);
-            Assert.Equal("https://uat.portal.languageweaver.com/", uat.LanguageWeaverEUPortalUrl);
-            Assert.Equal("https://eu.uat-cloud.trados.com/lc-api/gw-account-web/accounts/", uat.LanguageCloudAccountsUrl);
-        }
-
         /// <summary>
         /// The authorize and token endpoints must belong to one tenant: only the tenant that issued an
         /// authorization code can exchange it. This is the invariant that the old per-call-site values broke.

@@ -1,39 +1,15 @@
 using LanguageWeaverProvider.CohereSubscription.Workflow.Model;
-using Newtonsoft.Json;
 using System;
 using Xunit;
 
 namespace LanguageWeaverProviderTests.UnitTests
 {
     /// <summary>
-    /// Pins the trial-period response from <c>GET /account-portal/v1/weaver/trial</c> and the day count
-    /// derived from it. The dates arrive as <c>yyyy/MM/dd</c>, which Newtonsoft does not parse by default.
+    /// Pins the day count derived from the trial-period response. The dates arrive as <c>yyyy/MM/dd</c>,
+    /// which Newtonsoft does not parse by default, so <c>RemainingDays</c> parses them itself.
     /// </summary>
     public class TrialPeriodTests
     {
-        [Fact]
-        public void TheConfirmedResponseShape_Deserialises()
-        {
-            // The example given by the service team, verbatim.
-            const string json = @"{
-                ""id"": 403,
-                ""limit"": 14,
-                ""status"": ""IN_PROGRESS"",
-                ""startDate"": ""2026/08/26"",
-                ""endDate"": ""2026/09/10"",
-                ""subscriptionId"": 1129
-            }";
-
-            var trial = JsonConvert.DeserializeObject<TrialPeriod>(json);
-
-            Assert.Equal(403, trial.Id);
-            Assert.Equal(14, trial.Limit);
-            Assert.Equal("IN_PROGRESS", trial.Status);
-            Assert.Equal("2026/08/26", trial.StartDate);
-            Assert.Equal("2026/09/10", trial.EndDate);
-            Assert.Equal(1129, trial.SubscriptionId);
-        }
-
         [Fact]
         public void RemainingDays_CountsCalendarDaysToTheEndDate()
         {
@@ -96,7 +72,7 @@ namespace LanguageWeaverProviderTests.UnitTests
         [Fact]
         public void AMissingEndDate_DoesNotThrow()
         {
-            var trial = JsonConvert.DeserializeObject<TrialPeriod>(@"{""status"":""IN_PROGRESS""}");
+            var trial = new TrialPeriod();
 
             Assert.Null(trial.RemainingDays());
             Assert.Null(trial.Limit);

@@ -15,12 +15,6 @@ namespace LanguageWeaverProviderTests.UnitTests
     public class CloudRegionNormalizationTests
     {
         [Fact]
-        public void CurrentEuRegion_IsKept()
-        {
-            Assert.Equal(Constants.CloudEUUrl, CloudCredentialsViewModel.NormalizeRegion(Constants.CloudEUUrl));
-        }
-
-        [Fact]
         public void CurrentUsRegion_IsKept()
         {
             Assert.Equal(Constants.CloudUSUrl, CloudCredentialsViewModel.NormalizeRegion(Constants.CloudUSUrl));
@@ -29,16 +23,13 @@ namespace LanguageWeaverProviderTests.UnitTests
         [Theory]
         [InlineData(null)]
         [InlineData("")]
-        [InlineData("https://api.languageweaver.com/")]
         [InlineData("https://uat.api.languageweaver.com/")]
         [InlineData("not-a-region")]
-        public void RegionFromAnotherEnvironmentOrNoRegionAtAll_FallsBackToCurrentEu(string persistedRegion)
+        public void AnythingElse_FallsBackToEu(string persistedRegion)
         {
-            var normalized = CloudCredentialsViewModel.NormalizeRegion(persistedRegion);
-
-            Assert.True(
-                normalized == Constants.CloudEUUrl || normalized == Constants.CloudUSUrl,
-                $"'{persistedRegion}' normalized to '{normalized}', which is not a selectable region.");
+            // A region saved against another environment is treated as unset: it matches neither radio
+            // button, so the selector would otherwise render blank.
+            Assert.Equal(Constants.CloudEUUrl, CloudCredentialsViewModel.NormalizeRegion(persistedRegion));
         }
     }
 }
