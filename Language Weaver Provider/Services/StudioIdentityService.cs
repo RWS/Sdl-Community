@@ -63,6 +63,25 @@ namespace LanguageWeaverProvider.Services
         }
 
         /// <summary>
+        /// Returns the tenant of the current Trados sign-in, or <c>null</c> when Studio has no usable session.
+        /// Unlike the access token, this is unchanged by Studio renewing the session, so it identifies who is
+        /// signed in rather than how recently.
+        /// </summary>
+        public static string GetActiveTenantId()
+        {
+            try
+            {
+                var tenantId = LanguageCloudIdentityApi.Instance?.ActiveTenantId;
+                return string.IsNullOrWhiteSpace(tenantId) ? null : tenantId;
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(LogLevel.Warn, $"Could not read the Trados sign-in tenant: {ex.Message}");
+                return null;
+            }
+        }
+
+        /// <summary>
         /// Builds an <see cref="AccessToken"/> for <paramref name="region"/> from the current Trados sign-in,
         /// or returns <c>null</c> when there is no session to reuse. The account id is not populated here.
         /// </summary>

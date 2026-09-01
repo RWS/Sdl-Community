@@ -1,12 +1,8 @@
 ﻿using LanguageWeaverProvider.CohereSubscription.Settings.Interfaces;
 using NLog;
 using Sdl.Desktop.IntegrationApi;
-using Sdl.Desktop.IntegrationApi.Extensions.Internal;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LanguageWeaverProvider.CohereSubscription
@@ -52,12 +48,9 @@ namespace LanguageWeaverProvider.CohereSubscription
                     return;
                 }
 
-                bool wasShown = await _cohereOrchestrator.RunAsync();
-
-                if (wasShown)
-                {
-                    RemoveSubscriber();
-                }
+                // Deliberately stays subscribed after showing: the orchestrator prompts once per signed-in
+                // tenant, so remaining subscribed is what lets a re-sign-in be noticed.
+                await _cohereOrchestrator.RunAsync();
             }
             catch (Exception ex)
             {

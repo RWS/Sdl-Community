@@ -72,7 +72,8 @@ namespace LanguageWeaverProvider
                 _developerSettings.TrialPromptFromDaysRemaining.Value);
 
             var cohereOrchestrator = new CohereSubscriptionOrchestrator(
-                cohereSettingsService, cohereWorkflowService, cohereDecisionService);
+                cohereSettingsService, cohereWorkflowService, cohereDecisionService,
+                new StudioSignedInTenant(), new SubscriptionWindowPrompt());
 
             List<AbstractViewController> viewControllers = new List<AbstractViewController>()
             {
