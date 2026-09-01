@@ -21,7 +21,7 @@ namespace LanguageWeaverProvider.CohereSubscription.Settings.Services
             _storageService = storageService;
         }
 
-        public DeveloperSettings Load()
+        public DeveloperSettings LoadCreatingDefaultsIfMissing()
         {
             var defaults = new DeveloperSettings
             {
@@ -43,30 +43,32 @@ namespace LanguageWeaverProvider.CohereSubscription.Settings.Services
                     return defaults;
                 }
 
-                // A file written by hand can be missing keys or carry a typo. Each value falls back on its
-                // own so that one bad entry does not discard the rest, and every value is resolved here so
-                // that callers never have to repeat the fallback.
-                settings.Environment = ResolveEnvironment(settings.Environment).Name;
-                if (!settings.TrialPromptFromDaysRemaining.HasValue
-                 || settings.TrialPromptFromDaysRemaining < 0)
-                {
-                    settings.TrialPromptFromDaysRemaining =
-                        CohereSubscriptionDecisionService.DefaultTrialPromptFromDaysRemaining;
-                }
-
-                return settings;
+                return ResolveEachValueIndependently(settings);
             }
             catch (Exception ex)
             {
-                // Settings are a convenience; a locked or unreadable file must never stop Studio loading.
                 Logger.Error(ex, "[Cohere] Developer settings could not be read. Using defaults.");
                 return defaults;
             }
         }
 
-        public DeveloperSettings Apply()
+        private static DeveloperSettings ResolveEachValueIndependently(DeveloperSettings settings)
         {
-            var settings = Load();
+            settings.Environment = ResolveEnvironment(settings.Environment).Name;
+
+            if (!settings.TrialPromptFromDaysRemaining.HasValue
+             || settings.TrialPromptFromDaysRemaining < 0)
+            {
+                settings.TrialPromptFromDaysRemaining =
+                    CohereSubscriptionDecisionService.DefaultTrialPromptFromDaysRemaining;
+            }
+
+            return settings;
+        }
+
+        public DeveloperSettings ApplyToTheCurrentEnvironment()
+        {
+            var settings = LoadCreatingDefaultsIfMissing();
 
             CloudEnvironment.Current = ResolveEnvironment(settings.Environment);
             if (CloudEnvironment.Current != CloudEnvironment.Production)

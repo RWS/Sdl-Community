@@ -9,15 +9,8 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
 {
     public class CohereSubscriptionDecisionService : ICohereSubscriptionDecisionService
     {
-        /// <summary>
-        /// DET-421: silence on days 14-8, then a countdown from day 7. This is the shipped rule; the
-        /// developer settings file may override it so the countdown can be exercised without a rebuild.
-        /// </summary>
         public const int DefaultTrialPromptFromDaysRemaining = 7;
 
-        /// <summary>
-        /// The active-trial prompt appears once the trial has this many days left or fewer.
-        /// </summary>
         private readonly int _trialPromptFromDaysRemaining;
 
         public CohereSubscriptionDecisionService()
@@ -35,21 +28,13 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
             if (data == null)
                 return null;
 
-            // Paid add-on: no pop-up
             if (data.IsPaid)
                 return null;
 
             var uriOpener = new UriOpener();
 
-            // An account provisioned through Account Portal is administered on its own tenant page there;
-            // one without such a record has nothing to link to, so it goes to the Language Weaver portal
-            // account page instead. Both actions land on the same dashboard: buying and starting a trial are
-            // both done from there, and neither can be deep-linked from outside the portal.
-            var accountUri = string.IsNullOrWhiteSpace(data.BusinessAccountId)
-                ? Constants.LanguageWeaverProStartTrialUrl
-                : Constants.AccountPortalTenantUrl + data.BusinessAccountId;
+            var accountUri = AccountUriFor(data);
 
-            // Cohere not detected
             if (!data.IsCohereDetected)
             {
                 if (data.IsAdmin)
@@ -90,15 +75,9 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
                     uriOpener);
             }
 
-            // DET-421: stay quiet for the first half of the trial, then count down over the last week. The
-            // threshold is inclusive - "7 days left" is the first day that prompts.
-            //
-            // A null count means the trial endpoint could not be read. Silence is the safer reading: the
-            // alternative is prompting someone on day 1 with copy that cannot say how long they have, which
-            // is the behaviour this schedule exists to avoid.
-            if (data.IsTrial && !data.IsTrialExpired)
+            if (IsMidTrial(data))
             {
-                if (!data.TrialRemainingDays.HasValue || data.TrialRemainingDays.Value > _trialPromptFromDaysRemaining)
+                if (IsStillOutsideTheCountdownWindow(data))
                 {
                     return null;
                 }
@@ -106,9 +85,7 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
                 return BuildActiveTrialViewModel(data, accountUri, uriOpener);
             }
 
-            // Trial ended of its own accord. Deliberate cancellations never reach here - the workflow
-            // returns null for those, so no prompt is built at all.
-            if (data.IsTrial && data.IsTrialExpired)
+            if (HasTrialRunItsCourse(data))
             {
                 if (data.IsAdmin)
                 {
@@ -146,10 +123,21 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
             return null;
         }
 
-        /// <summary>
-        /// The active-trial prompt, shown over the final week of the trial. Only reached with a known day
-        /// count, so the copy can name it.
-        /// </summary>
+        private static string AccountUriFor(CohereSubscriptionData data)
+            => string.IsNullOrWhiteSpace(data.BusinessAccountId)
+                ? Constants.LanguageWeaverProStartTrialUrl
+                : Constants.AccountPortalTenantUrl + data.BusinessAccountId;
+
+        private static bool IsMidTrial(CohereSubscriptionData data)
+            => data.IsTrial && !data.IsTrialExpired;
+
+        private static bool HasTrialRunItsCourse(CohereSubscriptionData data)
+            => data.IsTrial && data.IsTrialExpired;
+
+        private bool IsStillOutsideTheCountdownWindow(CohereSubscriptionData data)
+            => !data.TrialRemainingDays.HasValue
+            || data.TrialRemainingDays.Value > _trialPromptFromDaysRemaining;
+
         private static SubscriptionViewModel BuildActiveTrialViewModel(CohereSubscriptionData data, string accountUri, IUriOpener uriOpener)
         {
             var daysRemaining = data.TrialRemainingDays ?? 0;

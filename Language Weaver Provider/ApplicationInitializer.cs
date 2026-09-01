@@ -49,10 +49,8 @@ namespace LanguageWeaverProvider
             CurrentAppVersion = GetAssemblyFileVersion();
             Log.Setup();
 
-            // Before anything can read an endpoint or sign in. Sign-in fixes the Auth0 tenant for the rest
-            // of the session, so switching environments after this point would leave a token that the other
-            // environment cannot honour.
-            _developerSettings = DeveloperSettingsServiceFactory.Create().Apply();
+            _developerSettings = SelectTheCloudEnvironmentBeforeAnythingSignsIn();
+
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings
             {
                 NullValueHandling = NullValueHandling.Ignore
@@ -61,6 +59,9 @@ namespace LanguageWeaverProvider
             SdlTradosStudio.Application.GetService<IStudioEventAggregator>()
               .GetEvent<StudioWindowCreatedNotificationEvent>().Subscribe(OnStudioWindowCreated);
         }
+
+        private static DeveloperSettings SelectTheCloudEnvironmentBeforeAnythingSignsIn()
+            => DeveloperSettingsServiceFactory.Create().ApplyToTheCurrentEnvironment();
 
         private void OnStudioWindowCreated(StudioWindowCreatedNotificationEvent obj)
         {

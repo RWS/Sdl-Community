@@ -55,8 +55,6 @@ namespace LanguageWeaverProvider.CohereSubscription
             }
             catch (Exception ex)
             {
-                // Never let a failed entitlement check surface to the user or bring down view activation
-                // (DET-421, case E): swallow it here, but record why so the failure is diagnosable.
                 Logger.Error(ex, "[Cohere] Subscription check failed during view activation.");
             }
         }

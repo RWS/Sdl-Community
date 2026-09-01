@@ -4,9 +4,6 @@ using Xunit;
 
 namespace LanguageWeaverProviderTests.UnitTests
 {
-    /// <summary>
-    /// Pins DET-421's active-trial schedule: silent for days 14-8, then a countdown over the final week.
-    /// </summary>
     public class ActiveTrialPromptScheduleTests
     {
         private static CohereSubscriptionData TrialWith(int? daysRemaining) => new CohereSubscriptionData
@@ -19,14 +16,11 @@ namespace LanguageWeaverProviderTests.UnitTests
             TrialRemainingDays = daysRemaining
         };
 
-        /// <summary>
-        /// 8 is the last silent day. The threshold is inclusive, so 7 is the first day that prompts.
-        /// </summary>
         [Theory]
         [InlineData(14)]
         [InlineData(10)]
         [InlineData(8)]
-        public void EarlyInTheTrial_ShowsNothing(int daysRemaining)
+        public void UpToAndIncludingDayEight_ShowsNothing(int daysRemaining)
         {
             var viewModel = new CohereSubscriptionDecisionService().BuildViewModel(TrialWith(daysRemaining));
 
@@ -48,8 +42,6 @@ namespace LanguageWeaverProviderTests.UnitTests
         [Fact]
         public void AnUnknownDayCount_ShowsNothing()
         {
-            // The trial endpoint could not be read. Prompting here would mean copy that cannot say how long
-            // is left - precisely what the schedule exists to prevent.
             var viewModel = new CohereSubscriptionDecisionService().BuildViewModel(TrialWith(null));
 
             Assert.Null(viewModel);

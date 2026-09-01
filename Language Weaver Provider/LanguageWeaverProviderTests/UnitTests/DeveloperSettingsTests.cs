@@ -9,12 +9,6 @@ using Xunit;
 
 namespace LanguageWeaverProviderTests.UnitTests
 {
-    /// <summary>
-    /// The developer settings file exists to make the Cohere journey testable by hand, so its own failure
-    /// modes have to be harmless: an installation that never touches the file must behave exactly as the
-    /// shipped product, and a hand-edited file with a typo in it must not point a real user at UAT or
-    /// silence the trial prompt.
-    /// </summary>
     public class DeveloperSettingsTests
     {
         private readonly FakePathInfo _pathInfo = new FakePathInfo();
@@ -28,7 +22,7 @@ namespace LanguageWeaverProviderTests.UnitTests
         [Fact]
         public void WithNoFile_TheDefaultsAreProductionAndTheFinalWeek()
         {
-            var settings = CreateService().Load();
+            var settings = CreateService().LoadCreatingDefaultsIfMissing();
 
             Assert.Equal(CloudEnvironment.Production.Name, settings.Environment);
             Assert.Equal(7, settings.TrialPromptFromDaysRemaining);
@@ -37,7 +31,7 @@ namespace LanguageWeaverProviderTests.UnitTests
         [Fact]
         public void WithNoFile_OneIsWrittenSoItCanBeFoundAndEdited()
         {
-            CreateService().Load();
+            CreateService().LoadCreatingDefaultsIfMissing();
 
             Assert.True(_storage.Exists(_pathInfo.DeveloperSettingsPath));
         }
@@ -47,7 +41,7 @@ namespace LanguageWeaverProviderTests.UnitTests
         {
             _storage.Save(_pathInfo.DeveloperSettingsPath, new DeveloperSettings { Environment = "UAT" });
 
-            var settings = CreateService().Load();
+            var settings = CreateService().LoadCreatingDefaultsIfMissing();
 
             Assert.Equal(CloudEnvironment.Uat.Name, settings.Environment);
         }
@@ -59,7 +53,7 @@ namespace LanguageWeaverProviderTests.UnitTests
         {
             _storage.Save(_pathInfo.DeveloperSettingsPath, new DeveloperSettings { Environment = name });
 
-            var settings = CreateService().Load();
+            var settings = CreateService().LoadCreatingDefaultsIfMissing();
 
             Assert.Equal(CloudEnvironment.Uat.Name, settings.Environment);
         }
@@ -72,7 +66,7 @@ namespace LanguageWeaverProviderTests.UnitTests
         {
             _storage.Save(_pathInfo.DeveloperSettingsPath, new DeveloperSettings { Environment = name });
 
-            var settings = CreateService().Load();
+            var settings = CreateService().LoadCreatingDefaultsIfMissing();
 
             Assert.Equal(CloudEnvironment.Production.Name, settings.Environment);
         }
@@ -83,7 +77,7 @@ namespace LanguageWeaverProviderTests.UnitTests
             _storage.Save(_pathInfo.DeveloperSettingsPath, new DeveloperSettings { Environment = "UAT" });
             _storage.ThrowOnLoad = true;
 
-            var settings = CreateService().Load();
+            var settings = CreateService().LoadCreatingDefaultsIfMissing();
 
             Assert.Equal(CloudEnvironment.Production.Name, settings.Environment);
             Assert.Equal(7, settings.TrialPromptFromDaysRemaining);
@@ -92,13 +86,11 @@ namespace LanguageWeaverProviderTests.UnitTests
         [Fact]
         public void AThresholdOfZero_IsHonouredSoTheFinalDayAloneCanBeTested()
         {
-            // Zero is a legitimate setting - it silences everything but the last day - so it must not be
-            // mistaken for "unset" and replaced by the default.
             _storage.Save(
                 _pathInfo.DeveloperSettingsPath,
                 new DeveloperSettings { TrialPromptFromDaysRemaining = 0 });
 
-            var settings = CreateService().Load();
+            var settings = CreateService().LoadCreatingDefaultsIfMissing();
 
             Assert.Equal(0, settings.TrialPromptFromDaysRemaining);
         }
@@ -106,10 +98,9 @@ namespace LanguageWeaverProviderTests.UnitTests
         [Fact]
         public void AnOmittedThreshold_ResolvesToTheShippedDefault()
         {
-            // Load always returns a usable value, so no caller has to repeat the fallback.
             _storage.Save(_pathInfo.DeveloperSettingsPath, new DeveloperSettings { Environment = "UAT" });
 
-            var settings = CreateService().Load();
+            var settings = CreateService().LoadCreatingDefaultsIfMissing();
 
             Assert.Equal(7, settings.TrialPromptFromDaysRemaining);
         }
@@ -122,7 +113,7 @@ namespace LanguageWeaverProviderTests.UnitTests
             {
                 _storage.Save(_pathInfo.DeveloperSettingsPath, new DeveloperSettings { Environment = "UAT" });
 
-                CreateService().Apply();
+                CreateService().ApplyToTheCurrentEnvironment();
 
                 Assert.Same(CloudEnvironment.Uat, CloudEnvironment.Current);
             }

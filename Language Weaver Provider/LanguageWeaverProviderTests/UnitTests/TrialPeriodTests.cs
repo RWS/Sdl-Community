@@ -4,10 +4,6 @@ using Xunit;
 
 namespace LanguageWeaverProviderTests.UnitTests
 {
-    /// <summary>
-    /// Pins the day count derived from the trial-period response. The dates arrive as <c>yyyy/MM/dd</c>,
-    /// which Newtonsoft does not parse by default, so <c>RemainingDays</c> parses them itself.
-    /// </summary>
     public class TrialPeriodTests
     {
         [Fact]
@@ -47,11 +43,9 @@ namespace LanguageWeaverProviderTests.UnitTests
         [InlineData(null)]
         [InlineData("")]
         [InlineData("not a date")]
-        [InlineData("10/09/2026")] // day-first: ambiguous, and not the documented format
+        [InlineData("10/09/2026")]
         public void AnUnusableEndDate_IsUnknownRatherThanZero(string endDate)
         {
-            // Null and zero must stay distinct: zero means "ends today" and prompts, null means the countdown
-            // could not be read and stays silent.
             var trial = new TrialPeriod { EndDate = endDate };
 
             Assert.Null(trial.RemainingDays());
@@ -60,7 +54,6 @@ namespace LanguageWeaverProviderTests.UnitTests
         [Fact]
         public void AnIsoStyleDate_IsAlsoAccepted()
         {
-            // Not the documented format, but a plausible drift; cheaper to tolerate than to field a bug for.
             var trial = new TrialPeriod
             {
                 EndDate = DateTime.Today.AddDays(2).ToString("yyyy-MM-dd")

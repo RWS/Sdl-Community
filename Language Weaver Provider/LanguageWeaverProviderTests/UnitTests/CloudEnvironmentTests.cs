@@ -3,15 +3,6 @@ using Xunit;
 
 namespace LanguageWeaverProviderTests.UnitTests
 {
-    /// <summary>
-    /// Pins the LW Cloud endpoints the plug-in talks to.
-    /// <para>
-    /// These values used to be written at each call site, which let them drift: a preprod client id was once
-    /// left behind in the token-refresh path after everything else had gone back to production, so sign-in
-    /// succeeded but the later refresh failed against the wrong tenant. Two things are guarded here - that
-    /// the shipped default is Production, and that every value in a profile belongs to the same environment.
-    /// </para>
-    /// </summary>
     public class CloudEnvironmentTests
     {
         [Fact]
@@ -20,10 +11,7 @@ namespace LanguageWeaverProviderTests.UnitTests
             Assert.Same(CloudEnvironment.Production, CloudEnvironment.Current);
         }
 
-        /// <summary>
-        /// The authorize and token endpoints must belong to one tenant: only the tenant that issued an
-        /// authorization code can exchange it. This is the invariant that the old per-call-site values broke.
-        /// </summary>
+        // A stale preprod client id once survived in the token-refresh path: sign-in succeeded, refresh failed.
         [Fact]
         public void AuthorizeAndTokenEndpoints_ShareTheSameTenant()
         {
@@ -34,10 +22,6 @@ namespace LanguageWeaverProviderTests.UnitTests
             }
         }
 
-        /// <summary>
-        /// Production must never carry a preprod host, and UAT must never carry a production Auth0 host.
-        /// The US Cloud host is exempt: there is no US UAT host, so UAT deliberately points at production.
-        /// </summary>
         [Fact]
         public void Profiles_DoNotMixHostsFromTheOtherEnvironment()
         {
@@ -49,6 +33,7 @@ namespace LanguageWeaverProviderTests.UnitTests
             }
 
             var uat = CloudEnvironment.Uat;
+            // CloudUSUrl is absent by design: there is no US UAT host, so UAT points at the production one.
             Assert.Contains("preprod", uat.Auth0BaseUrl);
             Assert.Contains("preprod", uat.Auth0Audience);
             Assert.Contains("uat", uat.CloudEUUrl);
@@ -76,10 +61,6 @@ namespace LanguageWeaverProviderTests.UnitTests
             ];
         }
 
-        /// <summary>
-        /// The authorize URL is what Auth0 validates, so centralising the host must not have altered a single
-        /// character of it. Everything except the random state and code challenge is pinned literally.
-        /// </summary>
         [Fact]
         public void LoginUri_ForProduction_IsUnchangedByCentralisingTheHost()
         {
