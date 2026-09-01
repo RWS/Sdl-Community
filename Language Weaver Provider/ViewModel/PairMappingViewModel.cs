@@ -403,7 +403,19 @@ namespace LanguageWeaverProvider.ViewModel
                 CredentialManager.UpdateCredentials(ApplicationInitializer.CredentialStore, _translationOptions);
             }
 
-            CloseEventRaised?.Invoke();
+            // The mappings were built from the previous account's engines, so discard them and rebuild from
+            // the API for whoever just signed in. Rebuilding in place rather than closing keeps the window
+            // open, so the new account's engines and settings can actually be chosen.
+            _translationOptions.PairMappings?.Clear();
+
+            // CreatePairMappings preserves any existing mapping whose display name and language codes still
+            // match, which is right for a language-mapping refresh but wrong here: those objects carry the
+            // previous account's engines. Drop them so every pair is rebuilt from the new account's resources.
+            PairMappings = [];
+            SelectedPairMapping = default;
+            InitializeSettingsView();
+            OnPropertyChanged(nameof(SettingsView));
+            CreatePairMappings();
         }
 
         private void SetHeader()

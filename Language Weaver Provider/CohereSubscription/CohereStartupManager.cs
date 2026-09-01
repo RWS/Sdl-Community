@@ -1,12 +1,8 @@
 ﻿using LanguageWeaverProvider.CohereSubscription.Settings.Interfaces;
 using NLog;
 using Sdl.Desktop.IntegrationApi;
-using Sdl.Desktop.IntegrationApi.Extensions.Internal;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LanguageWeaverProvider.CohereSubscription
@@ -33,10 +29,16 @@ namespace LanguageWeaverProvider.CohereSubscription
         public void Initialize()
         {
             AddSubscriber();
+            _ = RunWorkflow();
         }
 
 
         private async void OnViewActivated(object sender, EventArgs e)
+        {
+            await RunWorkflow();
+        }
+
+        private async Task RunWorkflow()
         {
             try
             {
@@ -46,17 +48,12 @@ namespace LanguageWeaverProvider.CohereSubscription
                     return;
                 }
 
-                bool wasShown = await _cohereOrchestrator.RunAsync();
-
-                if (wasShown)
-                {
-                    RemoveSubscriber();
-                }
+                // Deliberately stays subscribed after showing: the orchestrator prompts once per signed-in
+                // tenant, so remaining subscribed is what lets a re-sign-in be noticed.
+                await _cohereOrchestrator.RunAsync();
             }
             catch (Exception ex)
             {
-                // Never let a failed entitlement check surface to the user or bring down view activation
-                // (DET-421, case E): swallow it here, but record why so the failure is diagnosable.
                 Logger.Error(ex, "[Cohere] Subscription check failed during view activation.");
             }
         }

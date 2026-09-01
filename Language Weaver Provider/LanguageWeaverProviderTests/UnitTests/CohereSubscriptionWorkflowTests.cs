@@ -1,63 +1,122 @@
+using LanguageWeaverProvider.CohereSubscription.Workflow.Model;
 using LanguageWeaverProvider.CohereSubscription.Workflow.Services;
 using Xunit;
 
 namespace LanguageWeaverProviderTests.UnitTests
 {
-    /// <summary>
-    /// Pins the mapping from the two observable facts — whether the account holds Pro (GENERICPLUS) language
-    /// pairs, and the signed-in user's role — onto the prompt's decision inputs.
-    /// </summary>
     public class CohereSubscriptionWorkflowTests
     {
         [Fact]
-        public void ProLanguagePairs_AreMappedAsPaid()
+        public void ActiveProSubscription_IsMappedAsPaid()
         {
-            var data = CohereSubscriptionWorkflow.MapEntitlement(hasProLanguagePairs: true, userRole: "ADMIN");
+            var data = CohereSubscriptionWorkflow.MapDetails(new LanguageWeaverDetails
+            {
+                IsProActive = true,
+                TrialStatus = "NOT_STARTED"
+            });
 
+            Assert.True(data.IsCohereDetected);
+            Assert.True(data.IsPaid);
+            Assert.False(data.IsTrial);
+        }
+
+        [Fact]
+        public void PaidAfterTrialConversion_IsStillPaidDespiteTheCancelledTrialStatus()
+        {
+            var data = CohereSubscriptionWorkflow.MapDetails(new LanguageWeaverDetails
+            {
+                IsProActive = true,
+                TrialStatus = "CANCELLED"
+            });
+
+            Assert.NotNull(data);
             Assert.True(data.IsPaid);
             Assert.True(data.IsCohereDetected);
         }
 
         [Fact]
-        public void NoProLanguagePairs_AreMappedAsNotDetected()
+        public void TrialInProgress_IsMappedAsAnActiveTrial()
         {
-            var data = CohereSubscriptionWorkflow.MapEntitlement(hasProLanguagePairs: false, userRole: "ADMIN");
+            var data = CohereSubscriptionWorkflow.MapDetails(new LanguageWeaverDetails
+            {
+                TrialStatus = "IN_PROGRESS"
+            });
 
+            Assert.True(data.IsCohereDetected);
+            Assert.True(data.IsTrial);
+            Assert.False(data.IsTrialExpired);
             Assert.False(data.IsPaid);
-            Assert.False(data.IsCohereDetected);
-        }
-
-        [Theory]
-        [InlineData("ADMIN")]
-        [InlineData("admin")]
-        public void AdminRole_IsRecognisedRegardlessOfCasing(string userRole)
-        {
-            Assert.True(CohereSubscriptionWorkflow.MapEntitlement(false, userRole).IsAdmin);
-        }
-
-        [Theory]
-        [InlineData("USER")]
-        [InlineData("")]
-        [InlineData(null)]
-        public void NonAdminOrMissingRole_IsNotAdmin(string userRole)
-        {
-            // A missing role must never read as admin: API-credential logins identify an application rather
-            // than a person and carry no role, and those users must not be offered account-management actions.
-            Assert.False(CohereSubscriptionWorkflow.MapEntitlement(true, userRole).IsAdmin);
         }
 
         [Fact]
-        public void TrialState_IsNeverAsserted()
+        public void TrialThatRanItsCourse_IsMappedAsEnded()
         {
-            // Documents a known gap rather than desired behaviour: no source currently exposes trial state,
-            // so both flags stay false and the two trial cases collapse into the neighbouring ones.
-            var entitled = CohereSubscriptionWorkflow.MapEntitlement(true, "ADMIN");
-            var notEntitled = CohereSubscriptionWorkflow.MapEntitlement(false, "ADMIN");
+            var data = CohereSubscriptionWorkflow.MapDetails(new LanguageWeaverDetails
+            {
+                TrialStatus = "ENDED"
+            });
 
-            Assert.False(entitled.IsTrial);
-            Assert.False(entitled.IsTrialExpired);
-            Assert.False(notEntitled.IsTrial);
-            Assert.False(notEntitled.IsTrialExpired);
+            Assert.True(data.IsCohereDetected);
+            Assert.True(data.IsTrial);
+            Assert.True(data.IsTrialExpired);
+            Assert.False(data.IsPaid);
+        }
+
+        [Fact]
+        public void DeliberateCancellation_ShowsNoPromptAtAll()
+        {
+            var data = CohereSubscriptionWorkflow.MapDetails(new LanguageWeaverDetails
+            {
+                TrialStatus = "CANCELLED",
+                IsProActive = false // pinned from a live UAT cancellation, where isProActive arrives as JSON null
+            });
+
+            Assert.Null(data);
+        }
+
+        [Fact]
+        public void NoTrialAndNoPro_IsMappedAsNotDetected()
+        {
+            var data = CohereSubscriptionWorkflow.MapDetails(new LanguageWeaverDetails
+            {
+                IsProActive = false,
+                TrialStatus = "NOT_STARTED"
+            });
+
+            Assert.False(data.IsCohereDetected);
+            Assert.False(data.IsPaid);
+            Assert.False(data.IsTrial);
+        }
+
+        [Fact]
+        public void NeverTrialed_WithoutProPairs_IsOfferedTheTrial()
+        {
+            var data = CohereSubscriptionWorkflow.MapEntitlement(hasProLanguagePairs: false);
+
+            Assert.False(data.IsCohereDetected);
+            Assert.False(data.IsPaid);
+            Assert.False(data.IsTrial);
+            Assert.False(data.IsTrialExpired);
+        }
+
+        [Fact]
+        public void NeverTrialed_WithProPairs_IsPaid()
+        {
+            var data = CohereSubscriptionWorkflow.MapEntitlement(hasProLanguagePairs: true);
+
+            Assert.True(data.IsCohereDetected);
+            Assert.True(data.IsPaid);
+            Assert.False(data.IsTrial);
+        }
+
+        [Fact]
+        public void MissingTrialStatus_IsMappedAsNotDetected()
+        {
+            var data = CohereSubscriptionWorkflow.MapDetails(new LanguageWeaverDetails());
+
+            Assert.False(data.IsCohereDetected);
+            Assert.False(data.IsTrial);
+            Assert.False(data.IsTrialExpired);
         }
     }
 }

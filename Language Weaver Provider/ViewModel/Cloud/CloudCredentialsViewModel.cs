@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Security.Policy;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.Extensions;
@@ -9,11 +10,14 @@ using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Services;
 using LanguageWeaverProvider.View.Cloud;
 using LanguageWeaverProvider.ViewModel.Interface;
+using NLog;
 
 namespace LanguageWeaverProvider.ViewModel.Cloud
 {
 	public class CloudCredentialsViewModel : BaseViewModel, ICredentialsViewModel
 	{
+		private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
 		AuthenticationType _authenticationType;
 
 		string _connectionCode;
@@ -27,11 +31,15 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 		bool _showVerifyCredentialsWarning;
 
+		bool _isStudioSignInAvailable;
+		string _studioSignInTooltip = "Checking your Trados sign-in...";
+
 		public CloudCredentialsViewModel(ITranslationOptions translationOptions)
 		{
 			TranslationOptions = translationOptions;
 			InitializeCommands();
 			LoadCredentials();
+			_ = EvaluateStudioSignInAvailability();
 		}
 
 		public ITranslationOptions TranslationOptions { get; set; }
@@ -149,6 +157,33 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 		public ICommand Auth0SignInCommand { get; private set; }
 
+		public ICommand StudioSignInCommand { get; private set; }
+
+		/// <summary>
+		/// Whether the Trados sign-in can be reused: the user is signed in to Trados and that identity has a
+		/// Language Weaver account. The button stays visible but disabled when it is not, so the option is
+		/// discoverable and its tooltip can explain why it is unavailable.
+		/// </summary>
+		public bool IsStudioSignInAvailable
+		{
+			get => _isStudioSignInAvailable;
+			set
+			{
+				_isStudioSignInAvailable = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public string StudioSignInTooltip
+		{
+			get => _studioSignInTooltip;
+			set
+			{
+				_studioSignInTooltip = value;
+				OnPropertyChanged();
+			}
+		}
+
 		public ICommand OpenExternalUrlCommand { get; private set; }
 
 		public ICommand SelectAuthenticationTypeCommand { get; private set; }
@@ -165,6 +200,7 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			ClearCommand = new RelayCommand(Clear);
 			SignInCommand = new RelayCommand(SignIn);
 			Auth0SignInCommand = new RelayCommand(Auth0SignIn);
+			StudioSignInCommand = new RelayCommand(StudioSignIn);
 			OpenExternalUrlCommand = new RelayCommand(OpenExternalUrl);
 			SelectAuthenticationTypeCommand = new RelayCommand(SelectAuthenticationType);
 		}
@@ -177,12 +213,33 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 				return;
 			}
 
-			SelectedRegion = TranslationOptions.CloudCredentials.AccountRegion ??= Constants.CloudEUUrl;
+			SelectedRegion = TranslationOptions.CloudCredentials.AccountRegion = NormalizeRegion(TranslationOptions.CloudCredentials.AccountRegion);
 			UserName = TranslationOptions.CloudCredentials.UserName;
 			UserPassword = TranslationOptions.CloudCredentials.UserPassword;
 			ClientId = TranslationOptions.CloudCredentials.ClientID;
 			ClientSecret = TranslationOptions.CloudCredentials.ClientSecret;
 			ConnectionCode = TranslationOptions.CloudCredentials.ConnectionCode;
+		}
+
+		/// <summary>
+		/// Maps a persisted account region onto one of the current environment's hosts.
+		/// <para>
+		/// The region is stored as a full host, so a credential saved against one environment keeps that
+		/// environment's URL after <see cref="Model.CloudEnvironment.Current"/> is switched. The region radio
+		/// buttons compare the bound value against the current hosts, so an unrecognised one matches neither
+		/// and the selector renders blank even though a region is set. Anything that is not a host of the
+		/// current environment is therefore treated as unset and falls back to EU; a valid US selection is
+		/// left alone.
+		/// </para>
+		/// </summary>
+		public static string NormalizeRegion(string accountRegion)
+		{
+			if (string.Equals(accountRegion, Constants.CloudUSUrl, StringComparison.OrdinalIgnoreCase))
+			{
+				return Constants.CloudUSUrl;
+			}
+
+			return Constants.CloudEUUrl;
 		}
 
 		private void SelectAuthenticationType(object parameter)
@@ -263,6 +320,63 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 			cloudAuth0View.ShowDialog();
 			StopLoginProcess?.Invoke(this, EventArgs.Empty);
+		}
+
+		private async void StudioSignIn(object parameter)
+		{
+			StartLoginProcess?.Invoke(this, new LoginEventArgs(PluginResources.Loading_Connecting));
+
+			var success = await CloudService.AuthenticateWithStudioIdentity(TranslationOptions, SelectedRegion);
+			StopLoginProcess?.Invoke(this, EventArgs.Empty);
+			if (!success)
+			{
+				// The Trados session may have lapsed since the probe ran, so re-evaluate rather than leaving
+				// the button enabled for an option that no longer works.
+				await EvaluateStudioSignInAvailability();
+				return;
+			}
+
+			AuthenticationType = AuthenticationType.CloudStudio;
+			CloseWindow();
+		}
+
+		/// <summary>
+		/// Determines whether the Trados sign-in can actually be used, by asking Language Weaver whether the
+		/// signed-in identity has an account there. Failures only disable the option; they are never surfaced
+		/// as dialogs, because this runs unprompted while the window opens.
+		/// </summary>
+		private async Task EvaluateStudioSignInAvailability()
+		{
+			try
+			{
+				var accessToken = StudioIdentityService.CreateAccessToken(SelectedRegion);
+				if (accessToken is null)
+				{
+					IsStudioSignInAvailable = false;
+					StudioSignInTooltip = "You are not signed in to Trados. Sign in to Trados to use this option.";
+					return;
+				}
+
+				var (accountId, _) = await CloudService.GetSelf(accessToken);
+				if (string.IsNullOrEmpty(accountId))
+				{
+					IsStudioSignInAvailable = false;
+					StudioSignInTooltip = "Your Trados account is not set up for Language Weaver. Use one of the other sign-in options.";
+					return;
+				}
+
+				var displayName = StudioIdentityService.GetDisplayName();
+				IsStudioSignInAvailable = true;
+				StudioSignInTooltip = string.IsNullOrEmpty(displayName)
+					? "Sign in with the Trados account you are already using."
+					: $"Sign in as {displayName}, the Trados account you are already using.";
+			}
+			catch (Exception ex)
+			{
+				IsStudioSignInAvailable = false;
+				StudioSignInTooltip = "Your Trados sign-in could not be checked. Use one of the other sign-in options.";
+				Logger.Log(LogLevel.Warn, $"Could not evaluate the Trados sign-in option: {ex.Message}");
+			}
 		}
 
 		private bool CredentialsAreSet()

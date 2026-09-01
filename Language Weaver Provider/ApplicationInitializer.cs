@@ -7,6 +7,8 @@ using System.Windows;
 using LanguageWeaverProvider.CohereSubscription;
 using LanguageWeaverProvider.CohereSubscription.Decision;
 using LanguageWeaverProvider.CohereSubscription.Settings;
+using LanguageWeaverProvider.CohereSubscription.Settings.Model;
+using LanguageWeaverProvider.CohereSubscription.Settings.Services;
 using LanguageWeaverProvider.CohereSubscription.Workflow;
 using LanguageWeaverProvider.CohereSubscription.Workflow.Interfaces;
 using LanguageWeaverProvider.Model;
@@ -40,10 +42,15 @@ namespace LanguageWeaverProvider
         public static IDictionary<string, ITranslationOptions> TranslationOptions { get; set; } = new Dictionary<string, ITranslationOptions>();
         public static bool IsStandalone { get; set; }
 
+        private DeveloperSettings _developerSettings;
+
         public void Execute()
         {
             CurrentAppVersion = GetAssemblyFileVersion();
             Log.Setup();
+
+            _developerSettings = SelectTheCloudEnvironmentBeforeAnythingSignsIn();
+
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings
             {
                 NullValueHandling = NullValueHandling.Ignore
@@ -53,14 +60,20 @@ namespace LanguageWeaverProvider
               .GetEvent<StudioWindowCreatedNotificationEvent>().Subscribe(OnStudioWindowCreated);
         }
 
+        private static DeveloperSettings SelectTheCloudEnvironmentBeforeAnythingSignsIn()
+            => DeveloperSettingsServiceFactory.Create().ApplyToTheCurrentEnvironment();
+
         private void OnStudioWindowCreated(StudioWindowCreatedNotificationEvent obj)
         {
             var cohereSettingsService = CohereSubscriptionSettingsServiceFactory.Create();
-            var cohereWorkflowService = CohereWorkflowServiceFactory.Create();
-            var cohereDecisionService = CohereSubscriptionDecisionServiceFactory.Create();
+            var cohereWorkflowService = CohereWorkflowServiceFactory.Create(
+                _developerSettings.TrialStatusOverride);
+            var cohereDecisionService = CohereSubscriptionDecisionServiceFactory.Create(
+                _developerSettings.TrialPromptFromDaysRemaining.Value);
 
             var cohereOrchestrator = new CohereSubscriptionOrchestrator(
-                cohereSettingsService, cohereWorkflowService, cohereDecisionService);
+                cohereSettingsService, cohereWorkflowService, cohereDecisionService,
+                new StudioSignedInTenant(), new SubscriptionWindowPrompt());
 
             List<AbstractViewController> viewControllers = new List<AbstractViewController>()
             {

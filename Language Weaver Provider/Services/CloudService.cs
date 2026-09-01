@@ -23,11 +23,15 @@ namespace LanguageWeaverProvider.Services
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
+        // Must match the tenant that issued the authorization code in CloudAuth0Config, so both come from
+        // the same CloudEnvironment entry.
+        private static string Auth0TokenUrl => CloudEnvironment.Current.Auth0TokenUrl;
+
         public static async Task<bool> RefreshAuth0Token(ITranslationOptions translationOptions)
         {
             var parameters = new Dictionary<string, string>
             {
-                { "client_id", "F4NpOGG1sBaEzk379M6ZxX3gGa0iH1Ff"},
+                { "client_id", CloudEnvironment.Current.Auth0ClientId },
                 { "grant_type", "refresh_token" },
                 { "refresh_token", translationOptions.AccessToken?.RefreshToken }
             };
@@ -35,7 +39,7 @@ namespace LanguageWeaverProvider.Services
             using var httpRequest = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
-                RequestUri = new Uri("https://sdl-prod.eu.auth0.com/oauth/token"),
+                RequestUri = new Uri(Auth0TokenUrl),
                 Content = new FormUrlEncodedContent(parameters)
             };
 
@@ -81,7 +85,7 @@ namespace LanguageWeaverProvider.Services
                 param["code_verifier"] = auth0Config.CodeVerifier;
                 param["grant_type"] = "authorization_code";
 
-                var requestUri = new Uri("https://sdl-prod.eu.auth0.com/oauth/token");
+                var requestUri = new Uri(Auth0TokenUrl);
                 var formUrlEncodedContent = new FormUrlEncodedContent(param);
                 using var httpRequest = new HttpRequestMessage()
                 {
@@ -151,6 +155,57 @@ namespace LanguageWeaverProvider.Services
             }
         }
 
+        /// <summary>
+        /// Authenticates using the RWS ID session Trados Studio already holds, so the user is not asked to sign
+        /// in a second time. Returns <c>false</c> when Studio has no session or the account cannot be resolved.
+        /// </summary>
+        public static async Task<bool> AuthenticateWithStudioIdentity(ITranslationOptions translationOptions, string selectedRegion, bool showErrors = true)
+        {
+            try
+            {
+                var accessToken = StudioIdentityService.CreateAccessToken(selectedRegion);
+                if (accessToken is null)
+                {
+                    Logger.Log(LogLevel.Info, "No Trados sign-in session available to reuse.");
+                    if (showErrors)
+                    {
+                        ErrorHandling.ShowDialog(null, "Authentication failed", "You are not signed in to Trados. Sign in to Trados and try again.");
+                    }
+
+                    return false;
+                }
+
+                var (accountId, _) = await GetSelf(accessToken);
+                if (string.IsNullOrEmpty(accountId))
+                {
+                    // The Trados sign-in is valid but the identity has no Language Weaver account behind it.
+                    Logger.Log(LogLevel.Info, "The Trados sign-in has no associated Language Weaver account.");
+                    if (showErrors)
+                    {
+                        ErrorHandling.ShowDialog(null, "Authentication failed", "Your Trados account is not set up for Language Weaver. Use another sign-in option.");
+                    }
+
+                    return false;
+                }
+
+                accessToken.AccountId = accountId;
+                translationOptions.AccessToken = accessToken;
+                translationOptions.AuthenticationType = AuthenticationType.CloudStudio;
+                translationOptions.CloudCredentials ??= new();
+                translationOptions.CloudCredentials.AccountRegion = selectedRegion;
+                translationOptions.CloudCredentials.AccountId = accountId;
+                Logger.Log(LogLevel.Info, "Authentication with the Trados sign-in successful.");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                var message = $"{ex.Message}. {Environment.StackTrace}.";
+                Logger.Log(LogLevel.Error, message);
+                if (showErrors) ex.ShowDialog("Authentication failed", message, true);
+                return false;
+            }
+        }
+
         private static async Task SetAccountId(ITranslationOptions translationOptions, string uri, CloudCredentials cloudCredentials = null)
         {
             var requesturi = translationOptions.AuthenticationType switch
@@ -158,6 +213,7 @@ namespace LanguageWeaverProvider.Services
                 AuthenticationType.CloudCredentials => $"{uri}v4/accounts/users/self",
                 AuthenticationType.CloudAPI => $"{uri}v4/accounts/api-credentials/self",
                 AuthenticationType.CloudSSO => $"{uri}v4/accounts/users/self",
+                AuthenticationType.CloudStudio => $"{uri}v4/accounts/users/self",
             };
 
             var accountId = await GetUserInfo(translationOptions.AccessToken, requesturi, "accountId");
@@ -206,21 +262,21 @@ namespace LanguageWeaverProvider.Services
         }
 
         /// <summary>
-        /// Reads the signed-in user's role on the Language Weaver account (for example "ADMIN"), from the same
-        /// endpoint that resolves the account id. Returns <c>null</c> when no role is available — the request
-        /// failed, or the credential identifies an application rather than a person, as API-credential logins do.
+        /// Reads the signed-in user's own Language Weaver account id and role (for example "ADMIN") in a single
+        /// request. Either value is <c>null</c> when unavailable — the request failed, or the credential
+        /// identifies an application rather than a person, as API-credential logins do.
         /// </summary>
-        public static async Task<string> GetUserRole(AccessToken accessToken)
+        public static async Task<(string AccountId, string UserRole)> GetSelf(AccessToken accessToken)
         {
             var response = await Service.SendRequest(
                 HttpMethod.Get, $"{accessToken.BaseUri}v4/accounts/users/self", accessToken);
             if (!response.IsSuccessStatusCode)
             {
-                return null;
+                return (null, null);
             }
 
-            var content = await response.Content.ReadAsStringAsync();
-            return JObject.Parse(content)["userRole"]?.ToString();
+            var self = JObject.Parse(await response.Content.ReadAsStringAsync());
+            return (self["accountId"]?.ToString(), self["userRole"]?.ToString());
         }
 
         public static async Task<List<T>> GetResources<T>(AccessToken accessToken, CloudResources resource)
@@ -359,7 +415,7 @@ namespace LanguageWeaverProvider.Services
 
         public static async Task<bool> CreateDictionaryTerm(AccessToken accessToken, PairDictionary pairDictionary, DictionaryTerm newDictionaryTerm)
         {
-            var requestUri = $"https://api.languageweaver.com/v4/accounts/{accessToken.AccountId}/dictionaries/{pairDictionary.DictionaryId}/terms";
+            var requestUri = $"{accessToken.BaseUri}v4/accounts/{accessToken.AccountId}/dictionaries/{pairDictionary.DictionaryId}/terms";
             var content = JsonConvert.SerializeObject(newDictionaryTerm);
             var stringContent = new StringContent(content, new UTF8Encoding(), "application/json");
 
