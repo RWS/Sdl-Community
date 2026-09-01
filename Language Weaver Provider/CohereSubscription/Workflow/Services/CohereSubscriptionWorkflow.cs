@@ -48,6 +48,30 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
 
         private static readonly HttpClient HttpClient = new HttpClient();
 
+        private readonly string _trialStatusOverride;
+
+        public CohereSubscriptionWorkflow()
+            : this(null)
+        {
+        }
+
+        public CohereSubscriptionWorkflow(string trialStatusOverride)
+        {
+            _trialStatusOverride = trialStatusOverride;
+        }
+
+        private void ApplyTheDeveloperTrialStatusOverride(LanguageWeaverDetails details)
+        {
+            if (string.IsNullOrWhiteSpace(_trialStatusOverride))
+                return;
+
+            Logger.Warn(
+                "[Cohere] Developer settings replace the reported trialStatus '{0}' with '{1}'.",
+                details.TrialStatus ?? "none", _trialStatusOverride);
+
+            details.TrialStatus = _trialStatusOverride;
+        }
+
         public async Task<CohereSubscriptionData> ExecuteAsync()
         {
             var languageCloudIdentity = LanguageCloudIdentityApi.Instance;
@@ -91,6 +115,8 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow.Services
             {
                 return null;
             }
+
+            ApplyTheDeveloperTrialStatusOverride(details);
 
             var data = MapDetails(details, account.BusinessAccountId, account.BusinessSubscriptionId);
             if (data is null)

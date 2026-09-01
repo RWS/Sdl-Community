@@ -125,7 +125,7 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
 
         private static string AccountUriFor(CohereSubscriptionData data)
             => string.IsNullOrWhiteSpace(data.BusinessAccountId)
-                ? Constants.LanguageWeaverProStartTrialUrl
+                ? Constants.AccountPortalUrl
                 : Constants.AccountPortalTenantUrl + data.BusinessAccountId;
 
         private static bool IsMidTrial(CohereSubscriptionData data)

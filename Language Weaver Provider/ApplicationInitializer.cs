@@ -66,7 +66,8 @@ namespace LanguageWeaverProvider
         private void OnStudioWindowCreated(StudioWindowCreatedNotificationEvent obj)
         {
             var cohereSettingsService = CohereSubscriptionSettingsServiceFactory.Create();
-            var cohereWorkflowService = CohereWorkflowServiceFactory.Create();
+            var cohereWorkflowService = CohereWorkflowServiceFactory.Create(
+                _developerSettings.TrialStatusOverride);
             var cohereDecisionService = CohereSubscriptionDecisionServiceFactory.Create(
                 _developerSettings.TrialPromptFromDaysRemaining.Value);
 

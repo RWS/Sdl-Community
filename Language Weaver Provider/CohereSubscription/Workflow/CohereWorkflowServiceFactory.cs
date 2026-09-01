@@ -9,5 +9,10 @@ namespace LanguageWeaverProvider.CohereSubscription.Workflow
         {
             return new CohereSubscriptionWorkflow();
         }
+
+        public static ICohereSubscriptionWorkflowService Create(string trialStatusOverride)
+        {
+            return new CohereSubscriptionWorkflow(trialStatusOverride);
+        }
     }
 }

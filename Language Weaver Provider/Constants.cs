@@ -44,10 +44,7 @@
 		public static string LanguageWeaverUSPortal = Model.CloudEnvironment.Current.LanguageWeaverUSPortalUrl + "login";
 
 		// Trados LLM / Language Weaver Pro add-on. Buying is presented on the public pricing page, where the
-		// add-on and its price are shown. Starting a trial is a different action: it is activated from the
-		// account's own Language Weaver settings, so it has its own URL rather than reusing the pricing page.
-		public const string LanguageWeaverProPricingUrl = "https://www.trados.com/pricing/freelance-translators/";
-		public static string LanguageWeaverProStartTrialUrl = Model.CloudEnvironment.Current.LanguageWeaverEUPortalUrl + "settings/account";
+		// add-on and its price are shown.
 
 		// An account provisioned through Account Portal is managed there rather than in the Language Weaver
 		// portal, so the prompt links it to its own tenant page. Append the businessAccountId.
@@ -56,6 +53,10 @@
 		// bootstrap, which discards the requested path and lands on the dashboard regardless of an existing
 		// session. Verified against the add-on page in UAT. Only the dashboard survives external entry.
 		public static string AccountPortalTenantUrl = Model.CloudEnvironment.Current.AccountPortalUrl + "t/";
+
+		// Used when the tenant is unknown: the subscription is managed in Account Portal either way, so the
+		// prompt sends the user there rather than to the Language Weaver portal, which cannot action the add-on.
+		public static string AccountPortalUrl = Model.CloudEnvironment.Current.AccountPortalUrl;
 		public const string LanguageWeaverProLearnMoreUrl = "https://www.trados.com/ecosystem/language-weaver-for-trados/";
 
 		// LW Cloud API Region. Set by CloudEnvironment; switch environments there, not here.
