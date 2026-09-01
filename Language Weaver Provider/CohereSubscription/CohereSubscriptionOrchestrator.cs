@@ -14,7 +14,7 @@ namespace LanguageWeaverProvider.CohereSubscription
         private readonly ISignedInTenant _signedInTenant;
         private readonly ISubscriptionPrompt _prompt;
 
-        private string _promptedTenantId;
+        private string _checkedTenantId;
         private bool _isRunning;
 
         public CohereSubscriptionOrchestrator(
@@ -38,18 +38,23 @@ namespace LanguageWeaverProvider.CohereSubscription
             if (tenantId is null)
                 return;
 
-            if (tenantId == _promptedTenantId || _isRunning || _settings.GetDoNotShowAgain())
+            if (tenantId == _checkedTenantId || _isRunning || _settings.GetDoNotShowAgain())
                 return;
 
             _isRunning = true;
             try
             {
                 var data = await _workflow.ExecuteAsync();
+
+                // Recorded once the check has happened, not once a window is shown: deciding that this
+                // tenant needs no prompt is still an answer, and re-asking would repeat the portal call
+                // on every view activation.
+                _checkedTenantId = tenantId;
+
                 var viewModel = _decisionService.BuildViewModel(data);
                 if (viewModel == null)
                     return;
 
-                _promptedTenantId = tenantId;
                 _prompt.Show(viewModel);
 
                 if (viewModel.DoNotShowThisAgain)

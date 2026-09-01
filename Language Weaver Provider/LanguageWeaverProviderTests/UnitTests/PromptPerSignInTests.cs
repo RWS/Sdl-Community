@@ -29,14 +29,24 @@ namespace LanguageWeaverProviderTests.UnitTests
 
         private class AnAccountNeedingAPrompt : ICohereSubscriptionWorkflowService
         {
+            public int TimesExecuted;
+
             public Task<CohereSubscriptionData> ExecuteAsync()
-                => Task.FromResult(new CohereSubscriptionData());
+            {
+                TimesExecuted++;
+                return Task.FromResult(new CohereSubscriptionData());
+            }
         }
 
         private class AlwaysPrompts : ICohereSubscriptionDecisionService
         {
             public SubscriptionViewModel BuildViewModel(CohereSubscriptionData data)
                 => new SubscriptionViewModel("Cohere", new SubscriptionOptions(), new ADiscardedUriOpener());
+        }
+
+        private class NeverPrompts : ICohereSubscriptionDecisionService
+        {
+            public SubscriptionViewModel BuildViewModel(CohereSubscriptionData data) => null;
         }
 
         private class ADiscardedUriOpener : IUriOpener
@@ -59,6 +69,15 @@ namespace LanguageWeaverProviderTests.UnitTests
                 new AlwaysPrompts(),
                 tenant,
                 prompt);
+
+        private static CohereSubscriptionOrchestrator AnUnpromptedAccount(
+            TheSignedInTenant tenant, AnAccountNeedingAPrompt workflow)
+            => new CohereSubscriptionOrchestrator(
+                new NeverSuppressed(),
+                workflow,
+                new NeverPrompts(),
+                tenant,
+                new ACountingPrompt());
 
         [Fact]
         public async Task TheSameSignIn_IsPromptedOnlyOnce()
@@ -101,6 +120,34 @@ namespace LanguageWeaverProviderTests.UnitTests
             await orchestrator.RunAsync();
 
             Assert.Equal(1, prompt.TimesShown);
+        }
+
+        [Fact]
+        public async Task AnAccountThatNeedsNoPrompt_IsNotAskedAboutAgain()
+        {
+            var tenant = new TheSignedInTenant { TenantId = "tenant-a" };
+            var workflow = new AnAccountNeedingAPrompt();
+            var orchestrator = AnUnpromptedAccount(tenant, workflow);
+
+            await orchestrator.RunAsync();
+            await orchestrator.RunAsync();
+            await orchestrator.RunAsync();
+
+            Assert.Equal(1, workflow.TimesExecuted);
+        }
+
+        [Fact]
+        public async Task AnAccountThatNeededNoPrompt_IsStillRecheckedOnANewSignIn()
+        {
+            var tenant = new TheSignedInTenant { TenantId = "tenant-a" };
+            var workflow = new AnAccountNeedingAPrompt();
+            var orchestrator = AnUnpromptedAccount(tenant, workflow);
+
+            await orchestrator.RunAsync();
+            tenant.TenantId = "tenant-b";
+            await orchestrator.RunAsync();
+
+            Assert.Equal(2, workflow.TimesExecuted);
         }
     }
 }
