@@ -33,10 +33,16 @@ namespace LanguageWeaverProvider.CohereSubscription
         public void Initialize()
         {
             AddSubscriber();
+            _ = RunWorkflow();
         }
 
 
         private async void OnViewActivated(object sender, EventArgs e)
+        {
+            await RunWorkflow();
+        }
+
+        private async Task RunWorkflow()
         {
             try
             {
