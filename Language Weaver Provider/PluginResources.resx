@@ -177,6 +177,24 @@
   <data name="Auth_Studio_SignIn" xml:space="preserve">
     <value>Use my Trados Studio sign-in</value>
   </data>
+  <data name="Auth_Studio_SignIn_Checking" xml:space="preserve">
+    <value>Checking your Trados Studio sign-in...</value>
+  </data>
+  <data name="Auth_Studio_SignIn_NotSignedIn" xml:space="preserve">
+    <value>You are not signed in to Trados Studio. Sign in to Trados Studio to use this option.</value>
+  </data>
+  <data name="Auth_Studio_SignIn_NoAccount" xml:space="preserve">
+    <value>Your Trados Studio account is not set up for Language Weaver. Use one of the other sign-in options.</value>
+  </data>
+  <data name="Auth_Studio_SignIn_Available" xml:space="preserve">
+    <value>Sign in with the Trados Studio account you are already using.</value>
+  </data>
+  <data name="Auth_Studio_SignIn_AvailableAs" xml:space="preserve">
+    <value>Sign in as {0}, the Trados Studio account you are already using.</value>
+  </data>
+  <data name="Auth_Studio_SignIn_CheckFailed" xml:space="preserve">
+    <value>Your Trados Studio sign-in could not be checked. Use one of the other sign-in options.</value>
+  </data>
   <data name="Auth_SSO" xml:space="preserve">
     <value>RWS ID SSO</value>
   </data>

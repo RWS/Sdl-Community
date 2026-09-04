@@ -169,7 +169,7 @@ namespace LanguageWeaverProvider.Services
                     Logger.Log(LogLevel.Info, "No Trados sign-in session available to reuse.");
                     if (showErrors)
                     {
-                        ErrorHandling.ShowDialog(null, "Authentication failed", "You are not signed in to Trados. Sign in to Trados and try again.");
+                        ErrorHandling.ShowDialog(null, "Authentication failed", PluginResources.Auth_Studio_SignIn_NotSignedIn);
                     }
 
                     return false;
@@ -182,7 +182,7 @@ namespace LanguageWeaverProvider.Services
                     Logger.Log(LogLevel.Info, "The Trados sign-in has no associated Language Weaver account.");
                     if (showErrors)
                     {
-                        ErrorHandling.ShowDialog(null, "Authentication failed", "Your Trados account is not set up for Language Weaver. Use another sign-in option.");
+                        ErrorHandling.ShowDialog(null, "Authentication failed", PluginResources.Auth_Studio_SignIn_NoAccount);
                     }
 
                     return false;
