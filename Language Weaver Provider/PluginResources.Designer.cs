@@ -232,6 +232,69 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use my Trados Studio sign-in.
+        /// </summary>
+        public static string Auth_Studio_SignIn {
+            get {
+                return ResourceManager.GetString("Auth_Studio_SignIn", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Checking your Trados Studio sign-in....
+        /// </summary>
+        public static string Auth_Studio_SignIn_Checking {
+            get {
+                return ResourceManager.GetString("Auth_Studio_SignIn_Checking", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to You are not signed in to Trados Studio. Sign in to Trados Studio to use this option..
+        /// </summary>
+        public static string Auth_Studio_SignIn_NotSignedIn {
+            get {
+                return ResourceManager.GetString("Auth_Studio_SignIn_NotSignedIn", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Your Trados Studio account is not set up for Language Weaver. Use one of the other sign-in options..
+        /// </summary>
+        public static string Auth_Studio_SignIn_NoAccount {
+            get {
+                return ResourceManager.GetString("Auth_Studio_SignIn_NoAccount", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Sign in with the Trados Studio account you are already using..
+        /// </summary>
+        public static string Auth_Studio_SignIn_Available {
+            get {
+                return ResourceManager.GetString("Auth_Studio_SignIn_Available", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Sign in as {0}, the Trados Studio account you are already using..
+        /// </summary>
+        public static string Auth_Studio_SignIn_AvailableAs {
+            get {
+                return ResourceManager.GetString("Auth_Studio_SignIn_AvailableAs", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Your Trados Studio sign-in could not be checked. Use one of the other sign-in options..
+        /// </summary>
+        public static string Auth_Studio_SignIn_CheckFailed {
+            get {
+                return ResourceManager.GetString("Auth_Studio_SignIn_CheckFailed", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to RWS ID SSO.
         /// </summary>
         public static string Auth_SSO {

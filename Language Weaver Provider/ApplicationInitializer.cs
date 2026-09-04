@@ -56,8 +56,8 @@ namespace LanguageWeaverProvider
                 NullValueHandling = NullValueHandling.Ignore
             };
 
-            SdlTradosStudio.Application.GetService<IStudioEventAggregator>()
-              .GetEvent<StudioWindowCreatedNotificationEvent>().Subscribe(OnStudioWindowCreated);
+            //SdlTradosStudio.Application.GetService<IStudioEventAggregator>()
+            //  .GetEvent<StudioWindowCreatedNotificationEvent>().Subscribe(OnStudioWindowCreated);
         }
 
         private static DeveloperSettings SelectTheCloudEnvironmentBeforeAnythingSignsIn()

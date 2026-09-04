@@ -32,7 +32,7 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 		bool _showVerifyCredentialsWarning;
 
 		bool _isStudioSignInAvailable;
-		string _studioSignInTooltip = "Checking your Trados sign-in...";
+		string _studioSignInTooltip = PluginResources.Auth_Studio_SignIn_Checking;
 
 		public CloudCredentialsViewModel(ITranslationOptions translationOptions)
 		{
@@ -353,7 +353,7 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 				if (accessToken is null)
 				{
 					IsStudioSignInAvailable = false;
-					StudioSignInTooltip = "You are not signed in to Trados. Sign in to Trados to use this option.";
+					StudioSignInTooltip = PluginResources.Auth_Studio_SignIn_NotSignedIn;
 					return;
 				}
 
@@ -361,20 +361,20 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 				if (string.IsNullOrEmpty(accountId))
 				{
 					IsStudioSignInAvailable = false;
-					StudioSignInTooltip = "Your Trados account is not set up for Language Weaver. Use one of the other sign-in options.";
+					StudioSignInTooltip = PluginResources.Auth_Studio_SignIn_NoAccount;
 					return;
 				}
 
 				var displayName = StudioIdentityService.GetDisplayName();
 				IsStudioSignInAvailable = true;
 				StudioSignInTooltip = string.IsNullOrEmpty(displayName)
-					? "Sign in with the Trados account you are already using."
-					: $"Sign in as {displayName}, the Trados account you are already using.";
+					? PluginResources.Auth_Studio_SignIn_Available
+					: string.Format(PluginResources.Auth_Studio_SignIn_AvailableAs, displayName);
 			}
 			catch (Exception ex)
 			{
 				IsStudioSignInAvailable = false;
-				StudioSignInTooltip = "Your Trados sign-in could not be checked. Use one of the other sign-in options.";
+				StudioSignInTooltip = PluginResources.Auth_Studio_SignIn_CheckFailed;
 				Logger.Log(LogLevel.Warn, $"Could not evaluate the Trados sign-in option: {ex.Message}");
 			}
 		}
