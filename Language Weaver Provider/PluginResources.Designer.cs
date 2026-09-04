@@ -232,6 +232,15 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use my Trados Studio sign-in.
+        /// </summary>
+        public static string Auth_Studio_SignIn {
+            get {
+                return ResourceManager.GetString("Auth_Studio_SignIn", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to RWS ID SSO.
         /// </summary>
         public static string Auth_SSO {
