@@ -132,12 +132,12 @@
   </ItemGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="Google.Cloud.AutoML.V1" Version="3.4.0" />
-		<PackageReference Include="Google.Cloud.Translate.V3" Version="3.9.0" />
+		<PackageReference Include="Google.Cloud.AutoML.V1" Version="3.5.0" />
+		<PackageReference Include="Google.Cloud.Translate.V3" Version="3.11.0" />
 		<PackageReference Include="LanguageMappingProvider" Version="1.0.107" />
 		<PackageReference Include="Sdl.Core.PluginFramework" Version="2.1.0" />
 		<PackageReference Include="Sdl.Core.PluginFramework.Build" Version="18.0.1" />
-		<PackageReference Include="System.Diagnostics.DiagnosticSource" Version="8.0.1" />
+		<PackageReference Include="System.Diagnostics.DiagnosticSource" Version="10.0.11" />
 		<PackageReference Include="Trados.LocalCache" Version="1.0.0" />
 	</ItemGroup>
 	
