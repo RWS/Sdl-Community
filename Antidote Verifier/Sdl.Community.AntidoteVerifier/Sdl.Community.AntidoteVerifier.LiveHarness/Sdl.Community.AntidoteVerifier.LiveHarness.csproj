@@ -8,7 +8,6 @@
 	<UseWPF>true</UseWPF>
 	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-	<TradosFolder>$(ProgramW6432)\Trados\Trados Studio\Studio19</TradosFolder>
   </PropertyGroup>
 
   <ItemGroup>

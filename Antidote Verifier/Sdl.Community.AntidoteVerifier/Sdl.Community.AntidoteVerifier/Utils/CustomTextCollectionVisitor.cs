@@ -21,6 +21,11 @@ namespace Sdl.Community.AntidoteVerifier
         private readonly Collection<IAbstractMarkupData> _markupsListVisited = new Collection<IAbstractMarkupData>();
         private readonly Collection<RangeOfCharacterInfos> _lockedRanges = new Collection<RangeOfCharacterInfos>();
 
+        // Offsets in the collected text where a placeholder tag sits. The tag contributes no
+        // characters (see VisitPlaceholderTag), so a boundary is a zero-width position rather than a
+        // range, and only an edit that STRICTLY spans one is unsafe.
+        private readonly Collection<int> _tagBoundaries = new Collection<int>();
+
         private bool _inLockedContent;
         private int _startOffsetOfFirstElemInRange;
         private int _endOffsetOfLastElemInRange;
@@ -56,6 +61,16 @@ namespace Sdl.Community.AntidoteVerifier
 
                 // ...or the range covers the locked text entirely.
                 if (_startOfRange <= locked.Start && _endOfRange > locked.End)
+                    return true;
+            }
+
+            // A replacement that spans a placeholder tag cannot be applied correctly: ReplaceText
+            // rewrites the IText elements on either side and leaves the tag where it is, silently
+            // re-anchoring it to different words -- a footnote reference would end up after the wrong
+            // one. Touching a boundary is fine; only crossing it is refused.
+            foreach (var boundary in _tagBoundaries)
+            {
+                if (_startOfRange < boundary && _endOfRange > boundary)
                     return true;
             }
 
@@ -197,11 +212,12 @@ namespace Sdl.Community.AntidoteVerifier
 
         public void VisitPlaceholderTag(IPlaceholderTag tag)
         {
-            if (tag.Properties.DisplayText.Length > 0)
-            {
-                _lockedRanges.Add(new RangeOfCharacterInfos(CollectedText.Length, tag.Properties.DisplayText.Length));
-                CollectedText += tag.Properties.DisplayText;
-            }
+            // DisplayText is Studio's LABEL for the tag, not document content: a DOCX footnote
+            // reference reports "fn 1". Collecting it fed Antidote characters the document does not
+            // contain -- the space inside "fn 1" surfaced as a phantom space beside the tag, and the
+            // label welded onto the preceding word ("Conseilfn") wrecked the analysis of the whole
+            // sentence around it (SRQ-32047). The tag contributes nothing; only its position is kept.
+            _tagBoundaries.Add(CollectedText.Length);
         }
 
         public void VisitRevisionMarker(IRevisionMarker revisionMarker)
