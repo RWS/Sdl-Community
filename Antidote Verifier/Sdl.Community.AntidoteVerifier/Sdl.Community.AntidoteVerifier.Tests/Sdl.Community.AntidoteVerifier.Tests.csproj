@@ -6,7 +6,6 @@
 	<LangVersion>latest</LangVersion>
 	<IsPackable>false</IsPackable>
 	<SignAssembly>false</SignAssembly>
-	<TradosFolder>$(ProgramW6432)\Trados\Trados Studio\Studio19</TradosFolder>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,6 +21,12 @@
 	<Reference Include="Newtonsoft.Json">
 	  <HintPath>$(TradosFolder)\Newtonsoft.Json.dll</HintPath>
 	  <Private>true</Private>
+	</Reference>
+	<Reference Include="Sdl.FileTypeSupport.Framework.Implementation">
+	  <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Implementation.dll</HintPath>
+	</Reference>
+	<Reference Include="Sdl.FileTypeSupport.Framework.Core">
+	  <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
 	</Reference>
 	<Reference Include="NLog">
 	  <HintPath>$(TradosFolder)\NLog.dll</HintPath>

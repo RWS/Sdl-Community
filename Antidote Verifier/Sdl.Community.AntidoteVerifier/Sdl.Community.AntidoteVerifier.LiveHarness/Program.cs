@@ -85,6 +85,15 @@ namespace Sdl.Community.AntidoteVerifier.LiveHarness
             "Il faut que tu viens me voir la semaine prochaine."
         };
 
+        // HARNESS_SEGMENTS_A / HARNESS_SEGMENTS_B ("|"-separated) replace the sample segments above, so a
+        // specific text can be put on the wire -- e.g. bisecting whether Antidote's own analysis or the
+        // plugin's extraction is responsible for a detection (SRQ-32047) -- without editing the harness.
+        private static string[] SegmentsOverride(string environmentVariable)
+        {
+            var value = Environment.GetEnvironmentVariable(environmentVariable);
+            return string.IsNullOrEmpty(value) ? null : value.Split('|');
+        }
+
         // In --step mode each pause waits for this file to appear (then deletes it), so an external
         // orchestrator -- a script, or an agent driving the UI -- can advance the scenario window by window.
         private static readonly string StepSignalPath =
@@ -159,8 +168,10 @@ namespace Sdl.Community.AntidoteVerifier.LiveHarness
             // files, so the harness can impersonate another client's documents (e.g. Studio's real
             // project files) and bisect path/cache-dependent behavior in Antidote.
             var documentsFolder = Path.Combine(Path.GetTempPath(), "AntidoteVerifierHarness");
-            var docA = HarnessDocument.Resolve(documentsFolder, "document-A.sdlxliff", SegmentsA, "HARNESS_DOC_A");
-            var docB = HarnessDocument.Resolve(documentsFolder, "document-B.sdlxliff", SegmentsB, "HARNESS_DOC_B");
+            var docA = HarnessDocument.Resolve(documentsFolder, "document-A.sdlxliff",
+                SegmentsOverride("HARNESS_SEGMENTS_A") ?? SegmentsA, "HARNESS_DOC_A");
+            var docB = HarnessDocument.Resolve(documentsFolder, "document-B.sdlxliff",
+                SegmentsOverride("HARNESS_SEGMENTS_B") ?? SegmentsB, "HARNESS_DOC_B");
             Console.WriteLine("Documents on disk (stable paths, like a Studio project):");
             Console.WriteLine("  A: " + docA.Path + "  (" + docA.Segments.Count + " segments)");
             Console.WriteLine("  B: " + docB.Path + "  (" + docB.Segments.Count + " segments)");
