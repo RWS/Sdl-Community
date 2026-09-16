@@ -122,7 +122,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
             return false;
         }
 
-        private static void AddFileToArchive(int encodingCode, ProjectFile targetFile, ZipArchive archive)
+        private static void AddFileToArchive(ProjectFile targetFile, ZipArchive archive)
         {
             if (!string.IsNullOrEmpty(targetFile.Folder))
                 archive.CreateEntry(targetFile.Folder);
@@ -130,21 +130,29 @@ namespace Sdl.Community.StarTransit.Shared.Services
             var pathToTargetFileFolder = Path.GetDirectoryName(targetFile.LocalFilePath);
             var fileName = Path.GetFileNameWithoutExtension(targetFile.LocalFilePath);
 
-            var nameBytes = Encoding.Default.GetBytes(fileName);
-            var encodedFileName = Encoding.GetEncoding(encodingCode).GetString(nameBytes);
-
+            // The entry name is encoded by the archive's entryNameEncoding (see OpenArchive); do not re-encode it here.
             archive.CreateEntryFromFile(Path.Combine(pathToTargetFileFolder, fileName),
-                $"{targetFile.Folder}{encodedFileName}", CompressionLevel.Optimal);
+                $"{targetFile.Folder}{fileName}", CompressionLevel.Optimal);
+        }
+
+        /// <summary>
+        /// Transit reads zip entry names as raw ANSI bytes and ignores the zip UTF-8 flag. Without an explicit
+        /// entryNameEncoding .NET stores any non-ASCII name as UTF-8 with that flag set, so "Störung" arrives in
+        /// Transit as "StÃ¶rung". Opening with the selected code page writes the single-byte name Transit expects.
+        /// </summary>
+        private static ZipArchive OpenArchive(string archivePath, ZipArchiveMode mode, int encodingCode)
+        {
+            return ZipFile.Open(archivePath, mode, Encoding.GetEncoding(encodingCode));
         }
 
         private static void CreateArchive(IReturnPackage package, int encodingCode, string archivePath, string prjFileName)
         {
-            using var archive = ZipFile.Open(archivePath, ZipArchiveMode.Create);
+            using var archive = OpenArchive(archivePath, ZipArchiveMode.Create, encodingCode);
 
             archive.CreateEntryFromFile(package.PathToPrjFile, string.Concat(prjFileName, ".PRJ"),
                 CompressionLevel.Optimal);
 
-            foreach (var targetFile in package.SelectedTargetFilesForImport) AddFileToArchive(encodingCode, targetFile, archive);
+            foreach (var targetFile in package.SelectedTargetFilesForImport) AddFileToArchive(targetFile, archive);
         }
 
         /// <summary>
@@ -262,7 +270,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
         {
             try
             {
-                using (var archive = ZipFile.Open(archivePath, ZipArchiveMode.Update))
+                using (var archive = OpenArchive(archivePath, ZipArchiveMode.Update, encodingCode))
                 {
                     var entriesCollection = new ObservableCollection<ZipArchiveEntry>(archive.Entries);
 
@@ -276,10 +284,10 @@ namespace Sdl.Community.StarTransit.Shared.Services
                     }
                 }
 
-                using (var archive = ZipFile.Open(archivePath, ZipArchiveMode.Update))
+                using (var archive = OpenArchive(archivePath, ZipArchiveMode.Update, encodingCode))
                 {
                     archive.CreateEntryFromFile(returnPackagePackage.PathToPrjFile, string.Concat(prjFileName, ".PRJ"), CompressionLevel.Optimal);
-                    foreach (var file in returnPackagePackage.SelectedTargetFilesForImport) AddFileToArchive(encodingCode, file, archive);
+                    foreach (var file in returnPackagePackage.SelectedTargetFilesForImport) AddFileToArchive(file, archive);
                 }
             }
             catch (Exception ex)
