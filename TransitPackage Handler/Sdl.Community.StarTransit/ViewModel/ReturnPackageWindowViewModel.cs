@@ -163,7 +163,8 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private void LoadEncodingsOptions()
 		{
 			Encodings = Encoding.GetEncodings().ToList();
-			var westernEncoding = Encodings.FirstOrDefault(e => e.CodePage.Equals(850));
+			// Transit stores zip entry names in the Windows ANSI code page (verified against a Transit-generated PPF: o-umlaut is the single byte 0xF6, no UTF-8 flag)
+			var westernEncoding = Encodings.FirstOrDefault(e => e.CodePage.Equals(Encoding.Default.CodePage));
 			if (westernEncoding != null)
 			{
 				SelectedFileNameEncoding = westernEncoding;
