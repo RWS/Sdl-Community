@@ -23,5 +23,10 @@ namespace Sdl.Community.StarTransit.Shared.Services.Interfaces
 		{
 			return _projectsController?.SelectedProjects;	
 		}
+
+		public IEnumerable<ProjectTemplateInfo> GetProjectTemplates()
+		{
+			return _projectsController?.GetProjectTemplates();
+		}
 	}
 }

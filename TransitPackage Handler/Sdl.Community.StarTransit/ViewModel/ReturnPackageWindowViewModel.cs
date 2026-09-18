@@ -162,7 +162,10 @@ namespace Sdl.Community.StarTransit.ViewModel
 		}
 		private void LoadEncodingsOptions()
 		{
-			Encodings = Encoding.GetEncodings().ToList();
+			// zip entry names are byte strings in a code page or UTF-8: ZipArchive rejects UTF-16 and no zip reader interprets UTF-32/UTF-7
+			Encodings = Encoding.GetEncodings()
+				.Where(e => !(e.GetEncoding() is UnicodeEncoding || e.GetEncoding() is UTF32Encoding || e.GetEncoding() is UTF7Encoding))
+				.ToList();
 			// Transit stores zip entry names in the Windows ANSI code page (verified against a Transit-generated PPF: o-umlaut is the single byte 0xF6, no UTF-8 flag)
 			var westernEncoding = Encodings.FirstOrDefault(e => e.CodePage.Equals(Encoding.Default.CodePage));
 			if (westernEncoding != null)

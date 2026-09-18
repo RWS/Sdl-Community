@@ -7,6 +7,11 @@
     <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
   </PropertyGroup>
   <ItemGroup>
+    <!-- Studio's TM API logs through Sdl.Desktop.Logger, which needs the Microsoft.Extensions.Options that Studio ships;
+         referencing it here copies it to the test output and generates the matching binding redirect -->
+    <Reference Include="Microsoft.Extensions.Options">
+      <HintPath>$(TradosFolder)\Microsoft.Extensions.Options.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Core.Globalization">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
@@ -52,34 +57,16 @@
     <None Update="TestingFiles\MachineTranslatedSegments.DEU">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestingFiles\693203001_Trumpf_ID_IND.PPF">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestingFiles\766ec607-508b-4c45-92f2-15c58d1eff53_ENU_00_J00265435.ppf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="TestingFiles\Default.sdltpl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestingFiles\FnrTranslationTat_Amplexor_FB_TRANSLAT_IDN.DEU">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="TestingFiles\MultilingualNoOptions.sdltpl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestingFiles\Test Multilingual Package Trados Plugin.PPF">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="TestingFiles\TestTransitTM.sdltm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestingFiles\TransitMultilingualPenaltiesOptions.sdltpl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="TestingFiles\TransitMultilingualTemplate.sdltpl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestingFiles\_AEXTR_1.DEU">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -89,18 +76,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Moq">
-      <Version>4.13.1</Version>
-    </PackageReference>
-    <PackageReference Include="MSTest.TestAdapter">
-      <Version>1.3.2</Version>
-    </PackageReference>
-    <PackageReference Include="MSTest.TestFramework">
-      <Version>1.3.2</Version>
-    </PackageReference>
-    <PackageReference Include="NSubstitute">
-      <Version>4.2.1</Version>
-    </PackageReference>
     <PackageReference Include="System.Data.SQLite">
       <Version>1.0.113.7</Version>
     </PackageReference>

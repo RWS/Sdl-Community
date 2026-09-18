@@ -13,7 +13,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 {
 	public class FileService : IFileService
 	{
-		private const string FileType = "Transit";
+		private const string RootElement = "<Transit";
 		private Dictionary<string, string> _starTransitLanguageDictionary;
 		private Dictionary<string, string> _starTransitFileLanguageDictionary;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
@@ -46,7 +46,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				string line;
 				while ((line = reader.ReadLine()) != null)
 				{
-					if (line.Contains(FileType))
+					if (line.Contains(RootElement))
 					{
 						return true;
 					}

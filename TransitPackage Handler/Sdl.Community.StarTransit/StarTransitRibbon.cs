@@ -40,7 +40,7 @@ namespace Sdl.Community.StarTransit
 		private ObservableCollection<IProgressHeaderItem> CreatePages(IWizardModel wizardModel)
 		{
 			var packageService = new PackageService(_eventAggregatorService);
-			var studioService = new StudioService(_projectsController);
+			var studioService = new StudioService(_projectControllerService);
 			var dialogService = new DialogService();
 			var projectService = new ProjectService(_eventAggregatorService);
 
