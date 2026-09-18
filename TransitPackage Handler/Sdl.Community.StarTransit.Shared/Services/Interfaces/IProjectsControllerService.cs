@@ -8,5 +8,6 @@ namespace Sdl.Community.StarTransit.Shared.Services.Interfaces
 	{
 		void OpenProjectInFilesView(IProject studioProject);
 		IEnumerable<FileBasedProject> GetSelectedProjects();
+		IEnumerable<ProjectTemplateInfo> GetProjectTemplates();
 	}
 }

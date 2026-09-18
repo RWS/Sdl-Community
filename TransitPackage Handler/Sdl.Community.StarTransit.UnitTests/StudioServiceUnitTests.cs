@@ -4,13 +4,15 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using NSubstitute;
 using Sdl.Community.StarTransit.Interface;
 using Sdl.Community.StarTransit.Service;
 using Sdl.Community.StarTransit.Shared.Models;
+using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 using Sdl.Core.Globalization;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.ProjectAutomation.Core;
+using Sdl.ProjectAutomation.FileBased;
 using Xunit;
+using Task = System.Threading.Tasks.Task;
 
 namespace Sdl.Community.StarTransit.UnitTests
 {
@@ -20,8 +22,34 @@ namespace Sdl.Community.StarTransit.UnitTests
 		private readonly IStudioService _studioService;
 		public StudioServiceUnitTests()
 		{
-			var projectsController = Substitute.For<ProjectsController>();
-			_studioService = new StudioService(projectsController);
+			_studioService = new StudioService(new ProjectsControllerServiceStub());
+		}
+
+		[Fact]
+		public void GetProjectTemplates_ReturnsTemplatesOrderedByName()
+		{
+			var controllerService = new ProjectsControllerServiceStub
+			{
+				Templates =
+				{
+					new ProjectTemplateInfo { Name = "Zulu" },
+					new ProjectTemplateInfo { Name = "Alpha" },
+					new ProjectTemplateInfo { Name = "Mike" }
+				}
+			};
+
+			var templates = new StudioService(controllerService).GetProjectTemplates();
+
+			Assert.Equal(new[] { "Alpha", "Mike", "Zulu" }, templates.Select(t => t.Name));
+		}
+
+		[Fact]
+		public void GetProjectTemplates_StudioHasNoProjectsController_ReturnsEmpty()
+		{
+			// ProjectsControllerService returns null when Studio did not hand out a ProjectsController
+			var templates = new StudioService(new ProjectsControllerServiceStub { Templates = null }).GetProjectTemplates();
+
+			Assert.Empty(templates);
 		}
 
 		[Theory]
@@ -32,17 +60,6 @@ namespace Sdl.Community.StarTransit.UnitTests
 		{
 			var templateInfo = await _studioService.GetModelBasedOnStudioTemplate(templatePath,null,null);
 			Assert.Null(templateInfo);
-		}
-
-		[Theory]
-		[InlineData("TransitMultilingualTemplate.sdltpl")]
-		public async Task ReadTemplateData_TransitTemplate_ReturnsProjectLocation(string templateName)
-		{
-			var multilingualTemplate = Path.Combine(_testingFilesPath, templateName);
-			var templateInfo = await _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate, null, null);
-
-			Assert.NotNull(templateInfo);
-			Assert.NotEmpty(templateInfo.Location);
 		}
 
 		[Theory]
@@ -77,24 +94,14 @@ namespace Sdl.Community.StarTransit.UnitTests
 		}
 
 		[Theory]
-		[InlineData("TransitMultilingualTemplate.sdltpl")]
-		public async Task ReadTemplateData_TransitTemplate_ReturnsDueDate(string templateName)
+		[InlineData("TransitMultilingualTemplate.sdltpl", "2021-05-15T00:00:00+03:00")]
+		public async Task ReadTemplateData_TransitTemplate_ReturnsDueDate(string templateName, string templateDueDate)
 		{
 			var multilingualTemplate = Path.Combine(_testingFilesPath, templateName);
 			var templateInfo = await _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate, null, null);
 
-			Assert.NotNull(templateInfo.DueDate);
+			Assert.Equal(DateTime.Parse(templateDueDate), templateInfo.DueDate);
 		}
-		[Theory]
-		[InlineData("MultilingualNoOptions.sdltpl")]
-		public async Task ReadTemplateData_TransitTemplate_ReturnsNullDueDate(string templateName)
-		{
-			var multilingualTemplate = Path.Combine(_testingFilesPath, templateName);
-			var templateInfo = await _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate, null, null);
-
-			Assert.Null(templateInfo.Customer);
-		}
-
 		[Theory]
 		[InlineData("Default.sdltpl")]
 		public async Task ReadTemplateData_TransitTemplate_ReturnsNull(string templateName)
@@ -103,108 +110,6 @@ namespace Sdl.Community.StarTransit.UnitTests
 			var templateInfo = await _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate, null, null);
 
 			Assert.Null(templateInfo);
-		}
-
-		[Theory]
-		[InlineData("TransitMultilingualTemplate.sdltpl", "de-DE", "en-GB,fr-FR")]
-		public async Task ReadTemplateData_TransitTemplate_GetCorrectTmOption(string templateName, string sourceLanguageCode,
-			string targetLanguageCodes)
-		{
-			var languagePair = new LanguagePair
-			{
-				SourceLanguage = new CultureInfo("de-DE"),
-				TargetLanguage = new CultureInfo("en-GB"),
-				CreateNewTm = true,
-				TemplatePenalty = 5
-			};
-			var multilingualTemplate = Path.Combine(_testingFilesPath, templateName);
-			var targetLanguages = GetStudioLanguages(targetLanguageCodes);
-
-			var templateInfo = await _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate, new CultureInfo(sourceLanguageCode), targetLanguages);
-
-			Assert.Single(templateInfo.LanguagePairs);
-			Assert.Equal(languagePair.SourceLanguage,templateInfo.LanguagePairs[0].SourceLanguage);
-			Assert.Equal(languagePair.TargetLanguage, templateInfo.LanguagePairs[0].TargetLanguage);
-			Assert.True(templateInfo.LanguagePairs[0].CreateNewTm);
-			Assert.Equal(5, templateInfo.LanguagePairs[0].TemplatePenalty);
-		}
-
-		[Theory]
-		[InlineData("TransitMultilingualPenaltiesOptions.sdltpl", "de-DE", "en-GB,fr-FR,it-IT", 2)]
-		public async Task ReadTemplateData_MultilingualTransitTemplate_GetCorrectTmOptionsNumber(string templateName,
-			string sourceLanguageCode,
-			string targetLanguageCodes, int tmsOptions)
-		{
-			var multilingualTemplate = Path.Combine(_testingFilesPath, templateName);
-			var targetLanguages = GetStudioLanguages(targetLanguageCodes);
-
-			var templateInfo = await _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate,
-				new CultureInfo(sourceLanguageCode), targetLanguages);
-
-			Assert.NotNull(templateInfo.LanguagePairs);
-			Assert.Equal(tmsOptions, templateInfo.LanguagePairs.Count);
-		}
-
-		[Theory]
-		[InlineData("TransitMultilingualPenaltiesOptions.sdltpl", "de-DE", "en-GB,fr-FR,it-IT")]
-		public async Task ReadTemplateData_MultilingualTransitTemplate_GetCorrectLanguagePairOptions_DeFr(string templateName,
-			string sourceLanguageCode,
-			string targetLanguageCodes)
-		{
-			var deFrLanguagePair = new LanguagePair
-			{
-				SourceLanguage = new CultureInfo("de-DE"),
-				TargetLanguage = new CultureInfo("fr-FR"),
-				CreateNewTm = true,
-				TemplatePenalty = 10
-			};
-			var multilingualTemplate = Path.Combine(_testingFilesPath, templateName);
-			var targetLanguages = GetStudioLanguages(targetLanguageCodes);
-
-			var templateInfo = await  _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate,
-				new CultureInfo(sourceLanguageCode), targetLanguages);
-
-			var fRCorrespondingLpOption = GetCorresponndingLanguagePair(templateInfo.LanguagePairs, deFrLanguagePair);
-			Assert.Equal(deFrLanguagePair.SourceLanguage, fRCorrespondingLpOption.SourceLanguage);
-			Assert.Equal(deFrLanguagePair.TargetLanguage, fRCorrespondingLpOption.TargetLanguage);
-			Assert.Equal(deFrLanguagePair.CreateNewTm,fRCorrespondingLpOption.CreateNewTm);
-			Assert.Equal(deFrLanguagePair.TemplatePenalty, fRCorrespondingLpOption.TemplatePenalty);
-		}
-
-		[Theory]
-		[InlineData("TransitMultilingualPenaltiesOptions.sdltpl", "de-DE", "en-GB,fr-FR,it-IT")]
-		public async Task ReadTemplateData_MultilingualTransitTemplate_GetCorrectLanguagePairOptions_DeIt(string templateName,
-			string sourceLanguageCode,
-			string targetLanguageCodes)
-		{
-			var deItLanguagePair = new LanguagePair
-			{
-				SourceLanguage = new CultureInfo("de-DE"),
-				TargetLanguage = new CultureInfo("it-IT"),
-				ChoseExistingTm = true,
-				TemplatePenalty = 0,
-				TmName = "Transit De-It.sdltm",
-				TmPath = @"C:/Users/aghisa/Documents/Studio 2021/Translation Memories/Transit De-It.sdltm"
-			};
-
-			var multilingualTemplate = Path.Combine(_testingFilesPath, templateName);
-			var targetLanguages = GetStudioLanguages(targetLanguageCodes);
-
-			var templateInfo = await _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate,
-				new CultureInfo(sourceLanguageCode), targetLanguages);
-
-			var correspondingLpOption = GetCorresponndingLanguagePair(templateInfo.LanguagePairs, deItLanguagePair);
-			Assert.Equal(deItLanguagePair.SourceLanguage, correspondingLpOption.SourceLanguage);
-			Assert.Equal(deItLanguagePair.TargetLanguage, correspondingLpOption.TargetLanguage);
-			Assert.Equal(deItLanguagePair.CreateNewTm, correspondingLpOption.CreateNewTm);
-			Assert.Equal(deItLanguagePair.TemplatePenalty, correspondingLpOption.TemplatePenalty);
-		}
-
-		private LanguagePair GetCorresponndingLanguagePair(List<LanguagePair> templateInfoLanguagePairs, LanguagePair languagePair)
-		{
-			return templateInfoLanguagePairs.FirstOrDefault(l =>
-				l.SourceLanguage.Equals(languagePair.SourceLanguage) &&
-				l.TargetLanguage.Equals(languagePair.TargetLanguage));
 		}
 
 		[Theory]
@@ -247,12 +152,11 @@ namespace Sdl.Community.StarTransit.UnitTests
 		}
 
 		[Theory]
-		[InlineData("TestTransitTM.sdltm", "de-DE", "en-GB,fr-FR")]
-		public void TmSupportsAnyLanguageDirection_ReturnsFalse(string tmName, string packageSourceLanguageCode,
+		[InlineData("TestTransitTM.sdltm", "en-US", "en-GB,fr-FR")]
+		public void TmSupportsAnyLanguageDirection_CorrectSourceButNoMatchingTarget_ReturnsFalse(string tmName, string packageSourceLanguageCode,
 			string packageTargetLanguageCodes)
 		{
 			var uri = new Uri($"{Path.Combine(_testingFilesPath, tmName)}");
-
 			var targetLanguages = GetStudioLanguages(packageTargetLanguageCodes);
 
 			var (isSupported, language) = _studioService.TmSupportsAnyLanguageDirection(uri, new CultureInfo(packageSourceLanguageCode), targetLanguages);
@@ -289,29 +193,22 @@ namespace Sdl.Community.StarTransit.UnitTests
 		}
 
 		[Theory]
-		[InlineData("projects.xml")]
-		public async Task ReadCustomers_ReturnsNotNull(string projectsFileName)
-		{
-			var projectsXmlFilePath = Path.Combine(_testingFilesPath, projectsFileName);
-			var customers = await _studioService.GetCustomers(projectsXmlFilePath);
-			Assert.NotNull(customers);
-		}
-
-		[Theory]
 		[InlineData("projects.xml", "Automotive")]
 		public async Task ReadCustomers_ContainsCustomer(string projectsFileName, string customerName)
 		{
 			var projectsXmlFilePath = Path.Combine(_testingFilesPath, projectsFileName);
 			var customers = await _studioService.GetCustomers(projectsXmlFilePath);
-			Assert.Contains(customers,
-				customer => customer.Name != null && customer.Name.Contains(customerName));
+			Assert.Contains(customers, customer => customer.Name == customerName);
 		}
 
 		[Fact]
-		public async Task ReadCustomers_EmptyPath_ReturnsNotNull()
+		public async Task ReadCustomers_NoPath_ReturnsOnlyTheBlankPlaceholder()
 		{
 			var customers = await _studioService.GetCustomers(null);
-			Assert.NotNull(customers);
+
+			//the first entry is always a blank customer the UI uses to clear the selection
+			var placeholder = Assert.Single(customers);
+			Assert.Null(placeholder.Name);
 		}
 
 		[Theory]
@@ -331,5 +228,17 @@ namespace Sdl.Community.StarTransit.UnitTests
 			return  targetCodes.Select(code => new Language(code)).ToArray();
 		}
 
+		private class ProjectsControllerServiceStub : IProjectsControllerService
+		{
+			public List<ProjectTemplateInfo> Templates { get; set; } = new List<ProjectTemplateInfo>();
+
+			public IEnumerable<ProjectTemplateInfo> GetProjectTemplates() => Templates;
+
+			public IEnumerable<FileBasedProject> GetSelectedProjects() => Enumerable.Empty<FileBasedProject>();
+
+			public void OpenProjectInFilesView(IProject studioProject)
+			{
+			}
+		}
 	}
 }

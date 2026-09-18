@@ -8,17 +8,17 @@ using System.Xml;
 using Sdl.Community.StarTransit.Interface;
 using Sdl.Community.StarTransit.Model;
 using Sdl.Community.StarTransit.Shared.Models;
+using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.ProjectAutomation.Core;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Task = System.Threading.Tasks.Task;
 
 namespace Sdl.Community.StarTransit.Service
 {
 	public class StudioService: IStudioService
 	{
-		private readonly ProjectsController _projectsController;
+		private readonly IProjectsControllerService _projectsControllerService;
 		private const string ProjectSettingsGroupId = "ProjectSettings";
 		private const string GeneralProjectInfoSettingsGroupId = "GeneralProjectInfoSettings";
 		private const string ProjectTemplateSettingsGroupId = "ProjectTemplateSettings";
@@ -27,14 +27,14 @@ namespace Sdl.Community.StarTransit.Service
 		private const string ProjectOriginId = "ProjectOrigin";
 		private const string ProjectLocationId = "ProjectLocation";
 
-		public StudioService(ProjectsController projectsController)
+		public StudioService(IProjectsControllerService projectsControllerService)
 		{
-			_projectsController = projectsController;
+			_projectsControllerService = projectsControllerService;
 		}
 
 		public List<ProjectTemplateInfo> GetProjectTemplates()
 		{
-			var templateList = _projectsController?.GetProjectTemplates()?.OrderBy(t => t.Name).ToList();
+			var templateList = _projectsControllerService?.GetProjectTemplates()?.OrderBy(t => t.Name).ToList();
 			return templateList ?? new List<ProjectTemplateInfo>();
 		}
 

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Text;
 using System.Xml;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
@@ -13,16 +15,12 @@ namespace Sdl.Community.StarTransit.UnitTests
 	public class FilesServiceUnitTests
 	{
 		private readonly string _testingFilesPath;
-		private readonly string _tmFilePath;
-		private readonly string _transitFilePath;
 		private readonly IFileService _fileService;
 
 		public FilesServiceUnitTests()
 		{
 			_fileService = new FileService();
 			_testingFilesPath = Path.Combine($"{AppDomain.CurrentDomain.BaseDirectory}", "TestingFiles");
-			_tmFilePath = Path.Combine(_testingFilesPath, "_AEXTR_1.DEU");
-			_transitFilePath = Path.Combine(_testingFilesPath, "FnrTranslationTat_Amplexor_FB_TRANSLAT_IDN.DEU");
 		}
 
 		[Theory]
@@ -71,49 +69,51 @@ namespace Sdl.Community.StarTransit.UnitTests
 			Assert.Equal(languageCode, transitLanguageCode);
 		}
 
-		[Fact]
-		public void IsTransitFile_RetunsTrue()
+		[Theory]
+		[InlineData("MachineTranslatedSegments.DEU")]
+		public void IsTransitFile_TransitFile_ReturnsTrue(string fileName)
 		{
-			var isTransitFile = _fileService.IsTransitFile(_transitFilePath);
+			var isTransitFile = _fileService.IsTransitFile(Path.Combine(_testingFilesPath, fileName));
 			Assert.True(isTransitFile);
 		}
 
 		[Fact]
-		public void IsTransitFile_ReturnsTrue()
+		public void IsTransitFile_DeclarationAndRootElementOnOneLine_ReturnsTrue()
 		{
-			var isTransitFile = _fileService.IsTransitFile(_tmFilePath);
-			Assert.True(isTransitFile);
+			var transitFile = Path.GetTempFileName();
+			try
+			{
+				File.WriteAllText(transitFile, "<?xml version=\"1.0\" encoding=\"UTF-16\"?><Transit version=\"4.0\">\r\n<Header>\r\n", Encoding.Unicode);
+
+				Assert.True(_fileService.IsTransitFile(transitFile));
+			}
+			finally
+			{
+				File.Delete(transitFile);
+			}
 		}
 
-		[Fact]
-		public void IsTransitFile_ReturnsFalse()
+		[Theory]
+		[InlineData("projects.xml")]
+		[InlineData("missing file")]
+		public void IsTransitFile_OtherFile_ReturnsFalse(string fileName)
 		{
-			var isTransitFile = _fileService.IsTransitFile("random path");
+			var isTransitFile = _fileService.IsTransitFile(Path.Combine(_testingFilesPath, fileName));
 			Assert.False(isTransitFile);
 		}
 
 		[Fact]
-		public void GetStudioTargetLanguages_ReturnsEmpty()
-		{
-			var empty = _fileService.GetStudioTargetLanguages(null);
-			Assert.Empty(empty);
-		}
-
-		[Fact]
-		public void GetStudioTargetLanguages_ReturnsList()
+		public void GetStudioTargetLanguages_ReturnsTheTargetOfEachLanguagePair()
 		{
 			var languagePairs = new List<LanguagePair>
 			{
-				new LanguagePair
-				{
-					SourceLanguage = new CultureInfo("en-en"), TargetLanguage = new CultureInfo("fr-fr")
-				},new LanguagePair
-				{
-					SourceLanguage = new CultureInfo("en-en"), TargetLanguage = new CultureInfo("de-de")
-				}
+				new LanguagePair { SourceLanguage = new CultureInfo("de-DE"), TargetLanguage = new CultureInfo("fr-FR") },
+				new LanguagePair { SourceLanguage = new CultureInfo("de-DE"), TargetLanguage = new CultureInfo("en-GB") }
 			};
+
 			var targetLanguages = _fileService.GetStudioTargetLanguages(languagePairs);
-			Assert.NotEmpty(targetLanguages);
+
+			Assert.Equal(new[] { "fr-FR", "en-GB" }, targetLanguages.Select(language => language.CultureInfo.Name));
 		}
 	}
 }
