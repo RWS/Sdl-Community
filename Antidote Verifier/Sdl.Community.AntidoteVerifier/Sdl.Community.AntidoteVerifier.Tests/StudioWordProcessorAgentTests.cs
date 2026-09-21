@@ -211,6 +211,20 @@ namespace Sdl.Community.AntidoteVerifier.Tests
         }
 
         [Fact]
+        public void Configuration_declares_non_breaking_and_thin_space_support()
+        {
+            // Left unset, Antidote treats the host as unable to hold a non-breaking space and the
+            // French typography corrections (space before ':' ';' '?' '!', between number and unit)
+            // never reach Studio, whose IText holds U+00A0 / U+202F like any other character.
+            var agent = CreateAgent(new FakeEditorService("x"));
+
+            var config = agent.Configuration();
+
+            Assert.True(config.AllowNbSpace);
+            Assert.True(config.AllowThinSpace);
+        }
+
+        [Fact]
         public void DocumentPath_returns_editor_document_path()
         {
             var editor = new FakeEditorService("x") { DocumentPath = @"C:\docs\report.sdlxliff" };
