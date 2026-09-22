@@ -65,7 +65,15 @@ namespace Sdl.Community.AntidoteVerifier.Connectix
                 CacheIdType = CacheIdentifierType.ForcePath,
                 // Antidote applies minimal positional replacements directly (as the old COM
                 // RemplaceIntervalle did), so the editor does not require a live selection.
-                ReplaceWithoutSelection = true
+                ReplaceWithoutSelection = true,
+                // Studio's IText holds U+00A0 / U+202F like any other character, but Antidote only
+                // sends them when the host declares support: with the keys absent the French
+                // typography corrections (space before ':' ';' '?' '!', number-unit) never arrived
+                // and translators inserted every non-breaking space by hand (community report,
+                // Studio 2026, 2026-07). Which of the two spaces Antidote picks stays governed by
+                // the user's own Antidote settings.
+                AllowNbSpace = true,
+                AllowThinSpace = true
             };
         }
 

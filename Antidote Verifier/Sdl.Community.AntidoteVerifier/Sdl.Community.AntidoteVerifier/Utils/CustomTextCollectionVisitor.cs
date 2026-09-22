@@ -49,8 +49,23 @@ namespace Sdl.Community.AntidoteVerifier
         /// <summary>True when the (start, end) range overlaps any locked text.</summary>
         public bool RangeContainsTextLocked()
         {
-            if (_endOfRange <= _startOfRange)
+            if (_endOfRange < _startOfRange)
                 return false;
+
+            // A zero-length insertion goes into the element holding the character at that position
+            // (see VisitText), or into the last element when the position is the end of the text.
+            // Either way it is an edit INSIDE that element, so it is refused when the element is locked.
+            if (_endOfRange == _startOfRange)
+            {
+                foreach (var locked in _lockedRanges)
+                {
+                    if ((_startOfRange >= locked.Start && _startOfRange < locked.End)
+                        || (_startOfRange == locked.End && _startOfRange == CollectedText.Length))
+                        return true;
+                }
+
+                return false;
+            }
 
             foreach (var locked in _lockedRanges)
             {
@@ -296,7 +311,17 @@ namespace Sdl.Community.AntidoteVerifier
                             isMarkupInRange = true;
 
                         if (isMarkupInRange)
+                        {
+                            // A zero-length insertion sitting exactly where two text elements meet
+                            // (the tag boundary of "abordable[fn]; ils") matches both; keeping both
+                            // let the later one overwrite the offsets and ReplaceText then emptied
+                            // the earlier element. The insertion belongs to ONE element: the one
+                            // holding the character Antidote pointed at, i.e. the later of the two
+                            // (the last element when the point is the end of the segment).
+                            if (_startOfRange == _endOfRange)
+                                _markupsListInRange.Clear();
                             _markupsListInRange.Add(text);
+                        }
                     }
 
                     //Collect the text
