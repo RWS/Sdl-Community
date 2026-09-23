@@ -44,7 +44,7 @@
             Height="48"
             Width="48"
             Margin="10,0,0,0"
-            Source="../Resources/Information.png"/>
+            Source="pack://application:,,,/LanguageWeaverProvider;component/Resources/Information.png"/>
         <StackPanel
             Grid.Row="1"
             Grid.Column="1"
