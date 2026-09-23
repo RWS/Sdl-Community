@@ -57,7 +57,7 @@
 		// Used when the tenant is unknown: the subscription is managed in Account Portal either way, so the
 		// prompt sends the user there rather than to the Language Weaver portal, which cannot action the add-on.
 		public static string AccountPortalUrl = Model.CloudEnvironment.Current.AccountPortalUrl;
-		public const string LanguageWeaverProLearnMoreUrl = "https://www.trados.com/ecosystem/language-weaver-for-trados/";
+		public const string LanguageWeaverProLearnMoreUrl = "https://www.trados.com/language-weaver-pro/";
 
 		// LW Cloud API Region. Set by CloudEnvironment; switch environments there, not here.
 		public static string CloudEUUrl = Model.CloudEnvironment.Current.CloudEUUrl;
