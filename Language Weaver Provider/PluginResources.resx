@@ -175,7 +175,7 @@
     <value>Sign in</value>
   </data>
   <data name="Auth_Studio_SignIn" xml:space="preserve">
-    <value>Use my Trados Studio sign-in</value>
+    <value>Trados Studio sign-in</value>
   </data>
   <data name="Auth_Studio_SignIn_Checking" xml:space="preserve">
     <value>Checking your Trados Studio sign-in...</value>

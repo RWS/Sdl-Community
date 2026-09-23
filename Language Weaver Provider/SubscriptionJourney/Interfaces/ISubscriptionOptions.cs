@@ -15,6 +15,7 @@ namespace LanguageWeaverProvider.Model.Interface
         public bool ShowSecondary { get; }
         public string SecondaryContent { get; }
         public string CancelContent { get; }
+        public string LearnMoreUri { get; }
 
 
     }

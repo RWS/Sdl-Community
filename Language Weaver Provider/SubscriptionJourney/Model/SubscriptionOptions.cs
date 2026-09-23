@@ -25,5 +25,7 @@ namespace LanguageWeaverProvider.SubscriptionJourney.Model
         public string SecondaryContent { get; set; }
 
         public string CancelContent { get; set; }
+
+        public string LearnMoreUri { get; set; }
     }
 }
