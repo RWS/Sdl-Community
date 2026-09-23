@@ -48,6 +48,9 @@ namespace LanguageWeaverProvider.SubscriptionJourney.ViewModel
 
             PrimaryCommand = Act(subscriptionOptions.PrimaryUri);
             SecondaryCommand = Act(subscriptionOptions.SecondaryUri);
+
+            LearnMoreUri = subscriptionOptions.LearnMoreUri;
+            LearnMoreCommand = Act(subscriptionOptions.LearnMoreUri);
         }
 
         public event Action RequestClose;
@@ -83,5 +86,11 @@ namespace LanguageWeaverProvider.SubscriptionJourney.ViewModel
         public string SecondaryButtonContent { get; }
 
         public string CancelContent { get; }
+
+        public string LearnMoreUri { get; }
+
+        public ICommand LearnMoreCommand { get; }
+
+        public bool ShowLearnMoreLink => !string.IsNullOrWhiteSpace(LearnMoreUri);
     }
 }

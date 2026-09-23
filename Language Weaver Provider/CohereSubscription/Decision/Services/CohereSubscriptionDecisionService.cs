@@ -51,6 +51,7 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
                             ShowSecondary = true,
                             SecondaryContent = "Buy now",
                             SecondaryUri = accountUri,
+                            LearnMoreUri = Constants.LanguageWeaverProLearnMoreUrl,
                             CancelContent = "Cancel",
                             IsDoNotShowAgainVisible = true,
                         },
@@ -99,6 +100,7 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
                             PrimaryContent = "Buy now",
                             PrimaryUri = accountUri,
                             ShowSecondary = false,
+                            LearnMoreUri = Constants.LanguageWeaverProLearnMoreUrl,
                             CancelContent = "Cancel",
                             IsDoNotShowAgainVisible = true,
                         }, uriOpener);
@@ -159,6 +161,7 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
                         PrimaryContent = "Buy now",
                         PrimaryUri = accountUri,
                         ShowSecondary = false,
+                        LearnMoreUri = Constants.LanguageWeaverProLearnMoreUrl,
                         CancelContent = "Cancel",
                         IsDoNotShowAgainVisible = true,
                     },
