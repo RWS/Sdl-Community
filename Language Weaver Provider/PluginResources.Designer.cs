@@ -1156,5 +1156,137 @@ namespace LanguageWeaverProvider {
                 return ResourceManager.GetString("TranslationDraftNotResent", resourceCulture);
             }
         }
+
+        public static string Cohere_WindowTitle {
+            get {
+                return ResourceManager.GetString("Cohere_WindowTitle", resourceCulture);
+            }
+        }
+
+        public static string Cohere_NotDetected_Admin_Title {
+            get {
+                return ResourceManager.GetString("Cohere_NotDetected_Admin_Title", resourceCulture);
+            }
+        }
+
+        public static string Cohere_NotDetected_Admin_Body {
+            get {
+                return ResourceManager.GetString("Cohere_NotDetected_Admin_Body", resourceCulture);
+            }
+        }
+
+        public static string Cohere_NotDetected_NonAdmin_Title {
+            get {
+                return ResourceManager.GetString("Cohere_NotDetected_NonAdmin_Title", resourceCulture);
+            }
+        }
+
+        public static string Cohere_NotDetected_NonAdmin_Body {
+            get {
+                return ResourceManager.GetString("Cohere_NotDetected_NonAdmin_Body", resourceCulture);
+            }
+        }
+
+        public static string Cohere_TrialEnding_Admin_Title {
+            get {
+                return ResourceManager.GetString("Cohere_TrialEnding_Admin_Title", resourceCulture);
+            }
+        }
+
+        public static string Cohere_TrialEnding_Admin_Body {
+            get {
+                return ResourceManager.GetString("Cohere_TrialEnding_Admin_Body", resourceCulture);
+            }
+        }
+
+        public static string Cohere_TrialEnding_NonAdmin_Title {
+            get {
+                return ResourceManager.GetString("Cohere_TrialEnding_NonAdmin_Title", resourceCulture);
+            }
+        }
+
+        public static string Cohere_TrialEnding_NonAdmin_Body {
+            get {
+                return ResourceManager.GetString("Cohere_TrialEnding_NonAdmin_Body", resourceCulture);
+            }
+        }
+
+        public static string Cohere_TrialExpired_Admin_Title {
+            get {
+                return ResourceManager.GetString("Cohere_TrialExpired_Admin_Title", resourceCulture);
+            }
+        }
+
+        public static string Cohere_TrialExpired_Admin_Body {
+            get {
+                return ResourceManager.GetString("Cohere_TrialExpired_Admin_Body", resourceCulture);
+            }
+        }
+
+        public static string Cohere_TrialExpired_NonAdmin_Title {
+            get {
+                return ResourceManager.GetString("Cohere_TrialExpired_NonAdmin_Title", resourceCulture);
+            }
+        }
+
+        public static string Cohere_TrialExpired_NonAdmin_Body {
+            get {
+                return ResourceManager.GetString("Cohere_TrialExpired_NonAdmin_Body", resourceCulture);
+            }
+        }
+
+        public static string Cohere_Trial_EndsToday {
+            get {
+                return ResourceManager.GetString("Cohere_Trial_EndsToday", resourceCulture);
+            }
+        }
+
+        public static string Cohere_Trial_EndsInOneDay {
+            get {
+                return ResourceManager.GetString("Cohere_Trial_EndsInOneDay", resourceCulture);
+            }
+        }
+
+        public static string Cohere_Trial_EndsInDays {
+            get {
+                return ResourceManager.GetString("Cohere_Trial_EndsInDays", resourceCulture);
+            }
+        }
+
+        public static string Cohere_Button_StartFreeTrial {
+            get {
+                return ResourceManager.GetString("Cohere_Button_StartFreeTrial", resourceCulture);
+            }
+        }
+
+        public static string Cohere_Button_BuyNow {
+            get {
+                return ResourceManager.GetString("Cohere_Button_BuyNow", resourceCulture);
+            }
+        }
+
+        public static string Cohere_Button_Ok {
+            get {
+                return ResourceManager.GetString("Cohere_Button_Ok", resourceCulture);
+            }
+        }
+
+        public static string Cohere_Button_LearnMore {
+            get {
+                return ResourceManager.GetString("Cohere_Button_LearnMore", resourceCulture);
+            }
+        }
+
+        public static string Cohere_Button_Cancel {
+            get {
+                return ResourceManager.GetString("Cohere_Button_Cancel", resourceCulture);
+            }
+        }
+        public static string Cohere_DoNotShowAgain {
+            get {
+                return ResourceManager.GetString("Cohere_DoNotShowAgain", resourceCulture);
+            }
+        }
+
     }
 }

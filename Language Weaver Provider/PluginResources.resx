@@ -491,4 +491,82 @@ Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
   <data name="TranslationDraftNotResent" xml:space="preserve">
     <value>[segment already translated...source not re-sent]</value>
   </data>
+  <data name="Cohere_WindowTitle" xml:space="preserve">
+    <value>Cohere Subscription</value>
+  </data>
+  <data name="Cohere_NotDetected_Admin_Title" xml:space="preserve">
+    <value>Try the best AI translation in the world!</value>
+  </data>
+  <data name="Cohere_NotDetected_Admin_Body" xml:space="preserve">
+    <value>Language Weaver Pro gives you the highest quality AI translation, for a stronger first pass draft.
+
+Start your 14-day free trial or buy the add-on anytime.</value>
+  </data>
+  <data name="Cohere_NotDetected_NonAdmin_Title" xml:space="preserve">
+    <value>Language Weaver Pro available for your organization</value>
+  </data>
+  <data name="Cohere_NotDetected_NonAdmin_Body" xml:space="preserve">
+    <value>The world’s best AI translation engine, Language Weaver Pro, can be enabled on your Language Weaver account.
+
+Ask your administrator to start a 14-day free trial or purchase the add-on.</value>
+  </data>
+  <data name="Cohere_TrialEnding_Admin_Title" xml:space="preserve">
+    <value>Language Weaver Pro trial ending soon</value>
+  </data>
+  <data name="Cohere_TrialEnding_Admin_Body" xml:space="preserve">
+    <value>Your Language Weaver Pro trial {0}.
+
+Purchase the add-on to keep using the world’s best AI translation without interruption.</value>
+  </data>
+  <data name="Cohere_TrialEnding_NonAdmin_Title" xml:space="preserve">
+    <value>Language Weaver Pro trial ending soon</value>
+  </data>
+  <data name="Cohere_TrialEnding_NonAdmin_Body" xml:space="preserve">
+    <value>Your organization’s Language Weaver Pro trial {0}.
+
+Contact your administrator to purchase the add-on and avoid any interruption.</value>
+  </data>
+  <data name="Cohere_TrialExpired_Admin_Title" xml:space="preserve">
+    <value>Language Weaver Pro trial expired</value>
+  </data>
+  <data name="Cohere_TrialExpired_Admin_Body" xml:space="preserve">
+    <value>Your 14-day Language Weaver Pro trial has ended.
+
+Purchase the add-on to continue using the world’s best AI translation.</value>
+  </data>
+  <data name="Cohere_TrialExpired_NonAdmin_Title" xml:space="preserve">
+    <value>Language Weaver Pro trial expired</value>
+  </data>
+  <data name="Cohere_TrialExpired_NonAdmin_Body" xml:space="preserve">
+    <value>Your organization’s Language Weaver Pro trial has ended.
+
+Contact your administrator to purchase the add-on to restore access.</value>
+  </data>
+  <data name="Cohere_Trial_EndsToday" xml:space="preserve">
+    <value>ends today</value>
+  </data>
+  <data name="Cohere_Trial_EndsInOneDay" xml:space="preserve">
+    <value>ends in 1 day</value>
+  </data>
+  <data name="Cohere_Trial_EndsInDays" xml:space="preserve">
+    <value>ends in {0} days</value>
+  </data>
+  <data name="Cohere_Button_StartFreeTrial" xml:space="preserve">
+    <value>Start free trial</value>
+  </data>
+  <data name="Cohere_Button_BuyNow" xml:space="preserve">
+    <value>Buy now</value>
+  </data>
+  <data name="Cohere_Button_Ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Cohere_Button_LearnMore" xml:space="preserve">
+    <value>Learn more</value>
+  </data>
+  <data name="Cohere_Button_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Cohere_DoNotShowAgain" xml:space="preserve">
+    <value>Do not show this again</value>
+  </data>
 </root>

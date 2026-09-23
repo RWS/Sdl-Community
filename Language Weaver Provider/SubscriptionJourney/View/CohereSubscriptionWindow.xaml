@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LanguageWeaverProvider.SubscriptionJourney.ViewModel"
 		xmlns:converters="clr-namespace:LanguageWeaverProvider.SubscriptionJourney.Converters"
+        xmlns:root="clr-namespace:LanguageWeaverProvider"
         mc:Ignorable="d"
         ResizeMode="NoResize"
         SizeToContent="Height"
@@ -63,7 +64,7 @@
                 Visibility="{Binding ShowLearnMoreLink, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Hyperlink
                     Command="{Binding LearnMoreCommand}"
-                    ToolTip="{Binding LearnMoreUri}">Learn more</Hyperlink>
+                    ToolTip="{Binding LearnMoreUri}"><Run Text="{x:Static root:PluginResources.Cohere_Button_LearnMore}" /></Hyperlink>
             </TextBlock>
         </StackPanel>
 
@@ -74,12 +75,11 @@
             </Grid.ColumnDefinitions>
 
             <!-- Checkbox on the left -->
-            <!-- Use Plugin Resources and replace the hardcoded content -->
             <CheckBox Grid.Column="0"
                       Visibility="{Binding IsDoNotShowAgainVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
                       IsChecked="{Binding DoNotShowThisAgain}"
               VerticalAlignment="Center"
-              Content="Do not show this again" />
+              Content="{x:Static root:PluginResources.Cohere_DoNotShowAgain}" />
 
             <!-- Buttons on the right -->
             <StackPanel Grid.Column="1"

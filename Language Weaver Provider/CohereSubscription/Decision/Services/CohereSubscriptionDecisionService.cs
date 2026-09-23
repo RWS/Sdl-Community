@@ -1,4 +1,4 @@
-﻿using LanguageWeaverProvider.CohereSubscription.Decision.Interfaces;
+using LanguageWeaverProvider.CohereSubscription.Decision.Interfaces;
 using LanguageWeaverProvider.CohereSubscription.Workflow.Model;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.SubscriptionJourney.Model;
@@ -40,19 +40,19 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
                 if (data.IsAdmin)
                 {
                     return new SubscriptionViewModel(
-                        "Cohere Subscription",
+                        PluginResources.Cohere_WindowTitle,
                         new SubscriptionOptions()
                         {
-                            Title = "Try the best AI translation in the world!",
-                            Description = "Language Weaver Pro gives you the highest quality AI translation, for a stronger first pass draft. \n\nStart your 14-day free trial or buy the add-on anytime.",
+                            Title = PluginResources.Cohere_NotDetected_Admin_Title,
+                            Description = PluginResources.Cohere_NotDetected_Admin_Body,
                             ShowPrimary = true,
-                            PrimaryContent = "Start free trial",
+                            PrimaryContent = PluginResources.Cohere_Button_StartFreeTrial,
                             PrimaryUri = accountUri,
                             ShowSecondary = true,
-                            SecondaryContent = "Buy now",
+                            SecondaryContent = PluginResources.Cohere_Button_BuyNow,
                             SecondaryUri = accountUri,
                             LearnMoreUri = Constants.LanguageWeaverProLearnMoreUrl,
-                            CancelContent = "Cancel",
+                            CancelContent = PluginResources.Cohere_Button_Cancel,
                             IsDoNotShowAgainVisible = true,
                         },
                         uriOpener);
@@ -60,17 +60,17 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
                 }
 
                 return new SubscriptionViewModel(
-                    "Cohere Subscription",
+                    PluginResources.Cohere_WindowTitle,
                     new SubscriptionOptions
                     {
-                        Title = "Language Weaver Pro available for your organization",
-                        Description = "The world’s best AI translation engine, Language Weaver Pro, can be enabled on your Language Weaver account. \n\nAsk your administrator to start a 14-day free trial or purchase the add-on.",
+                        Title = PluginResources.Cohere_NotDetected_NonAdmin_Title,
+                        Description = PluginResources.Cohere_NotDetected_NonAdmin_Body,
                         ShowPrimary = true,
-                        PrimaryContent = "OK",
+                        PrimaryContent = PluginResources.Cohere_Button_Ok,
                         ShowSecondary = true,
-                        SecondaryContent = "Learn more",
+                        SecondaryContent = PluginResources.Cohere_Button_LearnMore,
                         SecondaryUri = Constants.LanguageWeaverProLearnMoreUrl,
-                        CancelContent = "Cancel",
+                        CancelContent = PluginResources.Cohere_Button_Cancel,
                         IsDoNotShowAgainVisible = true,
                     },
                     uriOpener);
@@ -91,33 +91,33 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
                 if (data.IsAdmin)
                 {
                     return new SubscriptionViewModel(
-                        "Cohere Subscription",
+                        PluginResources.Cohere_WindowTitle,
                         new SubscriptionOptions
                         {
-                            Title = "Language Weaver Pro trial expired",
-                            Description = "Your 14-day Language Weaver Pro trial has ended. \n\nPurchase the add-on to continue using the world’s best AI translation.",
+                            Title = PluginResources.Cohere_TrialExpired_Admin_Title,
+                            Description = PluginResources.Cohere_TrialExpired_Admin_Body,
                             ShowPrimary = true,
-                            PrimaryContent = "Buy now",
+                            PrimaryContent = PluginResources.Cohere_Button_BuyNow,
                             PrimaryUri = accountUri,
                             ShowSecondary = false,
                             LearnMoreUri = Constants.LanguageWeaverProLearnMoreUrl,
-                            CancelContent = "Cancel",
+                            CancelContent = PluginResources.Cohere_Button_Cancel,
                             IsDoNotShowAgainVisible = true,
                         }, uriOpener);
                 }
 
                 return new SubscriptionViewModel(
-                    "Cohere Subscription",
+                    PluginResources.Cohere_WindowTitle,
                     new SubscriptionOptions
                     {
-                        Title = "Language Weaver Pro trial expired",
-                        Description = "Your organization’s Language Weaver Pro trial has ended. \n\nContact your administrator to purchase the add-on to restore access.",
+                        Title = PluginResources.Cohere_TrialExpired_NonAdmin_Title,
+                        Description = PluginResources.Cohere_TrialExpired_NonAdmin_Body,
                         ShowPrimary = true,
-                        PrimaryContent = "OK",
+                        PrimaryContent = PluginResources.Cohere_Button_Ok,
                         ShowSecondary = true,
-                        SecondaryContent = "Learn more",
+                        SecondaryContent = PluginResources.Cohere_Button_LearnMore,
                         SecondaryUri = Constants.LanguageWeaverProLearnMoreUrl,
-                        CancelContent = "Cancel",
+                        CancelContent = PluginResources.Cohere_Button_Cancel,
                         IsDoNotShowAgainVisible = true,
                     }, uriOpener);
             }
@@ -144,42 +144,42 @@ namespace LanguageWeaverProvider.CohereSubscription.Decision.Services
         {
             var daysRemaining = data.TrialRemainingDays ?? 0;
             var endsIn = daysRemaining == 0
-                ? "ends today"
+                ? PluginResources.Cohere_Trial_EndsToday
                 : daysRemaining == 1
-                    ? "ends in 1 day"
-                    : $"ends in {daysRemaining} days";
+                    ? PluginResources.Cohere_Trial_EndsInOneDay
+                    : string.Format(PluginResources.Cohere_Trial_EndsInDays, daysRemaining);
 
             if (data.IsAdmin)
             {
                 return new SubscriptionViewModel(
-                    "Cohere Subscription",
+                    PluginResources.Cohere_WindowTitle,
                     new SubscriptionOptions
                     {
-                        Title = "Language Weaver Pro trial ending soon",
-                        Description = $"Your Language Weaver Pro trial {endsIn}. \n\nPurchase the add-on to keep using the world’s best AI translation without interruption.",
+                        Title = PluginResources.Cohere_TrialEnding_Admin_Title,
+                        Description = string.Format(PluginResources.Cohere_TrialEnding_Admin_Body, endsIn),
                         ShowPrimary = true,
-                        PrimaryContent = "Buy now",
+                        PrimaryContent = PluginResources.Cohere_Button_BuyNow,
                         PrimaryUri = accountUri,
                         ShowSecondary = false,
                         LearnMoreUri = Constants.LanguageWeaverProLearnMoreUrl,
-                        CancelContent = "Cancel",
+                        CancelContent = PluginResources.Cohere_Button_Cancel,
                         IsDoNotShowAgainVisible = true,
                     },
                     uriOpener);
             }
 
             return new SubscriptionViewModel(
-                "Cohere Subscription",
+                PluginResources.Cohere_WindowTitle,
                 new SubscriptionOptions
                 {
-                    Title = "Language Weaver Pro trial ending soon",
-                    Description = $"Your organization’s Language Weaver Pro trial {endsIn}. \n\nContact your administrator to purchase the add-on and avoid any interruption.",
+                    Title = PluginResources.Cohere_TrialEnding_NonAdmin_Title,
+                    Description = string.Format(PluginResources.Cohere_TrialEnding_NonAdmin_Body, endsIn),
                     ShowPrimary = true,
-                    PrimaryContent = "OK",
+                    PrimaryContent = PluginResources.Cohere_Button_Ok,
                     ShowSecondary = true,
-                    SecondaryContent = "Learn more",
+                    SecondaryContent = PluginResources.Cohere_Button_LearnMore,
                     SecondaryUri = Constants.LanguageWeaverProLearnMoreUrl,
-                    CancelContent = "Cancel",
+                    CancelContent = PluginResources.Cohere_Button_Cancel,
                     IsDoNotShowAgainVisible = true,
                 },
                 uriOpener);
