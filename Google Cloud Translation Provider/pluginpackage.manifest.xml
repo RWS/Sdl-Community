@@ -2,7 +2,7 @@
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 	
 	<PlugInName>Google Cloud Translation Provider</PlugInName>
-	<Version>3.0.4.0</Version>
+	<Version>3.0.5.0</Version>
 	<Description>Google Cloud Translation Provider</Description>
 	<Author>Trados AppStore Team</Author>
 	<RequiredProduct name="TradosStudio" minversion="19.0" maxversion="19.0.9" />
@@ -32,12 +32,5 @@
 		<File>Grpc.Core.dll</File>
 		<File>LanguageMappingProvider.dll</File>
 		<File>Trados.LocalCache.dll</File>
-		<File>SQLite.Interop.dll</File>
-		<File>System.Data.SQLite.dll</File>
-		<File>System.Memory.dll</File>
-		<File>System.Net.Http.dll</File>
-		<File>System.Runtime.CompilerServices.Unsafe.dll</File>
-		<File>System.Text.Json.dll</File>
-		<File>System.Diagnostics.DiagnosticSource.dll</File>
 	</Include>
 </PluginPackage>
