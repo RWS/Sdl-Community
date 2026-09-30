@@ -35,28 +35,11 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                 _options?.LanguagePairOptions?.FirstOrDefault(lpo => lpo.LanguagePair.Equals(languageDirection));
         }
 
-        public bool CanReverseLanguageDirection => throw new NotImplementedException();
-
         CultureCode ITranslationProviderLanguageDirection.SourceLanguage => _languageDirection.SourceCulture;
         CultureCode ITranslationProviderLanguageDirection.TargetLanguage => _languageDirection.TargetCulture;
         public ITranslationProvider TranslationProvider => _deepLMtTranslationProvider;
 
-        public ImportResult[] AddOrUpdateTranslationUnits(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings)
-        {
-            throw new NotImplementedException();
-        }
-
         public ImportResult[] AddOrUpdateTranslationUnitsMasked(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings, bool[] mask)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ImportResult AddTranslationUnit(TranslationUnit translationUnit, ImportSettings settings)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ImportResult[] AddTranslationUnits(TranslationUnit[] translationUnits, ImportSettings settings)
         {
             throw new NotImplementedException();
         }
@@ -71,27 +54,12 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             throw new NotImplementedException();
         }
 
-        public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
-        {
-            throw new NotImplementedException();
-        }
-
         public SearchResults[] SearchSegmentsMasked(SearchSettings settings, Segment[] segments, bool[] mask)
         {
             throw new NotImplementedException();
         }
 
         public SearchResults SearchText(SearchSettings settings, string segment)
-        {
-            throw new NotImplementedException();
-        }
-
-        public SearchResults SearchTranslationUnit(SearchSettings settings, TranslationUnit translationUnit)
-        {
-            throw new NotImplementedException();
-        }
-
-        public SearchResults[] SearchTranslationUnits(SearchSettings settings, TranslationUnit[] translationUnits)
         {
             throw new NotImplementedException();
         }
@@ -144,11 +112,6 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             }
 
             return results.ToArray();
-        }
-
-        public ImportResult UpdateTranslationUnit(TranslationUnit translationUnit)
-        {
-            throw new NotImplementedException();
         }
 
         public ImportResult[] UpdateTranslationUnits(TranslationUnit[] translationUnits)
