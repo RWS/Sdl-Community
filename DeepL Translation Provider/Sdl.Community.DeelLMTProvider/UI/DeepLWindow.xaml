@@ -161,6 +161,13 @@
                                       ToolTip="{x:Static deepLmtProvider:PluginResources.ResendDraft_Tooltip}"
                                       IsChecked="{Binding ResendDraft}"
                                       Content="Resend Draft" />
+                            <CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+                                      VerticalContentAlignment="Center"
+                                      Margin="15,0,0,5"
+                                      x:Name="SendContext"
+                                      ToolTip="Send the surrounding source segments to DeepL as context, to improve consistency and resolve ambiguous words. Context is not billed, but cached translations are reused less often."
+                                      IsChecked="{Binding SendContext}"
+                                      Content="Send surrounding segments as context" />
                             <StackPanel Orientation="Horizontal">
                                 <CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
                                           VerticalContentAlignment="Center"

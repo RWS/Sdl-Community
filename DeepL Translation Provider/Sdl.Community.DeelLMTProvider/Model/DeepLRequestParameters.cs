@@ -5,6 +5,8 @@ namespace Sdl.Community.DeepLMTProvider.Model
 {
     public class DeeplRequestParameters
     {
+        public string Context { get; set; }
+
         public string Formality { get; set; }
 
         [JsonProperty("glossary_id")]

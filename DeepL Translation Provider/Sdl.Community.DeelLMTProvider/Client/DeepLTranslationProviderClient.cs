@@ -44,7 +44,9 @@ namespace Sdl.Community.DeepLMTProvider.Client
             LanguagePair languageDirection,
             IReadOnlyList<string> sourceTexts,
             DeepLSettings deepLSettings,
-            bool useLocalCache = true)
+            bool useLocalCache = true,
+            IReadOnlyList<int> unitPositions = null,
+            IReadOnlyList<string> contextUnits = null)
         {
             var (sourceLanguage, _, _) = LanguageValidationService.GetDeepLLanguageCode(languageDirection.SourceCulture, true);
             var (targetLanguage, _, _) = LanguageValidationService.GetDeepLLanguageCode(languageDirection.TargetCulture, false);
@@ -66,30 +68,33 @@ namespace Sdl.Community.DeepLMTProvider.Client
             // Caching is gated per call, not via ILocalCache.IsEnabled: language
             // directions with different settings run concurrently and would race
             // on the shared instance's flag.
+            // Slices are cut before the cache lookup: a slice's context is part of
+            // its texts' cache keys, so slicing must not depend on what is cached.
             var cacheKeys = new string[sourceTexts.Count];
-            var pendingIndices = new List<int>(sourceTexts.Count);
-            for (var i = 0; i < sourceTexts.Count; i++)
+            foreach (var (textIndices, context) in BuildBatches(sourceTexts, unitPositions, contextUnits))
             {
-                if (useLocalCache)
+                var pendingIndices = new List<int>(textIndices.Count);
+                foreach (var i in textIndices)
                 {
-                    cacheKeys[i] = BuildCacheKey(sourceLanguage, targetLanguage, modelType, tagHandling, formality, deepLSettings, sourceTexts[i]);
-                    if (DeepLTranslationCache.Instance.TryGet(cacheKeys[i], out var cachedTranslation))
+                    if (useLocalCache)
                     {
-                        results[i] = (cachedTranslation, null);
-                        continue;
+                        cacheKeys[i] = BuildCacheKey(sourceLanguage, targetLanguage, modelType, tagHandling, formality, deepLSettings, sourceTexts[i], context);
+                        if (DeepLTranslationCache.Instance.TryGet(cacheKeys[i], out var cachedTranslation))
+                        {
+                            results[i] = (cachedTranslation, null);
+                            continue;
+                        }
                     }
+
+                    pendingIndices.Add(i);
                 }
 
-                pendingIndices.Add(i);
-            }
+                if (pendingIndices.Count == 0) continue;
 
-            var pendingTexts = pendingIndices.Select(index => sourceTexts[index]).ToList();
-            var batchStartIndex = 0;
-
-            foreach (var batch in BuildBatches(pendingTexts))
-            {
+                var batch = pendingIndices.Select(index => sourceTexts[index]).ToList();
                 var deeplRequestParameters = new DeeplRequestParameters
                 {
+                    Context = context,
                     Text = batch,
                     SourceLanguage = sourceLanguage,
                     TargetLanguage = targetLanguage,
@@ -116,7 +121,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
                     {
                         var errorMessage = !string.IsNullOrWhiteSpace(responseBody) ? responseBody : response.ReasonPhrase;
                         for (var i = 0; i < batch.Count; i++)
-                            results[pendingIndices[batchStartIndex + i]] = (null, errorMessage);
+                            results[pendingIndices[i]] = (null, errorMessage);
                     }
                     else
                     {
@@ -127,7 +132,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
                                 ? translatedObject.Translations[i].Text
                                 : null;
 
-                            var sourceIndex = pendingIndices[batchStartIndex + i];
+                            var sourceIndex = pendingIndices[i];
                             results[sourceIndex] = (translation, null);
 
                             if (useLocalCache && !string.IsNullOrEmpty(translation))
@@ -139,25 +144,24 @@ namespace Sdl.Community.DeepLMTProvider.Client
                 {
                     var inner = ex is AggregateException aEx ? aEx.InnerExceptions.FirstOrDefault() ?? ex : ex;
                     for (var i = 0; i < batch.Count; i++)
-                        results[pendingIndices[batchStartIndex + i]] = (null, inner.Message);
+                        results[pendingIndices[i]] = (null, inner.Message);
                 }
-
-                batchStartIndex += batch.Count;
             }
 
             return results;
         }
 
-        private static string BuildCacheKey(
+        public static string BuildCacheKey(
             string sourceLanguage,
             string targetLanguage,
             string modelType,
             string tagHandling,
             string formality,
             DeepLSettings deepLSettings,
-            string sourceText)
+            string sourceText,
+            string context = null)
         {
-            return new Trados.LocalCache.CacheKeyBuilder()
+            var keyBuilder = new Trados.LocalCache.CacheKeyBuilder()
                 .Add("provider", "deepl")
                 .Add("src", sourceLanguage)
                 .Add("tgt", targetLanguage)
@@ -170,8 +174,14 @@ namespace Sdl.Community.DeepLMTProvider.Client
                 .Add("preserveFormatting", deepLSettings.PreserveFormatting)
                 .Add("splitSentences", deepLSettings.SplitSentencesHandling.GetApiValue())
                 .AddValues("ignoreTags", deepLSettings.IgnoreTags)
-                .Add("content", sourceText)
-                .Build();
+                .Add("content", sourceText);
+
+            // Added only when present, so context-free keys stay as before and
+            // existing cache entries keep hitting.
+            if (context != null)
+                keyBuilder.Add("context", context);
+
+            return keyBuilder.Build();
         }
 
         private static void ApplyDeepLRestrictions(DeeplRequestParameters deeplRequestParameters)
@@ -180,28 +190,53 @@ namespace Sdl.Community.DeepLMTProvider.Client
                 deeplRequestParameters.ModelType == "latency_optimized" ? "v1" : "v2";
         }
 
-        private static IEnumerable<List<string>> BuildBatches(IReadOnlyList<string> sourceTexts)
+        public static IEnumerable<(List<int> TextIndices, string Context)> BuildBatches(
+            IReadOnlyList<string> sourceTexts,
+            IReadOnlyList<int> unitPositions = null,
+            IReadOnlyList<string> contextUnits = null)
         {
-            var currentBatch = new List<string>();
-            var currentBatchSize = 0;
+            // Walks the units in document order and cuts a request when the next unit
+            // would push text + context over the limit, so each request carries the
+            // context of its own slice. Without context, every text is its own unit
+            // and only text bytes count.
+            var unitCount = contextUnits?.Count ?? sourceTexts.Count;
+            var textAtUnit = Enumerable.Repeat(-1, unitCount).ToArray();
+            for (var i = 0; i < sourceTexts.Count; i++)
+                textAtUnit[contextUnits == null ? i : unitPositions[i]] = i;
 
-            foreach (var text in sourceTexts)
+            var textIndices = new List<int>();
+            var firstUnit = 0;
+            var size = 0;
+
+            for (var unit = 0; unit < unitCount; unit++)
             {
-                var textSize = Encoding.UTF8.GetByteCount(text ?? string.Empty);
+                var textIndex = textAtUnit[unit];
+                var unitSize = (textIndex < 0 ? 0 : Encoding.UTF8.GetByteCount(sourceTexts[textIndex] ?? string.Empty))
+                    + (contextUnits == null ? 0 : Encoding.UTF8.GetByteCount(contextUnits[unit]) + 1);
 
-                if (currentBatch.Count > 0 && currentBatchSize + textSize > MaxBatchSizeBytes)
+                if (unit > firstUnit && size + unitSize > MaxBatchSizeBytes)
                 {
-                    yield return currentBatch;
-                    currentBatch = new List<string>();
-                    currentBatchSize = 0;
+                    if (textIndices.Count > 0)
+                        yield return (textIndices, JoinContext(firstUnit, unit));
+
+                    textIndices = new List<int>();
+                    firstUnit = unit;
+                    size = 0;
                 }
 
-                currentBatch.Add(text);
-                currentBatchSize += textSize;
+                if (textIndex >= 0) textIndices.Add(textIndex);
+                size += unitSize;
             }
 
-            if (currentBatch.Count > 0)
-                yield return currentBatch;
+            if (textIndices.Count > 0)
+                yield return (textIndices, JoinContext(firstUnit, unitCount));
+
+            // A slice over the limit is a single unit too big to also carry its own
+            // context: send it without, as it would be sent with the option off.
+            string JoinContext(int from, int to) =>
+                contextUnits == null || size > MaxBatchSizeBytes
+                    ? null
+                    : string.Join("\n", contextUnits.Skip(from).Take(to - from));
         }
 
         private static HttpResponseMessage IsValidApiKey() =>
