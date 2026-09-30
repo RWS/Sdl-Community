@@ -9,6 +9,20 @@ namespace LanguageWeaverProvider.Helpers
 {
     public static class WebView2ThemeHelper
     {
+        private const string BrowserScript = @"document.oncontextmenu = (e) => { return false; };
+
+                                                document.onreadystatechange = () => {
+                                                    if (document.readyState != 'interactive') 
+                                                        { return; }
+
+                                                    for (const footerElement of document.getElementsByTagName('footer')) 
+                                                    {
+                                                        footerElement.style.visibility = 'collapse';
+                                                        footerElement.style.padding = '0px';
+                                                        footerElement.style.position = 'fixed';
+                                                    }
+                                                };";
+
         public static async Task InitializeThemeAsync(WebView2 webView, string subFolder)
         {
             bool isDark = WindowThemeHelper.IsDarkTheme();
@@ -36,7 +50,7 @@ namespace LanguageWeaverProvider.Helpers
                 };
 
                 await webView.EnsureCoreWebView2Async(environment);
-                await webView.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(GetBrowserScript());
+                await webView.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(BrowserScript);
             }
 
             webView.CoreWebView2.Profile.PreferredColorScheme = isDark
@@ -44,27 +58,6 @@ namespace LanguageWeaverProvider.Helpers
                 : CoreWebView2PreferredColorScheme.Light;
 
             webView.DefaultBackgroundColor = isDark ? Color.FromArgb(255, 43, 43, 43) : Color.White;
-        }
-
-        private static string GetBrowserScript()
-        {
-            return @"document.oncontextmenu = (e) => { return false; };
-
-                        document.onreadystatechange = () => {
-                        if (document.readyState != 'interactive') 
-                           { return; }
-
-                        for (const htmlElement of document.getElementsByTagName('html')) 
-                            { htmlElement.style.background = '#ffffff'; }
-
-                        for (const footerElement of document.getElementsByTagName('footer')) 
-                        {
-                            footerElement.style.visibility = 'collapse';
-                            footerElement.style.padding = '0px';
-                            footerElement.style.position = 'fixed';
-                            footerElement.style.background = '#ffffff';
-                        }
-                    };";
         }
     }
 }

@@ -39,7 +39,7 @@ namespace LanguageWeaverProvider.Helpers
         {
             var background = ResolveWindowBackground();
 
-            if (background == null || !IsDark(background.Value) || SystemParameters.HighContrast)
+            if (background is not { } color || !IsDark(color) || SystemParameters.HighContrast)
             {
                 return;
             }
@@ -58,7 +58,6 @@ namespace LanguageWeaverProvider.Helpers
                 _ = DwmSetWindowAttribute(handle, DWMWA_USE_IMMERSIVE_DARK_MODE_BEFORE_20H1, ref useDarkMode, sizeof(int));
             }
 
-            var color = background.Value;
             int captionColor = color.R | (color.G << 8) | (color.B << 16);
 
             _ = DwmSetWindowAttribute(handle, DWMWA_CAPTION_COLOR, ref captionColor, sizeof(int));
