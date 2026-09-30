@@ -25,7 +25,6 @@ namespace LanguageWeaverProvider.ViewModel
         private readonly ILanguageMappingDatabase _languageMappingDatabase;
         private readonly LanguagePair[] _languagePairs;
         private readonly ITranslationOptions _translationOptions;
-        private string _headerImagePath;
 
         private string _loadingAction;
         private ObservableCollection<PairMapping> _pairMappings;
@@ -44,7 +43,6 @@ namespace LanguageWeaverProvider.ViewModel
             InitializeSettingsView();
             InitializeCommands();
             LoadPairMapping();
-            SetHeader();
         }
 
         public delegate void CloseWindowEventRaiser();
@@ -52,16 +50,6 @@ namespace LanguageWeaverProvider.ViewModel
         public event CloseWindowEventRaiser CloseEventRaised;
 
         public ICommand CloseCommand { get; private set; }
-
-        public string HeaderImagePath
-        {
-            get => _headerImagePath;
-            set
-            {
-                _headerImagePath = value;
-                OnPropertyChanged();
-            }
-        }
 
         public string LoadingAction
         {
@@ -416,11 +404,6 @@ namespace LanguageWeaverProvider.ViewModel
             InitializeSettingsView();
             OnPropertyChanged(nameof(SettingsView));
             CreatePairMappings();
-        }
-
-        private void SetHeader()
-        {
-            HeaderImagePath = "pack://application:,,,/LanguageWeaverProvider;component/Resources/LW_Logo_Brand.png";
         }
     }
 }

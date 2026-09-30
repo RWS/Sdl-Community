@@ -40,6 +40,7 @@
 				<ResourceDictionary Source="pack://application:,,,/LanguageWeaverProvider;component/Controls/ProgressIndicator.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/LanguageWeaverProvider;component/Controls/WatermarkTextBoxResources.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/LanguageWeaverProvider;component/Controls/WatermarkPasswordBoxResources.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/LanguageWeaverProvider;component/Resources/LanguageWeaver.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <Style TargetType="Image">
@@ -86,9 +87,9 @@
 
         <Image Grid.Row="0"
                Grid.ColumnSpan="2"
-               Source="{Binding HeaderImagePath}"
+               Source="{StaticResource LanguageWeaverLogo}"
                Height="48"
-               Margin="48 24 48 0" />
+               Margin="48 24 48 0"/>
 
         <Grid Grid.Row="1"
               Grid.ColumnSpan="2"
@@ -105,7 +106,7 @@
 
                 <TextBlock Grid.Row="0"
                            Text="{x:Static root:PluginResources.CloudMappingView_WelcomeMessage}"
-                           Foreground="#444444"
+                           Foreground="{DynamicResource Rws.Text.Default}"
                            FontSize="12"
                            FontWeight="DemiBold"
                            Focusable="True"
@@ -128,7 +129,7 @@
                                     VerticalAlignment="Center">
 							
                             <TextBlock Text="|"
-                                       Foreground="#E4D4D4"
+                                       Foreground="{DynamicResource Rws.Text.Muted}"
                                        FontWeight="Light" />
 							
                             <Button Content="{x:Static root:PluginResources.PairMappingView_Buttons_Refresh}"
@@ -160,7 +161,7 @@
                                     Margin="8 0" />
 							
                             <TextBlock Text="|"
-                                       Foreground="#E4D4D4"
+                                       Foreground="{DynamicResource Rws.Text.Muted}"
                                        FontWeight="Light"
                                        Margin="0 0 8 0" />
                         </StackPanel>
@@ -289,7 +290,7 @@
                                                                    Visibility="{Binding DictionaryId, Converter={StaticResource EmptyStringToVisibilityConverter}}"
                                                                    FontSize="10"
                                                                    FontStyle="Italic"
-                                                                   Foreground="#808080"
+                                                                   Foreground="{DynamicResource Rws.Text.Secondary}"
                                                                    Margin="0"
                                                                    Grid.Row="1"
                                                                    Grid.Column="0"

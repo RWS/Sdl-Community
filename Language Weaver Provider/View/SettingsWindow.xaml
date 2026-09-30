@@ -31,9 +31,9 @@
     <Border Margin="10">
         <Grid>
             <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0">
@@ -176,6 +176,7 @@
                    />
 
                     <Button HorizontalAlignment="Left"
+                            Style="{StaticResource Sdl.Button.GeneralStyle}"
                   Width="80"
                   Height="24"
                   Cursor="Hand"
@@ -215,6 +216,7 @@
                               />
 
                     <Button HorizontalAlignment="Left"
+                            Style="{StaticResource Sdl.Button.GeneralStyle}"
                               Width="80"
                               Height="24"
                               Cursor="Hand"
@@ -246,6 +248,7 @@
                         </Image.ToolTip>
                     </Image>
                     <Button HorizontalAlignment="Left"
+                            Style="{StaticResource Sdl.Button.GeneralStyle}"
                           Width="90"
                           Height="24"
                           Cursor="Hand"
@@ -264,7 +267,7 @@
                 HorizontalAlignment="Right"
                 Orientation="Horizontal"
                Margin="16">
-                       <Button 
+                <Button 
                             Style="{StaticResource Sdl.Button.PrimaryStyle}"
                             Content="OK"
                             Margin="16 0"
@@ -277,8 +280,8 @@
                             Height="26"
                             Width="120">
 
-                        </Button>
-                        <Button 
+                </Button>
+                <Button 
                             Style="{StaticResource Sdl.Button.SecondaryStyle}"
                             Content="Cancel"
                             IsCancel="True"
@@ -287,7 +290,7 @@
                             FontWeight="DemiBold"
                             Height="26"
                             Width="120">
-                        </Button>
+                </Button>
             </StackPanel>
         </Grid>
     </Border>

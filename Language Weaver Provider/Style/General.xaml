@@ -40,20 +40,9 @@
 					 Color="#8825BD59" />
 	<SolidColorBrush x:Key="SdlDarkGreenButtonStyle.Disabled.Border"
 					 Color="#882CA754" />
-	<SolidColorBrush x:Key="SdlDarkGreenButtonStyle.Disabled.Foreground"
+    <SolidColorBrush x:Key="SdlDarkGreenButtonStyle.Disabled.Foreground"
 					 Color="White" />
-
-	<SolidColorBrush x:Key="SdlSecondaryButton.Background"
-					 Color="#FFE1E7EB" />
-	<SolidColorBrush x:Key="SdlSecondaryButton.Border"
-					 Color="#CACFD3" />
-	<SolidColorBrush x:Key="SdlSecondaryButton.Foreground"
-					 Color="#2A3B4C" />
-	<SolidColorBrush x:Key="SdlSecondaryButton.MouseOver.Background"
-					 Color="#FFCFD4D7" />
-	<SolidColorBrush x:Key="SdlSecondaryButton.MouseOver.Border"
-					 Color="#CACFD3" />
-	<SolidColorBrush x:Key="SdlSecondaryButton.Pressed.Background"
+    <SolidColorBrush x:Key="SdlSecondaryButton.Pressed.Background"
 					 Color="#FFCFD4D7" />
 	<SolidColorBrush x:Key="SdlSecondaryButton.Pressed.Border"
 					 Color="#CACFD3" />
