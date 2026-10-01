@@ -2,17 +2,14 @@
 using Sdl.Community.IATETerminologyProvider.Helpers;
 using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Community.IATETerminologyProvider.Service;
-using Sdl.Terminology.TerminologyProvider.Core;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TradosStudio.API.TranslationResources.Terminology;
 
 namespace Sdl.Community.IATETerminologyProvider
 {
-    [TerminologyProviderFactory(Id = "IATETerminologyProvider",
-        Name = "IATE Terminology Provider",
-        Icon = "Iate_logo",
-        Description = "IATE terminology provider factory")]
     public class IATETerminologyProviderFactory : ITerminologyProviderFactory
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
@@ -31,6 +28,11 @@ namespace Sdl.Community.IATETerminologyProvider
         {
             var savedSettings = SettingsService.GetSettingsForCurrentProject();
             var savedTermTypesNumber = savedSettings?.TermTypes.Count;
+
+            if(!IATEApplication.IsInitialized)
+            {
+                System.Threading.Tasks.Task.Run(async () => await IATEApplication.ExecuteAsync()).GetAwaiter().GetResult();
+            }
 
             if (savedTermTypesNumber > 0 && savedTermTypesNumber > IATEApplication.InventoriesProvider.TermTypes?.Count)
             {

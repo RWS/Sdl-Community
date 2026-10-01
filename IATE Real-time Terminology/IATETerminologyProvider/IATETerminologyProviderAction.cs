@@ -9,8 +9,6 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 
 namespace Sdl.Community.IATETerminologyProvider
 {
-	[RibbonGroup("IATETermDefinition", Name = "IATE Term Definition")]
-	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultViews.TradosStudioViewsLocation))]
 	public class IATETerminologyProviderAction: AbstractRibbonGroup
 	{
 		private static SearchResultsViewerController GetSearchResultsController()
@@ -66,9 +64,6 @@ namespace Sdl.Community.IATETerminologyProvider
 			searchResultsController.NavigateTo(url);
 		}
 
-		[Action("IATESearchAllAction", Name = "Search IATE (all)", Icon = "Iate_logo")]
-		[ActionLayout(typeof(IATETerminologyProviderAction), 20, DisplayType.Large)]
-		[ActionLayout(typeof(TranslationStudioDefaultContextMenus.EditorDocumentContextMenuLocation), 10, DisplayType.Large)]
 		public class IATESearchAllAction : AbstractAction
 		{
 			// Navigate to the IATE search term based on the document source and all existing target languages(from IATE)
@@ -78,9 +73,6 @@ namespace Sdl.Community.IATETerminologyProvider
 			}
 		}
 
-		[Action("IATESearchSourceTargetAction", Name = "Search IATE (source and target only)", Icon = "Iate_logo")]
-		[ActionLayout(typeof(IATETerminologyProviderAction), 20, DisplayType.Large)]
-		[ActionLayout(typeof(TranslationStudioDefaultContextMenus.EditorDocumentContextMenuLocation), 10, DisplayType.Large)]
 		public class IATESearchSourceLanguageAction : AbstractAction
 		{	
 			// Navigate to the IATE search term based on only source and target languages set on the active document

@@ -137,7 +137,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 
 			var getInstitutionsResponse = await _connectionProvider.HttpClient.SendAsync(getInstitutionsRequest);
 
-			var institutionsJson = new List<IateInstitution>();
+            var institutionsJson = new List<IateInstitution>();
 
 			try
 			{

@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Sdl.ProjectAutomation.Core;
-using Sdl.Terminology.TerminologyProvider.Core;
+using TradosStudio.API.TranslationResources.Terminology;
+
 
 namespace Sdl.Community.IATETerminologyProvider.Interface
 {

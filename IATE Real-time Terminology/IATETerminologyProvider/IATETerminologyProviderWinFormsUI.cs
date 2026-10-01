@@ -1,52 +1,30 @@
-﻿using NLog;
+﻿using Sdl.Community.IATETerminologyProvider.Behaviours;
 using Sdl.Community.IATETerminologyProvider.Helpers;
-using Sdl.Community.IATETerminologyProvider.View;
-using Sdl.Terminology.TerminologyProvider.Core;
+
 using System;
-using System.Windows.Forms;
+using TradosStudio.API.TranslationResources.Terminology;
+using TradosStudio.API.TranslationResources.Terminology.Behaviours.Interfaces;
 
 namespace Sdl.Community.IATETerminologyProvider
 {
-    [TerminologyProviderWinFormsUI]
-    public class IATETerminologyProviderWinFormsUI : ITerminologyProviderWinFormsUIWithEdit
+    public class IATETerminologyProviderWinFormsUI : ITerminologyProviderWinFormsUI
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private MainWindow _mainWindow;
-
         public string TypeDescription => PluginResources.IATETerminologyProviderDescription;
         public string TypeName => PluginResources.IATETerminologyProviderName;
 
-        public ITerminologyProvider[] Browse(IWin32Window owner)
+        public T GetBehaviour<T>() where T : ITerminologyProviderBehaviour
         {
-            return Browse();
-        }
-
-        public bool Edit(IWin32Window owner, ITerminologyProvider terminologyProvider)
-        {
-            if (!IATEApplication.ConnectionProvider.EnsureConnection())
+            if(typeof(T) == typeof(IEditBehaviour))
             {
-                var exception = new Exception("Failed login!");
-                _logger.Error(exception);
-
-                throw exception;
+                return (T)(ITerminologyProviderBehaviour)new IATEEditBehaviour();
             }
 
-            var provider = terminologyProvider as IATETerminologyProvider;
-            if (provider == null)
+            if (typeof(T) == typeof(IBrowseBehaviour))
             {
-                return false;
+                return (T)(ITerminologyProviderBehaviour)new IATEIBrowseBehaviour();
             }
 
-            _mainWindow = IATEApplication.GetMainWindow();
-
-            if (!_mainWindow.ShowDialog() ?? false)
-            {
-                return false;
-            }
-
-            provider.ProviderSettings = _mainWindow.ProviderSettings;
-
-            return true;
+            return default;
         }
 
         public TerminologyProviderDisplayInfo GetDisplayInfo(Uri terminologyProviderUri)
@@ -61,29 +39,6 @@ namespace Sdl.Community.IATETerminologyProvider
         public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
         {
             return terminologyProviderUri.Scheme == Constants.IATEGlossary;
-        }
-
-        private ITerminologyProvider[] Browse()
-        {
-            _mainWindow = IATEApplication.GetMainWindow();
-            if (_mainWindow != null)
-            {
-                _mainWindow.ShowDialog();
-                if (!_mainWindow?.DialogResult ?? true)
-                {
-                    return null;
-                }
-
-                var provider = new IATETerminologyProvider(_mainWindow.ProviderSettings, IATEApplication.ConnectionProvider,
-                    IATEApplication.InventoriesProvider, IATEApplication.CacheProvider, IATEApplication.EUProvider);
-
-                return new ITerminologyProvider[] { provider };
-            }
-
-            var exception = new Exception("Failed login!");
-            _logger.Error(exception);
-
-            throw exception;
         }
     }
 }
