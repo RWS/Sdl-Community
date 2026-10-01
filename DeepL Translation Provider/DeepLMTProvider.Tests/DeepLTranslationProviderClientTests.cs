@@ -200,20 +200,20 @@ namespace DeepLMTProvider.Tests
         }
 
         [Fact]
-        public void BuildBatches_WithContext_CutsASliceEveryThreeUnits()
+        public void BuildBatches_WithContext_CutsASliceEveryFiveUnits()
         {
             // Arrange
-            var units = new[] { "a", "b", "c", "d", "e", "f", "g", "h", "i" };
+            var units = new[] { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l" };
 
             // Act
-            var batches = DeepLTranslationProviderClient.BuildBatches(units, Enumerable.Range(0, 9).ToArray(), units).ToList();
+            var batches = DeepLTranslationProviderClient.BuildBatches(units, Enumerable.Range(0, 12).ToArray(), units).ToList();
 
             // Assert
-            Assert.Equal(new[] { new[] { 0, 1, 2 }, new[] { 3, 4, 5 }, new[] { 6, 7, 8 } }, batches.Select(b => b.TextIndices.ToArray()));
+            Assert.Equal(new[] { new[] { 0, 1, 2, 3, 4 }, new[] { 5, 6, 7, 8, 9 }, new[] { 10, 11 } }, batches.Select(b => b.TextIndices.ToArray()));
         }
 
         [Fact]
-        public void BuildBatches_WithContext_PadsEachSliceWithOneNeighbourOnEachSide_ClampedAtBatchEdges()
+        public void BuildBatches_WithContext_AddsThePreviousUnitButNothingAfter()
         {
             // Arrange
             var units = new[] { "a", "b", "c", "d", "e", "f", "g", "h", "i" };
@@ -222,21 +222,21 @@ namespace DeepLMTProvider.Tests
             var batches = DeepLTranslationProviderClient.BuildBatches(units, Enumerable.Range(0, 9).ToArray(), units).ToList();
 
             // Assert
-            Assert.Equal(new[] { "a\nb\nc\nd", "c\nd\ne\nf\ng", "f\ng\nh\ni" }, batches.Select(b => b.Context));
+            Assert.Equal(new[] { "a\nb\nc\nd\ne", "e\nf\ng\nh\ni" }, batches.Select(b => b.Context));
         }
 
         [Fact]
         public void BuildBatches_WithContext_PaddingCountsTowardTheRequestLimit()
         {
-            // Arrange: 30 KiB units; two units plus their padded context would exceed 128 KiB
+            // Arrange: 30 KiB units; the previous unit in the context counts toward 128 KiB
             var units = Enumerable.Range(0, 4).Select(k => new string((char)('a' + k), 30 * KiB)).ToArray();
 
             // Act
             var batches = DeepLTranslationProviderClient.BuildBatches(units, new[] { 0, 1, 2, 3 }, units).ToList();
 
             // Assert
-            Assert.Equal(new[] { new[] { 0 }, new[] { 1 }, new[] { 2 }, new[] { 3 } }, batches.Select(b => b.TextIndices.ToArray()));
-            Assert.Equal(string.Join("\n", units[0], units[1], units[2]), batches[1].Context);
+            Assert.Equal(new[] { new[] { 0, 1 }, new[] { 2 }, new[] { 3 } }, batches.Select(b => b.TextIndices.ToArray()));
+            Assert.Equal(string.Join("\n", units[1], units[2]), batches[1].Context);
             Assert.All(batches, b => Assert.True(
                 b.TextIndices.Sum(i => units[i].Length) + b.Context.Length <= 128 * KiB));
         }

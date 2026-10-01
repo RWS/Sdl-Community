@@ -20,11 +20,12 @@ namespace Sdl.Community.DeepLMTProvider.Client
     {
         private const int MaxBatchSizeBytes = 128 * 1024;
 
-        // Measured (DET-830): DeepL only used context of about 5 segments; whole-batch
-        // context was ignored. 3 units per request plus 1 neighbour on each side keeps
-        // the context at ~5 segments.
-        private const int ContextSliceUnits = 3;
-        private const int ContextPadUnits = 1;
+        // Measured (DET-830): DeepL used the context only in requests shaped like
+        // Studio's 5-segment batches: the request's own segments plus the one before.
+        // Larger context, or context reaching past the request, was ignored.
+        private const int ContextSliceUnits = 5;
+        private const int ContextUnitsBefore = 1;
+        private const int ContextUnitsAfter = 0;
 
         private const int MaxSendAttempts = 3;
         private const int MaxRequestsInFlight = 8;
@@ -211,7 +212,8 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
             // Prefix sums, so the size of a slice [from, to) including its padded
             // context is O(1): text bytes of the slice + context bytes of the padded range.
-            var pad = contextUnits == null ? 0 : ContextPadUnits;
+            var unitsBefore = contextUnits == null ? 0 : ContextUnitsBefore;
+            var unitsAfter = contextUnits == null ? 0 : ContextUnitsAfter;
             var textPrefix = new int[unitCount + 1];
             var contextPrefix = new int[unitCount + 1];
             for (var unit = 0; unit < unitCount; unit++)
@@ -244,8 +246,8 @@ namespace Sdl.Community.DeepLMTProvider.Client
             if (textIndices.Count > 0)
                 yield return (textIndices, JoinContext(firstUnit, unitCount));
 
-            int PaddedFrom(int from) => Math.Max(0, from - pad);
-            int PaddedTo(int to) => Math.Min(unitCount, to + pad);
+            int PaddedFrom(int from) => Math.Max(0, from - unitsBefore);
+            int PaddedTo(int to) => Math.Min(unitCount, to + unitsAfter);
 
             int Size(int from, int to) =>
                 textPrefix[to] - textPrefix[from] + contextPrefix[PaddedTo(to)] - contextPrefix[PaddedFrom(from)];
