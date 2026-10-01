@@ -34,6 +34,7 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/LanguageWeaverProvider;component/Controls/ProgressIndicator.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/LanguageWeaverProvider;component/Controls/WatermarkTextBoxResources.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/LanguageWeaverProvider;component/Resources/LanguageWeaver.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 
 			<Style TargetType="Image">
@@ -62,16 +63,16 @@
 				<ColumnDefinition Width="Auto" />
 			</Grid.ColumnDefinitions>
 
-			<Image Grid.Row="0"
+            <Image Grid.Row="0"
 				   Grid.ColumnSpan="2"
-				   Source="pack://application:,,,/LanguageWeaverProvider;component/Resources/LW_Logo_Brand.png"
-                   Height="80"
-				   Margin="0 16 0 0" />
+				   Source="{StaticResource LanguageWeaverLogo}"
+				   Height="80"
+				   Stretch="Uniform" />
 
-			<TextBlock Grid.Row="1"
+            <TextBlock Grid.Row="1"
 					   Grid.RowSpan="2"
 					   Text="The Language Mapping feature allows users to align unrecognised or new language codes coming from the machine translation engine with a recognised language in Trados Studio, enabling translation where it otherwise wouldn't be possible."
-					   Foreground="#444444"
+					   Foreground="{DynamicResource Rws.Text.Default}"
 					   FontSize="12"
 					   FontWeight="DemiBold"
 					   Focusable="True"
@@ -98,7 +99,7 @@
 			<TextBlock Grid.Row="2"
 					   Grid.Column="1"
 					   Margin="0 0 20 0"
-					   Foreground="#444444"
+					   Foreground="{DynamicResource Rws.Text.Default}"
 					   FontSize="11"
 					   FontWeight="DemiBold"
 					   HorizontalAlignment="Right"

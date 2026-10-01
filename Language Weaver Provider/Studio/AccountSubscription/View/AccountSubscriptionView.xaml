@@ -50,7 +50,6 @@
 				   Grid.ColumnSpan="3"
 				   Text="Please select the account that you wish to see your informations"
 				   Style="{StaticResource Sdl.TextBlock.SubsectionTitleStyle}"
-				   Foreground="Black"
 				   FontSize="14" />
 
 		<ComboBox Grid.Row="1"
@@ -64,7 +63,6 @@
 				   Grid.Column="0"
 				   Text="Subscription info"
 				   Style="{StaticResource Sdl.TextBlock.SubsectionTitleStyle}"
-				   Foreground="Black"
 				   FontSize="14" />
 
 		<TextBlock Grid.Row="3"

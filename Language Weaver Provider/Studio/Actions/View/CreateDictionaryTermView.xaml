@@ -50,7 +50,7 @@
 		</ResourceDictionary>
 	</Window.Resources>
 
-	<Border Background="#f6f6f6"
+    <Border Background="{DynamicResource Rws.Bg.Main}"
 			CornerRadius="2"
 			BorderThickness=".5"
 			Padding="2"
@@ -67,7 +67,7 @@
 			</Grid.RowDefinitions>
 
 			<Grid Grid.Row="0"
-				  Background="#ffffff">
+				  Background="{DynamicResource ComboBox.Pressed.Editable.Background}">
 				<Image HorizontalAlignment="Left"
 					   VerticalAlignment="Center"
 					   Source="pack://application:,,,/LanguageWeaverProvider;component/Resources/lwHeader_Main.png"
@@ -266,8 +266,7 @@
 
 			<Grid Grid.Row="6"
 				  Grid.ColumnSpan="2"
-				  HorizontalAlignment="Stretch"
-				  Background="#ffffff">
+				  HorizontalAlignment="Stretch">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto" />
 					<ColumnDefinition Width="*" />

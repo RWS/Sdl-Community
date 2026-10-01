@@ -11,10 +11,18 @@
         SizeToContent="Height"
         d:DataContext="{d:DesignInstance local:SubscriptionViewModel}"
         WindowStartupLocation="CenterScreen"
-        Title="{Binding WindowTitle}" Width="600" MinHeight="150">
+        Title="{Binding WindowTitle}" Width="600" MinHeight="150"
+        Background="{DynamicResource Rws.Bg.Main}"
+        Foreground="{DynamicResource Rws.Text.Default}">
     <Window.Resources>
         <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/LanguageWeaverProvider;component/Resources/LanguageWeaver.xaml" />
+            </ResourceDictionary.MergedDictionaries>
             <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            
         </ResourceDictionary>
     </Window.Resources>
     <Grid Margin="10">
@@ -85,21 +93,23 @@
             <StackPanel Grid.Column="1"
                 Orientation="Horizontal"
                 VerticalAlignment="Center">
-                
-                <Button 
+
+                <Button Style="{StaticResource Sdl.Button.GeneralStyle}"
                         Padding="25 5"
                 Command="{Binding PrimaryCommand}"
                 Content="{Binding PrimaryButtonContent}"
                 Visibility="{Binding ShowPrimaryButton, Converter={StaticResource BooleanToVisibilityConverter}}"
                 Margin="10,0,0,0" />
                 
-                <Button Padding="25 5"
+                <Button Style="{StaticResource Sdl.Button.GeneralStyle}"
+                        Padding="25 5"
                 Command="{Binding SecondaryCommand}"
                 Content="{Binding SecondaryButtonContent}"
                 Visibility="{Binding ShowSecondaryButton, Converter={StaticResource BooleanToVisibilityConverter}}"
                 Margin="10,0,0,0" />
 
-                <Button Padding="25 5"
+                <Button Style="{StaticResource Sdl.Button.GeneralStyle}"
+                        Padding="25 5"
                 Content="{Binding CancelContent}"
                 IsCancel="True"
                 Margin="10,0,0,0" />
