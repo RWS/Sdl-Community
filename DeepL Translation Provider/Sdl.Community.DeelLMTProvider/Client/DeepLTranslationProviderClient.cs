@@ -11,12 +11,24 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Sdl.Community.DeepLMTProvider.Client
 {
     public class DeepLTranslationProviderClient
     {
         private const int MaxBatchSizeBytes = 128 * 1024;
+
+        // Measured (DET-830): DeepL only used context of about 5 segments; whole-batch
+        // context was ignored. 3 units per request plus 1 neighbour on each side keeps
+        // the context at ~5 segments.
+        private const int ContextSliceUnits = 3;
+        private const int ContextPadUnits = 1;
+
+        private const int MaxSendAttempts = 3;
+        private const int MaxRequestsInFlight = 8;
+        private static readonly Random Jitter = new();
 
         private static readonly Logger Logger = Log.GetLogger(nameof(DeepLTranslationProviderClient));
 
@@ -70,7 +82,10 @@ namespace Sdl.Community.DeepLMTProvider.Client
             // on the shared instance's flag.
             // Slices are cut before the cache lookup: a slice's context is part of
             // its texts' cache keys, so slicing must not depend on what is cached.
+            // The cache is only touched on this thread: lookups before the parallel
+            // sends, writes after them.
             var cacheKeys = new string[sourceTexts.Count];
+            var requests = new List<(List<int> Indices, DeeplRequestParameters Parameters)>();
             foreach (var (textIndices, context) in BuildBatches(sourceTexts, unitPositions, contextUnits))
             {
                 var pendingIndices = new List<int>(textIndices.Count);
@@ -91,11 +106,10 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
                 if (pendingIndices.Count == 0) continue;
 
-                var batch = pendingIndices.Select(index => sourceTexts[index]).ToList();
                 var deeplRequestParameters = new DeeplRequestParameters
                 {
                     Context = context,
-                    Text = batch,
+                    Text = pendingIndices.Select(index => sourceTexts[index]).ToList(),
                     SourceLanguage = sourceLanguage,
                     TargetLanguage = targetLanguage,
                     Formality = formality,
@@ -111,40 +125,31 @@ namespace Sdl.Community.DeepLMTProvider.Client
                 };
 
                 ApplyDeepLRestrictions(deeplRequestParameters);
+                requests.Add((pendingIndices, deeplRequestParameters));
+            }
 
-                try
+            // Task.Run: the sends must not resume on a caller's synchronization context.
+            var outcomes = Task.Run(() => SendAllAsync(requests, r => TranslateAsync(r.Parameters), MaxRequestsInFlight))
+                .GetAwaiter().GetResult();
+
+            for (var r = 0; r < requests.Count; r++)
+            {
+                var (pendingIndices, _) = requests[r];
+                var (translations, errorMessage) = outcomes[r];
+                for (var i = 0; i < pendingIndices.Count; i++)
                 {
-                    var response = Translate(deeplRequestParameters);
-                    var responseBody = response.Content?.ReadAsStringAsync().Result;
-
-                    if (!response.IsSuccessStatusCode)
+                    var sourceIndex = pendingIndices[i];
+                    if (errorMessage is not null)
                     {
-                        var errorMessage = !string.IsNullOrWhiteSpace(responseBody) ? responseBody : response.ReasonPhrase;
-                        for (var i = 0; i < batch.Count; i++)
-                            results[pendingIndices[i]] = (null, errorMessage);
+                        results[sourceIndex] = (null, errorMessage);
+                        continue;
                     }
-                    else
-                    {
-                        var translatedObject = JsonConvert.DeserializeObject<TranslationResponse>(responseBody);
-                        for (var i = 0; i < batch.Count; i++)
-                        {
-                            var translation = translatedObject?.Translations?.Count > i
-                                ? translatedObject.Translations[i].Text
-                                : null;
 
-                            var sourceIndex = pendingIndices[i];
-                            results[sourceIndex] = (translation, null);
+                    var translation = translations?.Count > i ? translations[i].Text : null;
+                    results[sourceIndex] = (translation, null);
 
-                            if (useLocalCache && !string.IsNullOrEmpty(translation))
-                                DeepLTranslationCache.Instance.Set(cacheKeys[sourceIndex], translation);
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    var inner = ex is AggregateException aEx ? aEx.InnerExceptions.FirstOrDefault() ?? ex : ex;
-                    for (var i = 0; i < batch.Count; i++)
-                        results[pendingIndices[i]] = (null, inner.Message);
+                    if (useLocalCache && !string.IsNullOrEmpty(translation))
+                        DeepLTranslationCache.Instance.Set(cacheKeys[sourceIndex], translation);
                 }
             }
 
@@ -204,39 +209,91 @@ namespace Sdl.Community.DeepLMTProvider.Client
             for (var i = 0; i < sourceTexts.Count; i++)
                 textAtUnit[contextUnits == null ? i : unitPositions[i]] = i;
 
-            var textIndices = new List<int>();
-            var firstUnit = 0;
-            var size = 0;
-
+            // Prefix sums, so the size of a slice [from, to) including its padded
+            // context is O(1): text bytes of the slice + context bytes of the padded range.
+            var pad = contextUnits == null ? 0 : ContextPadUnits;
+            var textPrefix = new int[unitCount + 1];
+            var contextPrefix = new int[unitCount + 1];
             for (var unit = 0; unit < unitCount; unit++)
             {
                 var textIndex = textAtUnit[unit];
-                var unitSize = (textIndex < 0 ? 0 : Encoding.UTF8.GetByteCount(sourceTexts[textIndex] ?? string.Empty))
+                textPrefix[unit + 1] = textPrefix[unit]
+                    + (textIndex < 0 ? 0 : Encoding.UTF8.GetByteCount(sourceTexts[textIndex] ?? string.Empty));
+                contextPrefix[unit + 1] = contextPrefix[unit]
                     + (contextUnits == null ? 0 : Encoding.UTF8.GetByteCount(contextUnits[unit]) + 1);
+            }
 
-                if (unit > firstUnit && size + unitSize > MaxBatchSizeBytes)
+            var textIndices = new List<int>();
+            var firstUnit = 0;
+
+            for (var unit = 0; unit < unitCount; unit++)
+            {
+                if (unit > firstUnit && (Size(firstUnit, unit + 1) > MaxBatchSizeBytes
+                    || contextUnits != null && unit - firstUnit >= ContextSliceUnits))
                 {
                     if (textIndices.Count > 0)
                         yield return (textIndices, JoinContext(firstUnit, unit));
 
                     textIndices = new List<int>();
                     firstUnit = unit;
-                    size = 0;
                 }
 
-                if (textIndex >= 0) textIndices.Add(textIndex);
-                size += unitSize;
+                if (textAtUnit[unit] >= 0) textIndices.Add(textAtUnit[unit]);
             }
 
             if (textIndices.Count > 0)
                 yield return (textIndices, JoinContext(firstUnit, unitCount));
 
-            // A slice over the limit is a single unit too big to also carry its own
-            // context: send it without, as it would be sent with the option off.
+            int PaddedFrom(int from) => Math.Max(0, from - pad);
+            int PaddedTo(int to) => Math.Min(unitCount, to + pad);
+
+            int Size(int from, int to) =>
+                textPrefix[to] - textPrefix[from] + contextPrefix[PaddedTo(to)] - contextPrefix[PaddedFrom(from)];
+
+            // A slice over the limit is a single unit too big to also carry its context:
+            // send it without, as it would be sent with the option off.
             string JoinContext(int from, int to) =>
-                contextUnits == null || size > MaxBatchSizeBytes
+                contextUnits == null || Size(from, to) > MaxBatchSizeBytes
                     ? null
-                    : string.Join("\n", contextUnits.Skip(from).Take(to - from));
+                    : string.Join("\n", contextUnits.Skip(PaddedFrom(from)).Take(PaddedTo(to) - PaddedFrom(from)));
+        }
+
+        // Runs all sends concurrently, at most maxInFlight at a time; results keep request order.
+        public static async Task<TResult[]> SendAllAsync<TRequest, TResult>(
+            IReadOnlyList<TRequest> requests,
+            Func<TRequest, Task<TResult>> send,
+            int maxInFlight)
+        {
+            using var gate = new SemaphoreSlim(maxInFlight);
+            return await Task.WhenAll(requests.Select(async request =>
+            {
+                await gate.WaitAsync().ConfigureAwait(false);
+                try { return await send(request).ConfigureAwait(false); }
+                finally { gate.Release(); }
+            })).ConfigureAwait(false);
+        }
+
+        public static async Task<HttpResponseMessage> SendWithRetryAsync(
+            Func<Task<HttpResponseMessage>> send,
+            Func<TimeSpan, Task> delay)
+        {
+            // DeepL: retry 429/529 and 5xx with exponential backoff and jitter; never 456 (quota).
+            for (var attempt = 1; ; attempt++)
+            {
+                var response = await send().ConfigureAwait(false);
+                var status = (int)response.StatusCode;
+                if (attempt >= MaxSendAttempts || status != 429 && status < 500) return response;
+
+                var retryAfter = response.Headers.RetryAfter;
+                response.Dispose();
+
+                int jitterMs;
+                lock (Jitter) jitterMs = Jitter.Next(250);
+                var wait = retryAfter?.Delta
+                    ?? (retryAfter?.Date is { } until ? until - DateTimeOffset.UtcNow : (TimeSpan?)null)
+                    ?? TimeSpan.FromSeconds(Math.Pow(2, attempt - 1)) + TimeSpan.FromMilliseconds(jitterMs);
+                await delay(wait > TimeSpan.Zero ? wait : TimeSpan.Zero).ConfigureAwait(false);
+            }
         }
 
         private static HttpResponseMessage IsValidApiKey() =>
@@ -264,7 +321,10 @@ namespace Sdl.Community.DeepLMTProvider.Client
             LanguageClientV3.ClearCache();
         }
 
-        private static HttpResponseMessage Translate(DeeplRequestParameters deeplRequestParameters)
+        // One request per slice; errors are returned, not thrown, so one failed slice
+        // only fails its own segments.
+        private static async Task<(List<TranslationDetails> Translations, string ErrorMessage)> TranslateAsync(
+            DeeplRequestParameters deeplRequestParameters)
         {
             var requestJson = JsonConvert.SerializeObject(
                 deeplRequestParameters,
@@ -273,16 +333,35 @@ namespace Sdl.Community.DeepLMTProvider.Client
                     NullValueHandling = NullValueHandling.Ignore,
                     ContractResolver = new CamelCasePropertyNamesContractResolver()
                 });
+            var requestUri = new Uri($"{BaseUrl}/translate");
 
-            var request = new HttpRequestMessage
+            // .NET Framework allows 2 connections per host by default, which would
+            // serialize the parallel requests; raise it for DeepL's host only.
+            var servicePoint = ServicePointManager.FindServicePoint(requestUri);
+            if (servicePoint.ConnectionLimit < MaxRequestsInFlight)
+                servicePoint.ConnectionLimit = MaxRequestsInFlight;
+
+            try
             {
-                Content = new StringContent(requestJson, Encoding.UTF8, "application/json"),
-                Method = HttpMethod.Post,
-                RequestUri = new Uri($"{BaseUrl}/translate")
-            };
+                // A request message can only be sent once, so each attempt builds its own.
+                using var response = await SendWithRetryAsync(
+                    () => AppInitializer.Client.SendAsync(new HttpRequestMessage(HttpMethod.Post, requestUri)
+                    {
+                        Content = new StringContent(requestJson, Encoding.UTF8, "application/json")
+                    }),
+                    Task.Delay).ConfigureAwait(false);
 
-            var response = AppInitializer.Client.SendAsync(request).Result;
-            return response;
+                var responseBody = response.Content is null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                if (!response.IsSuccessStatusCode)
+                    return (null, !string.IsNullOrWhiteSpace(responseBody) ? responseBody : response.ReasonPhrase);
+
+                return (JsonConvert.DeserializeObject<TranslationResponse>(responseBody)?.Translations, null);
+            }
+            catch (Exception ex)
+            {
+                var inner = ex is AggregateException aEx ? aEx.InnerExceptions.FirstOrDefault() ?? ex : ex;
+                return (null, inner.Message);
+            }
         }
     }
 }
