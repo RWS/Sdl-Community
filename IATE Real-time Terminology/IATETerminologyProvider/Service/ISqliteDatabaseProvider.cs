@@ -1,0 +1,18 @@
+﻿using Sdl.Community.IATETerminologyProvider.Model;
+using Sdl.ProjectAutomation.Core;
+using System.Collections.Generic;
+
+namespace Sdl.Community.IATETerminologyProvider.Service
+{
+    public interface ISqliteDatabaseProvider
+    {
+        void CloseConnection();
+        void Connect(IProject project);
+        List<SearchCache> Get();
+        SearchCache Get(string sourceText, string targetLanguage, string queryString);
+        int Insert(SearchCache searchCache);
+        bool IsConnected();
+        void RemoveAll();
+        void Update(SearchCache searchCache);
+    }
+}

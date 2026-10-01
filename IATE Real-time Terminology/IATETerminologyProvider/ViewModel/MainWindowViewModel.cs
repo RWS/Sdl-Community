@@ -19,12 +19,20 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 		private ICommand _saveSettingsCommand;
 		private ICommand _saveTemplateCommand;
 		private ICommand _importSettingsCommand;
+        private ICacheProvider _cacheProvider;
+        private IMessageBoxService _messageBoxService;
 
-		public MainWindowViewModel(List<ISettingsViewModel> viewModels, SettingsModel settingsModel)
+
+        public MainWindowViewModel(List<ISettingsViewModel> viewModels, 
+            SettingsModel settingsModel, 
+            ICacheProvider cacheProvider,
+            IMessageBoxService messageBoxService)
 		{
 			//TODO maybe this viewModel should take care of the data initialization and distribution to the other VMs
 			ViewModels = viewModels;
 			ProviderSettings = settingsModel;
+			_cacheProvider = cacheProvider;
+			_messageBoxService = messageBoxService;
 		}
 
 		public ICommand ClearCache => _clearCache ?? (_clearCache = new CommandHandler(Clear, true));
@@ -113,13 +121,13 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 
 		private void Clear()
 		{
-			var result = IATEApplication.MessageBoxService.ShowYesNoMessageBox("", PluginResources.ClearConfirmation);
+			var result = _messageBoxService.ShowYesNoMessageBox("", PluginResources.ClearConfirmation);
 			if (result != MessageDialogResult.Yes)
 			{
 				return;
 			}
 
-			IATEApplication.CacheProvider?.ClearCachedResults();
+			_cacheProvider?.ClearCachedResults();
 		}
 
 		private void Reset()

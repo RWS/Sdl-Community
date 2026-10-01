@@ -10,9 +10,9 @@ using TradosStudio.API.TranslationResources.Terminology;
 
 namespace Sdl.Community.IATETerminologyProvider.Service
 {
-	public class EUProvider:IEUProvider
+	public static class EUProvider
 	{		
-		public bool IsEULanguages(ILanguage source, ILanguage target)
+		public static bool IsEULanguages(ILanguage source, ILanguage target)
 		{
 			string[] EULanguageArray = { "bg", "cs", "da", "de", "el", "en", "es", "et", "fi", "fr", "ga", "hr", "hu", "it", "lt", "lv", "mt", "nl", "pl", "pt", "ro", "sk", "sl", "sv" };
 			var checkEULanguages = EULanguageArray.ToList().Where(a => 

@@ -29,21 +29,18 @@ namespace Sdl.Community.IATETerminologyProvider
 		private TermSearchService _searchService;
 		private EditorController _editorController;
 		private IStudioDocument _activeDocument;
-		private readonly IEUProvider _euProvider;
 
 		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
 
 		public SettingsModel ProviderSettings { get; set; }
 
 		public IATETerminologyProvider(SettingsModel providerSettings, ConnectionProvider connectionProvider,
-			InventoriesProvider inventoriesProvider, ICacheProvider cacheProvider, IEUProvider eUProvider)
+			InventoriesProvider inventoriesProvider, ICacheProvider cacheProvider)
 		{
 			ProviderSettings = providerSettings;
 			ConnectionProvider = connectionProvider;
 			InventoriesProvider = inventoriesProvider;
 			CacheProvider = cacheProvider;
-            IATEApplication.CacheProvider = CacheProvider;
-            _euProvider = eUProvider;
 			Id = Guid.NewGuid().ToString();
 		}
 
@@ -140,7 +137,7 @@ namespace Sdl.Community.IATETerminologyProvider
 			if (string.IsNullOrEmpty(text) || string.IsNullOrWhiteSpace(text)) return null;
 			if (text == "\" \"" || text == "") return null;
 			// Limit to EU languages
-			if (!_euProvider.IsEULanguages(source, target))
+			if (!EUProvider.IsEULanguages(source, target))
 			{
 				return null;
 			}

@@ -14,9 +14,9 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 {
 	public class CacheProvider : ICacheProvider
 	{
-		private readonly SqliteDatabaseProvider _databaseProvider;
+		private readonly ISqliteDatabaseProvider _databaseProvider;
 
-		public CacheProvider(SqliteDatabaseProvider databaseProvider)
+		public CacheProvider(ISqliteDatabaseProvider databaseProvider)
 		{
 			_databaseProvider = databaseProvider;
 		}

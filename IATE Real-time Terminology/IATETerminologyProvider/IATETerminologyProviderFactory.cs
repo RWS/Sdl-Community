@@ -1,5 +1,6 @@
 ﻿using NLog;
 using Sdl.Community.IATETerminologyProvider.Helpers;
+using Sdl.Community.IATETerminologyProvider.Interface;
 using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Community.IATETerminologyProvider.Service;
 
@@ -13,6 +14,13 @@ namespace Sdl.Community.IATETerminologyProvider
     public class IATETerminologyProviderFactory : ITerminologyProviderFactory
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
+        private ICacheProvider _cacheProvider;
+
+        public IATETerminologyProviderFactory(ICacheProvider cacheProvider)
+        {
+            _cacheProvider = cacheProvider;
+        }
 
         public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
         {
@@ -48,11 +56,11 @@ namespace Sdl.Community.IATETerminologyProvider
                 throw exception;
             }
 
-            var sqlDatabaseProvider = new SqliteDatabaseProvider(new PathInfo());
-            var cacheProvider = new CacheProvider(sqlDatabaseProvider);
-
-            var terminologyProvider = new IATETerminologyProvider(savedSettings,
-                IATEApplication.ConnectionProvider, IATEApplication.InventoriesProvider, cacheProvider, IATEApplication.EUProvider);
+            var terminologyProvider = new IATETerminologyProvider(
+                savedSettings,
+                IATEApplication.ConnectionProvider, 
+                IATEApplication.InventoriesProvider, 
+                _cacheProvider);
 
             return terminologyProvider;
         }

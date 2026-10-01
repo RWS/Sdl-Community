@@ -19,22 +19,14 @@ namespace Sdl.Community.IATETerminologyProvider
 
         public static bool IsInitialized { get; private set; }
 
-        public static ICacheProvider CacheProvider { get; set; } =
-			new CacheProvider(new SqliteDatabaseProvider(new PathInfo()));
-
 		public static ConnectionProvider ConnectionProvider { get; private set; }
 
 		public static InventoriesProvider InventoriesProvider { get; set; }
 
-		public static MainWindow MainWindow { get; set; }
-
-		public static IMessageBoxService MessageBoxService { get; set; } = new MessageBoxService();
-		public static IEUProvider EUProvider { get; set; } = new EUProvider();
-
 		public static ProjectsController ProjectsController
 			=> _projectsController ??= SdlTradosStudio.Application?.GetController<ProjectsController>();
 
-		public static MainWindow GetMainWindow()
+		public static MainWindow GetMainWindow(ICacheProvider cacheProvider)
 		{
             if (!IsInitialized)
             {
@@ -50,9 +42,9 @@ namespace Sdl.Community.IATETerminologyProvider
 				new FineGrainedFilterViewModel()
 			};
 
-			MainWindow = new MainWindow(listOfViewModels, settingsModel ?? new SettingsModel());
+			var mainWindow = new MainWindow(listOfViewModels, settingsModel ?? new SettingsModel(), cacheProvider, new MessageBoxService());
 
-			return MainWindow;
+			return mainWindow;
 		}
 
 		public static async Task ExecuteAsync()

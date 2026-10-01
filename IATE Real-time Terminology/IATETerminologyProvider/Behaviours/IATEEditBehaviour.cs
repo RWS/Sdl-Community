@@ -1,4 +1,5 @@
 ﻿using NLog;
+using Sdl.Community.IATETerminologyProvider.Interface;
 using Sdl.Community.IATETerminologyProvider.View;
 using System;
 using System.Windows.Forms;
@@ -11,6 +12,14 @@ namespace Sdl.Community.IATETerminologyProvider.Behaviours
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private MainWindow _mainWindow;
+
+        private ICacheProvider _cacheProvider;
+
+        public IATEEditBehaviour(ICacheProvider cacheProvider)
+        {
+            _cacheProvider = cacheProvider;
+        }
+
 
         public bool Edit(IntPtr owner, ITerminologyProvider terminologyProvider)
         {
@@ -28,7 +37,7 @@ namespace Sdl.Community.IATETerminologyProvider.Behaviours
                 return false;
             }
 
-            _mainWindow = IATEApplication.GetMainWindow();
+            _mainWindow = IATEApplication.GetMainWindow(_cacheProvider);
 
             if (!_mainWindow.ShowDialog() ?? false)
             {

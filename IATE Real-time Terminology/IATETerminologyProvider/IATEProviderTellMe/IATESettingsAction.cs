@@ -1,13 +1,17 @@
-﻿using System.Drawing;
+﻿using Sdl.Community.IATETerminologyProvider.Interface;
 using Sdl.TellMe.ProviderApi;
+using System.Drawing;
 
 namespace Sdl.Community.IATETerminologyProvider.IATEProviderTellMe
 {
 	public class IATESettingsAction : AbstractTellMeAction
 	{
-		public IATESettingsAction()
+        private ICacheProvider _cacheProvider;
+
+        public IATESettingsAction(ICacheProvider cacheProvider)
 		{
 			Name = "IATE Settings";
+			_cacheProvider = cacheProvider;
 		}
 
 		public override string Category => "IATE results";
@@ -16,7 +20,7 @@ namespace Sdl.Community.IATETerminologyProvider.IATEProviderTellMe
 
 		public override void Execute()
 		{
-			var mainWindow = IATEApplication.GetMainWindow();
+			var mainWindow = IATEApplication.GetMainWindow(_cacheProvider);
 			mainWindow.ShowDialog();
 		}
 	}
