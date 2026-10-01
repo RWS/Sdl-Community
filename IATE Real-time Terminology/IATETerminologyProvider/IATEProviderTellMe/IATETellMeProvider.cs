@@ -1,4 +1,5 @@
 ﻿using Sdl.Community.IATETerminologyProvider.Interface;
+using Sdl.Community.IATETerminologyProvider.Service;
 using Sdl.TellMe.ProviderApi;
 
 namespace Sdl.Community.IATETerminologyProvider.IATEProviderTellMe
@@ -7,10 +8,12 @@ namespace Sdl.Community.IATETerminologyProvider.IATEProviderTellMe
 	public class IATETellMeProvider : ITellMeProvider
 	{
         private ICacheProvider _cacheProvider;
+        private IConnectionProvider _connectionProvider;
 
-        public IATETellMeProvider(ICacheProvider cacheProvider)
+        public IATETellMeProvider(ICacheProvider cacheProvider, IConnectionProvider connectionProvider)
         {
             _cacheProvider = cacheProvider;
+            _connectionProvider = connectionProvider;
         }
 
         public string Name => "IATE Tell Me provider";
@@ -31,7 +34,7 @@ namespace Sdl.Community.IATETerminologyProvider.IATEProviderTellMe
 			},new IATESourceCode
 			{
 				Keywords = ["iate", "source", "code"]
-			}, new IATESettingsAction(_cacheProvider)
+			}, new IATESettingsAction(_cacheProvider, _connectionProvider)
 			{
 				Keywords = ["iate", "settings"]
 			}

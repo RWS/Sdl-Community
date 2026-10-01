@@ -15,11 +15,12 @@ namespace Sdl.Community.IATETerminologyProvider
         }
 
         public void RegisterTypes(IContainer container)
-        {            
+        {
             container.Register<IMessageBoxService, MessageBoxService>(Lifestyle.Singleton);
             container.Register<IPathInfo, PathInfo>(Lifestyle.Singleton);
             container.Register<ISqliteDatabaseProvider, SqliteDatabaseProvider>(Lifestyle.Singleton);
             container.Register<ICacheProvider, CacheProvider>(Lifestyle.Singleton);
+            container.Register<IConnectionProvider, ConnectionProvider>(Lifestyle.Singleton);
             container.Register<ITellMeProvider, IATETellMeProvider>(Lifestyle.Singleton);
             container.AppendCollection<ITerminologyProviderFactory, IATETerminologyProviderFactory>();
             container.AppendCollection<ITerminologyProviderViewerWinFormsUI, IATETerminologyProviderViewerWinFormsUI>();           

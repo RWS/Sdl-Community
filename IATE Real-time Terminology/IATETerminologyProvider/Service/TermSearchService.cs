@@ -18,13 +18,13 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 	public class TermSearchService
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-		private readonly ConnectionProvider _connectionProvider;
+		private readonly IConnectionProvider _connectionProvider;
 		private readonly InventoriesProvider _inventoriesProvider;
 		private readonly List<string> _subdomains;
 		private readonly List<TermTypeModel> _termTypes;
 		private int _termIndexId;
 
-		public TermSearchService(ConnectionProvider connectionProvider,
+		public TermSearchService(IConnectionProvider connectionProvider,
 			InventoriesProvider inventoriesProvider)
 		{
 			_connectionProvider = connectionProvider;

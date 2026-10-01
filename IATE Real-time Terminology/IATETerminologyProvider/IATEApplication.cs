@@ -17,24 +17,22 @@ namespace Sdl.Community.IATETerminologyProvider
 		private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 		private static ProjectsController _projectsController;
 
-        public static bool IsInitialized { get; private set; }
-
-		public static ConnectionProvider ConnectionProvider { get; private set; }
+		public static bool IsInitialized { get; private set; }
 
 		public static InventoriesProvider InventoriesProvider { get; set; }
 
 		public static ProjectsController ProjectsController
 			=> _projectsController ??= SdlTradosStudio.Application?.GetController<ProjectsController>();
 
-		public static MainWindow GetMainWindow(ICacheProvider cacheProvider)
+		public static MainWindow GetMainWindow(ICacheProvider cacheProvider, IConnectionProvider connectionProvider)
 		{
             if (!IsInitialized)
             {
-                Task.Run(async () => await ExecuteAsync()).GetAwaiter().GetResult();
+                Task.Run(async () => await ExecuteAsync(connectionProvider)).GetAwaiter().GetResult();
             }
 
             var settingsModel = SettingsService.GetSettingsForCurrentProject();
-			if (!ConnectionProvider.EnsureConnection()) return null;
+			if (!connectionProvider.EnsureConnection()) return null;
 
 			var listOfViewModels = new List<ISettingsViewModel>
 			{
@@ -47,7 +45,7 @@ namespace Sdl.Community.IATETerminologyProvider
 			return mainWindow;
 		}
 
-		public static async Task ExecuteAsync()
+		public static async Task ExecuteAsync(IConnectionProvider connectionProvider)
 		{
 			Log.Setup();
 			Logger.Info("--> IATE Initialize Application");
@@ -56,11 +54,11 @@ namespace Sdl.Community.IATETerminologyProvider
 			{
 				Logger.Info("--> Try to login");
 
-				ConnectionProvider = new ConnectionProvider();
-				var success = ConnectionProvider.Login("SDL_PLUGIN", "E9KWtWahXs4hvE9z");
+				
+				var success = connectionProvider.Login("SDL_PLUGIN", "E9KWtWahXs4hvE9z");
 				if (success)
 				{
-					InventoriesProvider = new InventoriesProvider(ConnectionProvider);
+					InventoriesProvider = new InventoriesProvider(connectionProvider);
 					await InventoriesProvider.Initialize();
                     IsInitialized = true;
                 }

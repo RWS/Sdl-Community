@@ -14,10 +14,10 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 {
 	public class InventoriesProvider
 	{
-		private readonly ConnectionProvider _connectionProvider;
+		private readonly IConnectionProvider _connectionProvider;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-		public InventoriesProvider(ConnectionProvider connectionProvider)
+		public InventoriesProvider(IConnectionProvider connectionProvider)
 		{
 			_connectionProvider = connectionProvider;
 		}

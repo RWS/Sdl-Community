@@ -16,10 +16,12 @@ namespace Sdl.Community.IATETerminologyProvider
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         private ICacheProvider _cacheProvider;
+        private IConnectionProvider _connectionProvider;
 
-        public IATETerminologyProviderFactory(ICacheProvider cacheProvider)
+        public IATETerminologyProviderFactory(ICacheProvider cacheProvider, IConnectionProvider connectionProvider)
         {
             _cacheProvider = cacheProvider;
+            _connectionProvider = connectionProvider;   
         }
 
         public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
@@ -39,7 +41,7 @@ namespace Sdl.Community.IATETerminologyProvider
 
             if(!IATEApplication.IsInitialized)
             {
-                System.Threading.Tasks.Task.Run(async () => await IATEApplication.ExecuteAsync()).GetAwaiter().GetResult();
+                System.Threading.Tasks.Task.Run(async () => await IATEApplication.ExecuteAsync(_connectionProvider)).GetAwaiter().GetResult();
             }
 
             if (savedTermTypesNumber > 0 && savedTermTypesNumber > IATEApplication.InventoriesProvider.TermTypes?.Count)
@@ -48,7 +50,7 @@ namespace Sdl.Community.IATETerminologyProvider
                 savedSettings.TermTypes = new List<TermTypeModel>(availableTermTypes);
             }
 
-            if (!IATEApplication.ConnectionProvider.EnsureConnection())
+            if (!_connectionProvider.EnsureConnection())
             {
                 var exception = new Exception("Failed login!");
                 _logger.Error(exception);
@@ -58,7 +60,7 @@ namespace Sdl.Community.IATETerminologyProvider
 
             var terminologyProvider = new IATETerminologyProvider(
                 savedSettings,
-                IATEApplication.ConnectionProvider, 
+                _connectionProvider, 
                 IATEApplication.InventoriesProvider, 
                 _cacheProvider);
 

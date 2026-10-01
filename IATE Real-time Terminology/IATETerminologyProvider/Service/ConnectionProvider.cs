@@ -11,7 +11,7 @@ using Sdl.Community.IATETerminologyProvider.Model.ResponseModels;
 
 namespace Sdl.Community.IATETerminologyProvider.Service
 {
-	public class ConnectionProvider : INotifyPropertyChanged, IDisposable
+	public class ConnectionProvider : IConnectionProvider
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly System.Timers.Timer _timer;

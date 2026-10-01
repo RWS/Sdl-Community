@@ -1,5 +1,6 @@
 ﻿using NLog;
 using Sdl.Community.IATETerminologyProvider.Interface;
+using Sdl.Community.IATETerminologyProvider.Service;
 using Sdl.Community.IATETerminologyProvider.View;
 using System;
 using System.Windows.Forms;
@@ -14,16 +15,18 @@ namespace Sdl.Community.IATETerminologyProvider.Behaviours
         private MainWindow _mainWindow;
 
         private ICacheProvider _cacheProvider;
+        private IConnectionProvider _connectionProvider;
 
-        public IATEEditBehaviour(ICacheProvider cacheProvider)
+        public IATEEditBehaviour(ICacheProvider cacheProvider, IConnectionProvider connectionProvider)
         {
             _cacheProvider = cacheProvider;
+            _connectionProvider = connectionProvider;
         }
 
 
         public bool Edit(IntPtr owner, ITerminologyProvider terminologyProvider)
         {
-            if (!IATEApplication.ConnectionProvider.EnsureConnection())
+            if (!_connectionProvider.EnsureConnection())
             {
                 var exception = new Exception("Failed login!");
                 _logger.Error(exception);
@@ -37,7 +40,7 @@ namespace Sdl.Community.IATETerminologyProvider.Behaviours
                 return false;
             }
 
-            _mainWindow = IATEApplication.GetMainWindow(_cacheProvider);
+            _mainWindow = IATEApplication.GetMainWindow(_cacheProvider, _connectionProvider);
 
             if (!_mainWindow.ShowDialog() ?? false)
             {
