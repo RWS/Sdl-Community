@@ -13,7 +13,6 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.IATETerminologyProvider.Service
 {
-	[ApplicationInitializer]
 	public class SettingsService : IApplicationInitializer
 	{
 		private const string BatchProcessing = "batch processing";

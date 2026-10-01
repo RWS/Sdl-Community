@@ -180,13 +180,13 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 
 		private void LoadCollections()
 		{
-			Collections = IATEApplication.InventoriesProvider.Collections.Select(c => new CollectionModel
-			{
-				Name = c.Name.FullName,
-				Code = c.Code,
-				InstitutionName = c.Name.InstitutionName
-			}).ToList();
-		}
+                Collections = IATEApplication.InventoriesProvider.Collections.Select(c => new CollectionModel
+                {
+                    Name = c.Name.FullName,
+                    Code = c.Code,
+                    InstitutionName = c.Name.InstitutionName
+                }).ToList();
+            }
 
 		private void LoadInstitutions()
 		{

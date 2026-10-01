@@ -10,8 +10,8 @@ using NLog;
 using Sdl.Community.IATETerminologyProvider.Helpers;
 using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Community.IATETerminologyProvider.Model.ResponseModels;
-using Sdl.Core.Globalization;
-using Sdl.Terminology.TerminologyProvider.Core;
+using System.Globalization;
+
 
 namespace Sdl.Community.IATETerminologyProvider.Service
 {
@@ -165,11 +165,11 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 									}
 
 									try
-									{
+									{                                        
 										var languageModel = new LanguageModel
 										{
-											Name = new Language(langTwoLetters).DisplayName,
-											Locale = new Language(langTwoLetters).CultureInfo
+											Name = CultureInfo.GetCultureInfo(langTwoLetters).DisplayName,
+											CultureInfo = CultureInfo.GetCultureInfo(langTwoLetters)
 										};
 
 										var termResult = new SearchResultModel

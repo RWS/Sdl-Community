@@ -1,25 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using NLog;
+﻿using NLog;
 using Sdl.Community.IATETerminologyProvider.Helpers;
 using Sdl.Community.IATETerminologyProvider.Interface;
 using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Community.IATETerminologyProvider.Service;
 using Sdl.Community.IATETerminologyProvider.View;
 using Sdl.Community.IATETerminologyProvider.ViewModel;
-using Sdl.Desktop.IntegrationApi;
-using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Sdl.Community.IATETerminologyProvider
 {
-	[ApplicationInitializer]
-	public class IATEApplication : IApplicationInitializer
+	public class IATEApplication
 	{
 		private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 		private static ProjectsController _projectsController;
 
-		public static ICacheProvider CacheProvider { get; set; } =
+        public static bool IsInitialized { get; private set; }
+
+        public static ICacheProvider CacheProvider { get; set; } =
 			new CacheProvider(new SqliteDatabaseProvider(new PathInfo()));
 
 		public static ConnectionProvider ConnectionProvider { get; private set; }
@@ -36,7 +36,12 @@ namespace Sdl.Community.IATETerminologyProvider
 
 		public static MainWindow GetMainWindow()
 		{
-			var settingsModel = SettingsService.GetSettingsForCurrentProject();
+            if (!IsInitialized)
+            {
+                Task.Run(async () => await ExecuteAsync()).GetAwaiter().GetResult();
+            }
+
+            var settingsModel = SettingsService.GetSettingsForCurrentProject();
 			if (!ConnectionProvider.EnsureConnection()) return null;
 
 			var listOfViewModels = new List<ISettingsViewModel>
@@ -50,7 +55,7 @@ namespace Sdl.Community.IATETerminologyProvider
 			return MainWindow;
 		}
 
-		public async void Execute()
+		public static async Task ExecuteAsync()
 		{
 			Log.Setup();
 			Logger.Info("--> IATE Initialize Application");
@@ -65,11 +70,18 @@ namespace Sdl.Community.IATETerminologyProvider
 				{
 					InventoriesProvider = new InventoriesProvider(ConnectionProvider);
 					await InventoriesProvider.Initialize();
-				}
-			}
+                    IsInitialized = true;
+                }
+                else
+                {
+                    IsInitialized = false;
+                    Logger.Error("Login failed. Please check your credentials.");
+                }
+            }
 			catch (Exception ex)
 			{
-				Logger.Error($"{ex.Message}\n{ex.StackTrace}");
+                IsInitialized = false;
+                Logger.Error($"{ex.Message}\n{ex.StackTrace}");
 			}
 		}
 	}

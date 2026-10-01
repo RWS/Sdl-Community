@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.ProjectAutomation.Core;
-using Sdl.Terminology.TerminologyProvider.Core;
+
 
 namespace Sdl.Community.IATETerminologyProvider.Interface
 {
