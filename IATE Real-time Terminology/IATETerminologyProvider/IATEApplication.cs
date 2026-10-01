@@ -19,16 +19,17 @@ namespace Sdl.Community.IATETerminologyProvider
 
 		public static bool IsInitialized { get; private set; }
 
-		public static InventoriesProvider InventoriesProvider { get; set; }
-
 		public static ProjectsController ProjectsController
 			=> _projectsController ??= SdlTradosStudio.Application?.GetController<ProjectsController>();
 
-		public static MainWindow GetMainWindow(ICacheProvider cacheProvider, IConnectionProvider connectionProvider)
+		public static MainWindow GetMainWindow(
+            ICacheProvider cacheProvider, 
+            IConnectionProvider connectionProvider, 
+            IInventoriesProvider inventoriesProvider)
 		{
             if (!IsInitialized)
             {
-                Task.Run(async () => await ExecuteAsync(connectionProvider)).GetAwaiter().GetResult();
+                Task.Run(async () => await ExecuteAsync(connectionProvider, inventoriesProvider)).GetAwaiter().GetResult();
             }
 
             var settingsModel = SettingsService.GetSettingsForCurrentProject();
@@ -36,8 +37,8 @@ namespace Sdl.Community.IATETerminologyProvider
 
 			var listOfViewModels = new List<ISettingsViewModel>
 			{
-				new DomainsAndTermTypesFilterViewModel(),
-				new FineGrainedFilterViewModel()
+				new DomainsAndTermTypesFilterViewModel(inventoriesProvider),
+				new FineGrainedFilterViewModel(inventoriesProvider)
 			};
 
 			var mainWindow = new MainWindow(listOfViewModels, settingsModel ?? new SettingsModel(), cacheProvider, new MessageBoxService());
@@ -45,7 +46,7 @@ namespace Sdl.Community.IATETerminologyProvider
 			return mainWindow;
 		}
 
-		public static async Task ExecuteAsync(IConnectionProvider connectionProvider)
+		public static async Task ExecuteAsync(IConnectionProvider connectionProvider, IInventoriesProvider inventoriesProvider)
 		{
 			Log.Setup();
 			Logger.Info("--> IATE Initialize Application");
@@ -53,13 +54,11 @@ namespace Sdl.Community.IATETerminologyProvider
 			try
 			{
 				Logger.Info("--> Try to login");
-
 				
 				var success = connectionProvider.Login("SDL_PLUGIN", "E9KWtWahXs4hvE9z");
 				if (success)
 				{
-					InventoriesProvider = new InventoriesProvider(connectionProvider);
-					await InventoriesProvider.Initialize();
+					await inventoriesProvider.Initialize();
                     IsInitialized = true;
                 }
                 else

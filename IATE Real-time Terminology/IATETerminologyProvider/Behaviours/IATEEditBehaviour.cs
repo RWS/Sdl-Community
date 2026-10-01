@@ -1,6 +1,5 @@
 ﻿using NLog;
 using Sdl.Community.IATETerminologyProvider.Interface;
-using Sdl.Community.IATETerminologyProvider.Service;
 using Sdl.Community.IATETerminologyProvider.View;
 using System;
 using System.Windows.Forms;
@@ -16,11 +15,13 @@ namespace Sdl.Community.IATETerminologyProvider.Behaviours
 
         private ICacheProvider _cacheProvider;
         private IConnectionProvider _connectionProvider;
+        private IInventoriesProvider _inventoriesProvider;
 
-        public IATEEditBehaviour(ICacheProvider cacheProvider, IConnectionProvider connectionProvider)
+        public IATEEditBehaviour(ICacheProvider cacheProvider, IConnectionProvider connectionProvider, IInventoriesProvider inventoriesProvider)
         {
             _cacheProvider = cacheProvider;
             _connectionProvider = connectionProvider;
+            _inventoriesProvider = inventoriesProvider;
         }
 
 
@@ -40,7 +41,7 @@ namespace Sdl.Community.IATETerminologyProvider.Behaviours
                 return false;
             }
 
-            _mainWindow = IATEApplication.GetMainWindow(_cacheProvider, _connectionProvider);
+            _mainWindow = IATEApplication.GetMainWindow(_cacheProvider, _connectionProvider, _inventoriesProvider);
 
             if (!_mainWindow.ShowDialog() ?? false)
             {

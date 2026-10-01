@@ -35,9 +35,9 @@ namespace Sdl.Community.IATETerminologyProvider
 		public SettingsModel ProviderSettings { get; set; }
 
 		public IATETerminologyProvider(SettingsModel providerSettings, 
-            IConnectionProvider connectionProvider,
-			InventoriesProvider inventoriesProvider, 
-            ICacheProvider cacheProvider)
+			IConnectionProvider connectionProvider,
+			IInventoriesProvider inventoriesProvider, 
+			ICacheProvider cacheProvider)
 		{
 			ProviderSettings = providerSettings;
 			ConnectionProvider = connectionProvider;
@@ -69,7 +69,7 @@ namespace Sdl.Community.IATETerminologyProvider
 
 		public IConnectionProvider ConnectionProvider { get; }
 
-		public InventoriesProvider InventoriesProvider { get; }
+		public IInventoriesProvider InventoriesProvider { get; }
 
 		public ICacheProvider CacheProvider { get; }
 

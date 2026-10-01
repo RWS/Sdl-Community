@@ -1,11 +1,12 @@
-﻿using System;
+﻿using NLog;
+using Sdl.Community.IATETerminologyProvider.Interface;
+using Sdl.Community.IATETerminologyProvider.Model;
+using Sdl.ProjectAutomation.Core;
+using System;
 using System.Collections.Generic;
 using System.Data;
-using Sdl.ProjectAutomation.Core;
 using System.Data.SQLite;
 using System.IO;
-using NLog;
-using Sdl.Community.IATETerminologyProvider.Model;
 
 
 namespace Sdl.Community.IATETerminologyProvider.Service

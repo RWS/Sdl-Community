@@ -2,7 +2,7 @@
 using Sdl.ProjectAutomation.Core;
 using System.Collections.Generic;
 
-namespace Sdl.Community.IATETerminologyProvider.Service
+namespace Sdl.Community.IATETerminologyProvider.Interface
 {
     public interface ISqliteDatabaseProvider
     {

@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Net.Http;
 
-namespace Sdl.Community.IATETerminologyProvider.Service
+namespace Sdl.Community.IATETerminologyProvider.Interface
 {
     public interface IConnectionProvider : INotifyPropertyChanged, IDisposable
     {

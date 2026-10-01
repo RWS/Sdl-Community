@@ -14,11 +14,14 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 		private Reliabilities _sourceReliabilities = new Reliabilities();
 		private Reliabilities _targetReliabilities = new Reliabilities();
 		private Primarities _primarities;
+        private IInventoriesProvider _inventoriesProvider;
 
-		public FineGrainedFilterViewModel()
+
+        public FineGrainedFilterViewModel(IInventoriesProvider inventoriesProvider)
 		{
 			PropertyChanged += FineGrainedFilterViewModel_PropertyChanged;
-		}
+            _inventoriesProvider = inventoriesProvider;
+        }
 
 		public bool AllCollectionsChecked
 		{
@@ -180,7 +183,7 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 
 		private void LoadCollections()
 		{
-                Collections = IATEApplication.InventoriesProvider.Collections.Select(c => new CollectionModel
+                Collections = _inventoriesProvider.Collections.Select(c => new CollectionModel
                 {
                     Name = c.Name.FullName,
                     Code = c.Code,
@@ -190,7 +193,7 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 
 		private void LoadInstitutions()
 		{
-			var iateInstitutions = IATEApplication.InventoriesProvider.Institutions;
+			var iateInstitutions = _inventoriesProvider.Institutions;
 
 			var institutions = new List<InstitutionModel>();
 			foreach (var iateInstitution in iateInstitutions)

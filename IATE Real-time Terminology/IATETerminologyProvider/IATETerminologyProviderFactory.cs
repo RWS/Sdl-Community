@@ -17,11 +17,13 @@ namespace Sdl.Community.IATETerminologyProvider
 
         private ICacheProvider _cacheProvider;
         private IConnectionProvider _connectionProvider;
+        private IInventoriesProvider _inventoriesProvider;
 
-        public IATETerminologyProviderFactory(ICacheProvider cacheProvider, IConnectionProvider connectionProvider)
+        public IATETerminologyProviderFactory(ICacheProvider cacheProvider, IConnectionProvider connectionProvider, IInventoriesProvider inventoriesProvider)
         {
             _cacheProvider = cacheProvider;
-            _connectionProvider = connectionProvider;   
+            _connectionProvider = connectionProvider;
+            _inventoriesProvider = inventoriesProvider;
         }
 
         public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
@@ -41,10 +43,10 @@ namespace Sdl.Community.IATETerminologyProvider
 
             if(!IATEApplication.IsInitialized)
             {
-                System.Threading.Tasks.Task.Run(async () => await IATEApplication.ExecuteAsync(_connectionProvider)).GetAwaiter().GetResult();
+                System.Threading.Tasks.Task.Run(async () => await IATEApplication.ExecuteAsync(_connectionProvider, _inventoriesProvider)).GetAwaiter().GetResult();
             }
 
-            if (savedTermTypesNumber > 0 && savedTermTypesNumber > IATEApplication.InventoriesProvider.TermTypes?.Count)
+            if (savedTermTypesNumber > 0 && savedTermTypesNumber > _inventoriesProvider.TermTypes?.Count)
             {
                 var availableTermTypes = GetAvailableTermTypes(savedSettings.TermTypes);
                 savedSettings.TermTypes = new List<TermTypeModel>(availableTermTypes);
@@ -61,7 +63,7 @@ namespace Sdl.Community.IATETerminologyProvider
             var terminologyProvider = new IATETerminologyProvider(
                 savedSettings,
                 _connectionProvider, 
-                IATEApplication.InventoriesProvider, 
+                _inventoriesProvider, 
                 _cacheProvider);
 
             return terminologyProvider;
@@ -70,7 +72,7 @@ namespace Sdl.Community.IATETerminologyProvider
         private List<TermTypeModel> GetAvailableTermTypes(List<TermTypeModel> savedList)
         {
             var availableTerms = savedList.Where(t =>
-                IATEApplication.InventoriesProvider.TermTypes.Any(t1 => t1.Code == t.Code.ToString())).ToList();
+                _inventoriesProvider.TermTypes.Any(t1 => t1.Code == t.Code.ToString())).ToList();
 
             return availableTerms;
         }

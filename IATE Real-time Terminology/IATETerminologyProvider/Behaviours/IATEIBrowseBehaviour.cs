@@ -1,6 +1,5 @@
 ﻿using NLog;
 using Sdl.Community.IATETerminologyProvider.Interface;
-using Sdl.Community.IATETerminologyProvider.Service;
 using Sdl.Community.IATETerminologyProvider.View;
 using System;
 using System.Collections.Generic;
@@ -17,11 +16,16 @@ namespace Sdl.Community.IATETerminologyProvider.Behaviours
 
         private ICacheProvider _cacheProvider;
         private IConnectionProvider _connectionProvider;
+        private IInventoriesProvider _inventoriesProvider;
 
-        public IATEIBrowseBehaviour(ICacheProvider cacheProvider, IConnectionProvider connectionProvider)
+        public IATEIBrowseBehaviour(
+            ICacheProvider cacheProvider, 
+            IConnectionProvider connectionProvider, 
+            IInventoriesProvider inventoriesProvider)
         {
             _cacheProvider = cacheProvider;
             _connectionProvider = connectionProvider;
+            _inventoriesProvider = inventoriesProvider;
         }
 
         public IEnumerable<ITerminologyProvider> Browse(IntPtr owner)
@@ -31,7 +35,7 @@ namespace Sdl.Community.IATETerminologyProvider.Behaviours
 
         private ITerminologyProvider[] Browse()
         {
-            _mainWindow = IATEApplication.GetMainWindow(_cacheProvider, _connectionProvider);
+            _mainWindow = IATEApplication.GetMainWindow(_cacheProvider, _connectionProvider, _inventoriesProvider);
             if (_mainWindow != null)
             {
                 _mainWindow.ShowDialog();
@@ -43,7 +47,7 @@ namespace Sdl.Community.IATETerminologyProvider.Behaviours
                 var provider = new IATETerminologyProvider(
                     _mainWindow.ProviderSettings, 
                     _connectionProvider,
-                    IATEApplication.InventoriesProvider, 
+                    _inventoriesProvider, 
                     _cacheProvider);
 
                 return new ITerminologyProvider[] { provider };

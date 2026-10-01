@@ -11,6 +11,7 @@ using Sdl.Community.IATETerminologyProvider.Helpers;
 using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Community.IATETerminologyProvider.Model.ResponseModels;
 using System.Globalization;
+using Sdl.Community.IATETerminologyProvider.Interface;
 
 
 namespace Sdl.Community.IATETerminologyProvider.Service
@@ -19,13 +20,13 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly IConnectionProvider _connectionProvider;
-		private readonly InventoriesProvider _inventoriesProvider;
+		private readonly IInventoriesProvider _inventoriesProvider;
 		private readonly List<string> _subdomains;
 		private readonly List<TermTypeModel> _termTypes;
 		private int _termIndexId;
 
 		public TermSearchService(IConnectionProvider connectionProvider,
-			InventoriesProvider inventoriesProvider)
+			IInventoriesProvider inventoriesProvider)
 		{
 			_connectionProvider = connectionProvider;
 			_inventoriesProvider = inventoriesProvider;
