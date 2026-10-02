@@ -59,7 +59,8 @@ namespace Sdl.Community.DeepLMTProvider.Client
             DeepLSettings deepLSettings,
             bool useLocalCache = true,
             IReadOnlyList<int> unitPositions = null,
-            IReadOnlyList<string> contextUnits = null)
+            IReadOnlyList<string> contextUnits = null,
+            string customContext = null)
         {
             var (sourceLanguage, _, _) = LanguageValidationService.GetDeepLLanguageCode(languageDirection.SourceCulture, true);
             var (targetLanguage, _, _) = LanguageValidationService.GetDeepLLanguageCode(languageDirection.TargetCulture, false);
@@ -87,7 +88,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
             // sends, writes after them.
             var cacheKeys = new string[sourceTexts.Count];
             var requests = new List<(List<int> Indices, DeeplRequestParameters Parameters)>();
-            foreach (var (textIndices, context) in BuildBatches(sourceTexts, unitPositions, contextUnits))
+            foreach (var (textIndices, context) in BuildBatches(sourceTexts, unitPositions, contextUnits, customContext))
             {
                 var pendingIndices = new List<int>(textIndices.Count);
                 foreach (var i in textIndices)
@@ -199,7 +200,8 @@ namespace Sdl.Community.DeepLMTProvider.Client
         public static IEnumerable<(List<int> TextIndices, string Context)> BuildBatches(
             IReadOnlyList<string> sourceTexts,
             IReadOnlyList<int> unitPositions = null,
-            IReadOnlyList<string> contextUnits = null)
+            IReadOnlyList<string> contextUnits = null,
+            string customContext = null)
         {
             // Walks the units in document order and cuts a request when the next unit
             // would push text + context over the limit, so each request carries the
@@ -214,6 +216,9 @@ namespace Sdl.Community.DeepLMTProvider.Client
             // context is O(1): text bytes of the slice + context bytes of the padded range.
             var unitsBefore = contextUnits == null ? 0 : ContextUnitsBefore;
             var unitsAfter = contextUnits == null ? 0 : ContextUnitsAfter;
+            // The custom context goes into every request's context, so it counts toward every request.
+            customContext = string.IsNullOrWhiteSpace(customContext) ? null : customContext.Trim();
+            var customContextSize = customContext == null ? 0 : Encoding.UTF8.GetByteCount(customContext) + 1;
             var textPrefix = new int[unitCount + 1];
             var contextPrefix = new int[unitCount + 1];
             for (var unit = 0; unit < unitCount; unit++)
@@ -250,14 +255,17 @@ namespace Sdl.Community.DeepLMTProvider.Client
             int PaddedTo(int to) => Math.Min(unitCount, to + unitsAfter);
 
             int Size(int from, int to) =>
-                textPrefix[to] - textPrefix[from] + contextPrefix[PaddedTo(to)] - contextPrefix[PaddedFrom(from)];
+                textPrefix[to] - textPrefix[from] + contextPrefix[PaddedTo(to)] - contextPrefix[PaddedFrom(from)] + customContextSize;
 
             // A slice over the limit is a single unit too big to also carry its context:
             // send it without, as it would be sent with the option off.
-            string JoinContext(int from, int to) =>
-                contextUnits == null || Size(from, to) > MaxBatchSizeBytes
-                    ? null
-                    : string.Join("\n", contextUnits.Skip(PaddedFrom(from)).Take(PaddedTo(to) - PaddedFrom(from)));
+            string JoinContext(int from, int to)
+            {
+                if (contextUnits == null && customContext == null || Size(from, to) > MaxBatchSizeBytes) return null;
+                if (contextUnits == null) return customContext;
+                return (customContext == null ? string.Empty : customContext + "\n")
+                    + string.Join("\n", contextUnits.Skip(PaddedFrom(from)).Take(PaddedTo(to) - PaddedFrom(from)));
+            }
         }
 
         // Runs all sends concurrently, at most maxInFlight at a time; results keep request order.

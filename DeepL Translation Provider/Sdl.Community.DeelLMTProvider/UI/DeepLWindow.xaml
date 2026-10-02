@@ -37,6 +37,7 @@
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <converters1:ListToStringConverter x:Key="ListToStringConverter" />
             <converters:EnumDescriptionConverter x:Key="EnumToDescriptionConverter" />
+            <converters:EnumToBoolConverter x:Key="EnumToBoolConverter" />
 
             <ObjectDataProvider MethodName="GetValues"
                                 ObjectType="{x:Type model:TagFormat}"
@@ -161,13 +162,50 @@
                                       ToolTip="{x:Static deepLmtProvider:PluginResources.ResendDraft_Tooltip}"
                                       IsChecked="{Binding ResendDraft}"
                                       Content="Resend Draft" />
-                            <CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
-                                      VerticalContentAlignment="Center"
-                                      Margin="15,0,0,5"
-                                      x:Name="SendContext"
-                                      ToolTip="Send the surrounding source segments to DeepL as context, to improve consistency and resolve ambiguous words. Context is not billed, but cached translations are reused less often."
-                                      IsChecked="{Binding SendContext}"
-                                      Content="Send surrounding segments as context" />
+                            <Label Content="Context sent to DeepL (not billed)"
+                                   Margin="12,0,0,0" />
+                            <RadioButton GroupName="ContextSource"
+                                         Margin="15,0,0,4"
+                                         Content="None"
+                                         IsChecked="{Binding ContextSource, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static model:ContextSource.None}}" />
+                            <RadioButton GroupName="ContextSource"
+                                         Margin="15,0,0,4"
+                                         Content="Surrounding segments"
+                                         ToolTip="Send the neighbouring source segments to DeepL as context, to resolve ambiguous words. Cached translations are reused less often."
+                                         IsChecked="{Binding ContextSource, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static model:ContextSource.SurroundingSegments}}" />
+                            <RadioButton GroupName="ContextSource"
+                                         x:Name="CustomContextOption"
+                                         Margin="15,0,0,4"
+                                         Content="Custom context"
+                                         ToolTip="Send your own text to DeepL as context, with every request: facts a single segment does not show, such as who a person is."
+                                         IsChecked="{Binding ContextSource, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static model:ContextSource.CustomContext}}" />
+                            <!-- One line until clicked into; expands while it has focus -->
+                            <TextBox x:Name="CustomContext"
+                                     Margin="33,0,15,8"
+                                     Width="420"
+                                     HorizontalAlignment="Left"
+                                     MaxLength="500"
+                                     IsEnabled="{Binding IsChecked, ElementName=CustomContextOption}"
+                                     ToolTip="Facts about the text, not instructions, written in the source language. Example: Device manual for a photo printer. Maria, the teacher, is a woman."
+                                     Text="{Binding CustomContext, UpdateSourceTrigger=PropertyChanged}">
+                                <TextBox.Style>
+                                    <Style TargetType="TextBox">
+                                        <Setter Property="AcceptsReturn" Value="True" />
+                                        <Setter Property="VerticalContentAlignment" Value="Top" />
+                                        <Setter Property="TextWrapping" Value="NoWrap" />
+                                        <Setter Property="MaxLines" Value="1" />
+                                        <Setter Property="VerticalScrollBarVisibility" Value="Hidden" />
+                                        <Style.Triggers>
+                                            <!-- Height, not MinLines/MaxLines: with MinLines the box keeps its expanded height after losing focus -->
+                                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                                <Setter Property="TextWrapping" Value="Wrap" />
+                                                <Setter Property="Height" Value="72" />
+                                                <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
                             <StackPanel Orientation="Horizontal">
                                 <CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
                                           VerticalContentAlignment="Center"

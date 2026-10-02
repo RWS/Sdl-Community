@@ -46,7 +46,8 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             PreserveFormatting = deepLTranslationOptions.PreserveFormatting;
             IgnoreTags = deepLTranslationOptions.IgnoreTagsParameter;
             UseLocalCache = deepLTranslationOptions.UseLocalCache;
-            SendContext = deepLTranslationOptions.SendContext;
+            ContextSource = deepLTranslationOptions.ContextSource;
+            CustomContext = deepLTranslationOptions.CustomContext;
 
             Options = deepLTranslationOptions;
 
@@ -72,7 +73,8 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             SplitSentencesType = deepLTranslationOptions.SplitSentenceHandling;
             IgnoreTags = deepLTranslationOptions.IgnoreTagsParameter;
             UseLocalCache = deepLTranslationOptions.UseLocalCache;
-            SendContext = deepLTranslationOptions.SendContext;
+            ContextSource = deepLTranslationOptions.ContextSource;
+            CustomContext = deepLTranslationOptions.CustomContext;
 
             PasswordChangedTimer.Elapsed += OnPasswordChanged;
 
@@ -174,7 +176,13 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             set => SetField(ref field, value);
         }
 
-        public bool SendContext
+        public ContextSource ContextSource
+        {
+            get;
+            set => SetField(ref field, value);
+        }
+
+        public string CustomContext
         {
             get;
             set => SetField(ref field, value);
@@ -487,7 +495,8 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             Options.SplitSentenceHandling = SplitSentencesType;
             Options.IgnoreTagsParameter = IgnoreTags;
             Options.UseLocalCache = UseLocalCache;
-            Options.SendContext = SendContext;
+            Options.ContextSource = ContextSource;
+            Options.CustomContext = CustomContext;
 
             var glossaryIds = Options.LanguagePairOptions.ToDictionary(
                 lpo => (lpo.LanguagePair.SourceCulture.Name, lpo.LanguagePair.TargetCulture.Name),

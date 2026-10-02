@@ -98,8 +98,8 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 
             if (preTranslateList.Count <= 0) return results.ToArray();
 
-            var contextUnits = _options.SendContext ? BuildContextUnits(translationUnits) : null;
-            var translatedSegments = TranslateSegments(preTranslateList, contextUnits);
+            var (contextUnits, customContext) = SelectContext(_options.ContextSource, _options.CustomContext, translationUnits);
+            var translatedSegments = TranslateSegments(preTranslateList, contextUnits, customContext);
             var preTranslateSearchResults = GetPreTranslationSearchResults(translatedSegments);
 
             foreach (var result in preTranslateSearchResults)
@@ -123,6 +123,16 @@ namespace Sdl.Community.DeepLMTProvider.Studio
         // the surrounding document text; index-aligned with translationUnits.
         public static List<string> BuildContextUnits(TranslationUnit[] translationUnits) =>
             translationUnits.Select(tu => tu?.SourceSegment?.ToPlain() ?? string.Empty).ToList();
+
+        // DeepL gets either the surrounding segments or the user's custom context, never both.
+        public static (List<string> ContextUnits, string CustomContext) SelectContext(
+            ContextSource contextSource, string customContext, TranslationUnit[] translationUnits) =>
+            contextSource switch
+            {
+                ContextSource.SurroundingSegments => (BuildContextUnits(translationUnits), null),
+                ContextSource.CustomContext => (null, customContext),
+                _ => (null, null)
+            };
 
         private string ApplyBeforeTranslationSettings(Segment newSeg)
         {
@@ -196,7 +206,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             return resultsList;
         }
 
-        private List<PreTranslateSegment> TranslateSegments(List<PreTranslateSegment> preTranslateSegments, List<string> contextUnits)
+        private List<PreTranslateSegment> TranslateSegments(List<PreTranslateSegment> preTranslateSegments, List<string> contextUnits, string customContext)
         {
             foreach (var segment in preTranslateSegments.Where(segment => segment != null))
             {
@@ -227,7 +237,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             // A segment's index in preTranslateSegments is its unit's index in the
             // translation units Studio passed, which contextUnits is aligned with.
             var unitPositions = eligibleSegments.Select(s => preTranslateSegments.IndexOf(s)).ToList();
-            var translationResults = _connecter.TranslateBatch(_languageDirection, sourceTexts, deepLSettings, _options.UseLocalCache, unitPositions, contextUnits);
+            var translationResults = _connecter.TranslateBatch(_languageDirection, sourceTexts, deepLSettings, _options.UseLocalCache, unitPositions, contextUnits, customContext);
 
             var errorMessages = new List<ErrorItem>();
             for (var i = 0; i < eligibleSegments.Count; i++)

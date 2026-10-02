@@ -1,3 +1,4 @@
+using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.Community.DeepLMTProvider.Studio;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
@@ -33,6 +34,26 @@ namespace DeepLMTProvider.Tests
 
             // Assert
             Assert.Equal(new[] { "Hello world", "", "Bye" }, contextUnits);
+        }
+
+        [Theory]
+        [InlineData(ContextSource.None, false, null)]
+        [InlineData(ContextSource.SurroundingSegments, true, null)]
+        [InlineData(ContextSource.CustomContext, false, "Maria is a woman.")]
+        public void SelectContext_SendsOneSourceOnly(ContextSource contextSource, bool expectUnits, string expectedCustomContext)
+        {
+            // Arrange: a custom context is stored regardless of the chosen source
+            var plain = new Segment(new CultureCode("en-US"));
+            plain.Add("Bye");
+            var translationUnits = new[] { new TranslationUnit { SourceSegment = plain } };
+
+            // Act
+            var (contextUnits, customContext) = DeepLMtTranslationProviderLanguageDirection.SelectContext(
+                contextSource, "Maria is a woman.", translationUnits);
+
+            // Assert
+            Assert.Equal(expectUnits, contextUnits != null);
+            Assert.Equal(expectedCustomContext, customContext);
         }
     }
 }

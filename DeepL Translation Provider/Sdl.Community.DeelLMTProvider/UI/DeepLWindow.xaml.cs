@@ -1,6 +1,7 @@
 ﻿using Sdl.Community.DeepLMTProvider.ViewModel;
 using System.Diagnostics;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Navigation;
 
 namespace Sdl.Community.DeepLMTProvider.UI
@@ -11,6 +12,14 @@ namespace Sdl.Community.DeepLMTProvider.UI
         {
             InitializeComponent();
             DataContext = viewModel;
+        }
+
+        // Clicking a non-focusable spot keeps focus in the custom context box; drop it so the box collapses.
+        protected override void OnPreviewMouseDown(MouseButtonEventArgs e)
+        {
+            if (CustomContext.IsKeyboardFocusWithin && !CustomContext.IsMouseOver)
+                Keyboard.ClearFocus();
+            base.OnPreviewMouseDown(e);
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)

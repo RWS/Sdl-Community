@@ -16,7 +16,9 @@ namespace Sdl.Community.DeepLMTProvider.Model
 
         public bool ResendDraft { get; set; }
 
-        public bool SendContext { get; set; }
+        public ContextSource ContextSource { get; set; }
+
+        public string CustomContext { get; set; }
 
         public bool SendPlainText { get; set; }
         public SplitSentences SplitSentenceHandling { get; set; } = SplitSentences.Default;

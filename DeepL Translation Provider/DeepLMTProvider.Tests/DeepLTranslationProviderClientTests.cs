@@ -183,6 +183,90 @@ namespace DeepLMTProvider.Tests
         }
 
         [Fact]
+        public void BuildBatches_WithWindowAndCustomContext_PutsTheCustomContextBeforeTheWindow()
+        {
+            // Arrange
+            var units = new[] { "a", "b" };
+
+            // Act
+            var batch = Assert.Single(DeepLTranslationProviderClient.BuildBatches(units, new[] { 0, 1 }, units, "Maria is a woman."));
+
+            // Assert
+            Assert.Equal("Maria is a woman.\na\nb", batch.Context);
+        }
+
+        [Fact]
+        public void BuildBatches_WithWindowAndCustomContext_CustomContextCountsTowardTheRequestLimit()
+        {
+            // Arrange: two 30 KiB units fit one request (120 KiB of text + context), but not with a 10 KiB custom context
+            var units = new[] { Text(30 * KiB), Text(30 * KiB) };
+
+            // Act
+            var batches = DeepLTranslationProviderClient.BuildBatches(units, new[] { 0, 1 }, units, Text(10 * KiB)).ToList();
+
+            // Assert
+            Assert.Equal(2, batches.Count);
+            Assert.All(batches, b => Assert.True(
+                b.TextIndices.Sum(i => units[i].Length) + b.Context.Length <= 128 * KiB));
+        }
+
+        [Fact]
+        public void BuildBatches_CustomContextOnly_IsTheContextOfOneRequestForTheWholeBatch()
+        {
+            // Arrange: no surrounding segments, so there is no window to slice for
+            var texts = Enumerable.Range(0, 12).Select(i => $"t{i}").ToArray();
+
+            // Act
+            var batch = Assert.Single(DeepLTranslationProviderClient.BuildBatches(texts, null, null, " Maria is a woman. "));
+
+            // Assert
+            Assert.Equal(Enumerable.Range(0, 12), batch.TextIndices);
+            Assert.Equal("Maria is a woman.", batch.Context);
+        }
+
+        [Fact]
+        public void BuildBatches_CustomContextOnly_CustomContextCountsTowardTheRequestLimit()
+        {
+            // Arrange: two 60 KiB texts fit one request (120 KiB), but not with a 10 KiB custom context
+            var texts = new[] { Text(60 * KiB), Text(60 * KiB) };
+            var customContext = Text(10 * KiB);
+
+            // Act
+            var batches = DeepLTranslationProviderClient.BuildBatches(texts, null, null, customContext).ToList();
+
+            // Assert
+            Assert.Equal(new[] { new[] { 0 }, new[] { 1 } }, batches.Select(b => b.TextIndices.ToArray()));
+            Assert.All(batches, b => Assert.Equal(customContext, b.Context));
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData("   \n ")]
+        public void BuildBatches_CustomContextOnly_WhitespaceCustomContextSendsNoContext(string customContext)
+        {
+            // Act
+            var batch = Assert.Single(DeepLTranslationProviderClient.BuildBatches(new[] { "a", "b" }, null, null, customContext));
+
+            // Assert
+            Assert.Null(batch.Context);
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData("   \n ")]
+        public void BuildBatches_WithContext_WhitespaceCustomContextIsIgnored(string customContext)
+        {
+            // Arrange
+            var units = new[] { "a", "b" };
+
+            // Act
+            var batch = Assert.Single(DeepLTranslationProviderClient.BuildBatches(units, new[] { 0, 1 }, units, customContext));
+
+            // Assert
+            Assert.Equal("a\nb", batch.Context);
+        }
+
+        [Fact]
         public void BuildBatches_WithContext_IncludesContextOnlyNeighbours()
         {
             // Arrange: units 0 and 3 are context only (e.g. masked out by Studio)
