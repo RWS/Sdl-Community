@@ -15,11 +15,12 @@ namespace Sdl.Community.IATETerminologyProvider
 	public class IATEApplication
 	{
 		private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-		private static ProjectsController _projectsController;
+		
 
 		public static bool IsInitialized { get; private set; }
 
-		public static ProjectsController ProjectsController
+        private static ProjectsController _projectsController;
+        public static ProjectsController ProjectsController
 			=> _projectsController ??= SdlTradosStudio.Application?.GetController<ProjectsController>();
 
 		public static MainWindow GetMainWindow(

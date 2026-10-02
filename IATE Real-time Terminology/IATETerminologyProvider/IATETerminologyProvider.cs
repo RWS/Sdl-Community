@@ -40,9 +40,9 @@ namespace Sdl.Community.IATETerminologyProvider
 			ICacheProvider cacheProvider)
 		{
 			ProviderSettings = providerSettings;
-			ConnectionProvider = connectionProvider;
-			InventoriesProvider = inventoriesProvider;
-			CacheProvider = cacheProvider;
+			_connectionProvider = connectionProvider;
+			_inventoriesProvider = inventoriesProvider;
+			_cacheProvider = cacheProvider;
 			Id = Guid.NewGuid().ToString();
 		}
 
@@ -53,13 +53,13 @@ namespace Sdl.Community.IATETerminologyProvider
 				return true;
 			}
 
-			if (!InventoriesProvider.IsInitialized)
+			if (!_inventoriesProvider.IsInitialized)
 			{
-				_ = Core.Globalization.LegacyAsyncHelpers.WrapAsyncCode(InventoriesProvider.Initialize);
+				_ = Core.Globalization.LegacyAsyncHelpers.WrapAsyncCode(_inventoriesProvider.Initialize);
 			}
 
 			_entryModels = new List<EntryModel>();
-			_searchService = new TermSearchService(ConnectionProvider, InventoriesProvider);
+			_searchService = new TermSearchService(_connectionProvider, _inventoriesProvider);
 
 			InitializeEditorController();
 			ActivateDocument(_editorController.ActiveDocument);
@@ -67,11 +67,11 @@ namespace Sdl.Community.IATETerminologyProvider
 			return true;
 		}
 
-		public IConnectionProvider ConnectionProvider { get; }
+		private IConnectionProvider _connectionProvider { get; }
 
-		public IInventoriesProvider InventoriesProvider { get; }
+		private IInventoriesProvider _inventoriesProvider { get; }
 
-		public ICacheProvider CacheProvider { get; }
+		private ICacheProvider _cacheProvider { get; }
 
 		public Definition Definition => new Definition(GetDescriptiveFields(), GetDefinitionLanguages());
 
@@ -148,13 +148,13 @@ namespace Sdl.Community.IATETerminologyProvider
 
 			var jsonBody = GetApiRequestBodyValues(source, target, text);
 			var queryString = JsonConvert.SerializeObject(jsonBody);
-			var canConnect = CacheProvider?.Connect(IATEApplication.ProjectsController?.CurrentProject);
+			var canConnect = _cacheProvider?.Connect(IATEApplication.ProjectsController?.CurrentProject);
 
 			if (canConnect != null && (bool)canConnect)
 			{
 				//_logger.Info("--> Try to get cache results");
 
-				var cachedResults = CacheProvider.GetCachedResults(text, CultureInfo.GetCultureInfo(target.LanguageIsoCode).Name, queryString);
+				var cachedResults = _cacheProvider.GetCachedResults(text, CultureInfo.GetCultureInfo(target.LanguageIsoCode).Name, queryString);
 				if (cachedResults != null && cachedResults.Count > 0)
 				{
 					var entryModels = CreateEntryTerms(cachedResults.ToList(), source, GetLanguages());
@@ -185,10 +185,10 @@ namespace Sdl.Community.IATETerminologyProvider
 					QueryString = queryString
 				};
 
-				if (CacheProvider != null)
+				if (_cacheProvider != null)
 				{
 					//_logger.Info("--> Try to add results in db");
-					CacheProvider.AddSearchResults(searchCache, results);
+					_cacheProvider.AddSearchResults(searchCache, results);
 				}
 
 				var entryModels = CreateEntryTerms(results, source, GetLanguages());
