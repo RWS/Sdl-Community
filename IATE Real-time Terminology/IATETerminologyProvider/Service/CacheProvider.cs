@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Xml.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Sdl.Community.IATETerminologyProvider.Interface;
 using Sdl.Community.IATETerminologyProvider.Model;
-using Sdl.Core.Globalization;
-using Sdl.Core.Globalization.LanguageRegistry;
+using System.Globalization;
 using Sdl.ProjectAutomation.Core;
-using Sdl.Terminology.TerminologyProvider.Core;
+using TradosStudio.API.TranslationResources.Terminology;
+using TradosStudio.API.TranslationResources.Terminology.Definition;
+
 
 namespace Sdl.Community.IATETerminologyProvider.Service
 {
 	public class CacheProvider : ICacheProvider
 	{
-		private readonly SqliteDatabaseProvider _databaseProvider;
+		private readonly ISqliteDatabaseProvider _databaseProvider;
 
-		public CacheProvider(SqliteDatabaseProvider databaseProvider)
+		public CacheProvider(ISqliteDatabaseProvider databaseProvider)
 		{
 			_databaseProvider = databaseProvider;
 		}
@@ -84,7 +84,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 			var settings = new JsonSerializerSettings
 			{
 				TypeNameHandling = TypeNameHandling.All,
-				Converters = { new SearchResultModelConverter(), new CultureCodeConverter() }
+				Converters = { new SearchResultModelConverter(), new CultureInfoConverter() }
 			};
 
 			return JsonConvert.DeserializeObject<List<SearchResultModel>>(searchResultsString, settings);
@@ -104,14 +104,14 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 		}
 	}
 
-	public class CultureCodeConverter : JsonConverter<CultureCode>
+	public class CultureInfoConverter : JsonConverter<CultureInfo>
 	{
-		public override CultureCode ReadJson(JsonReader reader, Type objectType, CultureCode existingValue, bool hasExistingValue, JsonSerializer serializer)
+		public override CultureInfo ReadJson(JsonReader reader, Type objectType, CultureInfo existingValue, bool hasExistingValue, JsonSerializer serializer)
 		{
 			if (reader.TokenType == JsonToken.String)
 			{
 				string cultureCodeString = (string)reader.Value;
-				return new CultureCode(cultureCodeString);
+				return CultureInfo.GetCultureInfo(cultureCodeString);
 			}
 
 			if (reader.TokenType == JsonToken.StartObject)
@@ -120,13 +120,13 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 				var cultureCodeObject = JObject.Load(reader);
 				var name = cultureCodeObject["Name"].ToObject<string>(serializer);
 
-				return new CultureCode(name);
+				return CultureInfo.GetCultureInfo(name);
 			}
 
 			throw new JsonReaderException($"Unexpected token type: {reader.TokenType}");
 		}
 
-		public override void WriteJson(JsonWriter writer, CultureCode value, JsonSerializer serializer)
+		public override void WriteJson(JsonWriter writer, CultureInfo value, JsonSerializer serializer)
 		{
 			writer.WriteValue(value.ToString());
 		}
@@ -185,11 +185,11 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 
 		private static ILanguage GetLanguage(string cultureCodeString)
 		{
-			var languageBase = LanguageRegistryApi.Instance.GetLanguage(cultureCodeString);
+			var languageBase = Sdl.Core.Globalization.LanguageRegistry.LanguageRegistryApi.Instance.GetLanguage(cultureCodeString);
 
 			var definitionLanguage = new DefinitionLanguage
 			{
-				Locale = new CultureCode(languageBase.CultureInfo),
+                LanguageIsoCode = languageBase.CultureInfo.Name,
 				Name = cultureCodeString
 			};
 

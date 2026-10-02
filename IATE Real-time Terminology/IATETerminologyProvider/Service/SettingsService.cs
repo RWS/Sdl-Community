@@ -1,19 +1,17 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Sdl.Community.IATETerminologyProvider.Helpers;
+using Sdl.Community.IATETerminologyProvider.Model;
+using Sdl.Desktop.IntegrationApi;
+using Sdl.ProjectAutomation.FileBased;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using Newtonsoft.Json;
-using Sdl.Community.IATETerminologyProvider.Helpers;
-using Sdl.Community.IATETerminologyProvider.Model;
-using Sdl.Desktop.IntegrationApi;
-using Sdl.Desktop.IntegrationApi.Extensions;
-using Sdl.ProjectAutomation.FileBased;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.IATETerminologyProvider.Service
 {
-	[ApplicationInitializer]
 	public class SettingsService : IApplicationInitializer
 	{
 		private const string BatchProcessing = "batch processing";

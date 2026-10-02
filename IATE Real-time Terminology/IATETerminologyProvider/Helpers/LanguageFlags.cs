@@ -3,7 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Sdl.Core.Globalization;
+using System.Globalization;
 
 namespace Sdl.Community.IATETerminologyProvider.Helpers
 {
@@ -33,7 +33,7 @@ namespace Sdl.Community.IATETerminologyProvider.Helpers
 
 		private static string CreateNewIconFlag(string languageCode)
 		{
-			var lang = new Language(new CultureInfo(languageCode));
+			var lang = new Sdl.Core.Globalization.Language(new CultureInfo(languageCode));
 			var langFlag = lang.GetFlagImage();
 			var dirInfo = new DirectoryInfo(Path.Combine(Path.GetTempPath(), "Flags"));
 

@@ -1,17 +1,17 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using NLog;
+using Sdl.Community.IATETerminologyProvider.Helpers;
+using Sdl.Community.IATETerminologyProvider.Interface;
+using Sdl.Community.IATETerminologyProvider.Model.ResponseModels;
+using System;
 using System.ComponentModel;
-using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
-using Newtonsoft.Json;
-using NLog;
-using Sdl.Community.IATETerminologyProvider.Helpers;
-using Sdl.Community.IATETerminologyProvider.Model.ResponseModels;
 
 namespace Sdl.Community.IATETerminologyProvider.Service
 {
-	public class ConnectionProvider : INotifyPropertyChanged, IDisposable
+	public class ConnectionProvider : IConnectionProvider
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly System.Timers.Timer _timer;

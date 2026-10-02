@@ -9,12 +9,15 @@ namespace Sdl.Community.IATETerminologyProvider.View
 	/// Interaction logic for SettingsWindow.xaml
 	/// </summary>
 	public partial class MainWindow
-	{
-		public MainWindow(List<ISettingsViewModel> viewModels, SettingsModel settingsModel)
+    {
+		public MainWindow(List<ISettingsViewModel> viewModels, 
+            SettingsModel settingsModel, 
+            ICacheProvider cacheProvider,
+            IMessageBoxService _messageBoxService)
 		{
-			InitializeComponent();
-			DataContext = new MainWindowViewModel(viewModels, settingsModel);
-		}
+                InitializeComponent();
+                DataContext = new MainWindowViewModel(viewModels, settingsModel, cacheProvider, _messageBoxService);
+            }
 
 		public SettingsModel ProviderSettings
 		{

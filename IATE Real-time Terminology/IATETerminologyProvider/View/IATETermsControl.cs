@@ -1,7 +1,6 @@
 ﻿using Sdl.Community.IATETerminologyProvider.Helpers;
 using Sdl.Community.IATETerminologyProvider.Model;
-using Sdl.Core.Globalization;
-using Sdl.Terminology.TerminologyProvider.Core;
+using System.Globalization;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,15 +9,17 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
+using TradosStudio.API.TranslationResources.Terminology.Entries;
+using TradosStudio.API.TranslationResources.Terminology;
 
 namespace Sdl.Community.IATETerminologyProvider.View
 {
-    public partial class IATETermsControl : UserControl
+    public partial class IATETermsControl : UserControl, ITermsView
     {
         private readonly IATETerminologyProvider _iateTerminologyProvider;
         private readonly PathInfo _pathInfo;
-        private Language _selectedSourceLanguage;
-        private Language _selectedTargetLanguage;
+        private ILanguage _selectedSourceLanguage;
+        private ILanguage _selectedTargetLanguage;
 
         public IATETermsControl()
         {
@@ -88,7 +89,7 @@ namespace Sdl.Community.IATETerminologyProvider.View
             return (EntryModel)treeView1.SelectedNode?.Tag;
         }
 
-        public void UpdateEntriesInView(IEnumerable<Entry> entries, Language sourceLanguage, Language targetLanguage, Entry selectedEntry)
+        public void UpdateEntriesInView(IEnumerable<Entry> entries, ILanguage sourceLanguage, ILanguage targetLanguage, Entry selectedEntry)
         {
             UpdateEntriesInViewInternal(entries.Cast<EntryModel>(), sourceLanguage, targetLanguage, selectedEntry);
         }
@@ -188,11 +189,11 @@ namespace Sdl.Community.IATETerminologyProvider.View
             }
         }
 
-        private void UpdateEntriesInViewInternal(IEnumerable<EntryModel> entryModels, Language sourceLanguage, Language targetLanguage, Entry selectedEntry)
+        private void UpdateEntriesInViewInternal(IEnumerable<EntryModel> entryModels, ILanguage sourceLanguage, ILanguage targetLanguage, Entry selectedEntry)
         {
             if (InvokeRequired)
             {
-                BeginInvoke(new Action<IEnumerable<EntryModel>, Language, Language, Entry>(UpdateEntriesInViewInternal), entryModels, sourceLanguage, targetLanguage, selectedEntry);
+                BeginInvoke(new Action<IEnumerable<EntryModel>, ILanguage, ILanguage, Entry>(UpdateEntriesInViewInternal), entryModels, sourceLanguage, targetLanguage, selectedEntry);
                 return;
             }
 
@@ -237,7 +238,7 @@ namespace Sdl.Community.IATETerminologyProvider.View
             treeView1.EndUpdate();
         }
 
-        private static Dictionary<string, List<EntryModelItem>> GetEntryModelItems(IEnumerable<EntryModel> entryModels, Language sourceLanguage)
+        private static Dictionary<string, List<EntryModelItem>> GetEntryModelItems(IEnumerable<EntryModel> entryModels, ILanguage sourceLanguage)
         {
             var items = new Dictionary<string, List<EntryModelItem>>();
             var index = new List<string>();
@@ -245,7 +246,7 @@ namespace Sdl.Community.IATETerminologyProvider.View
             foreach (var entryModel in entryModels)
             {
                 var sourceTerms = entryModel.Languages
-                    .Where(a => a.Locale.RegionNeutralName == sourceLanguage.CultureInfo.TwoLetterISOLanguageName).ToList();
+                    .Where(a => CultureInfo.GetCultureInfo(a.LanguageIsoCode).TwoLetterISOLanguageName == CultureInfo.GetCultureInfo(sourceLanguage.LanguageIsoCode).TwoLetterISOLanguageName).ToList();
 
                 foreach (var sourceTerm in sourceTerms)
                 {
@@ -338,8 +339,8 @@ namespace Sdl.Community.IATETerminologyProvider.View
 
             for (var i = 0; i < entry.Languages.Count; i++)
             {
-                if (string.Compare(entry.Languages[i].Locale.Name, _selectedSourceLanguage.CultureInfo.Name, StringComparison.InvariantCultureIgnoreCase) == 0 ||
-                    string.Compare(entry.Languages[i].Locale.Name, _selectedTargetLanguage.CultureInfo.Name, StringComparison.InvariantCultureIgnoreCase) == 0)
+                if (string.Compare(entry.Languages[i].LanguageIsoCode, _selectedSourceLanguage.LanguageIsoCode, StringComparison.InvariantCultureIgnoreCase) == 0 ||
+                    string.Compare(entry.Languages[i].LanguageIsoCode, _selectedTargetLanguage.LanguageIsoCode, StringComparison.InvariantCultureIgnoreCase) == 0)
                 {
                     WriteLanguage(entry.Languages[i], i == 0, xmlTxtWriter);
                 }
@@ -351,12 +352,14 @@ namespace Sdl.Community.IATETerminologyProvider.View
         private void WriteLanguage(EntryLanguage language, bool isSource, XmlWriter xmlTxtWriter)
         {
             var languageFlags = new LanguageFlags();
-            var fullPath = languageFlags.GetImageStudioCodeByLanguageCode(language.Locale.Name);
+            var fullPath = languageFlags.GetImageStudioCodeByLanguageCode(language.LanguageIsoCode);
+
+            var languageCultureInfo = CultureInfo.GetCultureInfo(language.LanguageIsoCode);
 
             xmlTxtWriter.WriteStartElement("Language");
-            xmlTxtWriter.WriteAttributeString("Name", language.Name);
-            xmlTxtWriter.WriteAttributeString("CultureInfo", language.Locale.Name);
-            xmlTxtWriter.WriteAttributeString("TwoLetterISOLanguageName", language.Locale.RegionNeutralName);
+            xmlTxtWriter.WriteAttributeString("Name", languageCultureInfo.DisplayName);
+            xmlTxtWriter.WriteAttributeString("CultureInfo", languageCultureInfo.Name);
+            xmlTxtWriter.WriteAttributeString("TwoLetterISOLanguageName", languageCultureInfo.TwoLetterISOLanguageName);
             xmlTxtWriter.WriteAttributeString("IsSource", isSource.ToString());
             xmlTxtWriter.WriteAttributeString("FlagFullPath", File.Exists(fullPath) ? fullPath : string.Empty);
 
