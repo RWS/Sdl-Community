@@ -29,7 +29,8 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
         private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
         {
-            Process.Start("https://www.deepl.com/api-contact.html");
+            Process.Start(e.Uri.AbsoluteUri);
+            e.Handled = true;
         }
 
         private void Ok_Click(object sender, RoutedEventArgs e)

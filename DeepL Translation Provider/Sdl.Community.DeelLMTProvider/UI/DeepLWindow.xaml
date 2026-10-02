@@ -176,9 +176,11 @@
                                       Content="Custom context"
                                       ToolTip="Send your own text to DeepL as context, with every request: facts a single segment does not show, such as who a person is."
                                       IsChecked="{Binding SendCustomContext}" />
+                            <StackPanel Orientation="Horizontal">
                             <!-- One line until clicked into; expands while it has focus -->
                             <TextBox x:Name="CustomContext"
-                                     Margin="33,0,15,8"
+                                     Margin="33,0,10,8"
+                                     VerticalAlignment="Top"
                                      Width="420"
                                      HorizontalAlignment="Left"
                                      MaxLength="500"
@@ -203,6 +205,16 @@
                                     </Style>
                                 </TextBox.Style>
                             </TextBox>
+                            <!-- DeepL's own warning against instructions in `context`; not disabled with the box, so it can be read before ticking -->
+                            <TextBlock Margin="0,3,15,8"
+                                       VerticalAlignment="Top"
+                                       Style="{StaticResource Sdl.TextBlock.HyperLinkTextStyle}">
+                                <Hyperlink NavigateUri="https://developers.deepl.com/docs/learning-how-tos/examples-and-guides/how-to-use-context-parameter#what-the-context-parameter-is-not-for"
+                                           RequestNavigate="Hyperlink_OnRequestNavigate">
+                                    What to write here?
+                                </Hyperlink>
+                            </TextBlock>
+                            </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
                                           VerticalContentAlignment="Center"
