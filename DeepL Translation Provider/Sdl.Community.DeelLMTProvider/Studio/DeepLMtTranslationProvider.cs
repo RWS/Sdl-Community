@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using NLog;
-using Sdl.Community.DeepLMTProvider.Interface;
 using Sdl.Community.DeepLMTProvider.Client;
+using Sdl.Community.DeepLMTProvider.Interface;
 using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.Community.DeepLMTProvider.Service;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Sdl.Community.DeepLMTProvider.Studio
@@ -23,7 +23,9 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             Options = options;
         }
 
+        public DeepLTranslationProviderClient DeepLTranslationProviderConnecter { get; }
         public bool IsReadOnly => true;
+        public Dictionary<string, string> LanguagesSupported { get; set; } = new Dictionary<string, string>();
         public string Name => "DeepL Translator provider using DeepL Translator ";
 
         public DeepLTranslationOptions Options
@@ -34,26 +36,13 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 
         public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, "Deepl");
         public bool SupportsConcordanceSearch => false;
-        public bool SupportsDocumentSearches => false;
-        public bool SupportsFilters => false;
-        public bool SupportsFuzzySearch => false;
-        public bool SupportsMultipleResults => false;
-        public bool SupportsPenalties => true;
-        public bool SupportsPlaceables => false;
-        public bool SupportsScoring => false;
+
         public bool SupportsSearchForTranslationUnits => true;
         public bool SupportsSourceConcordanceSearch => false;
-        public bool SupportsStructureContext => false;
-        public bool SupportsTaggedInput => true;
         public bool SupportsTargetConcordanceSearch => false;
-        public bool SupportsTranslation => true;
         public bool SupportsUpdate => false;
-        public bool SupportsWordCounts => false;
         public TranslationMethod TranslationMethod => TranslationMethod.MachineTranslation;
         public Uri Uri => Options.Uri;
-        public DeepLTranslationProviderClient DeepLTranslationProviderConnecter { get; }
-
-        public Dictionary<string, string> LanguagesSupported { get; set; } = new Dictionary<string, string>();
 
         public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
         {
@@ -65,7 +54,8 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             Options = JsonConvert.DeserializeObject<DeepLTranslationOptions>(translationProviderState);
         }
 
-        public void RefreshStatusInfo() {}
+        public void RefreshStatusInfo()
+        { }
 
         public string SerializeState() => JsonConvert.SerializeObject(Options);
 
@@ -91,20 +81,5 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 
             return false;
         }
-
-        //private void GetSupportedTargetLanguages(LanguagePair[] languagePairs)
-        //{
-        //    foreach (var languagePair in languagePairs)
-        //    {
-        //        var targetLanguage = languagePair.TargetCulture.RegionNeutralName.ToUpper();
-        //        if (DeepLTranslationProviderConnecter.IsLanguagePairSupported(languagePair.SourceCulture, languagePair.TargetCulture) && !Options.LanguagesSupported.ContainsKey(targetLanguage))
-        //        {
-        //            if (!Options.LanguagesSupported.ContainsKey(languagePair.TargetCultureName))
-        //            {
-        //                Options.LanguagesSupported.Add(languagePair.TargetCultureName, "DeepLTranslator");
-        //            }
-        //        }
-        //    }
-        //}
     }
 }

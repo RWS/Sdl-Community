@@ -1,6 +1,7 @@
 ﻿using Sdl.Community.DeepLMTProvider.ViewModel;
 using System.Diagnostics;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Navigation;
 
 namespace Sdl.Community.DeepLMTProvider.UI
@@ -11,6 +12,16 @@ namespace Sdl.Community.DeepLMTProvider.UI
         {
             InitializeComponent();
             DataContext = viewModel;
+            // Collapsed to one line, the box would otherwise keep the scroll position from editing.
+            CustomContext.LostKeyboardFocus += (_, _) => CustomContext.ScrollToHome();
+        }
+
+        // Clicking a non-focusable spot keeps focus in the custom context box; drop it so the box collapses.
+        protected override void OnPreviewMouseDown(MouseButtonEventArgs e)
+        {
+            if (CustomContext.IsKeyboardFocusWithin && !CustomContext.IsMouseOver)
+                Keyboard.ClearFocus();
+            base.OnPreviewMouseDown(e);
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
@@ -20,7 +31,8 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
         private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
         {
-            Process.Start("https://www.deepl.com/api-contact.html");
+            Process.Start(e.Uri.AbsoluteUri);
+            e.Handled = true;
         }
 
         private void Ok_Click(object sender, RoutedEventArgs e)

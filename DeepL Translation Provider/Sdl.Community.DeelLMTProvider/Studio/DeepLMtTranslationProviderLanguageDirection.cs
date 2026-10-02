@@ -35,28 +35,11 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                 _options?.LanguagePairOptions?.FirstOrDefault(lpo => lpo.LanguagePair.Equals(languageDirection));
         }
 
-        public bool CanReverseLanguageDirection => throw new NotImplementedException();
-
         CultureCode ITranslationProviderLanguageDirection.SourceLanguage => _languageDirection.SourceCulture;
         CultureCode ITranslationProviderLanguageDirection.TargetLanguage => _languageDirection.TargetCulture;
         public ITranslationProvider TranslationProvider => _deepLMtTranslationProvider;
 
-        public ImportResult[] AddOrUpdateTranslationUnits(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings)
-        {
-            throw new NotImplementedException();
-        }
-
         public ImportResult[] AddOrUpdateTranslationUnitsMasked(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings, bool[] mask)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ImportResult AddTranslationUnit(TranslationUnit translationUnit, ImportSettings settings)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ImportResult[] AddTranslationUnits(TranslationUnit[] translationUnits, ImportSettings settings)
         {
             throw new NotImplementedException();
         }
@@ -71,27 +54,12 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             throw new NotImplementedException();
         }
 
-        public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
-        {
-            throw new NotImplementedException();
-        }
-
         public SearchResults[] SearchSegmentsMasked(SearchSettings settings, Segment[] segments, bool[] mask)
         {
             throw new NotImplementedException();
         }
 
         public SearchResults SearchText(SearchSettings settings, string segment)
-        {
-            throw new NotImplementedException();
-        }
-
-        public SearchResults SearchTranslationUnit(SearchSettings settings, TranslationUnit translationUnit)
-        {
-            throw new NotImplementedException();
-        }
-
-        public SearchResults[] SearchTranslationUnits(SearchSettings settings, TranslationUnit[] translationUnits)
         {
             throw new NotImplementedException();
         }
@@ -130,7 +98,8 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 
             if (preTranslateList.Count <= 0) return results.ToArray();
 
-            var translatedSegments = TranslateSegments(preTranslateList);
+            var (contextUnits, customContext) = SelectContext(_options.SendSurroundingSegments, _options.SendCustomContext, _options.CustomContext, translationUnits);
+            var translatedSegments = TranslateSegments(preTranslateList, contextUnits, customContext);
             var preTranslateSearchResults = GetPreTranslationSearchResults(translatedSegments);
 
             foreach (var result in preTranslateSearchResults)
@@ -145,15 +114,20 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             return results.ToArray();
         }
 
-        public ImportResult UpdateTranslationUnit(TranslationUnit translationUnit)
-        {
-            throw new NotImplementedException();
-        }
-
         public ImportResult[] UpdateTranslationUnits(TranslationUnit[] translationUnits)
         {
             throw new NotImplementedException();
         }
+
+        // Plain source of every unit Studio passed, masked or not, so DeepL gets
+        // the surrounding document text; index-aligned with translationUnits.
+        public static List<string> BuildContextUnits(TranslationUnit[] translationUnits) =>
+            translationUnits.Select(tu => tu?.SourceSegment?.ToPlain() ?? string.Empty).ToList();
+
+        public static (List<string> ContextUnits, string CustomContext) SelectContext(
+            bool sendSurroundingSegments, bool sendCustomContext, string customContext, TranslationUnit[] translationUnits) =>
+            (sendSurroundingSegments ? BuildContextUnits(translationUnits) : null,
+             sendCustomContext ? customContext : null);
 
         private string ApplyBeforeTranslationSettings(Segment newSeg)
         {
@@ -227,7 +201,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             return resultsList;
         }
 
-        private List<PreTranslateSegment> TranslateSegments(List<PreTranslateSegment> preTranslateSegments)
+        private List<PreTranslateSegment> TranslateSegments(List<PreTranslateSegment> preTranslateSegments, List<string> contextUnits, string customContext)
         {
             foreach (var segment in preTranslateSegments.Where(segment => segment != null))
             {
@@ -255,7 +229,10 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                 _languagePairOptions?.SelectedTranslationMemory?.Id);
 
             var sourceTexts = eligibleSegments.Select(s => s.SourceText).ToList();
-            var translationResults = _connecter.TranslateBatch(_languageDirection, sourceTexts, deepLSettings, _options.UseLocalCache);
+            // A segment's index in preTranslateSegments is its unit's index in the
+            // translation units Studio passed, which contextUnits is aligned with.
+            var unitPositions = eligibleSegments.Select(s => preTranslateSegments.IndexOf(s)).ToList();
+            var translationResults = _connecter.TranslateBatch(_languageDirection, sourceTexts, deepLSettings, _options.UseLocalCache, unitPositions, contextUnits, customContext);
 
             var errorMessages = new List<ErrorItem>();
             for (var i = 0; i < eligibleSegments.Count; i++)
