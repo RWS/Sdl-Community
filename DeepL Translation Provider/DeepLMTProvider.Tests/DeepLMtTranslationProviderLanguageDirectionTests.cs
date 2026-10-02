@@ -37,19 +37,20 @@ namespace DeepLMTProvider.Tests
         }
 
         [Theory]
-        [InlineData(ContextSource.None, false, null)]
-        [InlineData(ContextSource.SurroundingSegments, true, null)]
-        [InlineData(ContextSource.CustomContext, false, "Maria is a woman.")]
-        public void SelectContext_SendsOneSourceOnly(ContextSource contextSource, bool expectUnits, string expectedCustomContext)
+        [InlineData(false, false, false, null)]
+        [InlineData(true, false, true, null)]
+        [InlineData(false, true, false, "Maria is a woman.")]
+        [InlineData(true, true, true, "Maria is a woman.")]
+        public void SelectContext_SendsTheChosenSources(bool sendSurroundingSegments, bool sendCustomContext, bool expectUnits, string expectedCustomContext)
         {
-            // Arrange: a custom context is stored regardless of the chosen source
+            // Arrange: a custom context is stored whether or not it is sent
             var plain = new Segment(new CultureCode("en-US"));
             plain.Add("Bye");
             var translationUnits = new[] { new TranslationUnit { SourceSegment = plain } };
 
             // Act
             var (contextUnits, customContext) = DeepLMtTranslationProviderLanguageDirection.SelectContext(
-                contextSource, "Maria is a woman.", translationUnits);
+                sendSurroundingSegments, sendCustomContext, "Maria is a woman.", translationUnits);
 
             // Assert
             Assert.Equal(expectUnits, contextUnits != null);

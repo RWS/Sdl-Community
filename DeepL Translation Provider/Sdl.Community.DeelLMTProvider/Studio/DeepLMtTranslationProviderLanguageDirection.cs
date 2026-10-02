@@ -98,7 +98,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 
             if (preTranslateList.Count <= 0) return results.ToArray();
 
-            var (contextUnits, customContext) = SelectContext(_options.ContextSource, _options.CustomContext, translationUnits);
+            var (contextUnits, customContext) = SelectContext(_options.SendSurroundingSegments, _options.SendCustomContext, _options.CustomContext, translationUnits);
             var translatedSegments = TranslateSegments(preTranslateList, contextUnits, customContext);
             var preTranslateSearchResults = GetPreTranslationSearchResults(translatedSegments);
 
@@ -124,15 +124,10 @@ namespace Sdl.Community.DeepLMTProvider.Studio
         public static List<string> BuildContextUnits(TranslationUnit[] translationUnits) =>
             translationUnits.Select(tu => tu?.SourceSegment?.ToPlain() ?? string.Empty).ToList();
 
-        // DeepL gets either the surrounding segments or the user's custom context, never both.
         public static (List<string> ContextUnits, string CustomContext) SelectContext(
-            ContextSource contextSource, string customContext, TranslationUnit[] translationUnits) =>
-            contextSource switch
-            {
-                ContextSource.SurroundingSegments => (BuildContextUnits(translationUnits), null),
-                ContextSource.CustomContext => (null, customContext),
-                _ => (null, null)
-            };
+            bool sendSurroundingSegments, bool sendCustomContext, string customContext, TranslationUnit[] translationUnits) =>
+            (sendSurroundingSegments ? BuildContextUnits(translationUnits) : null,
+             sendCustomContext ? customContext : null);
 
         private string ApplyBeforeTranslationSettings(Segment newSeg)
         {

@@ -16,7 +16,9 @@ namespace Sdl.Community.DeepLMTProvider.Model
 
         public bool ResendDraft { get; set; }
 
-        public ContextSource ContextSource { get; set; }
+        public bool SendSurroundingSegments { get; set; }
+
+        public bool SendCustomContext { get; set; }
 
         public string CustomContext { get; set; }
 

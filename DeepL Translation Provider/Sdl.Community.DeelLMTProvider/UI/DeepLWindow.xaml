@@ -37,7 +37,6 @@
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <converters1:ListToStringConverter x:Key="ListToStringConverter" />
             <converters:EnumDescriptionConverter x:Key="EnumToDescriptionConverter" />
-            <converters:EnumToBoolConverter x:Key="EnumToBoolConverter" />
 
             <ObjectDataProvider MethodName="GetValues"
                                 ObjectType="{x:Type model:TagFormat}"
@@ -164,21 +163,19 @@
                                       Content="Resend Draft" />
                             <Label Content="Context sent to DeepL (not billed)"
                                    Margin="12,0,0,0" />
-                            <RadioButton GroupName="ContextSource"
-                                         Margin="15,0,0,4"
-                                         Content="None"
-                                         IsChecked="{Binding ContextSource, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static model:ContextSource.None}}" />
-                            <RadioButton GroupName="ContextSource"
-                                         Margin="15,0,0,4"
-                                         Content="Surrounding segments"
-                                         ToolTip="Send the neighbouring source segments to DeepL as context, to resolve ambiguous words. Cached translations are reused less often."
-                                         IsChecked="{Binding ContextSource, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static model:ContextSource.SurroundingSegments}}" />
-                            <RadioButton GroupName="ContextSource"
-                                         x:Name="CustomContextOption"
-                                         Margin="15,0,0,4"
-                                         Content="Custom context"
-                                         ToolTip="Send your own text to DeepL as context, with every request: facts a single segment does not show, such as who a person is."
-                                         IsChecked="{Binding ContextSource, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static model:ContextSource.CustomContext}}" />
+                            <CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+                                      VerticalContentAlignment="Center"
+                                      Margin="15,0,0,5"
+                                      Content="Surrounding segments"
+                                      ToolTip="Send the neighbouring source segments to DeepL as context, to resolve ambiguous words. Cached translations are reused less often."
+                                      IsChecked="{Binding SendSurroundingSegments}" />
+                            <CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+                                      VerticalContentAlignment="Center"
+                                      x:Name="CustomContextOption"
+                                      Margin="15,0,0,5"
+                                      Content="Custom context"
+                                      ToolTip="Send your own text to DeepL as context, with every request: facts a single segment does not show, such as who a person is."
+                                      IsChecked="{Binding SendCustomContext}" />
                             <!-- One line until clicked into; expands while it has focus -->
                             <TextBox x:Name="CustomContext"
                                      Margin="33,0,15,8"
