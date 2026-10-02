@@ -12,6 +12,8 @@ namespace Sdl.Community.DeepLMTProvider.UI
         {
             InitializeComponent();
             DataContext = viewModel;
+            // Collapsed to one line, the box would otherwise keep the scroll position from editing.
+            CustomContext.LostKeyboardFocus += (_, _) => CustomContext.ScrollToHome();
         }
 
         // Clicking a non-focusable spot keeps focus in the custom context box; drop it so the box collapses.

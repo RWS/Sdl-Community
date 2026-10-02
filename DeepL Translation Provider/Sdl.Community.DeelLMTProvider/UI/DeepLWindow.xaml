@@ -190,7 +190,6 @@
                                 <TextBox.Style>
                                     <Style TargetType="TextBox">
                                         <Setter Property="AcceptsReturn" Value="True" />
-                                        <Setter Property="VerticalContentAlignment" Value="Top" />
                                         <Setter Property="TextWrapping" Value="NoWrap" />
                                         <Setter Property="MaxLines" Value="1" />
                                         <Setter Property="VerticalScrollBarVisibility" Value="Hidden" />
@@ -199,6 +198,8 @@
                                             <Trigger Property="IsKeyboardFocused" Value="True">
                                                 <Setter Property="TextWrapping" Value="Wrap" />
                                                 <Setter Property="Height" Value="72" />
+                                                <!-- Lift the idle MaxLines=1, or the text area stays one line high inside the taller box -->
+                                                <Setter Property="MaxLines" Value="100" />
                                                 <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
                                             </Trigger>
                                         </Style.Triggers>
