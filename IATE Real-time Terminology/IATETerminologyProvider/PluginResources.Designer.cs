@@ -338,5 +338,24 @@ namespace Sdl.Community.IATETerminologyProvider {
                 return ResourceManager.GetString("WindowsControl_Minimize", resourceCulture);
             }
         }
+
+        public static string IATETerminologyProviderRibbonGroup_Name { 
+           get {
+                return ResourceManager.GetString("IATETerminologyProviderRibbonGroup_Name", resourceCulture);
+            } 
+        }
+
+        public static string IATESearchAllAction_Name { 
+            get { 
+                return ResourceManager.GetString("IATESearchAllAction_Name", resourceCulture);
+            } 
+        }
+
+        public static string IATESearchSourceTargetAction_Name { 
+            get 
+            {
+                return ResourceManager.GetString("IATESearchSourceTargetAction_Name", resourceCulture);
+            } 
+        }
     }
 }

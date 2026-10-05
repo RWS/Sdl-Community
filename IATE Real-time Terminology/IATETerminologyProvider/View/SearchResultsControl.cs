@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 using System.Windows.Forms.Integration;
-using Sdl.Desktop.IntegrationApi.Interfaces;
+using TradosStudio.API.UI;
 
 namespace Sdl.Community.IATETerminologyProvider.View
 {

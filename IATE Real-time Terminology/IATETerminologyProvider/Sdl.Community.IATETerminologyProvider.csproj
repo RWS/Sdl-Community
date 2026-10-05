@@ -14,7 +14,11 @@
 		<TradosFolder>$(ProgramW6432)\Trados\Trados Studio\Studio19Beta</TradosFolder>
 	</PropertyGroup>
 	<ItemGroup>
+		<None Remove="Resources\Iate_logo.ico" />
 		<None Remove="Resources\IATE_settings.ico" />
+	</ItemGroup>
+	<ItemGroup>
+	  <EmbeddedResource Include="Resources\Iate_logo.ico" />
 	</ItemGroup>
 	<ItemGroup>
 		<Resource Include="Resources\IATE_settings.ico" />
@@ -80,6 +84,9 @@
 		<Reference Include="TradosStudio.API.TranslationResources">
 			<HintPath>$(TradosFolder)\TradosStudio.API.TranslationResources.dll</HintPath>
 		</Reference>
+		<Reference Include="TradosStudio.API.Projects">
+			<HintPath>$(TradosFolder)\TradosStudio.API.Projects.dll</HintPath>
+		</Reference>
 		<Reference Include="TradosStudio.API">
 			<HintPath>$(TradosFolder)\TradosStudio.API.dll</HintPath>
 		</Reference>
@@ -122,7 +129,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Web.WebView2">
-			<Version>1.0.2592.51</Version>
+			<Version>1.0.3856.49</Version>
 		</PackageReference>
 		<PackageReference Include="TradosStudio.Packaging" Version="0.1.77" />
 	</ItemGroup>
