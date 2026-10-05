@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Sdl.Community.IATETerminologyProvider.Model;
-using Sdl.ProjectAutomation.Core;
-
+using TradosStudio.API.Projects;
 
 namespace Sdl.Community.IATETerminologyProvider.Interface
 {

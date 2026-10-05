@@ -5,9 +5,9 @@ using Newtonsoft.Json.Linq;
 using Sdl.Community.IATETerminologyProvider.Interface;
 using Sdl.Community.IATETerminologyProvider.Model;
 using System.Globalization;
-using Sdl.ProjectAutomation.Core;
 using TradosStudio.API.TranslationResources.Terminology;
 using TradosStudio.API.TranslationResources.Terminology.Definition;
+using TradosStudio.API.Projects;
 
 
 namespace Sdl.Community.IATETerminologyProvider.Service
@@ -140,9 +140,18 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 			var result = new SearchResultModel();
 			serializer.Populate(token.CreateReader(), result);
 
-			// Convert the ILanguage property using the CultureCode converter
-			//result.Language = token["Language"].ToObject<ILanguage>(serializer);
-			return result;
+            var localeNameToken = token["Language"]?["Locale"]?["Name"];
+            if (localeNameToken != null && localeNameToken.Type != JTokenType.Null)
+            {
+                var cultureCodeString = localeNameToken.ToString();
+
+                if (!string.IsNullOrEmpty(cultureCodeString) && result.Language is LanguageModel model)
+                {
+                    model.CultureInfo = CultureInfo.GetCultureInfo(cultureCodeString);
+                }
+            }
+
+            return result;
 		}
 
 		public override void WriteJson(JsonWriter writer, SearchResultModel value, JsonSerializer serializer)

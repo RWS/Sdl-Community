@@ -1,12 +1,12 @@
 ﻿using NLog;
 using Sdl.Community.IATETerminologyProvider.Interface;
 using Sdl.Community.IATETerminologyProvider.Model;
-using Sdl.ProjectAutomation.Core;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.IO;
+using TradosStudio.API.Projects;
 
 
 namespace Sdl.Community.IATETerminologyProvider.Service
@@ -32,12 +32,11 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 
             try
             {
-                var projectInfo = project.GetProjectInfo();
-                var dbFilePath = Path.Combine(_pathInfo.DbaseCacheFullPath, $"{projectInfo.Name}.sqlite");
+                var dbFilePath = Path.Combine(_pathInfo.DbaseCacheFullPath, $"{project.Name}.sqlite");
 
                 if (File.Exists(dbFilePath))
                 {
-                    if (_project?.GetProjectInfo()?.Id == projectInfo.Id)
+                    if (_project?.Id == project.Id)
                     {
                         if (_connection.State == ConnectionState.Closed)
                         {

@@ -5,7 +5,6 @@ using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Community.IATETerminologyProvider.Service;
 using Sdl.Community.IATETerminologyProvider.View;
 using Sdl.Community.IATETerminologyProvider.ViewModel;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -14,14 +13,9 @@ namespace Sdl.Community.IATETerminologyProvider
 {
 	public class IATEApplication
 	{
-		private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-		
+		private static readonly Logger Logger = LogManager.GetCurrentClassLogger();		
 
 		public static bool IsInitialized { get; private set; }
-
-        private static ProjectsController _projectsController;
-        public static ProjectsController ProjectsController
-			=> _projectsController ??= SdlTradosStudio.Application?.GetController<ProjectsController>();
 
 		public static MainWindow GetMainWindow(
             ICacheProvider cacheProvider, 

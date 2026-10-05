@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Globalization;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Windows.Forms;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using NLog;
 using Sdl.Community.IATETerminologyProvider.EventArgs;
 using Sdl.Community.IATETerminologyProvider.Helpers;
@@ -13,8 +6,15 @@ using Sdl.Community.IATETerminologyProvider.Interface;
 using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Community.IATETerminologyProvider.Service;
 using Sdl.LanguagePlatform.Core;
-
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using System;
+using System.Collections.Generic;
+using System.Dynamic;
+using System.Globalization;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using TradosStudio.API.ProjectManagement;
 using TradosStudio.API.TranslationResources.Terminology;
 using TradosStudio.API.TranslationResources.Terminology.Definition;
 using TradosStudio.API.TranslationResources.Terminology.Entries;
@@ -34,15 +34,25 @@ namespace Sdl.Community.IATETerminologyProvider
 
 		public SettingsModel ProviderSettings { get; set; }
 
-		public IATETerminologyProvider(SettingsModel providerSettings, 
+        private IConnectionProvider _connectionProvider { get; }
+
+        private IInventoriesProvider _inventoriesProvider { get; }
+
+        private ICacheProvider _cacheProvider { get; }
+
+        private IProjectsRegistry _projectsRegistry { get; }
+
+        public IATETerminologyProvider(SettingsModel providerSettings, 
 			IConnectionProvider connectionProvider,
 			IInventoriesProvider inventoriesProvider, 
-			ICacheProvider cacheProvider)
+			ICacheProvider cacheProvider,
+			IProjectsRegistry projectsRegistry)
 		{
 			ProviderSettings = providerSettings;
 			_connectionProvider = connectionProvider;
 			_inventoriesProvider = inventoriesProvider;
 			_cacheProvider = cacheProvider;
+			_projectsRegistry = projectsRegistry;
 			Id = Guid.NewGuid().ToString();
 		}
 
@@ -67,13 +77,7 @@ namespace Sdl.Community.IATETerminologyProvider
 			return true;
 		}
 
-		private IConnectionProvider _connectionProvider { get; }
-
-		private IInventoriesProvider _inventoriesProvider { get; }
-
-		private ICacheProvider _cacheProvider { get; }
-
-		public Definition Definition => new Definition(GetDescriptiveFields(), GetDefinitionLanguages());
+        public Definition Definition => new Definition(GetDescriptiveFields(), GetDefinitionLanguages());
 
 		public string Description => PluginResources.IATETerminologyProviderDescription;
 
@@ -148,7 +152,7 @@ namespace Sdl.Community.IATETerminologyProvider
 
 			var jsonBody = GetApiRequestBodyValues(source, target, text);
 			var queryString = JsonConvert.SerializeObject(jsonBody);
-			var canConnect = _cacheProvider?.Connect(IATEApplication.ProjectsController?.CurrentProject);
+            var canConnect = _cacheProvider?.Connect(_projectsRegistry.GetActiveProject());
 
 			if (canConnect != null && (bool)canConnect)
 			{
@@ -167,8 +171,8 @@ namespace Sdl.Community.IATETerminologyProvider
 				}
 			}
 
-			var config = IATEApplication.ProjectsController?.CurrentProject?.GetTermbaseConfiguration();
-			var results = _searchService.GetTerms(queryString, config?.TermRecognitionOptions?.SearchDepth ?? 20);
+            var config = _projectsRegistry.GetActiveProject()?.GetTermbaseConfiguration(false);
+            var results = _searchService.GetTerms(queryString, config?.TermRecognitionOptions?.SearchDepth ?? 20);
 			if (results != null)
 			{
 				var termGroups = SortSearchResultsByPriority(text, GetTermResultGroups(results), source);
@@ -241,38 +245,38 @@ namespace Sdl.Community.IATETerminologyProvider
 		}
 
 		public IList<DefinitionLanguage> GetDefinitionLanguages()
-		{
-			var result = new List<DefinitionLanguage>();
+        {
+            var result = new List<DefinitionLanguage>();
 
-			var currentProject = IATEApplication.ProjectsController?.CurrentProject;
-			if (currentProject == null)
-			{
-				return result;
-			}
+            var currentProject = _projectsRegistry.GetActiveProject();
 
-			var projectInfo = currentProject.GetProjectInfo();
+            if (currentProject == null)
+            {
+                return result;
+            }
 
-			var sourceLanguage = new DefinitionLanguage
-			{
-				IsBidirectional = true,
-				LanguageIsoCode = projectInfo.SourceLanguage.CultureInfo.Name,
-				Name = projectInfo.SourceLanguage.DisplayName,
-				TargetOnly = false
-			};
-			result.Add(sourceLanguage);
+            result.Add(MapLanguageDefinition(currentProject.SourceLanguage));
 
-			result.AddRange(projectInfo.TargetLanguages.Select(language => new DefinitionLanguage
-			{
-				IsBidirectional = true,
-				LanguageIsoCode = language.CultureInfo.Name,
-				Name = language.DisplayName,
-				TargetOnly = false
-			}));
+            result.AddRange(currentProject.TargetLanguages.Select(language =>            
+               MapLanguageDefinition(language)
+            ));
 
-			return result;
-		}
+            return result;
+        }
 
-		public string GetStatusName(int value)
+        private static DefinitionLanguage MapLanguageDefinition(string languageIsoCode)
+        {
+            var languageCultureInfo = CultureInfo.GetCultureInfo(languageIsoCode);
+            return new DefinitionLanguage
+            {
+                IsBidirectional = true,
+                LanguageIsoCode = languageCultureInfo.Name,
+                Name = languageCultureInfo.DisplayName,
+                TargetOnly = false
+            };
+        }
+
+        public string GetStatusName(int value)
 		{
 			switch (value)
 			{

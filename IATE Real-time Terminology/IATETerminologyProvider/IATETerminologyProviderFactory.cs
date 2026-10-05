@@ -7,6 +7,7 @@ using Sdl.Community.IATETerminologyProvider.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TradosStudio.API.ProjectManagement;
 using TradosStudio.API.TranslationResources.Terminology;
 
 namespace Sdl.Community.IATETerminologyProvider
@@ -18,12 +19,18 @@ namespace Sdl.Community.IATETerminologyProvider
         private ICacheProvider _cacheProvider;
         private IConnectionProvider _connectionProvider;
         private IInventoriesProvider _inventoriesProvider;
+        private IProjectsRegistry _projectsRegistry;
 
-        public IATETerminologyProviderFactory(ICacheProvider cacheProvider, IConnectionProvider connectionProvider, IInventoriesProvider inventoriesProvider)
+        public IATETerminologyProviderFactory(
+            ICacheProvider cacheProvider, 
+            IConnectionProvider connectionProvider, 
+            IInventoriesProvider inventoriesProvider, 
+            IProjectsRegistry projectsRegistry)
         {
             _cacheProvider = cacheProvider;
             _connectionProvider = connectionProvider;
             _inventoriesProvider = inventoriesProvider;
+            _projectsRegistry = projectsRegistry;
         }
 
         public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
@@ -64,7 +71,8 @@ namespace Sdl.Community.IATETerminologyProvider
                 savedSettings,
                 _connectionProvider, 
                 _inventoriesProvider, 
-                _cacheProvider);
+                _cacheProvider,
+                _projectsRegistry);
 
             return terminologyProvider;
         }
