@@ -1,52 +1,24 @@
 ﻿using NLog;
+using System;
+using System.ComponentModel;
 using TradosStudio.API.UI;
 using TradosStudio.API.UI.View;
-using System;
-using System.Threading.Tasks;
 
 namespace Sdl.Community.IATETerminologyProvider.View
 {
-    internal class SearchResultsView : IView
+    public class SearchResultsViewPart : ViewPartBase, IViewPart
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private SearchResultsControl _contentControl;
 
-        public string Id => "IATE Results Viewer";
-
-        public string Name => "Search Results Viewer";
-
-        public string Description => "IATE Search Results";
-
-        public string Icon => $"Sdl.Community.IATETerminologyProvider.Resources.{nameof(PluginResources.Iate_logo)}.ico";
-
-        public bool Available => true;
-
-        public bool Enabled => true;
-
-        public static bool IsInitialized { get; set; }
-
-        public BrowserWindow Browser => _contentControl.Browser;
-
+        public static SearchResultsViewPart ActiveInstance { get; private set; }
         public string Url { get; set; }
-
-        public void Activate()
+        public static bool IsInitialized { get; set; }
+        public BrowserWindow Browser => _contentControl.Browser;
+              
+        public IUIControl GetControl()
         {
-            
-        }
-
-        public bool Deactivate()
-        {
-            return true;
-        }
-
-        public void Dispose()
-        {
-            /// clean up resources if needed
-        }
-
-        public IUIControl GetContentControl()
-        {
-            if(_contentControl == null)
+            if (_contentControl == null)
             {
                 _contentControl = new SearchResultsControl();
             }
@@ -54,15 +26,54 @@ namespace Sdl.Community.IATETerminologyProvider.View
             return _contentControl;
         }
 
-        public IUIControl GetExplorerBarControl()
+        public void OnActivate()
         {
-           return null;
+            // Implement activation logic here
+        }
+
+        public bool OnDeactivate()
+        {
+            // Implement deactivation logic here
+            return true;
+        }
+
+        public void OnDispose()
+        {
+            // Implement disposal logic here
+            ClearActiveInstance();
+        }
+
+        public bool OnHide()
+        {
+            // Implement hide logic here
+            return true;
         }
 
         public void OnInit()
         {
-            GetContentControl();
+            // Implement initialization logic here
+        }
+
+        public bool OnRemove()
+        {
+            // Implement remove logic here
+            ClearActiveInstance();
+            return true;
+        }
+
+        public void OnShow()
+        {
+            ActiveInstance = this;
+            GetControl();
             InitializeBrowserAsync();
+        }
+
+        private void ClearActiveInstance()
+        {
+            if (ReferenceEquals(ActiveInstance, this))
+            {
+                ActiveInstance = null;
+            }
         }
 
         private async void InitializeBrowserAsync()
@@ -94,6 +105,11 @@ namespace Sdl.Community.IATETerminologyProvider.View
         {
             try
             {
+                if (_contentControl == null)
+                {
+                    GetControl();
+                }
+                _contentControl.Show();
                 await Browser.NavigateAsync(Url);
                 IsInitialized = true;
             }

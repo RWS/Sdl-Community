@@ -33,7 +33,8 @@ namespace Sdl.Community.IATETerminologyProvider
             container.AppendCollection<IActionMetaData, IATESearchAllActionMetaData>();
             container.AppendCollection<IAction, IATESearchSourceLanguageAction>();
             container.AppendCollection<IAction, IATESearchAllAction>();
-            container.AppendCollection<IView, SearchResultsView>();
+            container.AppendCollection<IViewPart, SearchResultsViewPart>();
+            container.AppendCollection<IViewPartMetaData, SearchResultsViewPartMetaData>();
             container.AppendCollection<ITerminologyProviderFactory, IATETerminologyProviderFactory>();
             container.AppendCollection<ITerminologyProviderViewerWinFormsUI, IATETerminologyProviderViewerWinFormsUI>();           
             container.AppendCollection<ITerminologyProviderWinFormsUI, IATETerminologyProviderWinFormsUI>();

@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Web.WebView2.Wpf;
+using System.Windows;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace Sdl.Community.IATETerminologyProvider.View
@@ -41,7 +42,31 @@ namespace Sdl.Community.IATETerminologyProvider.View
 				UserDataFolder = Path.Combine(Path.GetTempPath(), Assembly.GetExecutingAssembly().GetName().Name)
 			};
 
+			if (!IsLoaded)
+			{
+				await WaitUntilLoadedAsync();
+			}
+
 			await WebView2.EnsureCoreWebView2Async();
+		}
+
+		private Task WaitUntilLoadedAsync()
+		{
+			if (IsLoaded)
+			{
+				return Task.CompletedTask;
+			}
+
+			var completionSource = new TaskCompletionSource<bool>();
+			RoutedEventHandler loadedHandler = null;
+			loadedHandler = (_, _) =>
+			{
+				Loaded -= loadedHandler;
+				completionSource.TrySetResult(true);
+			};
+
+			Loaded += loadedHandler;
+			return completionSource.Task;
 		}
 
 		public async Task NavigateAsync(string url)

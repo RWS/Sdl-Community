@@ -1,10 +1,8 @@
 ﻿using Sdl.Community.IATETerminologyProvider.Helpers;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using TradosStudio.API.UI;
 using TradosStudio.API.UI.Action;
-using TradosStudio.API.UI.View;
 
 namespace Sdl.Community.IATETerminologyProvider.Actions
 {
@@ -39,13 +37,6 @@ namespace Sdl.Community.IATETerminologyProvider.Actions
 
     internal class IATESearchSourceLanguageAction : ActionBase, IAction
     {
-        private IView _view;
-
-        public IATESearchSourceLanguageAction(IEnumerable<IView> views)
-        {
-            _view = views.ToList().FirstOrDefault();
-        }
-
         public void OnInit()
         {        
             
@@ -53,7 +44,7 @@ namespace Sdl.Community.IATETerminologyProvider.Actions
 
         void IAction.Execute()
         {
-            IATESearchActionHelper.NavigateToIATE(false, _view);
+            IATESearchActionHelper.NavigateToIATE(false);
         }
     }
 }

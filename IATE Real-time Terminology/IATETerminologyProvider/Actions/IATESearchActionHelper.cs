@@ -2,7 +2,6 @@
 using Sdl.Community.IATETerminologyProvider.View;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System.Windows;
-using TradosStudio.API.UI.View;
 
 namespace Sdl.Community.IATETerminologyProvider.Actions
 {
@@ -12,7 +11,7 @@ namespace Sdl.Community.IATETerminologyProvider.Actions
 		/// Construct URL based on the term/phrase selection using language pairs either from source segment, or from target segment.
 		/// </summary>
 		/// <param name="isSearchAll"></param>
-		public static void NavigateToIATE(bool isSearchAll, IView view)
+        public static void NavigateToIATE(bool isSearchAll)
         {
             var editorController = SdlTradosStudio.Application.GetController<EditorController>();
             var activeDocument = editorController?.ActiveDocument;
@@ -41,7 +40,12 @@ namespace Sdl.Community.IATETerminologyProvider.Actions
                             : ApiUrls.SearchSourceTargetUri(currentSelection, sourceLanguage, targetLanguage);
                     }
 
-                    var searchResultsView = view as SearchResultsView;
+                    var searchResultsView = SearchResultsViewPart.ActiveInstance;
+                    if (searchResultsView == null)
+                    {
+                        return;
+                    }
+
                     searchResultsView.NavigateTo(url);
 
                 }
