@@ -1,19 +1,17 @@
-﻿using System;
+﻿using Sdl.Community.IATETerminologyProvider.Helpers;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TradosStudio.API.UI.View;
 
 namespace Sdl.Community.IATETerminologyProvider.View
 {
     internal class SearchResultsViewPartMetaData : IViewPartMetaData
     {
-        public string Id => "IATE Results Viewer";
+        public string Id => Constants.SearchResultsViewPartMetaDataId;
 
-        public string Title => "Search Results Viewer";
+        public string Title => PluginResources.SearchResultsViewPartMetaData_Title;
 
-        public string Description => "IATE Search Results";
+        public string Description => PluginResources.SearchResultsViewPartMetaData_Description;
 
         public string Icon => $"Sdl.Community.IATETerminologyProvider.Resources.{nameof(PluginResources.Iate_logo)}.ico";
 

@@ -217,4 +217,10 @@
   <data name="IATESearchSourceTargetAction_Name" xml:space="preserve">
     <value>Search IATE (source and target only)</value>
   </data>
+  <data name="SearchResultsViewPartMetaData_Title" xml:space="preserve">
+    <value>Search Results Viewer</value>
+  </data>
+  <data name="SearchResultsViewPartMetaData_Description" xml:space="preserve">
+    <value>IATE Search Results</value>
+  </data>
 </root>

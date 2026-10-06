@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
+using NLog;
 using Sdl.Community.IATETerminologyProvider.Helpers;
 using Sdl.Community.IATETerminologyProvider.Model;
-using Sdl.Desktop.IntegrationApi;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System;
@@ -12,14 +12,14 @@ using System.Windows;
 
 namespace Sdl.Community.IATETerminologyProvider.Service
 {
-	public class SettingsService : IApplicationInitializer
+	public class SettingsService
 	{
 		private const string BatchProcessing = "batch processing";
 		private const string CreateNewProject = "create a new project";
 		private static ProjectsController _projectsController;
 		private static CurrentViewDetector currentViewDetector;
 
-		public static CurrentViewDetector CurrentViewDetector
+		private static CurrentViewDetector CurrentViewDetector
 		{
 			get => currentViewDetector ??= new CurrentViewDetector();
 			set => currentViewDetector = value;
@@ -31,7 +31,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 		public static Window GetCurrentWindow() => Application.Current.Windows.Cast<Window>().FirstOrDefault(
 			window => window.Title.ToLower() == BatchProcessing || window.Title.ToLower().Contains(CreateNewProject));
 
-		public static FileBasedProject GetProjectInProcessing()
+		private static FileBasedProject GetProjectInProcessing()
 		{
 			if (SdlTradosStudio.Application is null)
 				return null;
@@ -53,8 +53,14 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 		{
 			try
 			{
-				var serializedSettings = File.ReadAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-					$@"Trados AppStore\IATETerminologyProvider\Settings\{GetProjectInProcessing().GetProjectInfo().Id}",
+                var projectId = GetProjectInProcessing()?.GetProjectInfo()?.Id;
+                if (projectId == null)
+                {
+                    return new SettingsModel();
+                }
+
+                var serializedSettings = File.ReadAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+					$@"Trados AppStore\IATETerminologyProvider\Settings\{projectId}",
 					"IATESettings.json"));
 
 				return string.IsNullOrEmpty(serializedSettings)
@@ -108,8 +114,22 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 		{
 			var serializedSettings = JsonConvert.SerializeObject(settings);
 
-			var settingsFolderPath = path ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-				$@"Trados AppStore\IATETerminologyProvider\Settings\{GetProjectInProcessing().GetProjectInfo().Id}");
+			var settingsFolderPath = path;
+			if (string.IsNullOrWhiteSpace(settingsFolderPath))
+			{
+				var projectId = GetProjectInProcessing()?.GetProjectInfo()?.Id;
+				if (projectId == null)
+				{
+					throw new InvalidOperationException("Cannot save settings because no current Trados project could be determined.");
+				}
+
+				settingsFolderPath = Path.Combine(
+					Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+					"Trados AppStore",
+					"IATETerminologyProvider",
+					"Settings",
+					projectId.ToString());
+			}
 
 
 			await Task.Run(() =>
@@ -120,10 +140,6 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 					$@"{settingsFolderPath}\IATESettings.json",
 					serializedSettings);
 			});
-		}
-
-		public void Execute()
-		{
 		}
 	}
 }

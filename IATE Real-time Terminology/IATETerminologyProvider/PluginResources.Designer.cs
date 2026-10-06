@@ -357,5 +357,21 @@ namespace Sdl.Community.IATETerminologyProvider {
                 return ResourceManager.GetString("IATESearchSourceTargetAction_Name", resourceCulture);
             } 
         }
+
+        public static string SearchResultsViewPartMetaData_Title
+        {
+            get
+            {
+                return ResourceManager.GetString("SearchResultsViewPartMetaData_Title", resourceCulture);
+            }
+        }
+
+        public static string SearchResultsViewPartMetaData_Description
+        {
+            get
+            {
+                return ResourceManager.GetString("SearchResultsViewPartMetaData_Description", resourceCulture);
+            }
+        }
     }
 }
