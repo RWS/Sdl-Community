@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
-using Sdl.Community.IATETerminologyProvider.Interface;
+﻿using Sdl.Community.IATETerminologyProvider.Interface;
 using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Community.IATETerminologyProvider.ViewModel;
+using System.Collections.Generic;
+using TradosStudio.API.ProjectManagement;
 
 namespace Sdl.Community.IATETerminologyProvider.View
 {
@@ -13,10 +14,16 @@ namespace Sdl.Community.IATETerminologyProvider.View
 		public MainWindow(List<ISettingsViewModel> viewModels, 
             SettingsModel settingsModel, 
             ICacheProvider cacheProvider,
-            IMessageBoxService _messageBoxService)
+            IMessageBoxService messageBoxService,
+            IProjectsRegistry projectsRegistry)
 		{
                 InitializeComponent();
-                DataContext = new MainWindowViewModel(viewModels, settingsModel, cacheProvider, _messageBoxService);
+                DataContext = new MainWindowViewModel(
+                    viewModels, 
+                    settingsModel, 
+                    cacheProvider, 
+                    messageBoxService, 
+                    projectsRegistry);
             }
 
 		public SettingsModel ProviderSettings

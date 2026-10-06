@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Input;
+using TradosStudio.API.ProjectManagement;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
 namespace Sdl.Community.IATETerminologyProvider.ViewModel
@@ -21,16 +22,19 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 		private ICommand _importSettingsCommand;
         private ICacheProvider _cacheProvider;
         private IMessageBoxService _messageBoxService;
+        private IProjectsRegistry _projectsRegistry;
 
 
         public MainWindowViewModel(List<ISettingsViewModel> viewModels, 
             SettingsModel settingsModel, 
             ICacheProvider cacheProvider,
-            IMessageBoxService messageBoxService)
+            IMessageBoxService messageBoxService,
+            IProjectsRegistry projectsRegistry)
 		{
 			//TODO maybe this viewModel should take care of the data initialization and distribution to the other VMs
 			ViewModels = viewModels;
 			ProviderSettings = settingsModel;
+			_projectsRegistry = projectsRegistry;
 			_cacheProvider = cacheProvider;
 			_messageBoxService = messageBoxService;
 		}
@@ -179,7 +183,7 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 
 				}
 
-				await SettingsService.SaveSettingsForCurrentProject(ProviderSettings);
+				await SettingsService.SaveSettingsForCurrentProject(ProviderSettings, _projectsRegistry);
 			}
 			catch (InvalidOperationException ex)
 			{

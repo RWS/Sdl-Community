@@ -1,5 +1,6 @@
 ﻿using Sdl.Community.IATETerminologyProvider.Interface;
 using Sdl.TellMe.ProviderApi;
+using TradosStudio.API.ProjectManagement;
 
 namespace Sdl.Community.IATETerminologyProvider.IATEProviderTellMe
 {
@@ -9,15 +10,18 @@ namespace Sdl.Community.IATETerminologyProvider.IATEProviderTellMe
         private ICacheProvider _cacheProvider;
         private IConnectionProvider _connectionProvider;
         private IInventoriesProvider _inventoriesProvider;
+        private IProjectsRegistry _projectsRegistry;
 
         public IATETellMeProvider(
             ICacheProvider cacheProvider, 
             IConnectionProvider connectionProvider, 
-            IInventoriesProvider inventoriesProvider)
+            IInventoriesProvider inventoriesProvider,
+            IProjectsRegistry projectsRegistry)
         {
             _cacheProvider = cacheProvider;
             _connectionProvider = connectionProvider;
             _inventoriesProvider = inventoriesProvider;
+            _projectsRegistry = projectsRegistry;
         }
 
         public string Name => "IATE Tell Me provider";
@@ -38,7 +42,7 @@ namespace Sdl.Community.IATETerminologyProvider.IATEProviderTellMe
 			},new IATESourceCode
 			{
 				Keywords = ["iate", "source", "code"]
-			}, new IATESettingsAction(_cacheProvider, _connectionProvider, _inventoriesProvider)
+			}, new IATESettingsAction(_cacheProvider, _connectionProvider, _inventoriesProvider, _projectsRegistry)
 			{
 				Keywords = ["iate", "settings"]
 			}

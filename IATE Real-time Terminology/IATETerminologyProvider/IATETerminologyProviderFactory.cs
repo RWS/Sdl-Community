@@ -45,7 +45,7 @@ namespace Sdl.Community.IATETerminologyProvider
 
         private ITerminologyProvider CreateTerminologyProvider()
         {
-            var savedSettings = SettingsService.GetSettingsForCurrentProject();
+            var savedSettings = SettingsService.GetSettingsForCurrentProject(_projectsRegistry);
             var savedTermTypesNumber = savedSettings?.TermTypes.Count;
 
             if(!IATEApplication.IsInitialized)

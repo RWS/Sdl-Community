@@ -4,6 +4,7 @@ using Sdl.Community.IATETerminologyProvider.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TradosStudio.API.ProjectManagement;
 using TradosStudio.API.TranslationResources.Terminology;
 using TradosStudio.API.TranslationResources.Terminology.Behaviours.Interfaces;
 
@@ -15,6 +16,7 @@ namespace Sdl.Community.IATETerminologyProvider
         private IConnectionProvider _connectionProvider;
         private IInventoriesProvider _inventoriesProvider;
         private ITerminologyProviderFactory _terminologyProviderFactory;
+        private IProjectsRegistry _projectsRegistry;
 
         public string TypeDescription => PluginResources.IATETerminologyProviderDescription;
         public string TypeName => PluginResources.IATETerminologyProviderName;
@@ -23,12 +25,14 @@ namespace Sdl.Community.IATETerminologyProvider
             ICacheProvider cacheProvider, 
             IConnectionProvider connectionProvider, 
             IInventoriesProvider inventoriesProvider,
-            IEnumerable<ITerminologyProviderFactory> terminologyProviderFactories)
+            IEnumerable<ITerminologyProviderFactory> terminologyProviderFactories,
+            IProjectsRegistry projectsRegistry)
         {
             _cacheProvider = cacheProvider;
             _connectionProvider = connectionProvider;
             _inventoriesProvider = inventoriesProvider;
             _terminologyProviderFactory = terminologyProviderFactories.OfType<IATETerminologyProviderFactory>().FirstOrDefault();
+            _projectsRegistry = projectsRegistry;
         }
 
         public T GetBehaviour<T>() where T : ITerminologyProviderBehaviour
@@ -38,7 +42,8 @@ namespace Sdl.Community.IATETerminologyProvider
                 return (T)(ITerminologyProviderBehaviour)new IATEEditBehaviour(
                     _cacheProvider, 
                     _connectionProvider, 
-                    _inventoriesProvider);
+                    _inventoriesProvider, 
+                    _projectsRegistry);
             }
 
             if (typeof(T) == typeof(IBrowseBehaviour))
@@ -47,7 +52,8 @@ namespace Sdl.Community.IATETerminologyProvider
                     _cacheProvider, 
                     _connectionProvider, 
                     _inventoriesProvider, 
-                    _terminologyProviderFactory);
+                    _terminologyProviderFactory,
+                    _projectsRegistry);
             }
 
             return default;

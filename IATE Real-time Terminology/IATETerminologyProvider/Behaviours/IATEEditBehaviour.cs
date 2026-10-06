@@ -3,6 +3,7 @@ using Sdl.Community.IATETerminologyProvider.Interface;
 using Sdl.Community.IATETerminologyProvider.View;
 using System;
 using System.Windows.Forms;
+using TradosStudio.API.ProjectManagement;
 using TradosStudio.API.TranslationResources.Terminology;
 using TradosStudio.API.TranslationResources.Terminology.Behaviours.Interfaces;
 
@@ -16,12 +17,18 @@ namespace Sdl.Community.IATETerminologyProvider.Behaviours
         private ICacheProvider _cacheProvider;
         private IConnectionProvider _connectionProvider;
         private IInventoriesProvider _inventoriesProvider;
+        private IProjectsRegistry _projectsRegistry;
 
-        public IATEEditBehaviour(ICacheProvider cacheProvider, IConnectionProvider connectionProvider, IInventoriesProvider inventoriesProvider)
+        public IATEEditBehaviour(
+            ICacheProvider cacheProvider, 
+            IConnectionProvider connectionProvider, 
+            IInventoriesProvider inventoriesProvider, 
+            IProjectsRegistry projectsRegistry)
         {
             _cacheProvider = cacheProvider;
             _connectionProvider = connectionProvider;
             _inventoriesProvider = inventoriesProvider;
+            _projectsRegistry = projectsRegistry;
         }
 
 
@@ -41,7 +48,7 @@ namespace Sdl.Community.IATETerminologyProvider.Behaviours
                 return false;
             }
 
-            _mainWindow = IATEApplication.GetMainWindow(_cacheProvider, _connectionProvider, _inventoriesProvider);
+            _mainWindow = IATEApplication.GetMainWindow(_cacheProvider, _connectionProvider, _inventoriesProvider, _projectsRegistry);
 
             if (!_mainWindow.ShowDialog() ?? false)
             {

@@ -8,26 +8,28 @@ using Sdl.Community.IATETerminologyProvider.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TradosStudio.API.ProjectManagement;
 
 namespace Sdl.Community.IATETerminologyProvider
 {
 	public class IATEApplication
 	{
-		private static readonly Logger Logger = LogManager.GetCurrentClassLogger();		
+		private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-		public static bool IsInitialized { get; private set; }
+        public static bool IsInitialized { get; private set; }
 
 		public static MainWindow GetMainWindow(
             ICacheProvider cacheProvider, 
             IConnectionProvider connectionProvider, 
-            IInventoriesProvider inventoriesProvider)
+            IInventoriesProvider inventoriesProvider,
+            IProjectsRegistry projectsRegistry)
 		{
             if (!IsInitialized)
             {
                 Task.Run(async () => await ExecuteAsync(connectionProvider, inventoriesProvider)).GetAwaiter().GetResult();
             }
 
-            var settingsModel = SettingsService.GetSettingsForCurrentProject();
+            var settingsModel = SettingsService.GetSettingsForCurrentProject(projectsRegistry);
 			if (!connectionProvider.EnsureConnection()) return null;
 
 			var listOfViewModels = new List<ISettingsViewModel>
@@ -36,7 +38,12 @@ namespace Sdl.Community.IATETerminologyProvider
 				new FineGrainedFilterViewModel(inventoriesProvider)
 			};
 
-			var mainWindow = new MainWindow(listOfViewModels, settingsModel ?? new SettingsModel(), cacheProvider, new MessageBoxService());
+			var mainWindow = new MainWindow(
+                listOfViewModels, 
+                settingsModel ?? new SettingsModel(), 
+                cacheProvider, 
+                new MessageBoxService(), 
+                projectsRegistry);
 
 			return mainWindow;
 		}

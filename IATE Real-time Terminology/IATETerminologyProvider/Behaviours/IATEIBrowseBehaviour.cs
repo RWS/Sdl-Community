@@ -5,6 +5,7 @@ using Sdl.Community.IATETerminologyProvider.View;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TradosStudio.API.ProjectManagement;
 using TradosStudio.API.TranslationResources.Terminology;
 using TradosStudio.API.TranslationResources.Terminology.Behaviours.Interfaces;
 
@@ -19,17 +20,20 @@ namespace Sdl.Community.IATETerminologyProvider.Behaviours
         private IConnectionProvider _connectionProvider;
         private IInventoriesProvider _inventoriesProvider;
         private ITerminologyProviderFactory _treminologyProviderFactory;
+        private IProjectsRegistry _projectsRegistry;
 
         public IATEIBrowseBehaviour(
             ICacheProvider cacheProvider, 
             IConnectionProvider connectionProvider, 
             IInventoriesProvider inventoriesProvider,
-            ITerminologyProviderFactory terminologyProviderFactory)
+            ITerminologyProviderFactory terminologyProviderFactory,
+            IProjectsRegistry projectsRegistry)
         {
             _cacheProvider = cacheProvider;
             _connectionProvider = connectionProvider;
             _inventoriesProvider = inventoriesProvider;
             _treminologyProviderFactory = terminologyProviderFactory;
+            _projectsRegistry = projectsRegistry;
         }
 
         public IEnumerable<ITerminologyProvider> Browse(IntPtr owner)
@@ -39,7 +43,12 @@ namespace Sdl.Community.IATETerminologyProvider.Behaviours
 
         private ITerminologyProvider[] Browse()
         {
-            _mainWindow = IATEApplication.GetMainWindow(_cacheProvider, _connectionProvider, _inventoriesProvider);
+            _mainWindow = IATEApplication.GetMainWindow(
+                _cacheProvider, 
+                _connectionProvider, 
+                _inventoriesProvider, 
+                _projectsRegistry);
+
             if (_mainWindow != null)
             {
                 _mainWindow.ShowDialog();
