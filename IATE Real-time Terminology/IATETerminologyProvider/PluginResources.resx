@@ -208,4 +208,19 @@
   <data name="TellMe_Documentation" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\TellMe_Documentation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="IATETerminologyProviderRibbonGroup_Name" xml:space="preserve">
+    <value>IATE Term Definition</value>
+  </data>
+  <data name="IATESearchAllAction_Name" xml:space="preserve">
+    <value>Search IATE (all)</value>
+  </data>
+  <data name="IATESearchSourceTargetAction_Name" xml:space="preserve">
+    <value>Search IATE (source and target only)</value>
+  </data>
+  <data name="SearchResultsViewPartMetaData_Title" xml:space="preserve">
+    <value>Search Results Viewer</value>
+  </data>
+  <data name="SearchResultsViewPartMetaData_Description" xml:space="preserve">
+    <value>IATE Search Results</value>
+  </data>
 </root>

@@ -3,6 +3,7 @@ using System.Linq;
 using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Community.IATETerminologyProvider.View;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using TradosStudio.API.TranslationResources.Terminology;
 
 namespace Sdl.Community.IATETerminologyProvider.Service
 {
@@ -34,8 +35,18 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 				var documentEntries = _documentEntriesState.FirstOrDefault(a => a.DocumentId == _activeDocumentId);
 				if (documentEntries is null) return;
 				var projectInfo = _editorController.ActiveDocument.Project.GetProjectInfo();
-				iateTermsControl.UpdateEntriesInView(documentEntries.Entries,
-					projectInfo.SourceLanguage, activeFile.Language, documentEntries.SelectedEntry);
+				iateTermsControl.UpdateEntriesInView(
+                    documentEntries.Entries,
+                    new LanguageModel 
+                    { 
+                        Name = projectInfo.SourceLanguage.DisplayName, 
+                        CultureInfo = projectInfo.SourceLanguage.CultureInfo 
+                    },
+                    new LanguageModel { 
+                        Name = activeFile.Language.DisplayName,
+                        CultureInfo = activeFile.Language.CultureInfo
+                    }, 
+                    documentEntries.SelectedEntry);
 			}
 		}
 

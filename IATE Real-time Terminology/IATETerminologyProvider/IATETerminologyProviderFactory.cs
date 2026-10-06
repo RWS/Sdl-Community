@@ -1,21 +1,37 @@
 ﻿using NLog;
 using Sdl.Community.IATETerminologyProvider.Helpers;
+using Sdl.Community.IATETerminologyProvider.Interface;
 using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Community.IATETerminologyProvider.Service;
-using Sdl.Terminology.TerminologyProvider.Core;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TradosStudio.API.ProjectManagement;
+using TradosStudio.API.TranslationResources.Terminology;
 
 namespace Sdl.Community.IATETerminologyProvider
 {
-    [TerminologyProviderFactory(Id = "IATETerminologyProvider",
-        Name = "IATE Terminology Provider",
-        Icon = "Iate_logo",
-        Description = "IATE terminology provider factory")]
     public class IATETerminologyProviderFactory : ITerminologyProviderFactory
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
+        private ICacheProvider _cacheProvider;
+        private IConnectionProvider _connectionProvider;
+        private IInventoriesProvider _inventoriesProvider;
+        private IProjectsRegistry _projectsRegistry;
+
+        public IATETerminologyProviderFactory(
+            ICacheProvider cacheProvider, 
+            IConnectionProvider connectionProvider, 
+            IInventoriesProvider inventoriesProvider, 
+            IProjectsRegistry projectsRegistry)
+        {
+            _cacheProvider = cacheProvider;
+            _connectionProvider = connectionProvider;
+            _inventoriesProvider = inventoriesProvider;
+            _projectsRegistry = projectsRegistry;
+        }
 
         public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
         {
@@ -29,16 +45,21 @@ namespace Sdl.Community.IATETerminologyProvider
 
         private ITerminologyProvider CreateTerminologyProvider()
         {
-            var savedSettings = SettingsService.GetSettingsForCurrentProject();
+            var savedSettings = SettingsService.GetSettingsForCurrentProject(_projectsRegistry);
             var savedTermTypesNumber = savedSettings?.TermTypes.Count;
 
-            if (savedTermTypesNumber > 0 && savedTermTypesNumber > IATEApplication.InventoriesProvider.TermTypes?.Count)
+            if(!IATEApplication.IsInitialized)
+            {
+                System.Threading.Tasks.Task.Run(async () => await IATEApplication.ExecuteAsync(_connectionProvider, _inventoriesProvider)).GetAwaiter().GetResult();
+            }
+
+            if (savedTermTypesNumber > 0 && savedTermTypesNumber > _inventoriesProvider.TermTypes?.Count)
             {
                 var availableTermTypes = GetAvailableTermTypes(savedSettings.TermTypes);
                 savedSettings.TermTypes = new List<TermTypeModel>(availableTermTypes);
             }
 
-            if (!IATEApplication.ConnectionProvider.EnsureConnection())
+            if (!_connectionProvider.EnsureConnection())
             {
                 var exception = new Exception("Failed login!");
                 _logger.Error(exception);
@@ -46,11 +67,12 @@ namespace Sdl.Community.IATETerminologyProvider
                 throw exception;
             }
 
-            var sqlDatabaseProvider = new SqliteDatabaseProvider(new PathInfo());
-            var cacheProvider = new CacheProvider(sqlDatabaseProvider);
-
-            var terminologyProvider = new IATETerminologyProvider(savedSettings,
-                IATEApplication.ConnectionProvider, IATEApplication.InventoriesProvider, cacheProvider, IATEApplication.EUProvider);
+            var terminologyProvider = new IATETerminologyProvider(
+                savedSettings,
+                _connectionProvider, 
+                _inventoriesProvider, 
+                _cacheProvider,
+                _projectsRegistry);
 
             return terminologyProvider;
         }
@@ -58,7 +80,7 @@ namespace Sdl.Community.IATETerminologyProvider
         private List<TermTypeModel> GetAvailableTermTypes(List<TermTypeModel> savedList)
         {
             var availableTerms = savedList.Where(t =>
-                IATEApplication.InventoriesProvider.TermTypes.Any(t1 => t1.Code == t.Code.ToString())).ToList();
+                _inventoriesProvider.TermTypes.Any(t1 => t1.Code == t.Code.ToString())).ToList();
 
             return availableTerms;
         }

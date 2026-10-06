@@ -1,131 +1,169 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using NLog;
+using Sdl.Community.IATETerminologyProvider.Helpers;
+using Sdl.Community.IATETerminologyProvider.Model;
+using Sdl.ProjectAutomation.FileBased;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using Newtonsoft.Json;
-using Sdl.Community.IATETerminologyProvider.Helpers;
-using Sdl.Community.IATETerminologyProvider.Model;
-using Sdl.Desktop.IntegrationApi;
-using Sdl.Desktop.IntegrationApi.Extensions;
-using Sdl.ProjectAutomation.FileBased;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
+using TradosStudio.API.ProjectManagement;
 
 namespace Sdl.Community.IATETerminologyProvider.Service
 {
-	[ApplicationInitializer]
-	public class SettingsService : IApplicationInitializer
-	{
-		private const string BatchProcessing = "batch processing";
-		private const string CreateNewProject = "create a new project";
-		private static ProjectsController _projectsController;
-		private static CurrentViewDetector currentViewDetector;
+    public class SettingsService
+    {
+        private const string BatchProcessing = "batch processing";
+        private const string CreateNewProject = "create a new project";
+        private static CurrentViewDetector currentViewDetector;
 
-		public static CurrentViewDetector CurrentViewDetector
-		{
-			get => currentViewDetector ??= new CurrentViewDetector();
-			set => currentViewDetector = value;
-		}
+        private static CurrentViewDetector CurrentViewDetector
+        {
+            get => currentViewDetector ??= new CurrentViewDetector();
+            set => currentViewDetector = value;
+        }
 
-		private static ProjectsController ProjectsController
-					=> _projectsController ??= SdlTradosStudio.Application?.GetController<ProjectsController>();
+        private static bool IsCreatingNewProjectWindowOpen()
+        {
+            var application = Application.Current;
+            if (application == null)
+            {
+                return false;
+            }
 
-		public static Window GetCurrentWindow() => Application.Current.Windows.Cast<Window>().FirstOrDefault(
-			window => window.Title.ToLower() == BatchProcessing || window.Title.ToLower().Contains(CreateNewProject));
+            Func<bool> findWindow = () =>
+            {
+                var currentWindow = application.Windows.Cast<Window>().FirstOrDefault(window =>
+                    string.Equals(window.Title, BatchProcessing, StringComparison.OrdinalIgnoreCase) ||
+                    (!string.IsNullOrEmpty(window.Title) &&
+                     window.Title.IndexOf(CreateNewProject, StringComparison.OrdinalIgnoreCase) >= 0));
 
-		public static FileBasedProject GetProjectInProcessing()
-		{
-			if (SdlTradosStudio.Application is null)
-				return null;
-			if (GetCurrentWindow()?.Title.ToLower().Contains(CreateNewProject) ?? false)
-				return null;
+                return currentWindow != null &&
+                       !string.Equals(currentWindow.Title, BatchProcessing, StringComparison.OrdinalIgnoreCase);
+            };
 
-			var projectInProcessing = CurrentViewDetector.View
-				switch
-			{
-				CurrentViewDetector.CurrentView.ProjectsView => ProjectsController.SelectedProjects.FirstOrDefault() ?? ProjectsController.CurrentProject,
-				CurrentViewDetector.CurrentView.FilesView => ProjectsController.CurrentProject,
-				CurrentViewDetector.CurrentView.EditorView => ProjectsController.CurrentProject,
-				_ => null
-			};
-			return projectInProcessing;
-		}
+            return application.Dispatcher.CheckAccess()
+                ? findWindow()
+                : application.Dispatcher.Invoke(findWindow);
+        }
 
-		public static SettingsModel GetSettingsForCurrentProject()
-		{
-			try
-			{
-				var serializedSettings = File.ReadAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-					$@"Trados AppStore\IATETerminologyProvider\Settings\{GetProjectInProcessing().GetProjectInfo().Id}",
-					"IATESettings.json"));
+        private static string GetProjectInProcessingId(IProjectsRegistry projectsRegistry)
+        {
+            if (SdlTradosStudio.Application is null)
+            {
+                return null;
+            }
 
-				return string.IsNullOrEmpty(serializedSettings)
-					? null
-					: JsonConvert.DeserializeObject<SettingsModel>(serializedSettings);
-			}
-			catch { }
+            if (IsCreatingNewProjectWindowOpen())
+            {
+                return null;
+            }
 
-			return null;
-		}
+            var projectId = CurrentViewDetector.View
+                switch
+            {
+                CurrentViewDetector.CurrentView.ProjectsView => projectsRegistry.GetSelectedProjects()?.FirstOrDefault()?.Id ?? projectsRegistry.GetActiveProject()?.Id,
+                CurrentViewDetector.CurrentView.FilesView => projectsRegistry.GetActiveProject()?.Id,
+                CurrentViewDetector.CurrentView.EditorView => projectsRegistry.GetActiveProject()?.Id,
+                _ => null
+            };
+            return projectId?.ToString();
+        }
 
-		public static async Task<SettingsModel> GetSettingsFromTemplate(string path)
-		{
-			try
-			{
-				var settingsJson = await Task.Run(() => File.ReadAllText(path));
-				var settings = JsonConvert.DeserializeObject<SettingsModel>(settingsJson);
+        public static SettingsModel GetSettingsForCurrentProject(IProjectsRegistry projectsRegistry)
+        {
+            try
+            {
+                var projectId = GetProjectInProcessingId(projectsRegistry);
+                if (string.IsNullOrEmpty(projectId))
+                {
+                    return new SettingsModel();
+                }
 
-				return settings;
-			}
-			catch { }
+                var serializedSettings = File.ReadAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                    $@"Trados AppStore\IATETerminologyProvider\Settings\{projectId}",
+                    "IATESettings.json"));
 
-			return null;
-		}
+                return string.IsNullOrEmpty(serializedSettings)
+                    ? null
+                    : JsonConvert.DeserializeObject<SettingsModel>(serializedSettings);
+            }
+            catch { }
 
-		public static async Task SaveSettingsAtChosenLocation(SettingsModel settingsModel, string path)
-		{
-			var availableFilePath = GetAvailableFileName(path);
-			await Task.Run(() => File.WriteAllText(availableFilePath, JsonConvert.SerializeObject(settingsModel)));
-		}
+            return null;
+        }
 
-		private static string GetAvailableFileName(string filePath)
-		{
-			try
-			{
-				if (File.Exists(filePath))
-				{
-					File.Delete(filePath);
-				}
-			}
-			catch
-			{
-				return GetAvailableFileName(filePath.Insert(filePath.IndexOf(".xlsx", StringComparison.Ordinal), "(new)"));
-			}
+        public static async Task<SettingsModel> GetSettingsFromTemplate(string path)
+        {
+            try
+            {
+                var settingsJson = await Task.Run(() => File.ReadAllText(path));
+                var settings = JsonConvert.DeserializeObject<SettingsModel>(settingsJson);
 
-			return filePath;
-		}
+                return settings;
+            }
+            catch { }
+
+            return null;
+        }
+
+        public static async Task SaveSettingsAtChosenLocation(SettingsModel settingsModel, string path)
+        {
+            var availableFilePath = GetAvailableFileName(path);
+            await Task.Run(() => File.WriteAllText(availableFilePath, JsonConvert.SerializeObject(settingsModel)));
+        }
+
+        private static string GetAvailableFileName(string filePath)
+        {
+            try
+            {
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                }
+            }
+            catch
+            {
+                return GetAvailableFileName(filePath.Insert(filePath.IndexOf(".xlsx", StringComparison.Ordinal), "(new)"));
+            }
+
+            return filePath;
+        }
 
 
-		public static async Task SaveSettingsForCurrentProject(SettingsModel settings, string path = null)
-		{
-			var serializedSettings = JsonConvert.SerializeObject(settings);
+        public static async Task SaveSettingsForCurrentProject(SettingsModel settings, IProjectsRegistry projectsRegistry, string path = null)
+        {
+            var serializedSettings = JsonConvert.SerializeObject(settings);
 
-			var settingsFolderPath = path ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-				$@"Trados AppStore\IATETerminologyProvider\Settings\{GetProjectInProcessing().GetProjectInfo().Id}");
+            var settingsFolderPath = path;
+            if (string.IsNullOrWhiteSpace(settingsFolderPath))
+            {
+                var projectId = GetProjectInProcessingId(projectsRegistry);
+
+                if (string.IsNullOrEmpty(projectId))
+                {
+                    throw new InvalidOperationException("Cannot save settings because no current Trados project could be determined.");
+                }
+
+                settingsFolderPath = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                    "Trados AppStore",
+                    "IATETerminologyProvider",
+                    "Settings",
+                    projectId);
+            }
 
 
-			await Task.Run(() =>
-			{
-				Directory.CreateDirectory(settingsFolderPath);
+            await Task.Run(() =>
+            {
+                Directory.CreateDirectory(settingsFolderPath);
 
-				File.WriteAllText(
-					$@"{settingsFolderPath}\IATESettings.json",
-					serializedSettings);
-			});
-		}
-
-		public void Execute()
-		{
-		}
-	}
+                File.WriteAllText(
+                    $@"{settingsFolderPath}\IATESettings.json",
+                    serializedSettings);
+            });
+        }
+    }
 }

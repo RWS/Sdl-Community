@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Input;
-using Sdl.Community.IATETerminologyProvider.Commands;
+﻿using Sdl.Community.IATETerminologyProvider.Commands;
 using Sdl.Community.IATETerminologyProvider.Interface;
 using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Community.IATETerminologyProvider.Service;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
+using System.Windows.Input;
+using TradosStudio.API.ProjectManagement;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
 namespace Sdl.Community.IATETerminologyProvider.ViewModel
@@ -19,12 +20,23 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 		private ICommand _saveSettingsCommand;
 		private ICommand _saveTemplateCommand;
 		private ICommand _importSettingsCommand;
+        private ICacheProvider _cacheProvider;
+        private IMessageBoxService _messageBoxService;
+        private IProjectsRegistry _projectsRegistry;
 
-		public MainWindowViewModel(List<ISettingsViewModel> viewModels, SettingsModel settingsModel)
+
+        public MainWindowViewModel(List<ISettingsViewModel> viewModels, 
+            SettingsModel settingsModel, 
+            ICacheProvider cacheProvider,
+            IMessageBoxService messageBoxService,
+            IProjectsRegistry projectsRegistry)
 		{
 			//TODO maybe this viewModel should take care of the data initialization and distribution to the other VMs
 			ViewModels = viewModels;
 			ProviderSettings = settingsModel;
+			_projectsRegistry = projectsRegistry;
+			_cacheProvider = cacheProvider;
+			_messageBoxService = messageBoxService;
 		}
 
 		public ICommand ClearCache => _clearCache ?? (_clearCache = new CommandHandler(Clear, true));
@@ -113,13 +125,13 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 
 		private void Clear()
 		{
-			var result = IATEApplication.MessageBoxService.ShowYesNoMessageBox("", PluginResources.ClearConfirmation);
+			var result = _messageBoxService.ShowYesNoMessageBox("", PluginResources.ClearConfirmation);
 			if (result != MessageDialogResult.Yes)
 			{
 				return;
 			}
 
-			IATEApplication.CacheProvider?.ClearCachedResults();
+			_cacheProvider?.ClearCachedResults();
 		}
 
 		private void Reset()
@@ -129,45 +141,53 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 
 		private async void SaveSettingsAction()
 		{
-			foreach (var viewModel in ViewModels)
+			try
 			{
-				switch (viewModel)
+				foreach (var viewModel in ViewModels)
 				{
-					case DomainsAndTermTypesFilterViewModel domainsAndTermTypes:
+					switch (viewModel)
 					{
-						if (domainsAndTermTypes.Domains.Count > 0)
+						case DomainsAndTermTypesFilterViewModel domainsAndTermTypes:
 						{
-							ProviderSettings.Domains = domainsAndTermTypes.Domains;
+							if (domainsAndTermTypes.Domains.Count > 0)
+							{
+								ProviderSettings.Domains = domainsAndTermTypes.Domains;
+							}
+							if (domainsAndTermTypes.TermTypes.Count > 0)
+							{
+								ProviderSettings.TermTypes = domainsAndTermTypes.TermTypes;
+							}
+							ProviderSettings.SearchInSubdomains = domainsAndTermTypes.SearchInSubdomains;
+							break;
 						}
-						if (domainsAndTermTypes.TermTypes.Count > 0)
+						case FineGrainedFilterViewModel fineGrainedFilter:
 						{
-							ProviderSettings.TermTypes = domainsAndTermTypes.TermTypes;
+							if (fineGrainedFilter.Collections.Count > 0)
+							{
+								ProviderSettings.Collections = fineGrainedFilter.Collections.Where(c => c.IsSelected).ToList();
+							}
+
+							if (fineGrainedFilter.Institutions.Count > 0)
+							{
+								ProviderSettings.Institutions = fineGrainedFilter.Institutions.Where(i => i.IsSelected).ToList();
+							}
+
+							ProviderSettings.Primarities = fineGrainedFilter.Primarities;
+
+							ProviderSettings.SourceReliabilities = fineGrainedFilter.SourceReliabilities;
+							ProviderSettings.TargetReliabilities = fineGrainedFilter.TargetReliabilities;
+
+							break;
 						}
-						ProviderSettings.SearchInSubdomains = domainsAndTermTypes.SearchInSubdomains;
-						break;
 					}
-					case FineGrainedFilterViewModel fineGrainedFilter:
-					{
-						if (fineGrainedFilter.Collections.Count > 0)
-						{
-							ProviderSettings.Collections = fineGrainedFilter.Collections.Where(c => c.IsSelected).ToList();
-						}
 
-						if (fineGrainedFilter.Institutions.Count > 0)
-						{
-							ProviderSettings.Institutions = fineGrainedFilter.Institutions.Where(i => i.IsSelected).ToList();
-						}
-
-						ProviderSettings.Primarities = fineGrainedFilter.Primarities;
-
-						ProviderSettings.SourceReliabilities = fineGrainedFilter.SourceReliabilities;
-						ProviderSettings.TargetReliabilities = fineGrainedFilter.TargetReliabilities;
-
-						break;
-					}
 				}
 
-				await SettingsService.SaveSettingsForCurrentProject(ProviderSettings);
+				await SettingsService.SaveSettingsForCurrentProject(ProviderSettings, _projectsRegistry);
+			}
+			catch (InvalidOperationException ex)
+			{
+				MessageBox.Show(ex.Message, "IATE Terminology Provider", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 			}
 
 			//if (ProviderSettings.Domains.Count > 0)
