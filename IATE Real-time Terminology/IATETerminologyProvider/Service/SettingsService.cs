@@ -25,8 +25,29 @@ namespace Sdl.Community.IATETerminologyProvider.Service
             set => currentViewDetector = value;
         }
 
-        private static Window GetCurrentWindow() => Application.Current.Windows.Cast<Window>().FirstOrDefault(
-            window => window.Title.ToLower() == BatchProcessing || window.Title.ToLower().Contains(CreateNewProject));
+        private static bool IsCreatingNewProjectWindowOpen()
+        {
+            var application = Application.Current;
+            if (application == null)
+            {
+                return false;
+            }
+
+            Func<bool> findWindow = () =>
+            {
+                var currentWindow = application.Windows.Cast<Window>().FirstOrDefault(window =>
+                    string.Equals(window.Title, BatchProcessing, StringComparison.OrdinalIgnoreCase) ||
+                    (!string.IsNullOrEmpty(window.Title) &&
+                     window.Title.IndexOf(CreateNewProject, StringComparison.OrdinalIgnoreCase) >= 0));
+
+                return currentWindow != null &&
+                       !string.Equals(currentWindow.Title, BatchProcessing, StringComparison.OrdinalIgnoreCase);
+            };
+
+            return application.Dispatcher.CheckAccess()
+                ? findWindow()
+                : application.Dispatcher.Invoke(findWindow);
+        }
 
         private static string GetProjectInProcessingId(IProjectsRegistry projectsRegistry)
         {
@@ -35,7 +56,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
                 return null;
             }
 
-            if (GetCurrentWindow()?.Title.ToLower().Contains(CreateNewProject) ?? false)
+            if (IsCreatingNewProjectWindowOpen())
             {
                 return null;
             }
