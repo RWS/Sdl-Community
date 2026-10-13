@@ -10,7 +10,6 @@ namespace SDLCommunityCleanUpTasks
 {
 	public class TagSettingsPresenter : ITagSettingsPresenter
     {
-	    public static readonly Log Log = Log.Instance;
         private readonly ITagsSettingsControl control = null;
         private readonly XNamespace sdl = @"http://sdl.com/FileTypes/SdlXliff/1.0";
 
@@ -109,10 +108,8 @@ namespace SDLCommunityCleanUpTasks
             {
                 foreach (var pair in ReadPlaceholderTagInfo(file))
                 {
-	                Log.Logger.Info($"Loaded file: {file.LocalFilePath}\r\n\r\n");
                     if (!placeholderTagList.ContainsKey(pair.Key))
                     {
-						Log.Logger.Info($"{pair.Key}\r\n");
                         placeholderTagList.Add(pair.Key, pair.Value);
                     }
                 }
