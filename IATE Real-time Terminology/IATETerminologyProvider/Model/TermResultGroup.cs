@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Sdl.Terminology.TerminologyProvider.Core;
+
 
 namespace Sdl.Community.IATETerminologyProvider.Model
 {
