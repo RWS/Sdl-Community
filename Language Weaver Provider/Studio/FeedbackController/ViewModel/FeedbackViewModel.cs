@@ -313,7 +313,11 @@ public class FeedbackViewModel : BaseViewModel
     {
         var currentSegmentId = segmentProperties.Id;
         var documentSegmentPair = _editController.ActiveDocument.SegmentPairs.FirstOrDefault(sp => sp.Properties.Id == currentSegmentId);
-        var ratedSegment = ApplicationInitializer.RatedSegments.FirstOrDefault(rs => rs.SegmentId.Equals(currentSegmentId));
+        RatedSegment ratedSegment;
+        lock (ApplicationInitializer.RatedSegmentsLock)
+        {
+            ratedSegment = ApplicationInitializer.RatedSegments.FirstOrDefault(rs => rs is not null && rs.SegmentId.Equals(currentSegmentId));
+        }
 
         if (documentSegmentPair is null || ratedSegment is null)
         {
@@ -333,7 +337,10 @@ public class FeedbackViewModel : BaseViewModel
 
         translationOrigin.SetMetaData(translationData);
         UpdateSegmentPairProperties(documentSegmentPair);
-        ApplicationInitializer.RatedSegments.Remove(ratedSegment);
+        lock (ApplicationInitializer.RatedSegmentsLock)
+        {
+            ApplicationInitializer.RatedSegments.Remove(ratedSegment);
+        }
     }
 
     private void SetProviderState(ISegmentPairProperties segmentProperties)

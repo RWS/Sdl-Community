@@ -350,18 +350,23 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
         //TODO: Developer named variable FileName, but it stores the FilePath; needs to be revised to avoid confusion
         var fileNameNormalized = System.IO.Path.GetFileName(fileName);
 
-        var existingSegment = ApplicationInitializer.RatedSegments.FirstOrDefault(x =>
-            x.SegmentId.Id.Equals(ratedSegment.SegmentId.Id) &&
-            System.IO.Path.GetFileName(x.FileName).Equals(fileNameNormalized) &&
-                                                          x.ModelName.Equals(ratedSegment.ModelName));
-        if (existingSegment is null)
+        lock (ApplicationInitializer.RatedSegmentsLock)
         {
-            ApplicationInitializer.RatedSegments.Add(ratedSegment);
-        }
-        else
-        {
-            var existingSegmentIndex = ApplicationInitializer.RatedSegments.IndexOf(existingSegment);
-            ApplicationInitializer.RatedSegments[existingSegmentIndex] = ratedSegment;
+            // FileName is null for single-segment lookups, so compare with the static string.Equals.
+            var existingSegment = ApplicationInitializer.RatedSegments.FirstOrDefault(x =>
+                x is not null &&
+                x.SegmentId.Id.Equals(ratedSegment.SegmentId.Id) &&
+                string.Equals(System.IO.Path.GetFileName(x.FileName), fileNameNormalized) &&
+                string.Equals(x.ModelName, ratedSegment.ModelName));
+            if (existingSegment is null)
+            {
+                ApplicationInitializer.RatedSegments.Add(ratedSegment);
+            }
+            else
+            {
+                var existingSegmentIndex = ApplicationInitializer.RatedSegments.IndexOf(existingSegment);
+                ApplicationInitializer.RatedSegments[existingSegmentIndex] = ratedSegment;
+            }
         }
     }
 

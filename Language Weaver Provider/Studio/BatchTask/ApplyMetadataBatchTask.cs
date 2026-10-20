@@ -30,7 +30,15 @@ namespace LanguageWeaverProvider.BatchTask
         public override void TaskComplete()
         {
             base.TaskComplete();
-            ApplicationInitializer.RatedSegments = ApplicationInitializer.RatedSegments.Except(_ratedSegments).ToList();
+            if (_ratedSegments is null)
+            {
+                return;
+            }
+
+            lock (ApplicationInitializer.RatedSegmentsLock)
+            {
+                ApplicationInitializer.RatedSegments = ApplicationInitializer.RatedSegments.Except(_ratedSegments).ToList();
+            }
         }
 
         protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
@@ -44,9 +52,13 @@ namespace LanguageWeaverProvider.BatchTask
             }
 
             //TODO: Developer named variable FileName, but it stores the FilePath; needs to be revised to avoid confusion
-            _ratedSegments = ApplicationInitializer.RatedSegments.Where(seg =>
-                seg.TargetLanguageCode == languageCode &&
-                System.IO.Path.GetFileName(seg.FileName).Equals(fileName)).ToList();
+            lock (ApplicationInitializer.RatedSegmentsLock)
+            {
+                _ratedSegments = ApplicationInitializer.RatedSegments.Where(seg =>
+                    seg is not null &&
+                    seg.TargetLanguageCode == languageCode &&
+                    string.Equals(System.IO.Path.GetFileName(seg.FileName), fileName)).ToList();
+            }
             if (!_ratedSegments.Any())
             {
                 return;

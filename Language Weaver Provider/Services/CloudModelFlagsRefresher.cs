@@ -19,12 +19,14 @@ namespace LanguageWeaverProvider.Services
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly TimeSpan RefreshInterval = TimeSpan.FromHours(1);
-        private static readonly ConcurrentDictionary<string, DateTime> LastRefreshByProvider = new();
+        private static readonly TimeSpan RetryInterval = TimeSpan.FromMinutes(2);
+        private static readonly ConcurrentDictionary<string, DateTime> NextRefreshByProvider = new();
 
         /// <summary>
-        /// Fetches the account's language pairs and updates the cached flags in place. Throttled per provider to
-        /// once per <see cref="RefreshInterval"/> unless <paramref name="force"/> is set. Never throws: on any
-        /// failure the cached values are kept and the error is logged.
+        /// Fetches the account's language pairs and updates the cached flags in place. Throttled per provider: after a
+        /// success the next refresh is due in <see cref="RefreshInterval"/>, after a failure (e.g. a rejected token) in
+        /// <see cref="RetryInterval"/>, unless <paramref name="force"/> is set. Never throws: on any failure the cached
+        /// values are kept and the error is logged.
         /// </summary>
         public static async Task RefreshAsync(ITranslationOptions translationOptions, bool force = false)
         {
@@ -38,28 +40,32 @@ namespace LanguageWeaverProvider.Services
             }
 
             var providerKey = translationOptions.Id ?? string.Empty;
-            var now = DateTime.UtcNow;
             if (!force
-             && LastRefreshByProvider.TryGetValue(providerKey, out var lastRefresh)
-             && now - lastRefresh < RefreshInterval)
+             && NextRefreshByProvider.TryGetValue(providerKey, out var nextRefresh)
+             && DateTime.UtcNow < nextRefresh)
             {
                 return;
             }
 
-            // Recorded before the call so an unreachable API is not retried on every lookup.
-            LastRefreshByProvider[providerKey] = now;
+            // Claimed before the call so concurrent lookups and an unreachable API do not trigger a request each.
+            NextRefreshByProvider[providerKey] = DateTime.UtcNow + RetryInterval;
 
             try
             {
+                // Same renewal the batch path does; the single-segment path and the settings dialog do not validate first.
+                await Service.ValidateTokenAsync(translationOptions, false).ConfigureAwait(false);
+
                 var accountModels = await CloudService.GetResources<PairModel>(translationOptions.AccessToken, CloudResources.LanguagePairs).ConfigureAwait(false);
                 if (ApplyServerFlags(translationOptions.PairMappings, accountModels))
                 {
                     Logger.Info("Updated cached model capabilities (qeSupport/adaptation) from the language-pairs API.");
                 }
+
+                NextRefreshByProvider[providerKey] = DateTime.UtcNow + RefreshInterval;
             }
             catch (Exception ex)
             {
-                Logger.Warn(ex, "Could not refresh model capabilities from the language-pairs API; using cached values.");
+                Logger.Warn(ex, $"Could not refresh model capabilities from the language-pairs API; using cached values and retrying in {RetryInterval.TotalMinutes:0} minutes.");
             }
         }
 

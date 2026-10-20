@@ -35,6 +35,10 @@ namespace LanguageWeaverProvider
 
         public static IList<RatedSegment> RatedSegments { get; set; } = new List<RatedSegment>();
 
+        // RatedSegments is written from Studio lookup threads (possibly in parallel during batch tasks) and read/removed
+        // on the UI thread; List<T> is not thread-safe and concurrent Adds can leave null slots. Hold this for every access.
+        public static readonly object RatedSegmentsLock = new();
+
         public static ITranslationProviderCredentialStore CredentialStore { get; set; }
 
         public static PluginVersion PluginVersion { get; set; } = PluginVersion.None;
