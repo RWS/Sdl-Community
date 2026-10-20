@@ -25,23 +25,15 @@ namespace Sdl.Community.DsiViewer.Studio.DisplayFilters
 
 			if (Settings.ByQualityEstimation)
 			{
-				var anyQualityEstimation = false;
-				if (Settings.QeNone)
-				{
-					anyQualityEstimation = GetQualityEstimation(translationOrigin) == Constants.NoneQuality;
-				}
-				if (Settings.QePoor)
-				{
-					anyQualityEstimation |= GetQualityEstimation(translationOrigin) == Constants.PoorQuality;
-				}
-				if (Settings.QeGood)
-				{
-					anyQualityEstimation |= GetQualityEstimation(translationOrigin) == Constants.GoodQuality;
-				}
-				if (Settings.QeAdequate)
-				{
-					anyQualityEstimation |= GetQualityEstimation(translationOrigin) == Constants.AdequateQuality;
-				}
+				// Segments without an estimation (not from Language Weaver, or no QE returned) count as "None".
+				var qualityEstimation = GetQualityEstimation(translationOrigin);
+				if (string.IsNullOrWhiteSpace(qualityEstimation)) qualityEstimation = Constants.NoneQuality;
+
+				var anyQualityEstimation =
+					(Settings.QeNone && qualityEstimation == Constants.NoneQuality)
+					|| (Settings.QePoor && qualityEstimation == Constants.PoorQuality)
+					|| (Settings.QeGood && qualityEstimation == Constants.GoodQuality)
+					|| (Settings.QeAdequate && qualityEstimation == Constants.AdequateQuality);
 
 				shouldDisplayRow &= anyQualityEstimation;
 			}

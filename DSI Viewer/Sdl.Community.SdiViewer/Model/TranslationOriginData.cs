@@ -1,7 +1,11 @@
-﻿namespace Sdl.Community.DsiViewer.Model
+﻿using System;
+using System.Globalization;
+
+namespace Sdl.Community.DsiViewer.Model
 {
     public class TranslationOriginData : ModelBase
     {
+        private DateTime? _evaluatedAt;
         private string _description;
         private string _model;
         private string _qualityEstimation;
@@ -62,5 +66,19 @@
                 OnPropertyChanged();
             }
         }
+
+        /// <summary>When the estimation was made (stored as UTC in "tqe-evaluated-at-N"); null when not recorded.</summary>
+        public DateTime? EvaluatedAt
+        {
+            get => _evaluatedAt;
+            set
+            {
+                _evaluatedAt = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(EvaluatedAtDisplay));
+            }
+        }
+
+        public string EvaluatedAtDisplay => EvaluatedAt?.ToLocalTime().ToString("g", CultureInfo.CurrentCulture);
     }
 }

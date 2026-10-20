@@ -18,21 +18,14 @@ namespace Sdl.Community.DsiViewer.ViewModel
 {
     public class DsiViewerViewModel : ModelBase, IDisposable
     {
+        private const string NmtModelMetadataKey = "nmt_model";
+
         private readonly EditorController _editorController;
         private readonly SegmentVisitor _segmentVisitor;
         private IStudioDocument _activeDocument;
         private ICommand _applySdlMtCloudFilter;
         private ICommand _clearSdlMtCloudFilter;
-        private string _collapseCommentsButtonName;
-        private ICommand _collapseCommentsCommand;
-        private string _collapseDsiButtonName;
-        private ICommand _collapseDsiCommand;
-        private string _collapseFilteringButtonName;
-        private ICommand _collapseFilteringCommand;
-        private string _collapseLwButtonName;
-        private ICommand _collapseLwCommand;
-        private string _collapseTagsButtonName;
-        private ICommand _collapseTagsCommand;
+        private ICommand _toggleFilteringCommand;
         private List<IComment> _comments;
         private List<DsiModel> _documentStructureInformation;
         private bool _isCommentsVisible;
@@ -40,6 +33,7 @@ namespace Sdl.Community.DsiViewer.ViewModel
         private bool _isfilteringVisible;
         private bool _isQualityEstimationVisible;
         private bool _isTagsVisible;
+        private List<string> _projectModels = new();
         private List<DSITagModel> _segmentTags;
         private TranslationOriginData _translationOriginData;
         private List<TranslationOriginData> _previousTranslationOriginData;
@@ -54,108 +48,28 @@ namespace Sdl.Community.DsiViewer.ViewModel
             _editorController = DsiViewerInitializer.EditorController;
             _editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
 
-            CollapseDsiButtonName = "Collapse";
-            CollapseCommentsButtonName = "Collapse";
-            CollapseTagsButtonName = "Collapse";
-            CollapseLwButtonName = "Collapse";
-            CollapseFilteringButtonName = "Collapse";
-
             IsDsiVisible = true;
             IsCommentsVisible = true;
             IsTagsVisible = true;
             IsQualityEstimationVisible = true;
-            IsFilteringVisible = true;
+            IsFilteringVisible = false;
 
             SetActiveDocument(_editorController.ActiveDocument);
         }
 
         public ICommand ApplySdlMtCloudFilter => _applySdlMtCloudFilter ??= new CommandHandler(() => ApplyFilter(), true);
         public ICommand ClearSdlMtCloudFilter => _clearSdlMtCloudFilter ??= new CommandHandler(() => ApplyFilter(true), true);
-        public string CollapseCommentsButtonAccessibilityName => $"{CollapseCommentsButtonName} Comments Table";
+        public ICommand ToggleFilteringCommand => _toggleFilteringCommand ??= new CommandHandler(() => IsFilteringVisible = !IsFilteringVisible, true);
 
-        public string CollapseCommentsButtonName
+        /// <summary>Segment number shown in the panel header, e.g. "Segment 12".</summary>
+        public string ActiveSegmentTitle
         {
-            get { return _collapseCommentsButtonName; }
-            set
+            get
             {
-                if (_collapseCommentsButtonName != value)
-                {
-                    _collapseCommentsButtonName = value;
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(CollapseCommentsButtonAccessibilityName));
-                }
+                var segmentId = _activeDocument?.ActiveSegmentPair?.Properties?.Id.Id;
+                return string.IsNullOrEmpty(segmentId) ? null : $"Segment {segmentId}";
             }
         }
-
-        public ICommand CollapseCommentsCommand => _collapseCommentsCommand ??= new CommandHandler(CollapseComments, true);
-        public string CollapseDsiButtonAccessibilityName => $"{CollapseDsiButtonName} DSI Table";
-
-        public string CollapseDsiButtonName
-        {
-            get { return _collapseDsiButtonName; }
-            set
-            {
-                if (_collapseDsiButtonName != value)
-                {
-                    _collapseDsiButtonName = value;
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(CollapseDsiButtonAccessibilityName));
-                }
-            }
-        }
-
-        public ICommand CollapseDsiCommand => _collapseDsiCommand ??= new CommandHandler(CollapseDsi, true);
-        public string CollapseFilteringButtonAccessibilityName => $"{CollapseFilteringButtonName} Segment Filtering Section";
-
-        public string CollapseFilteringButtonName
-        {
-            get { return _collapseFilteringButtonName; }
-            set
-            {
-                if (_collapseFilteringButtonName != value)
-                {
-                    _collapseFilteringButtonName = value;
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(CollapseFilteringButtonAccessibilityName));
-                }
-            }
-        }
-
-        public ICommand CollapseFilteringCommand => _collapseFilteringCommand ??= new CommandHandler(CollapseFiltering, true);
-        public string CollapseLwButtonAccessibilityName => $"{CollapseLwButtonName} Language Weaver Section";
-
-        public string CollapseLwButtonName
-        {
-            get { return _collapseLwButtonName; }
-            set
-            {
-                if (_collapseLwButtonName != value)
-                {
-                    _collapseLwButtonName = value;
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(CollapseLwButtonAccessibilityName));
-                }
-            }
-        }
-
-        public ICommand CollapseLwCommand => _collapseLwCommand ??= new CommandHandler(CollapseLw, true);
-        public string CollapseTagsButtonAccessibilityName => $"{CollapseTagsButtonName} Tags Table";
-
-        public string CollapseTagsButtonName
-        {
-            get { return _collapseTagsButtonName; }
-            set
-            {
-                if (_collapseTagsButtonName != value)
-                {
-                    _collapseTagsButtonName = value;
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(CollapseTagsButtonAccessibilityName));
-                }
-            }
-        }
-
-        public ICommand CollapseTagsCommand => _collapseTagsCommand ??= new CommandHandler(CollapseTags, true);
 
         public IOrderedEnumerable<IComment> Comments
         {
@@ -167,10 +81,11 @@ namespace Sdl.Community.DsiViewer.ViewModel
             set
             {
                 _comments = value?.ToList();
-                OnPropertyChanged(nameof(Comments));
-                OnPropertyChanged(nameof(HasComments));
+                RaiseCommentsChanged();
             }
         }
+
+        public int CommentsCount => _comments?.Count ?? 0;
 
         public IOrderedEnumerable<DsiModel> DocumentStructureInformation
         {
@@ -182,12 +97,17 @@ namespace Sdl.Community.DsiViewer.ViewModel
             set
             {
                 _documentStructureInformation = value?.ToList();
-                OnPropertyChanged(nameof(DocumentStructureInformation));
-                OnPropertyChanged(nameof(HasDocumentStructureInformation));
+                RaiseDocumentStructureInformationChanged();
             }
         }
 
+        public int DocumentStructureInformationCount => _documentStructureInformation?.Count ?? 0;
+
         public FilterApplier FilterApplier { get; set; } = new();
+
+        public string FilterSummary => FilterApplier.SdlMtCloudFilterSettings.Summary;
+
+        public bool HasActiveSegment => _activeDocument?.ActiveSegmentPair is not null;
         public bool HasComments => Comments?.Any() ?? false;
         public bool HasDocumentStructureInformation => DocumentStructureInformation?.Any() ?? false;
         public bool HasTags => SegmentTags?.Any() ?? false;
@@ -219,6 +139,10 @@ namespace Sdl.Community.DsiViewer.ViewModel
             }
         }
 
+        /// <summary>The filter is applied to the document (not just edited in the filter card).</summary>
+        public bool IsFilterActive { get; private set; }
+
+        /// <summary>Whether the filter card is open.</summary>
         public bool IsFilteringVisible
         {
             get { return _isfilteringVisible; }
@@ -227,6 +151,11 @@ namespace Sdl.Community.DsiViewer.ViewModel
                 if (_isfilteringVisible != value)
                 {
                     _isfilteringVisible = value;
+                    if (value)
+                    {
+                        UpdateProjectModels();
+                    }
+
                     OnPropertyChanged();
                 }
             }
@@ -258,21 +187,45 @@ namespace Sdl.Community.DsiViewer.ViewModel
             }
         }
 
+        public int PreviousEstimationsCount => PreviousTranslationOriginData?.Count ?? 0;
+
+        public List<TranslationOriginData> PreviousTranslationOriginData
+        {
+            get => _previousTranslationOriginData;
+            set
+            {
+                _previousTranslationOriginData = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(PreviousEstimationsCount));
+            }
+        }
+
         public bool ProjectHasQualityEstimation =>
             _activeDocument?.SegmentPairs?.Any(x => TqeReader.HasTqeData(x.Properties?.TranslationOrigin)) ??
             false;
-        public bool SegmentHasQualityEstimation =>
-            TqeReader.HasTqeData(
-                _activeDocument?.ActiveSegmentPair?.Properties?.TranslationOrigin);
-        
-        public bool SegmentHasPreviousQualityEstimation =>
-            TqeReader.HasPreviousTqeData(
-                _activeDocument?.ActiveSegmentPair?.Properties?.TranslationOrigin);
+
+        /// <summary>Models used for the segments of the active document, offered in the filter's model list.</summary>
+        public List<string> ProjectModels
+        {
+            get => _projectModels;
+            private set
+            {
+                _projectModels = value;
+                OnPropertyChanged();
+            }
+        }
 
         public bool SegmentHasCurrentQualityEstimation =>
             TqeReader.HasCurrentTqeData(
                 _activeDocument?.ActiveSegmentPair?.Properties?.TranslationOrigin);
 
+        public bool SegmentHasPreviousQualityEstimation =>
+            TqeReader.HasPreviousTqeData(
+                _activeDocument?.ActiveSegmentPair?.Properties?.TranslationOrigin);
+
+        public bool SegmentHasQualityEstimation =>
+            TqeReader.HasTqeData(
+                _activeDocument?.ActiveSegmentPair?.Properties?.TranslationOrigin);
 
         public List<DSITagModel> SegmentTags
         {
@@ -282,8 +235,11 @@ namespace Sdl.Community.DsiViewer.ViewModel
                 _segmentTags = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(HasTags));
+                OnPropertyChanged(nameof(TagsCount));
             }
         }
+
+        public int TagsCount => SegmentTags?.Count ?? 0;
 
         public TranslationOriginData TranslationOriginData
         {
@@ -293,16 +249,6 @@ namespace Sdl.Community.DsiViewer.ViewModel
                 _translationOriginData = value;
                 OnPropertyChanged(nameof(TranslationOriginData));
                 OnPropertyChanged(nameof(HasTranslationOriginMetadata));
-            }
-        }
-
-        public List<TranslationOriginData> PreviousTranslationOriginData
-        {
-            get => _previousTranslationOriginData;
-            set
-            {
-                _previousTranslationOriginData = value;
-                OnPropertyChanged();
             }
         }
 
@@ -338,6 +284,13 @@ namespace Sdl.Community.DsiViewer.ViewModel
             UpdateTags();
 
             QualityEstimationChanged();
+            ActiveSegmentChanged();
+        }
+
+        private void ActiveSegmentChanged()
+        {
+            OnPropertyChanged(nameof(ActiveSegmentTitle));
+            OnPropertyChanged(nameof(HasActiveSegment));
         }
 
         private void QualityEstimationChanged()
@@ -391,42 +344,18 @@ namespace Sdl.Community.DsiViewer.ViewModel
             }
 
             FilterApplier.ApplyFilter();
-        }
 
-        private void CollapseComments()
-        {
-            IsCommentsVisible = !IsCommentsVisible;
-            CollapseCommentsButtonName = IsCommentsVisible ? "Collapse" : "Expand";
-        }
-
-        private void CollapseDsi()
-        {
-            IsDsiVisible = !IsDsiVisible;
-            CollapseDsiButtonName = IsDsiVisible ? "Collapse" : "Expand";
-        }
-
-        private void CollapseFiltering()
-        {
-            IsFilteringVisible = !IsFilteringVisible;
-            CollapseFilteringButtonName = IsFilteringVisible ? "Collapse" : "Expand";
-        }
-
-        private void CollapseLw()
-        {
-            IsQualityEstimationVisible = !IsQualityEstimationVisible;
-            CollapseLwButtonName = IsQualityEstimationVisible ? "Collapse" : "Expand";
-        }
-
-        private void CollapseTags()
-        {
-            IsTagsVisible = !IsTagsVisible;
-            CollapseTagsButtonName = IsTagsVisible ? "Collapse" : "Expand";
+            IsFilterActive = FilterApplier.SdlMtCloudFilterSettings.IsActive;
+            OnPropertyChanged(nameof(IsFilterActive));
+            OnPropertyChanged(nameof(FilterSummary));
+            IsFilteringVisible = false;
         }
 
         private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
         {
             SetActiveDocument(e.Document);
             QualityEstimationChanged();
+            ActiveSegmentChanged();
             OnPropertyChanged(nameof(ProjectHasQualityEstimation));
         }
 
@@ -544,6 +473,20 @@ namespace Sdl.Community.DsiViewer.ViewModel
             return additionalInfo.ToString();
         }
 
+        private void RaiseCommentsChanged()
+        {
+            OnPropertyChanged(nameof(Comments));
+            OnPropertyChanged(nameof(HasComments));
+            OnPropertyChanged(nameof(CommentsCount));
+        }
+
+        private void RaiseDocumentStructureInformationChanged()
+        {
+            OnPropertyChanged(nameof(DocumentStructureInformation));
+            OnPropertyChanged(nameof(HasDocumentStructureInformation));
+            OnPropertyChanged(nameof(DocumentStructureInformationCount));
+        }
+
         private void SetActiveDocument(IStudioDocument document)
         {
             if (_activeDocument != null)
@@ -573,8 +516,7 @@ namespace Sdl.Community.DsiViewer.ViewModel
             var segmentPair = _activeDocument?.ActiveSegmentPair;
             if (segmentPair == null)
             {
-                OnPropertyChanged(nameof(Comments));
-                OnPropertyChanged(nameof(HasComments));
+                RaiseCommentsChanged();
                 return;
             }
 
@@ -582,8 +524,7 @@ namespace Sdl.Community.DsiViewer.ViewModel
             AddComments(segmentPair.Source);
             AddComments(segmentPair.Target);
 
-            OnPropertyChanged(nameof(Comments));
-            OnPropertyChanged(nameof(HasComments));
+            RaiseCommentsChanged();
         }
 
         private void UpdateDocumentStructureInformation()
@@ -595,8 +536,7 @@ namespace Sdl.Community.DsiViewer.ViewModel
 
             if (!(contexts?.Contexts?.Count > 0))
             {
-                OnPropertyChanged(nameof(DocumentStructureInformation));
-                OnPropertyChanged(nameof(HasDocumentStructureInformation));
+                RaiseDocumentStructureInformationChanged();
                 return;
             }
 
@@ -619,7 +559,7 @@ namespace Sdl.Community.DsiViewer.ViewModel
 
                 if (color.Name == "0") // it doesn't have a color set
                 {
-                    model.RowColor = "White";
+                    model.RowColor = "Transparent";
                 }
                 else
                 {
@@ -629,8 +569,30 @@ namespace Sdl.Community.DsiViewer.ViewModel
                 _documentStructureInformation.Add(model);
             }
 
-            OnPropertyChanged(nameof(DocumentStructureInformation));
-            OnPropertyChanged(nameof(HasDocumentStructureInformation));
+            RaiseDocumentStructureInformationChanged();
+        }
+
+        private void UpdateProjectModels()
+        {
+            var segmentPairs = _activeDocument?.SegmentPairs;
+            if (segmentPairs is null)
+            {
+                ProjectModels = new List<string>();
+                return;
+            }
+
+            ProjectModels = segmentPairs
+                .Select(pair => pair.Properties?.TranslationOrigin)
+                .Where(origin => origin is not null)
+                .Select(origin =>
+                {
+                    var model = origin.GetMetaData(NmtModelMetadataKey);
+                    return string.IsNullOrWhiteSpace(model) ? TqeReader.GetCurrentTqe(origin)?.Model : model;
+                })
+                .Where(model => !string.IsNullOrWhiteSpace(model))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .OrderBy(model => model, StringComparer.OrdinalIgnoreCase)
+                .ToList();
         }
 
         private void UpdateTags()

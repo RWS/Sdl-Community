@@ -1,4 +1,6 @@
-﻿namespace Sdl.Community.DsiViewer.Model
+﻿using System.Linq;
+
+namespace Sdl.Community.DsiViewer.Model
 {
 	public class DsiModel : ModelBase
     {
@@ -48,6 +50,11 @@
                 OnPropertyChanged(nameof(DisplayName));
             }
         }
+
+        public bool HasDescription => !string.IsNullOrWhiteSpace(Description);
+
+        /// <summary>One-line description for screen readers, e.g. "P, Paragraph, A paragraph of text".</summary>
+        public string Summary => string.Join(", ", new[] { Code, DisplayName, Description?.Trim() }.Where(part => !string.IsNullOrWhiteSpace(part)));
 
         public string RowColor
         {

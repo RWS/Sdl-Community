@@ -3,646 +3,574 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:dsiViewer="clr-namespace:Sdl.Community.DsiViewer"
              xmlns:viewModel="clr-namespace:Sdl.Community.DsiViewer.ViewModel"
-             xmlns:converters="clr-namespace:Sdl.Community.DsiViewer.Converters"
-             xmlns:view="clr-namespace:Sdl.Community.DsiViewer.View"
              mc:Ignorable="d"
-             d:DesignHeight="450"
-             d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance viewModel:DsiViewerViewModel}">
+             d:DesignHeight="600"
+             d:DesignWidth="380"
+             d:DataContext="{d:DesignInstance viewModel:DsiViewerViewModel}"
+             Background="{DynamicResource Rws.Bg.Main}"
+             Foreground="{DynamicResource Rws.Text.Primary}"
+             FontSize="12">
+    <!-- Colours come from Studio's theme palette (Rws.*), so the panel follows the light, dark and high-contrast themes. -->
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../Styles/DataGridStyle.xaml" />
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
-                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <converters:MultiBooleanToVisibilityConverter x:Key="MultiBooleanToVisibilityConverter" />
+            <FontFamily x:Key="IconFont">Segoe MDL2 Assets</FontFamily>
+            <FontFamily x:Key="CodeFont">Consolas</FontFamily>
 
-            <Style TargetType="CheckBox">
-                <Setter Property="VerticalContentAlignment"
-                        Value="Center" />
+            <Style x:Key="MutedText" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{DynamicResource Rws.Text.Muted}" />
+                <Setter Property="TextWrapping" Value="Wrap" />
             </Style>
 
-            <Style x:Key="QeLabels"
-                   TargetType="CheckBox">
-                <Setter Property="IsEnabled"
-                        Value="{Binding ElementName=ByQe, Path=IsChecked}" />
-                <Setter Property="Margin"
-                        Value="0 2 0 0" />
+            <Style x:Key="Hairline" TargetType="Rectangle">
+                <Setter Property="Height" Value="1" />
+                <Setter Property="Fill" Value="{DynamicResource Rws.Text.Muted}" />
+                <Setter Property="Opacity" Value="0.25" />
+                <Setter Property="SnapsToDevicePixels" Value="True" />
             </Style>
 
-            <Style x:Key="DataGridTextColumnStyle"
-                   TargetType="TextBlock">
-                <Setter Property="Padding"
-                        Value="6 2" />
-                <Setter Property="VerticalAlignment"
-                        Value="Center" />
-                <Setter Property="TextWrapping"
-                        Value="Wrap" />
-            </Style>
-            <Style x:Key="NonFocusableCell"
-                   TargetType="DataGridCell"
-                   BasedOn="{StaticResource Sdl.DataGridCell.CellStyle}">
-                <Setter Property="Focusable"
-                        Value="False" />
+            <!-- Small rounded count shown next to a section title. -->
+            <Style x:Key="CountBadge" TargetType="Border">
+                <Setter Property="CornerRadius" Value="8" />
+                <Setter Property="Padding" Value="6 0" />
+                <Setter Property="Margin" Value="6 0 0 0" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="Background" Value="{DynamicResource Rws.Bg.Top}" />
+                <Setter Property="TextElement.Foreground" Value="{DynamicResource Rws.Text.Muted}" />
+                <Setter Property="TextElement.FontSize" Value="11" />
             </Style>
 
+            <!-- Good / Adequate / Poor pill; the label is passed in Tag. Solid fills with white text (each at least
+                 5:1 contrast) read the same on light and dark panels; the theme's tinted badge colours were too faint. -->
+            <SolidColorBrush x:Key="QeGoodBrush" Color="#1E7B45" />
+            <SolidColorBrush x:Key="QeAdequateBrush" Color="#A85400" />
+            <SolidColorBrush x:Key="QePoorBrush" Color="#C2273F" />
+            <SolidColorBrush x:Key="QeOtherBrush" Color="#4A5568" />
+
+            <Style x:Key="QeBadge" TargetType="Border">
+                <Setter Property="CornerRadius" Value="4" />
+                <Setter Property="Padding" Value="8 1" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="HorizontalAlignment" Value="Left" />
+                <Setter Property="TextElement.FontWeight" Value="SemiBold" />
+                <Setter Property="TextElement.Foreground" Value="White" />
+                <Setter Property="Background" Value="{StaticResource QeOtherBrush}" />
+                <Style.Triggers>
+                    <Trigger Property="Tag" Value="Good">
+                        <Setter Property="Background" Value="{StaticResource QeGoodBrush}" />
+                    </Trigger>
+                    <Trigger Property="Tag" Value="Adequate">
+                        <Setter Property="Background" Value="{StaticResource QeAdequateBrush}" />
+                    </Trigger>
+                    <Trigger Property="Tag" Value="Poor">
+                        <Setter Property="Background" Value="{StaticResource QePoorBrush}" />
+                    </Trigger>
+                    <!-- Windows high contrast: defer to the system highlight pair (last, so it wins). -->
+                    <DataTrigger Binding="{Binding Source={x:Static SystemParameters.HighContrast}}" Value="True">
+                        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                        <Setter Property="TextElement.Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="FocusVisual">
+                <Setter Property="Control.Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <Rectangle Margin="-2" StrokeThickness="1" StrokeDashArray="1 2"
+                                       Stroke="{DynamicResource Rws.Text.Primary}" SnapsToDevicePixels="True" />
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- Collapsible section: chevron + header on one row, a hairline above, content below. -->
+            <Style x:Key="Section" TargetType="Expander">
+                <Setter Property="Focusable" Value="False" />
+                <Setter Property="Foreground" Value="{DynamicResource Rws.Text.Primary}" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Expander">
+                            <StackPanel>
+                                <Rectangle Style="{StaticResource Hairline}" />
+                                <ToggleButton x:Name="HeaderToggle"
+                                              IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                              AutomationProperties.Name="{TemplateBinding AutomationProperties.Name}"
+                                              FocusVisualStyle="{StaticResource FocusVisual}"
+                                              Cursor="Hand"
+                                              Padding="0 8">
+                                    <ToggleButton.Template>
+                                        <ControlTemplate TargetType="ToggleButton">
+                                            <Border Background="Transparent" Padding="{TemplateBinding Padding}">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock x:Name="Chevron"
+                                                               FontFamily="{StaticResource IconFont}"
+                                                               FontSize="10"
+                                                               Text="&#xE76C;"
+                                                               Width="16"
+                                                               VerticalAlignment="Center"
+                                                               Foreground="{DynamicResource Rws.Text.Muted}" />
+                                                    <ContentPresenter VerticalAlignment="Center" RecognizesAccessKey="True" />
+                                                </StackPanel>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsChecked" Value="True">
+                                                    <Setter TargetName="Chevron" Property="Text" Value="&#xE70D;" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </ToggleButton.Template>
+                                    <ContentPresenter ContentSource="Header" RecognizesAccessKey="True" />
+                                </ToggleButton>
+                                <ContentPresenter x:Name="Body" Margin="16 0 0 10" Visibility="Collapsed" />
+                            </StackPanel>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsExpanded" Value="True">
+                                    <Setter TargetName="Body" Property="Visibility" Value="Visible" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="SectionTitle" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="13" />
+                <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+            </Style>
+
+            <!-- List without selection chrome: keyboard focusable rows, no scrolling of its own. -->
+            <Style x:Key="PlainList" TargetType="ListBox">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="Foreground" Value="{DynamicResource Rws.Text.Primary}" />
+                <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+                <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled" />
+                <Setter Property="ScrollViewer.CanContentScroll" Value="False" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ListBox">
+                            <ItemsPresenter />
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="PlainListItem" TargetType="ListBoxItem">
+                <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}" />
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ListBoxItem">
+                            <ContentPresenter />
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- Toggle chip used in the filter card. -->
+            <Style x:Key="FilterChip" TargetType="ToggleButton">
+                <Setter Property="Margin" Value="0 0 6 6" />
+                <Setter Property="Cursor" Value="Hand" />
+                <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}" />
+                <Setter Property="Foreground" Value="{DynamicResource Rws.Text.Primary}" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ToggleButton">
+                            <Border x:Name="Chip" CornerRadius="4" BorderThickness="1" Padding="10 3"
+                                    Background="{DynamicResource Rws.Bg.Main}" BorderBrush="Transparent">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock x:Name="Check" FontFamily="{StaticResource IconFont}" FontSize="10" Text="&#xE73E;"
+                                               Margin="0 0 6 0" VerticalAlignment="Center" Visibility="Collapsed" />
+                                    <ContentPresenter VerticalAlignment="Center" RecognizesAccessKey="True" />
+                                </StackPanel>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter TargetName="Chip" Property="Background" Value="{DynamicResource Rws.Accent.Info.BadgeBg}" />
+                                    <Setter TargetName="Chip" Property="BorderBrush" Value="{DynamicResource Rws.Accent.Info}" />
+                                    <Setter TargetName="Check" Property="Visibility" Value="Visible" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="IconToggle" TargetType="ToggleButton">
+                <Setter Property="Cursor" Value="Hand" />
+                <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}" />
+                <Setter Property="Foreground" Value="{DynamicResource Rws.Text.Muted}" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ToggleButton">
+                            <Border x:Name="Box" CornerRadius="4" Padding="6 4" Background="Transparent">
+                                <ContentPresenter />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="Box" Property="Background" Value="{DynamicResource Rws.Bg.Top}" />
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter TargetName="Box" Property="Background" Value="{DynamicResource Rws.Accent.Info.BadgeBg}" />
+                                    <Setter Property="Foreground" Value="{DynamicResource Rws.Accent.Info}" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <DataTemplate x:Key="EstimationRow">
+                <StackPanel Orientation="Horizontal" Margin="0 2">
+                    <Border Style="{StaticResource QeBadge}" Tag="{Binding QualityEstimation}">
+                        <TextBlock Text="{Binding QualityEstimation}" />
+                    </Border>
+                    <TextBlock Text="{Binding Model}" Margin="8 0 0 0" VerticalAlignment="Center" />
+                    <TextBlock Text="{Binding EvaluatedAtDisplay}" Margin="8 0 0 0" VerticalAlignment="Center"
+                               Style="{StaticResource MutedText}" />
+                </StackPanel>
+            </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <Grid Name="MainGrid"
-              Margin="0 16">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="12 10 12 12">
 
-            <DockPanel Grid.Row="0"
-                       Visibility="{Binding HasDocumentStructureInformation, Converter={StaticResource BooleanToVisibilityConverter}}"
-                       PreviewKeyDown="TabKeyNavigation"
-                       Margin="16 0">
-                <Label Target="{Binding ElementName=DSITabel}"
-                       FontSize="14"
-                       FontWeight="DemiBold"
-                       DockPanel.Dock="Left"
-                       VerticalAlignment="Center">
-                    <AccessText>_Document structure information</AccessText>
-                </Label>
-
-                <Button Content="{Binding CollapseDsiButtonName}"
-                        Command="{Binding CollapseDsiCommand}"
-                        AutomationProperties.Name="{Binding CollapseDsiButtonAccessibilityName}"
-                        AutomationProperties.HelpText="Press D to access the DSI table."
-                        Style="{StaticResource Sdl.Button.HyperLinkStyle}"
-                        DockPanel.Dock="Right"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center" />
-            </DockPanel>
-
-            <DataGrid Grid.Row="1"
-                      Name="DSITabel"
-                      ItemsSource="{Binding DocumentStructureInformation}"
-                      Style="{StaticResource Sdl.DataGrid.GenericStyle}"
-                      AutomationProperties.Name="Document structure information"
-                      CanUserSortColumns="True"
-                      BorderBrush="#D3D3D3"
-                      AutoGenerateColumns="False"
-                      CanUserAddRows="False"
-                      PreviewKeyDown="TabKeyNavigation"
-                      GotFocus="DataGridGotFocus"
-                      Margin="16 0">
-                <DataGrid.Resources>
-                    <Style TargetType="TextBox">
-                        <Setter Property="BorderThickness" Value="0"/>
-                        <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="IsReadOnly" Value="True"/>
+            <!-- Nothing selected yet -->
+            <TextBlock Text="Open a document and select a segment to see its details."
+                       Margin="0 8">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock" BasedOn="{StaticResource MutedText}">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasActiveSegment}" Value="False">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
                     </Style>
-                </DataGrid.Resources>
-                
-                <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="Code" IsReadOnly="True">
-                        <DataGridTemplateColumn.CellTemplate>
+                </TextBlock.Style>
+            </TextBlock>
+
+            <StackPanel Visibility="{Binding HasActiveSegment, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                <!-- Header: segment, current QE result, filter button -->
+                <DockPanel Margin="0 0 0 8">
+                    <ToggleButton DockPanel.Dock="Right"
+                                  Style="{StaticResource IconToggle}"
+                                  IsChecked="{Binding IsFilteringVisible, Mode=TwoWay}"
+                                  ToolTip="Filter segments"
+                                  AutomationProperties.Name="Filter segments"
+                                  AutomationProperties.HelpText="Show segments by quality estimation or model">
+                        <TextBlock FontFamily="{StaticResource IconFont}" FontSize="14" Text="&#xE71C;" />
+                    </ToggleButton>
+
+                    <Border DockPanel.Dock="Right"
+                            Margin="0 0 8 0"
+                            Style="{StaticResource QeBadge}"
+                            Tag="{Binding TranslationOriginData.QualityEstimation}"
+                            ToolTip="{Binding TranslationOriginData.Description}"
+                            Visibility="{Binding SegmentHasCurrentQualityEstimation, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <TextBlock Text="{Binding TranslationOriginData.QualityEstimation}"
+                                   AutomationProperties.Name="{Binding TranslationOriginData.AccessibilityQELabel}" />
+                    </Border>
+
+                    <TextBlock Text="{Binding ActiveSegmentTitle}"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center" />
+                </DockPanel>
+
+                <!-- Filter card (drops down under the header) -->
+                <Border Visibility="{Binding IsFilteringVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Background="{DynamicResource Rws.Bg.Top}"
+                        CornerRadius="6"
+                        Padding="12"
+                        Margin="0 0 0 10">
+                    <StackPanel>
+                        <TextBlock Text="Show segments" FontWeight="SemiBold" Margin="0 0 0 8" />
+
+                        <TextBlock Text="Quality estimation" Style="{StaticResource MutedText}" Margin="0 0 0 4" />
+                        <WrapPanel>
+                            <ToggleButton Style="{StaticResource FilterChip}"
+                                          IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.QeGood, Mode=TwoWay}"
+                                          AutomationProperties.Name="Good">
+                                <AccessText Text="_Good" />
+                            </ToggleButton>
+                            <ToggleButton Style="{StaticResource FilterChip}"
+                                          IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.QeAdequate, Mode=TwoWay}"
+                                          AutomationProperties.Name="Adequate">
+                                <AccessText Text="_Adequate" />
+                            </ToggleButton>
+                            <ToggleButton Style="{StaticResource FilterChip}"
+                                          IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.QePoor, Mode=TwoWay}"
+                                          AutomationProperties.Name="Poor">
+                                <AccessText Text="_Poor" />
+                            </ToggleButton>
+                            <ToggleButton Style="{StaticResource FilterChip}"
+                                          IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.QeNone, Mode=TwoWay}"
+                                          AutomationProperties.Name="No quality estimation">
+                                <AccessText Text="_No QE" />
+                            </ToggleButton>
+                        </WrapPanel>
+
+                        <Label Target="{Binding ElementName=FilterModelBox}" Padding="0" Margin="0 4 0 4"
+                               Foreground="{DynamicResource Rws.Text.Muted}">
+                            <AccessText Text="M_odel" />
+                        </Label>
+                        <ComboBox Name="FilterModelBox"
+                                  IsEditable="True"
+                                  ItemsSource="{Binding ProjectModels}"
+                                  Text="{Binding FilterApplier.SdlMtCloudFilterSettings.Model, UpdateSourceTrigger=PropertyChanged}"
+                                  AutomationProperties.Name="Model"
+                                  AutomationProperties.HelpText="Leave empty to include every model" />
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 12 0 0">
+                            <Button Content="Clear"
+                                    Command="{Binding ClearSdlMtCloudFilter}"
+                                    Style="{StaticResource Sdl.Button.SecondaryStyle}"
+                                    Margin="0 0 8 0" />
+                            <Button Content="Apply"
+                                    Command="{Binding ApplySdlMtCloudFilter}"
+                                    Style="{StaticResource Sdl.Button.PrimaryStyle}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Document structure information -->
+                <Expander Style="{StaticResource Section}"
+                          IsExpanded="{Binding IsDsiVisible, Mode=TwoWay}"
+                          AutomationProperties.Name="Document structure"
+                          Visibility="{Binding HasDocumentStructureInformation, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Expander.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource SectionTitle}"><AccessText Text="_Document structure" /></TextBlock>
+                            <Border Style="{StaticResource CountBadge}">
+                                <TextBlock Text="{Binding DocumentStructureInformationCount}" />
+                            </Border>
+                        </StackPanel>
+                    </Expander.Header>
+                    <ListBox Style="{StaticResource PlainList}"
+                             ItemsSource="{Binding DocumentStructureInformation}"
+                             AutomationProperties.Name="Document structure">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem" BasedOn="{StaticResource PlainListItem}">
+                                <Setter Property="AutomationProperties.Name" Value="{Binding Summary}" />
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal" Margin="6 0">
-                                    <Border Background="{Binding RowColor}"
-                                            Height="16"
-                                            Width="16"
-                                            BorderThickness="1"
-                                            BorderBrush="Black"
-                                            IsHitTestVisible="False" />
-                                    <TextBox Text="{Binding Code}"
-                                   VerticalAlignment="Center"
-                                   Margin="2 0 0 0" IsReadOnly="True"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-
-                    <DataGridTemplateColumn  Header="Location"
-                            IsReadOnly="True"
-                            Width="2*" >
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox Text="{Binding DisplayName}"
-                                 Background="Transparent"
-                                 BorderThickness="0"
-                                 VerticalAlignment="Center"
-                                 IsReadOnly="True"
-                                 TextWrapping="Wrap"
-                                 IsHitTestVisible="True"
-                                 IsReadOnlyCaretVisible="True" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-
-                    <DataGridTemplateColumn Header="Description" IsReadOnly="True" Width="2*">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox Text="{Binding Description}"
-                                            Background="Transparent"
-                                            BorderThickness="0"
-                                            VerticalAlignment="Center"
-                                            IsReadOnly="True"
-                                            TextWrapping="Wrap"
-                                            IsHitTestVisible="True"
-                                            IsReadOnlyCaretVisible="True" />    
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
-
-            <Separator Grid.Row="2"
-                       Visibility="{Binding HasDocumentStructureInformation, Converter={StaticResource BooleanToVisibilityConverter}}"
-                       Margin="0 16 0 8" />
-
-            <DockPanel Grid.Row="3"
-                       Visibility="{Binding HasComments, Converter={StaticResource BooleanToVisibilityConverter}}"
-                       PreviewKeyDown="TabKeyNavigation"
-                       Margin="16 0">
-                <Label Target="{Binding ElementName=CommentsTable}"
-                       FontSize="14"
-                       FontWeight="DemiBold"
-                       DockPanel.Dock="Left"
-                       VerticalAlignment="Center">
-                    <AccessText>_Comments</AccessText>
-                </Label>
-
-                <Button Content="{Binding CollapseCommentsButtonName}"
-                        Command="{Binding CollapseCommentsCommand}"
-                        AutomationProperties.Name="{Binding CollapseCommentsButtonAccessibilityName}"
-                        Style="{StaticResource Sdl.Button.HyperLinkStyle}"
-                        HorizontalAlignment="Left"
-                        DockPanel.Dock="Right"
-                        VerticalAlignment="Center" />
-            </DockPanel>
-
-            <DataGrid Grid.Row="4"
-                    Name="CommentsTable"
-                    ItemsSource="{Binding Comments}"
-                    AutomationProperties.Name="Comments"
-                    Style="{StaticResource Sdl.DataGrid.GenericStyle}"
-                    CanUserSortColumns="True"
-                    BorderBrush="#D3D3D3"
-                    AutoGenerateColumns="False"
-                    CanUserAddRows="False"
-                    PreviewKeyDown="TabKeyNavigation"
-                    GotFocus="DataGridGotFocus"
-                    Margin="16 0">
-                <DataGrid.Visibility>
-                    <MultiBinding Converter="{StaticResource MultiBooleanToVisibilityConverter}">
-                        <Binding Path="IsCommentsVisible" />
-                        <Binding Path="HasComments" />
-                    </MultiBinding>
-                </DataGrid.Visibility>
-
-                <DataGrid.Columns>
-
-                    <DataGridTemplateColumn Header="Comment" IsReadOnly="True" Width="*">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox Text="{Binding Text}"
-                                         Background="Transparent"
-                                         BorderThickness="0"
-                                         VerticalAlignment="Center" 
-                                         IsReadOnly="True"
-                                         TextWrapping="Wrap"
-                                         IsHitTestVisible="True"
-                                         IsReadOnlyCaretVisible="True"
-                                    />
-                            </DataTemplate>    
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    
-                    
-                    <DataGridTemplateColumn Header="Severity"
-                                IsReadOnly="True"
-                                Width="72">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Grid>
+                                <Grid Margin="0 3">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <Image Height="16"
-                                           Width="16"
-                                           Margin="4 0 2 0"
-                                           VerticalAlignment="Center"
-                                           Grid.Column="0">
+                                    <Border Width="10" Height="10" Margin="0 3 8 0" VerticalAlignment="Top"
+                                            Background="{Binding RowColor}"
+                                            BorderBrush="{DynamicResource Rws.Text.Muted}" BorderThickness="1" />
+                                    <TextBlock Grid.Column="1" Text="{Binding Code}" FontFamily="{StaticResource CodeFont}"
+                                               MinWidth="24" Margin="0 0 8 0" />
+                                    <StackPanel Grid.Column="2">
+                                        <TextBlock Text="{Binding DisplayName}" TextWrapping="Wrap" />
+                                        <TextBlock Text="{Binding Description}" Style="{StaticResource MutedText}"
+                                                   Visibility="{Binding HasDescription, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Expander>
+
+                <!-- Tags -->
+                <Expander Style="{StaticResource Section}"
+                          IsExpanded="{Binding IsTagsVisible, Mode=TwoWay}"
+                          AutomationProperties.Name="Tags"
+                          Visibility="{Binding HasTags, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Expander.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource SectionTitle}"><AccessText Text="_Tags" /></TextBlock>
+                            <Border Style="{StaticResource CountBadge}">
+                                <TextBlock Text="{Binding TagsCount}" />
+                            </Border>
+                        </StackPanel>
+                    </Expander.Header>
+                    <ListBox Style="{StaticResource PlainList}"
+                             ItemsSource="{Binding SegmentTags}"
+                             AutomationProperties.Name="Tags">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem" BasedOn="{StaticResource PlainListItem}">
+                                <Setter Property="AutomationProperties.Name" Value="{Binding Summary}" />
+                                <Setter Property="HorizontalContentAlignment" Value="Left" />
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border CornerRadius="4" Padding="8 2" Margin="0 3 6 3"
+                                        Background="{DynamicResource Rws.Bg.Top}"
+                                        ToolTip="{Binding Summary}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontFamily="{StaticResource CodeFont}">
+                                            <Run Text="{Binding Name, Mode=OneWay}" /><Run Text=" " /><Run Text="{Binding Id, Mode=OneWay}" Foreground="{DynamicResource Rws.Text.Muted}" />
+                                        </TextBlock>
+                                        <TextBlock Text="{Binding Attributes}" Margin="8 0 0 0"
+                                                   Visibility="{Binding HasAttributes, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                        <TextBlock Text="{Binding Content}" Margin="8 0 0 0" MaxWidth="220"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   Foreground="{DynamicResource Rws.Text.Muted}"
+                                                   Visibility="{Binding HasContent, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Expander>
+
+                <!-- Quality estimation -->
+                <Expander Style="{StaticResource Section}"
+                          IsExpanded="{Binding IsQualityEstimationVisible, Mode=TwoWay}"
+                          AutomationProperties.Name="Quality estimation"
+                          Visibility="{Binding SegmentHasQualityEstimation, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Expander.Header>
+                        <TextBlock Style="{StaticResource SectionTitle}"><AccessText Text="_Quality estimation" /></TextBlock>
+                    </Expander.Header>
+                    <StackPanel>
+                        <Grid Visibility="{Binding SegmentHasCurrentQualityEstimation, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" Text="Result" Style="{StaticResource MutedText}" Margin="0 3" />
+                            <Border Grid.Row="0" Grid.Column="1" Margin="0 3"
+                                    Style="{StaticResource QeBadge}"
+                                    Tag="{Binding TranslationOriginData.QualityEstimation}">
+                                <TextBlock Text="{Binding TranslationOriginData.QualityEstimation}" />
+                            </Border>
+
+                            <TextBlock Grid.Row="1" Text="Model" Style="{StaticResource MutedText}" Margin="0 3" />
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding TranslationOriginData.Model}"
+                                       TextWrapping="Wrap" Margin="0 3"
+                                       AutomationProperties.Name="{Binding TranslationOriginData.AccessibilityModelLabel}" />
+
+                            <TextBlock Grid.Row="2" Text="System" Style="{StaticResource MutedText}" Margin="0 3" />
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding TranslationOriginData.System}" Margin="0 3" />
+
+                            <TextBlock Grid.Row="3" Text="Evaluated" Style="{StaticResource MutedText}" Margin="0 3" />
+                            <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding TranslationOriginData.EvaluatedAtDisplay}" Margin="0 3" />
+                        </Grid>
+
+                        <Expander Style="{StaticResource Section}"
+                                  Margin="0 6 0 0"
+                                  AutomationProperties.Name="Previous estimations"
+                                  Visibility="{Binding SegmentHasPreviousQualityEstimation, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Expander.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Previous estimations" VerticalAlignment="Center" />
+                                    <Border Style="{StaticResource CountBadge}">
+                                        <TextBlock Text="{Binding PreviousEstimationsCount}" />
+                                    </Border>
+                                </StackPanel>
+                            </Expander.Header>
+                            <ItemsControl ItemsSource="{Binding PreviousTranslationOriginData}"
+                                          ItemTemplate="{StaticResource EstimationRow}" />
+                        </Expander>
+                    </StackPanel>
+                </Expander>
+
+                <!-- Comments -->
+                <Expander Style="{StaticResource Section}"
+                          IsExpanded="{Binding IsCommentsVisible, Mode=TwoWay}"
+                          AutomationProperties.Name="Comments"
+                          Visibility="{Binding HasComments, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Expander.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource SectionTitle}"><AccessText Text="_Comments" /></TextBlock>
+                            <Border Style="{StaticResource CountBadge}">
+                                <TextBlock Text="{Binding CommentsCount}" />
+                            </Border>
+                        </StackPanel>
+                    </Expander.Header>
+                    <ListBox Style="{StaticResource PlainList}"
+                             ItemsSource="{Binding Comments}"
+                             AutomationProperties.Name="Comments">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem" BasedOn="{StaticResource PlainListItem}">
+                                <Setter Property="AutomationProperties.Name" Value="{Binding Text}" />
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0 3">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Image Width="16" Height="16" Margin="0 1 8 0" VerticalAlignment="Top"
+                                           ToolTip="{Binding Severity}">
                                         <Image.Style>
                                             <Style TargetType="Image">
-                                                <Setter Property="Source"
-                                            Value="../Resources/information.png" />
+                                                <Setter Property="Source" Value="../Resources/information.png" />
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding Severity}"
-                                                     Value="High">
-                                                        <Setter Property="Source"
-                                                    Value="../Resources/error.png" />
+                                                    <DataTrigger Binding="{Binding Severity}" Value="High">
+                                                        <Setter Property="Source" Value="../Resources/error.png" />
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding Severity}"
-                                                     Value="Medium">
-                                                        <Setter Property="Source"
-                                                    Value="../Resources/warning.png" />
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding Severity}"
-                                                     Value="Low">
-                                                        <Setter Property="Source"
-                                                    Value="../Resources/information.png" />
+                                                    <DataTrigger Binding="{Binding Severity}" Value="Medium">
+                                                        <Setter Property="Source" Value="../Resources/warning.png" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
                                         </Image.Style>
                                     </Image>
-
-                                    <TextBox Text="{Binding Severity}"
-                                   Margin="2 0 4 0"
-                                   BorderThickness="0"
-                                   Background="Transparent"
-                                   VerticalAlignment="Center"
-                                   TextWrapping="Wrap"
-                                   IsHitTestVisible="True"
-                                   Grid.Column="1" IsReadOnly="True" IsReadOnlyCaretVisible="True"/>
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Text="{Binding Text}" TextWrapping="Wrap" />
+                                        <TextBlock Style="{StaticResource MutedText}">
+                                            <Run Text="{Binding Author, Mode=OneWay}" /><Run Text=" · " /><Run Text="{Binding Date, Mode=OneWay, StringFormat=g}" />
+                                        </TextBlock>
+                                    </StackPanel>
                                 </Grid>
                             </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-
-                    <DataGridTemplateColumn Header="Date"
-                            IsReadOnly="True" >
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox Text="{Binding Date}"
-                                         Background="Transparent"
-                                         BorderThickness="0"
-                                         VerticalAlignment="Center" 
-                                         IsReadOnly="True"
-                                         TextWrapping="Wrap"
-                                         IsHitTestVisible="True"
-                                         IsReadOnlyCaretVisible="True" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-
-                    <DataGridTemplateColumn Header="Author"
-                            IsReadOnly="True" >
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox Text="{Binding Author}" 
-                                  Background="Transparent"
-                                  BorderThickness="0"
-                                  VerticalAlignment="Center" 
-                                  IsReadOnly="True"
-                                  TextWrapping="Wrap"
-                                  IsHitTestVisible="True"
-                                  IsReadOnlyCaretVisible="True" />  
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                        
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
-
-            <Separator Grid.Row="5"
-                       Visibility="{Binding HasComments, Converter={StaticResource BooleanToVisibilityConverter}}"
-                       Margin="0 16 0 8" />
-
-            <DockPanel Grid.Row="6"
-                       Visibility="{Binding HasTags, Converter={StaticResource BooleanToVisibilityConverter}}"
-                       PreviewKeyDown="TabKeyNavigation"
-                       Margin="16 0">
-                <Label Target="{Binding ElementName=TagsTable}"
-                       FontSize="14"
-                       FontWeight="DemiBold"
-                       DockPanel.Dock="Left"
-                       VerticalAlignment="Center">
-                    <AccessText>_Tags</AccessText>
-                </Label>
-                <Button Content="{Binding CollapseTagsButtonName}"
-                        Command="{Binding CollapseTagsCommand}"
-                        AutomationProperties.Name="{Binding CollapseTagsButtonAccessibilityName}"
-                        Style="{StaticResource Sdl.Button.HyperLinkStyle}"
-                        HorizontalAlignment="Left"
-                        DockPanel.Dock="Right"
-                        VerticalAlignment="Center" />
-            </DockPanel>
-
-            <DataGrid Grid.Row="7"
-                      Name="TagsTable"
-                      ItemsSource="{Binding SegmentTags}"
-                      Style="{StaticResource Sdl.DataGrid.GenericStyle}"
-                      AutomationProperties.Name="Tags"
-                      CanUserSortColumns="True"
-                      BorderBrush="#D3D3D3"
-                      AutoGenerateColumns="False"
-                      CanUserAddRows="False"
-                      CanUserResizeRows="True"
-                      PreviewKeyDown="TabKeyNavigation"
-                      GotFocus="DataGridGotFocus"
-                      Margin="16 0">
-                <DataGrid.Visibility>
-                    <MultiBinding Converter="{StaticResource MultiBooleanToVisibilityConverter}">
-                        <Binding Path="IsTagsVisible" />
-                        <Binding Path="HasTags" />
-                    </MultiBinding>
-                </DataGrid.Visibility>
-
-                <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="Tag ID"
-                                        IsReadOnly="True" >
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox Text="{Binding Id}"
-                                         Background="Transparent"
-                                         BorderThickness="0"
-                                         VerticalAlignment="Center" 
-                                         IsReadOnly="True"
-                                         TextWrapping="Wrap"
-                                         IsHitTestVisible="True"
-                                         IsReadOnlyCaretVisible="True" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-
-                    <DataGridTemplateColumn Header="Start tag"
-                                        IsReadOnly="True" >
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox Text="{Binding StartTag}"
-                                         Background="Transparent"
-                                         BorderThickness="0"
-                                         VerticalAlignment="Center" 
-                                         IsReadOnly="True"
-                                         TextWrapping="Wrap"
-                                         IsHitTestVisible="True"
-                                         IsReadOnlyCaretVisible="True" />   
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-
-                    <DataGridTemplateColumn Header="End tag"
-                                        IsReadOnly="True" >
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox Text="{Binding EndTag}"
-                                          Background="Transparent"
-                                          BorderThickness="0"
-                                          VerticalAlignment="Center" 
-                                          IsReadOnly="True"
-                                          TextWrapping="Wrap"
-                                          IsHitTestVisible="True"
-                                          IsReadOnlyCaretVisible="True" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-
-                    <DataGridTemplateColumn Header="Tag Attributes"
-                                        IsReadOnly="True" >
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox Text="{Binding Attributes}"
-                                          Background="Transparent"
-                                          BorderThickness="0"
-                                          VerticalAlignment="Center" 
-                                          IsReadOnly="True"
-                                          TextWrapping="Wrap"
-                                          IsHitTestVisible="True"
-                                          IsReadOnlyCaretVisible="True" />  
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-
-                    </DataGridTemplateColumn>
-
-                    <DataGridTemplateColumn Header="Tag Content"
-                                        IsReadOnly="True"
-                                        Width="*" >
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox Text="{Binding Content}"
-                                           Background="Transparent"
-                                           BorderThickness="0"
-                                           VerticalAlignment="Center" 
-                                           IsReadOnly="True"
-                                           TextWrapping="Wrap"
-                                           IsHitTestVisible="True"
-                                           IsReadOnlyCaretVisible="True" /> 
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
-
-            <Separator Grid.Row="8"
-                       Visibility="{Binding HasTags, Converter={StaticResource BooleanToVisibilityConverter}}"
-                       Margin="0 16 0 8" />
-
-
-
-            <StackPanel Orientation="Horizontal"
-                        Grid.Row="9">
-            </StackPanel>
-
-            <DockPanel Grid.Row="9"
-                       Visibility="{Binding SegmentHasQualityEstimation, Converter={StaticResource BooleanToVisibilityConverter}}"
-                       PreviewKeyDown="TabKeyNavigation"
-                       Margin="16 0">
-
-                <Label Content="Quality Estimation"
-                       FontSize="14"
-                       FontWeight="DemiBold"
-                       DockPanel.Dock="Left"
-                       VerticalAlignment="Center" />
-
-                <Button Content="{Binding CollapseLwButtonName}"
-                        Command="{Binding CollapseLwCommand}"
-                        AutomationProperties.Name="{Binding CollapseLwButtonAccessibilityName}"
-                        Style="{StaticResource Sdl.Button.HyperLinkStyle}"
-                        HorizontalAlignment="Left"
-                        DockPanel.Dock="Right"
-                        VerticalAlignment="Center" />
-
-            </DockPanel>
-
-            <StackPanel Grid.Row="10">
-
-                <view:TqeCard TqeData="{Binding TranslationOriginData}">
-                    <view:TqeCard.Visibility>
-                        <MultiBinding Converter="{StaticResource MultiBooleanToVisibilityConverter}"
-                                      Mode="TwoWay"
-                                      UpdateSourceTrigger="PropertyChanged">
-                            <Binding Path="IsQualityEstimationVisible" />
-                            <Binding Path="SegmentHasCurrentQualityEstimation" />
-                        </MultiBinding>
-                    </view:TqeCard.Visibility>
-                </view:TqeCard>
-
-                <Expander>
-                    <Expander.Visibility>
-                        <MultiBinding Converter="{StaticResource MultiBooleanToVisibilityConverter}">
-                            <Binding Path="IsQualityEstimationVisible" />
-                            <Binding Path="SegmentHasPreviousQualityEstimation" />
-                        </MultiBinding>
-                    </Expander.Visibility>
-                    <Expander.Header>
-                        <TextBlock Text="Previous estimations"
-                                   FontWeight="DemiBold" />
-                    </Expander.Header>
-
-                    <ItemsControl HorizontalAlignment="Stretch"
-                                  ItemsSource="{Binding PreviousTranslationOriginData}"
-                                  HorizontalContentAlignment="Stretch">
-
-                        <ItemsControl.ItemTemplate>
-
-                            <DataTemplate>
-
-                                <view:TqeCard TqeData="{Binding .}"/>
-
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-
-                    </ItemsControl>
-
-
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 </Expander>
+
+                <!-- Active filter -->
+                <Border Visibility="{Binding IsFilterActive, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <StackPanel>
+                        <Rectangle Style="{StaticResource Hairline}" />
+                        <DockPanel Margin="0 8 0 0">
+                            <Button DockPanel.Dock="Right"
+                                    Content="Clear"
+                                    Command="{Binding ClearSdlMtCloudFilter}"
+                                    Style="{StaticResource Sdl.Button.HyperLinkStyle}"
+                                    AutomationProperties.Name="Clear segment filter" />
+                            <TextBlock FontFamily="{StaticResource IconFont}" Text="&#xE71C;" FontSize="12"
+                                       Foreground="{DynamicResource Rws.Text.Muted}" VerticalAlignment="Center" Margin="0 0 6 0" />
+                            <TextBlock Style="{StaticResource MutedText}" VerticalAlignment="Center">
+                                <Run Text="Filtered:" /> <Run Text="{Binding FilterSummary, Mode=OneWay}" />
+                            </TextBlock>
+                        </DockPanel>
+                    </StackPanel>
+                </Border>
             </StackPanel>
-
-            <Separator Grid.Row="11"
-                       Visibility="{Binding SegmentHasQualityEstimation, Converter={StaticResource BooleanToVisibilityConverter}}"
-                       Margin="0 16 0 8" />
-
-            <DockPanel Grid.Row="12"
-                       PreviewKeyDown="TabKeyNavigation"
-                       Margin="16 0">
-                <Label Content="Segments Filtering"
-                       FontSize="14"
-                       FontWeight="DemiBold"
-                       DockPanel.Dock="Left"
-                       VerticalAlignment="Center" />
-
-                <Button Name="SegmentsFilteringButton"
-                        Content="{Binding CollapseFilteringButtonName}"
-                        Command="{Binding CollapseFilteringCommand}"
-                        AutomationProperties.Name="{Binding CollapseFilteringButtonAccessibilityName}"
-                        Style="{StaticResource Sdl.Button.HyperLinkStyle}"
-                        HorizontalAlignment="Left"
-                        DockPanel.Dock="Right"
-                        VerticalAlignment="Center" />
-            </DockPanel>
-
-            <GroupBox Grid.Row="13"
-                      Visibility="{Binding IsFilteringVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                      BorderThickness="0"
-                      Margin="24 0">
-                <GroupBox.Header>
-                    <TextBlock Text="Segments Filtering"
-                               Visibility="Collapsed" />
-                </GroupBox.Header>
-
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-
-                    <Label Grid.Row="0"
-                           Grid.Column="0"
-                           Visibility="{Binding ProjectHasQualityEstimation, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverted}"
-                           Target="{Binding ElementName=FilterQEStackPanel}"
-                           Content="by Quality Estimation" />
-
-                    <GroupBox Grid.Row="0"
-                              Grid.Column="1"
-                              BorderThickness="0"
-                              Visibility="{Binding ProjectHasQualityEstimation, Converter={StaticResource BooleanToVisibilityConverter}}"
-                              PreviewKeyDown="TabKeyNavigation">
-                        <GroupBox.Header>
-                            <TextBlock Text="By Quality Estimation"
-                                       Visibility="Collapsed" />
-                        </GroupBox.Header>
-                        <StackPanel KeyboardNavigation.DirectionalNavigation="Contained">
-                            <CheckBox IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.QeGood}"
-                                      Style="{StaticResource QeLabels}"
-                                      AutomationProperties.Name="Good"
-                                      AutomationProperties.PositionInSet="1"
-                                      AutomationProperties.SizeOfSet="3">
-                                <AccessText Text="_Good" />
-                            </CheckBox>
-                            <CheckBox IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.QeAdequate}"
-                                      Style="{StaticResource QeLabels}"
-                                      AutomationProperties.Name="Adequate"
-                                      AutomationProperties.PositionInSet="2"
-                                      AutomationProperties.SizeOfSet="3">
-                                <AccessText Text="_Adequate" />
-                            </CheckBox>
-                            <CheckBox IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.QePoor}"
-                                      Style="{StaticResource QeLabels}"
-                                      AutomationProperties.Name="Poor"
-                                      AutomationProperties.PositionInSet="3"
-                                      AutomationProperties.SizeOfSet="3">
-                                <AccessText Text="_Poor" />
-                            </CheckBox>
-                        </StackPanel>
-                    </GroupBox>
-
-                    <Label Grid.Row="1"
-                           Grid.Column="0"
-                           Target="{Binding ElementName=FilterModelBox}"
-                           AutomationProperties.Name="By Model"
-                           HorizontalAlignment="Right"
-                           VerticalAlignment="Center"
-                           Margin="0">
-                        <AccessText Text="by M_odel" />
-                    </Label>
-
-                    <TextBox Grid.Row="1"
-                             Grid.Column="1"
-                             Name="FilterModelBox"
-                             AutomationProperties.Name="By Model"
-                             Text="{Binding FilterApplier.SdlMtCloudFilterSettings.Model, UpdateSourceTrigger=PropertyChanged}" />
-                </Grid>
-            </GroupBox>
-
-            <StackPanel Grid.Row="14"
-                        HorizontalAlignment="Stretch"
-                        Orientation="Horizontal"
-                        KeyboardNavigation.DirectionalNavigation="Contained"
-                        PreviewKeyDown="TabKeyNavigation"
-                        Margin="16 8">
-                <Button Content="Apply filter"
-                        Command="{Binding ApplySdlMtCloudFilter}"
-                        Style="{StaticResource Sdl.Button.PrimaryStyle}"
-                        Margin="8 0" />
-                <Button Content="Clear filter"
-                        Command="{Binding ClearSdlMtCloudFilter}"
-                        Style="{StaticResource Sdl.Button.SecondaryStyle}"
-                        HorizontalAlignment="Right" />
-            </StackPanel>
-        </Grid>
+        </StackPanel>
     </ScrollViewer>
 </UserControl>

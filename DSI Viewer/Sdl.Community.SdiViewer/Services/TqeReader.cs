@@ -3,6 +3,7 @@ using Sdl.Community.DsiViewer.Model;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace Sdl.Community.DsiViewer.Services
@@ -31,6 +32,7 @@ namespace Sdl.Community.DsiViewer.Services
                 Description = GetTQEDataInMetaData(translationOrigin, currentIndex, Constants.METADATA_DESCRIPTION_PREFIX),
                 Model = GetTQEDataInMetaData(translationOrigin, currentIndex, Constants.METADATA_MODEL_PREFIX),
                 Score = score,
+                EvaluatedAt = ParseEvaluatedAt(GetTQEDataInMetaData(translationOrigin, currentIndex, Constants.METADATA_EVALUATED_AT_PREFIX)),
                 // "quality_estimation" is only written by the Language Weaver Apply Metadata task / feedback panel; segments
                 // translated in the Editor carry just the tqe-* keys, so derive the label from the score.
                 QualityEstimation = NullIfWhiteSpace(translationOrigin.GetMetaData(Constants.QualityEstimation))
@@ -92,6 +94,18 @@ namespace Sdl.Community.DsiViewer.Services
         }
 
         private static string NullIfWhiteSpace(string value) => string.IsNullOrWhiteSpace(value) ? null : value;
+
+        // Writers format with Constants.METADATA_EVALUATED_AT_FORMAT under the writer's current culture, so the date
+        // separator may not be "/"; try the invariant form first, then the current culture.
+        private static DateTime? ParseEvaluatedAt(string value)
+        {
+            const DateTimeStyles utc = DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal;
+            return DateTime.TryParseExact(value, Constants.METADATA_EVALUATED_AT_FORMAT, CultureInfo.InvariantCulture, utc, out var evaluatedAt)
+                || DateTime.TryParseExact(value, Constants.METADATA_EVALUATED_AT_FORMAT, CultureInfo.CurrentCulture, utc, out evaluatedAt)
+                || DateTime.TryParse(value, CultureInfo.CurrentCulture, utc, out evaluatedAt)
+                ? DateTime.SpecifyKind(evaluatedAt, DateTimeKind.Utc)
+                : null;
+        }
 
         private int GetLastTqeIndex(ITranslationOrigin translationOrigin)
         {

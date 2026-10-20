@@ -1,9 +1,9 @@
-﻿namespace Sdl.Community.DsiViewer.Model
+﻿using System.Collections.Generic;
+
+namespace Sdl.Community.DsiViewer.Model
 {
 	public class SdlMtCloudFilterSettings : ModelBase
 	{
-		private bool _byModel;
-		private bool _byQualityEstimation;
 		private string _model;
 		private bool _qeAdequate;
 		private bool _qeGood;
@@ -12,7 +12,27 @@
 
 		public bool ByModel => !string.IsNullOrEmpty(Model);
 
-		public bool ByQualityEstimation => QeAdequate || QeGood || QePoor;
+		public bool ByQualityEstimation => QeAdequate || QeGood || QePoor || QeNone;
+
+		public bool IsActive => ByModel || ByQualityEstimation;
+
+		/// <summary>Short description of the active filter, e.g. "Good, Adequate · engfra_pro".</summary>
+		public string Summary
+		{
+			get
+			{
+				var estimations = new List<string>();
+				if (QeGood) estimations.Add(Constants.GoodQuality);
+				if (QeAdequate) estimations.Add(Constants.AdequateQuality);
+				if (QePoor) estimations.Add(Constants.PoorQuality);
+				if (QeNone) estimations.Add("No QE");
+
+				var parts = new List<string>();
+				if (estimations.Count > 0) parts.Add(string.Join(", ", estimations));
+				if (ByModel) parts.Add(Model);
+				return string.Join(" · ", parts);
+			}
+		}
 
 		public string Model
 		{
