@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 using SegmentSerializer = LanguageWeaverProvider.Services.SegmentSerializer;
 
@@ -88,6 +89,7 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
             SourceSegment = segment.Duplicate(),
         };
 
+        RefreshModelCapabilities();
         var sourceSegment = GetSourceSegment(segment);
         searchResults.Add(TranslateSegment(segment, sourceSegment));
         return searchResults;
@@ -119,6 +121,7 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
             return new SearchResults[mask.Length];
         }
 
+        RefreshModelCapabilities();
         ManageBatchTaskWindow(true);
         var searchResults = new SearchResults[mask.Length];
         var segmentsInput = translationUnits.Select(x => x.SourceSegment).ToList();
@@ -311,10 +314,13 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
 
         ManageSegmentMetadata(evaluatedSegment, mappedPair, null, 1, tuSearchResult.DocumentSegmentPair.Properties.TranslationOrigin);
 
-        return new SearchResult(tuSearchResult)
+        var searchResult = new SearchResult(tuSearchResult)
         {
             ScoringResult = new ScoringResult { BaseScore = 0 },
         };
+
+        StoreTqeMetadata(searchResult, evaluatedSegment);
+        return searchResult;
     }
 
     private void ManageSegmentMetadata(EvaluatedSegment evaluatedSegment, PairMapping pairMapping, string fileName,
@@ -373,6 +379,12 @@ public class TranslationProviderLanguageDirection : ITranslationProviderLanguage
 
         return taglessSegment;
     }
+
+    // Saved pair mappings hold a snapshot of each model's capabilities (e.g. qeSupport). Refresh it so features
+    // Language Weaver enables later, such as MTQE on Pro models, are requested without "Reset and identify pairs".
+    // Throttled inside the refresher; Task.Run avoids capturing a UI synchronization context while blocking.
+    private void RefreshModelCapabilities()
+        => Task.Run(() => CloudModelFlagsRefresher.RefreshAsync(_translationOptions)).GetAwaiter().GetResult();
 
     private PairMapping GetMappedPair()
     {

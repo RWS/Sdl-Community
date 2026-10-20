@@ -273,6 +273,7 @@ namespace LanguageWeaverProvider.ViewModel
 
             LoadingAction = "Loading resources...";
             await Task.Delay(0);
+            await CloudModelFlagsRefresher.RefreshAsync(_translationOptions, force: true);
             var pairMappings = new ObservableCollection<PairMapping>();
             foreach (var pairMapping in _translationOptions.PairMappings)
             {
