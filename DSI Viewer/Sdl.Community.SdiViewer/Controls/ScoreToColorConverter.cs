@@ -16,8 +16,8 @@
             {
                 return numericScore switch
                 {
-                    >= 67 => Brushes.Green,
-                    >= 34 => new BrushConverter().ConvertFromString("#FFBF00"), //amber
+                    >= Services.QualityEstimationLabel.GoodThreshold => Brushes.Green,
+                    >= Services.QualityEstimationLabel.AdequateThreshold => new BrushConverter().ConvertFromString("#FFBF00"), //amber
                     _ => Brushes.Red
                 };
             }

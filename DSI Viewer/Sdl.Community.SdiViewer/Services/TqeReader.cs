@@ -23,14 +23,18 @@ namespace Sdl.Community.DsiViewer.Services
                 return null;
 
             var currentIndex = GetLastTqeIndex(translationOrigin);
+            var score = GetTQEDataInMetaData(translationOrigin, currentIndex, Constants.METADATA_SCORE_PREFIX);
 
             return new TranslationOriginData()
             {
                 System = GetTQEDataInMetaData(translationOrigin, currentIndex, Constants.METADATA_SYSTEM_PREFIX),
                 Description = GetTQEDataInMetaData(translationOrigin, currentIndex, Constants.METADATA_DESCRIPTION_PREFIX),
                 Model = GetTQEDataInMetaData(translationOrigin, currentIndex, Constants.METADATA_MODEL_PREFIX),
-                Score = GetTQEDataInMetaData(translationOrigin, currentIndex, Constants.METADATA_SCORE_PREFIX),
-                QualityEstimation = translationOrigin.GetMetaData(Constants.QualityEstimation)
+                Score = score,
+                // "quality_estimation" is only written by the Language Weaver Apply Metadata task / feedback panel; segments
+                // translated in the Editor carry just the tqe-* keys, so derive the label from the score.
+                QualityEstimation = NullIfWhiteSpace(translationOrigin.GetMetaData(Constants.QualityEstimation))
+                                    ?? QualityEstimationLabel.FromScore(score)
             };
         }
 
@@ -86,6 +90,8 @@ namespace Sdl.Community.DsiViewer.Services
             if (translationOrigin is null) return false;
             return HasCurrentTqeData(translationOrigin) || HasPreviousTqeData(translationOrigin);
         }
+
+        private static string NullIfWhiteSpace(string value) => string.IsNullOrWhiteSpace(value) ? null : value;
 
         private int GetLastTqeIndex(ITranslationOrigin translationOrigin)
         {
