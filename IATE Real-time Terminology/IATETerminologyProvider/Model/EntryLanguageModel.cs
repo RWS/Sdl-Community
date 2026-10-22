@@ -1,4 +1,6 @@
-﻿using Sdl.Terminology.TerminologyProvider.Core;
+﻿
+
+using TradosStudio.API.TranslationResources.Terminology.Entries;
 
 namespace Sdl.Community.IATETerminologyProvider.Model
 {
