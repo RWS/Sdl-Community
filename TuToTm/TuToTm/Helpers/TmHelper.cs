@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using Sdl.Versioning;
@@ -17,10 +16,7 @@ namespace Sdl.Community.TuToTm.Helpers
 
 		public TmHelper()
 		{
-			var studioService = new StudioVersionService();
-			var publicVersion = studioService.GetStudioVersion().ExecutableVersion.Major;
-			var localAppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-			_tmsConfigPath = Path.Combine(localAppDataPath, $@"Trados\Trados Studio\Studio17\TranslationMemoryRepository.xml");
+			_tmsConfigPath = Path.Combine(VersionedPaths.LocalUserAppDataPath, "TranslationMemoryRepository.xml");
 		}
 
 		public List<TmDetails> LoadLocalUserTms()
@@ -70,7 +66,7 @@ namespace Sdl.Community.TuToTm.Helpers
 			tu.SourceSegment.Add(sourceText);
 			tu.TargetSegment.Add(targetText);
 
-			tmDetails.FileBasedTranslationMemory.LanguageDirection.AddTranslationUnit(tu, GetImportSettings());
+			tmDetails.FileBasedTranslationMemory.LanguageDirection.AddTranslationUnitsMasked(new[] { tu }, GetImportSettings(), new[] { true });
 			tmDetails.FileBasedTranslationMemory.Save();
 		}
 
