@@ -226,7 +226,8 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                 _options.IgnoreTagsParameter,
                 _languagePairOptions?.ModelType ?? ModelType.Prefer_Quality_Optimized,
                 _languagePairOptions?.SelectedStyle.ID,
-                _languagePairOptions?.SelectedTranslationMemory?.Id);
+                _languagePairOptions?.SelectedTranslationMemory?.Id,
+                _options.TagHandlingVersion);
 
             var sourceTexts = eligibleSegments.Select(s => s.SourceText).ToList();
             // A segment's index in preTranslateSegments is its unit's index in the

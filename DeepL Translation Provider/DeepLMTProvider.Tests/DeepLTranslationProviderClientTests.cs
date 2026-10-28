@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -151,6 +152,61 @@ namespace DeepLMTProvider.Tests
 
             // Assert: key produced by 8.0.6.0
             Assert.Equal("b27c92549f94ba1de632a512a41e33c679c6733b5d1a9ead10b66259096815b1", key);
+        }
+
+        // The chosen version is sent for every model; latency_optimized is no longer forced to v1.
+        [Theory]
+        [InlineData(ModelType.Quality_Optimized, TagHandlingVersion.V1, "v1")]
+        [InlineData(ModelType.Quality_Optimized, TagHandlingVersion.V2, "v2")]
+        [InlineData(ModelType.Latency_Optimized, TagHandlingVersion.V1, "v1")]
+        [InlineData(ModelType.Latency_Optimized, TagHandlingVersion.V2, "v2")]
+        public void BuildRequestParameters_SendsTheChosenTagHandlingVersion(ModelType modelType, TagHandlingVersion version, string expected)
+        {
+            // Arrange
+            var settings = new DeepLSettings(
+                Formality.Default, null, TagFormat.XML, SplitSentences.Default, false, null, modelType, null, tagHandlingVersion: version);
+
+            // Act
+            var parameters = DeepLTranslationProviderClient.BuildRequestParameters(
+                "DE", "IT", modelType.ToString().ToLowerInvariant(), "xml", "default", settings, new List<string> { "Hallo" });
+
+            // Assert
+            Assert.Equal(expected, parameters.TagHandlingVersion);
+        }
+
+        [Fact]
+        public void BuildCacheKey_LatencyModelWithV1_IsUnchangedSoExistingCacheEntriesStillHit()
+        {
+            // Arrange: before 8.1.2.0 the latency model was always sent v1
+            var settings = new DeepLSettings(
+                Formality.Default, null, TagFormat.None, SplitSentences.Default, false, null, ModelType.Latency_Optimized, null,
+                tagHandlingVersion: TagHandlingVersion.V1);
+
+            // Act
+            var key = DeepLTranslationProviderClient.BuildCacheKey("EN", "DE", "latency_optimized", null, "default", settings, "Hello world");
+
+            // Assert: key produced by 8.1.1.0
+            Assert.Equal("d78bbcb70d23cc1a9beb599ca45768b8f9cea839cae1537adfe4a7f163ce6ef1", key);
+        }
+
+        // Entries cached before 8.1.2.0 hold v2 output for every model except latency_optimized (v1);
+        // a request for the other version must not hit them.
+        [Theory]
+        [InlineData(ModelType.Quality_Optimized, TagHandlingVersion.V2, TagHandlingVersion.V1)]
+        [InlineData(ModelType.Latency_Optimized, TagHandlingVersion.V1, TagHandlingVersion.V2)]
+        public void BuildCacheKey_VersionTheModelDidNotUseBefore_GivesDifferentKey(ModelType modelType, TagHandlingVersion previous, TagHandlingVersion other)
+        {
+            // Arrange
+            var model = modelType.ToString().ToLowerInvariant();
+            DeepLSettings With(TagHandlingVersion version) => new DeepLSettings(
+                Formality.Default, null, TagFormat.XML, SplitSentences.Default, false, null, modelType, null, tagHandlingVersion: version);
+
+            // Act
+            var previousKey = DeepLTranslationProviderClient.BuildCacheKey("EN", "DE", model, "xml", "default", With(previous), "Hello world");
+            var otherKey = DeepLTranslationProviderClient.BuildCacheKey("EN", "DE", model, "xml", "default", With(other), "Hello world");
+
+            // Assert
+            Assert.NotEqual(previousKey, otherKey);
         }
 
         [Fact]

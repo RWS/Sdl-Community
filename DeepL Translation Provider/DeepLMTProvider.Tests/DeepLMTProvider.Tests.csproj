@@ -60,6 +60,7 @@
     <Compile Include="DeepLTranslationProviderClientTests.cs" />
     <Compile Include="DeepLTranslationProviderTagPlacerTests.cs" />
     <Compile Include="NormalizeSourceTextHelperTests.cs" />
+    <Compile Include="OptionsProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

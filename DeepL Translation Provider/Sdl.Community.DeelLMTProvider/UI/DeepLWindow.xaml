@@ -49,6 +49,14 @@
      
 
             <ObjectDataProvider MethodName="GetValues"
+                                ObjectType="{x:Type model:TagHandlingVersion}"
+                                x:Key="TagHandlingVersionProvider">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="model:TagHandlingVersion" />
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <ObjectDataProvider MethodName="GetValues"
                                 ObjectType="{x:Type model:SplitSentences}"
                                 x:Key="SplitSentencesProvider">
                 <ObjectDataProvider.MethodParameters>
@@ -240,6 +248,21 @@
                                           Height="20"
                                           SelectedItem="{Binding TagType}"
                                           ItemsSource="{Binding Source={StaticResource TagTypeProvider}}" />
+                                <Label Content="Version"
+                                       Margin="12 0 0 5" />
+                                <ComboBox Margin="5 0 0 0"
+                                          Height="20"
+                                          IsEnabled="{Binding IsTagHandlingVersionEnabled}"
+                                          ToolTipService.ShowOnDisabled="True"
+                                          ToolTip="DeepL's tag handling algorithm, used with XML or HTML tag handling. Try v1 if tag pairs are split around single words, for example with a glossary. DeepL plans to deprecate v1."
+                                          SelectedItem="{Binding TagHandlingVersion}"
+                                          ItemsSource="{Binding Source={StaticResource TagHandlingVersionProvider}}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Converter={StaticResource EnumToDescriptionConverter}}" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
                             </StackPanel>
 
 

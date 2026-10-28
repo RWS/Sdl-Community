@@ -11,7 +11,8 @@ namespace Sdl.Community.DeepLMTProvider.Model
         List<string> ignoreTags,
         ModelType modelType,
         string styleId,
-        string translationMemoryId = null)
+        string translationMemoryId = null,
+        TagHandlingVersion tagHandlingVersion = TagHandlingVersion.V2)
     {
         public Formality Formality { get; set; } = formality;
         public string GlossaryId { get; } = glossaryId;
@@ -21,6 +22,7 @@ namespace Sdl.Community.DeepLMTProvider.Model
         public SplitSentences SplitSentencesHandling { get; } = splitSentencesHandling;
         public string StyleId { get; } = styleId;
         public TagFormat TagHandling { get; } = tagHandling;
+        public TagHandlingVersion TagHandlingVersion { get; } = tagHandlingVersion;
         public string TranslationMemoryId { get; } = translationMemoryId;
     }
 }
