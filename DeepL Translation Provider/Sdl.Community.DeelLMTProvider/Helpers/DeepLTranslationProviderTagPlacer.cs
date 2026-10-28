@@ -74,7 +74,7 @@ namespace Sdl.Community.DeepLMTProvider.Helpers
 
 		private Dictionary<string, DeepLTag> GetSourceTagsDict()
 		{
-			_tagsDictionary = new Dictionary<string, DeepLTag>();
+			_tagsDictionary = new Dictionary<string, DeepLTag>(StringComparer.OrdinalIgnoreCase); //DeepL can return <TG1> for <tg1>
 			try
 			{
 				//build dict

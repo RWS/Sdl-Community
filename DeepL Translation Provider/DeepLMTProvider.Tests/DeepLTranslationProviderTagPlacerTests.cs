@@ -47,6 +47,39 @@ namespace DeepLMTProvider.Tests
             Assert.Equal("nella <Start1>categoria<End1> <Start1>di<End1> guida", Render(target));
         }
 
+        [Theory]
+        [InlineData("Con <TG1>Riassunto</TG1> si avvia")]
+        [InlineData("Con <TG1>Riassunto</tg1> si avvia")]
+        [InlineData("Con <tg1>Riassunto</TG1> si avvia")]
+        public void GetTaggedSegment_MapsTagsRegardlessOfCase(string returnedText)
+        {
+            // Arrange: with tag handling None and a glossary, DeepL can return the tags in upper or mixed case
+            var tagPlacer = new DeepLTranslationProviderTagPlacer(TaggedSource("Mit ", "Zusammenfassung", " startet"));
+
+            // Act
+            var target = tagPlacer.GetTaggedSegment(returnedText);
+
+            // Assert
+            Assert.Equal("Con <Start1>Riassunto<End1> si avvia", Render(target));
+        }
+
+        [Fact]
+        public void GetTaggedSegment_MapsUppercaseStandaloneTag()
+        {
+            // Arrange
+            var source = new Segment(new CultureCode("de-DE"));
+            source.Add("Seite ");
+            source.Add(new Tag(TagType.Standalone, "1", 1));
+            source.Add(" öffnen");
+            var tagPlacer = new DeepLTranslationProviderTagPlacer(source);
+
+            // Act
+            var target = tagPlacer.GetTaggedSegment("Aprire la pagina <TG1/>");
+
+            // Assert
+            Assert.Equal("Aprire la pagina <Standalone1>", Render(target));
+        }
+
         private static Segment TaggedSource(string before, string tagged, string after)
         {
             var source = new Segment(new CultureCode("de-DE"));
