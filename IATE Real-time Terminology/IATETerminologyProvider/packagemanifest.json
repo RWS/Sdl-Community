@@ -1,0 +1,15 @@
+{
+  "PluginName": "IATE Real-time Terminology",
+  "Version": "6.0.1.0",
+  "Description": "Integration with IATE European Union terminology",
+  "Author": "Trados AppStore Team",
+  "RequiredProduct": {
+    "Name": "TradosStudio",
+    "MinVersion": "19.0.0",
+    "MaxVersion": "19.9.*"
+  },
+  "EntryAssembly": "Sdl.Community.IATETerminologyProvider.dll",
+  "Files": [
+    "Sdl.Community.IATETerminologyProvider.dll"
+  ]
+}
