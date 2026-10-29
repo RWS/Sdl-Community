@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Text.RegularExpressions;
 using Sdl.Community.DeepLMTProvider.Helpers;
 using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.Core.Globalization;
@@ -145,6 +146,107 @@ namespace DeepLMTProvider.Tests
 
             // Assert
             Assert.Equal("Scrivere <Start1>&amp;<End1> per &.", Render(target));
+        }
+
+        [Fact]
+        public void GetTaggedSegment_None_DropsOpeningTagWithoutClosingTag()
+        {
+            // Arrange: with tag handling None DeepL can return an opening tag without its closing tag
+            var tagPlacer = new DeepLTranslationProviderTagPlacer(
+                Source("Jeder <488>Betriebstag</488> wird durch seine <489>ID</489> und den <490>Kurznamen</490> identifiziert."), TagFormat.None);
+
+            // Act
+            var target = tagPlacer.GetTaggedSegment(
+                "Ogni <TG488>giorno d'esercizio</TG488> è identificato dal proprio <TG489>ID</TG489> e dall'abbreviazione <TG490>.");
+
+            // Assert: the translation is kept with its valid pairs, so Studio does not drop it
+            Assert.Equal("Ogni <Start488>giorno d'esercizio<End488> è identificato dal proprio <Start489>ID<End489> e dall'abbreviazione .", Render(target));
+            Assert.True(IsValidIn(target));
+        }
+
+        [Fact]
+        public void GetTaggedSegment_None_LeavesGarbledTagAsTextAndDropsItsUnpairedTag()
+        {
+            // Arrange: DeepL can garble the plugin's own tag, here </tg59> into </TGTG59>
+            var tagPlacer = new DeepLTranslationProviderTagPlacer(
+                Source("<59>Kurzname</59>: Eingabefeld"), TagFormat.None);
+
+            // Act
+            var target = tagPlacer.GetTaggedSegment("<TG59>Abbreviazione</TGTG59>: campo");
+
+            // Assert: DeepL's output is not repaired; only the opening tag left without a partner goes
+            Assert.Equal("Abbreviazione</TGTG59>: campo", Render(target));
+            Assert.True(IsValidIn(target));
+        }
+
+        [Fact]
+        public void GetTaggedSegment_None_KeepsOnePairWhenOpeningTagIsRepeated()
+        {
+            // Arrange: DeepL can repeat an opening tag; one of the two has no closing tag
+            var tagPlacer = new DeepLTranslationProviderTagPlacer(
+                Source("für alle <1327>Kann</1327>-Fahrten"), TagFormat.None);
+
+            // Act
+            var target = tagPlacer.GetTaggedSegment("per tutte le corse possibili <TG1327><TG1327>possibili</TG1327>.");
+
+            // Assert: the closing tag pairs with the inner opening tag; the outer one goes
+            Assert.Equal("per tutte le corse possibili <Start1327>possibili<End1327>.", Render(target));
+            Assert.True(IsValidIn(target));
+        }
+
+        [Fact]
+        public void GetTaggedSegment_None_DropsClosingTagWithoutOpeningTag()
+        {
+            // Arrange: DeepL can put a closing tag before its opening tag
+            var tagPlacer = new DeepLTranslationProviderTagPlacer(Source("Der <1>Text</1>."), TagFormat.None);
+
+            // Act
+            var target = tagPlacer.GetTaggedSegment("Il </TG1>testo<TG1>.");
+
+            // Assert: neither tag has a partner, so both go and the text stays
+            Assert.Equal("Il testo.", Render(target));
+            Assert.True(IsValidIn(target));
+        }
+
+        [Fact]
+        public void GetTaggedSegment_None_KeepsOnlyCorrectlyNestedPairWhenPairsOverlap()
+        {
+            // Arrange: DeepL can return two pairs that cross each other
+            var tagPlacer = new DeepLTranslationProviderTagPlacer(Source("<1>Ein <2>roter</2> Text</1>"), TagFormat.None);
+
+            // Act
+            var target = tagPlacer.GetTaggedSegment("<TG1>Un <TG2>testo</TG1> rosso</TG2>");
+
+            // Assert: </TG1> does not close the innermost tag, so pair 1 goes and pair 2 stays
+            Assert.Equal("Un <Start2>testo rosso<End2>", Render(target));
+            Assert.True(IsValidIn(target));
+        }
+
+        // "<5>" start, "</5>" end, "<5/>" standalone; tag ID and anchor are the number
+        private static Segment Source(string markup)
+        {
+            var source = new Segment(new CultureCode("de-DE"));
+            foreach (var piece in Regex.Split(markup, @"(</?\d+/?>)"))
+            {
+                var match = Regex.Match(piece, @"^<(/?)(\d+)(/?)>$");
+                if (!match.Success)
+                {
+                    if (piece.Length > 0) source.Add(piece);
+                    continue;
+                }
+
+                var type = match.Groups[1].Value == "/" ? TagType.End : match.Groups[3].Value == "/" ? TagType.Standalone : TagType.Start;
+                source.Add(new Tag(type, match.Groups[2].Value, int.Parse(match.Groups[2].Value)));
+            }
+            return source;
+        }
+
+        // Studio judges a target segment with its target culture
+        private static bool IsValidIn(Segment target)
+        {
+            var withCulture = new Segment(new CultureCode("it-IT"));
+            foreach (var element in target.Elements) withCulture.Add(element);
+            return withCulture.IsValid();
         }
 
         private static Segment TaggedSource(string before, string tagged, string after)

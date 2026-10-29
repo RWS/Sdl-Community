@@ -59,7 +59,33 @@ namespace Sdl.Community.DeepLMTProvider.Helpers
 				_logger.Error($"{e.Message}\n {e.StackTrace}");
 			}
 
-			return segment; //this will return a tagged segment
+			return RemoveUnpairedTags(segment); //this will return a tagged segment
+		}
+
+		// Studio drops a translation whose tags do not pair up, leaving the target empty;
+		// DeepL can return such tags when tag handling is None, so they are left out and the text kept
+		private static Segment RemoveUnpairedTags(Segment segment)
+		{
+			var open = new Stack<int>();
+			var unpaired = new HashSet<int>();
+			for (var i = 0; i < segment.Elements.Count; i++)
+			{
+				if (segment.Elements[i] is not Tag tag) continue;
+				if (tag.Type == TagType.Start) open.Push(i);
+				else if (tag.Type == TagType.End)
+				{
+					if (open.Count > 0 && ((Tag)segment.Elements[open.Peek()]).TagID == tag.TagID) open.Pop();
+					else unpaired.Add(i);
+				}
+			}
+
+			unpaired.UnionWith(open);
+			if (unpaired.Count == 0) return segment;
+
+			var repaired = new Segment(segment.Culture);
+			for (var i = 0; i < segment.Elements.Count; i++)
+				if (!unpaired.Contains(i)) repaired.Add(segment.Elements[i]);
+			return repaired;
 		}
 
 		private string AddSeparators(string text, MatchCollection matches)
