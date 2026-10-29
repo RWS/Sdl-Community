@@ -201,7 +201,12 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         public bool SendPlainText
         {
             get;
-            set => SetField(ref field, value);
+            set
+            {
+                SetField(ref field, value);
+                OnPropertyChanged(nameof(IsTagHandlingEnabled));
+                OnPropertyChanged(nameof(IsTagHandlingVersionEnabled));
+            }
         }
 
         public SplitSentences SplitSentencesType
@@ -234,8 +239,14 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             set => SetField(ref field, value);
         }
 
-        // The version only applies to XML/HTML tag handling.
-        public bool IsTagHandlingVersionEnabled => TagType != TagFormat.None;
+        public bool IsTagHandlingEnabled => TagHandlingControlsEnabled(SendPlainText, TagType).TagHandling;
+
+        public bool IsTagHandlingVersionEnabled => TagHandlingControlsEnabled(SendPlainText, TagType).Version;
+
+        // Plain text is sent without tag handling (EffectiveTagHandling), so neither setting applies to it;
+        // the version only applies to XML/HTML tag handling.
+        public static (bool TagHandling, bool Version) TagHandlingControlsEnabled(bool sendPlainText, TagFormat tagType) =>
+            (!sendPlainText, !sendPlainText && tagType != TagFormat.None);
 
         public string Title { get; set; } = "DeepL Translation Provider";
 

@@ -1,5 +1,6 @@
 using System.Linq;
 using Sdl.Community.DeepLMTProvider.Helpers;
+using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Xunit;
@@ -12,7 +13,7 @@ namespace DeepLMTProvider.Tests
         public void GetTaggedSegment_AddsNoSourceSpaceAfterElidedArticle()
         {
             // Arrange: the source has a space before the tag, Italian elides "l'" onto the tagged word
-            var tagPlacer = new DeepLTranslationProviderTagPlacer(TaggedSource("Wählen Sie die ", "Option", " aus."));
+            var tagPlacer = new DeepLTranslationProviderTagPlacer(TaggedSource("Wählen Sie die ", "Option", " aus."), TagFormat.XML);
 
             // Act
             var target = tagPlacer.GetTaggedSegment("Selezionare l'<tg1>opzione</tg1>.");
@@ -25,7 +26,7 @@ namespace DeepLMTProvider.Tests
         public void GetTaggedSegment_KeepsSpaceDeepLAddsBesideTag()
         {
             // Arrange: the source glues the tag to the previous word, DeepL separates them
-            var tagPlacer = new DeepLTranslationProviderTagPlacer(TaggedSource("Klicken Sie auf", "OK", "."));
+            var tagPlacer = new DeepLTranslationProviderTagPlacer(TaggedSource("Klicken Sie auf", "OK", "."), TagFormat.XML);
 
             // Act
             var target = tagPlacer.GetTaggedSegment("Cliquez sur <tg1>OK</tg1>.");
@@ -38,7 +39,7 @@ namespace DeepLMTProvider.Tests
         public void GetTaggedSegment_KeepsSpaceBetweenTags()
         {
             // Arrange: DeepL returns one source pair as two pairs separated by a space
-            var tagPlacer = new DeepLTranslationProviderTagPlacer(TaggedSource("an der ", "Dienstart", " die"));
+            var tagPlacer = new DeepLTranslationProviderTagPlacer(TaggedSource("an der ", "Dienstart", " die"), TagFormat.XML);
 
             // Act
             var target = tagPlacer.GetTaggedSegment("nella <tg1>categoria</tg1> <tg1>di</tg1> guida");
@@ -54,7 +55,7 @@ namespace DeepLMTProvider.Tests
         public void GetTaggedSegment_MapsTagsRegardlessOfCase(string returnedText)
         {
             // Arrange: with tag handling None and a glossary, DeepL can return the tags in upper or mixed case
-            var tagPlacer = new DeepLTranslationProviderTagPlacer(TaggedSource("Mit ", "Zusammenfassung", " startet"));
+            var tagPlacer = new DeepLTranslationProviderTagPlacer(TaggedSource("Mit ", "Zusammenfassung", " startet"), TagFormat.XML);
 
             // Act
             var target = tagPlacer.GetTaggedSegment(returnedText);
@@ -71,13 +72,79 @@ namespace DeepLMTProvider.Tests
             source.Add("Seite ");
             source.Add(new Tag(TagType.Standalone, "1", 1));
             source.Add(" öffnen");
-            var tagPlacer = new DeepLTranslationProviderTagPlacer(source);
+            var tagPlacer = new DeepLTranslationProviderTagPlacer(source, TagFormat.XML);
 
             // Act
             var target = tagPlacer.GetTaggedSegment("Aprire la pagina <TG1/>");
 
             // Assert
             Assert.Equal("Aprire la pagina <Standalone1>", Render(target));
+        }
+
+        [Theory]
+        [InlineData(TagFormat.XML)]
+        [InlineData(TagFormat.HTML)]
+        public void PreparedSourceText_XmlOrHtml_EscapesSpecialCharactersInText(TagFormat tagHandling)
+        {
+            // Arrange: Studio's text holds plain characters; DeepL reads XML/HTML input as markup
+            var tagPlacer = new DeepLTranslationProviderTagPlacer(
+                TaggedSource("Geben Sie ", "<Kurzname> \"Grüße\"", " für A&B ein, Wert > 1."), tagHandling);
+
+            // Act
+            var prepared = tagPlacer.PreparedSourceText;
+
+            // Assert: only &, < and > are escaped; tags, quotes and umlauts stay as they are
+            Assert.Equal("Geben Sie <tg1>&lt;Kurzname&gt; \"Grüße\"</tg1> für A&amp;B ein, Wert &gt; 1.", prepared);
+        }
+
+        [Fact]
+        public void PreparedSourceText_None_LeavesTextRaw()
+        {
+            // Arrange: without tag handling DeepL reads the whole string as plain text
+            var tagPlacer = new DeepLTranslationProviderTagPlacer(
+                TaggedSource("Geben Sie ", "<Kurzname>", " für A&B ein, Wert > 1."), TagFormat.None);
+
+            // Act
+            var prepared = tagPlacer.PreparedSourceText;
+
+            // Assert
+            Assert.Equal("Geben Sie <tg1><Kurzname></tg1> für A&B ein, Wert > 1.", prepared);
+        }
+
+        [Theory]
+        [InlineData(TagFormat.XML, // v1 also escapes quotes and apostrophes
+            "Inserire <tg1>&lt;nome abbreviato&gt;</tg1>: Azienda A&amp;B, valore &gt; 1, &quot;it&apos;s&quot; &#169; &#x41;.",
+            "Inserire <Start1><nome abbreviato><End1>: Azienda A&B, valore > 1, \"it's\" © A.")]
+        [InlineData(TagFormat.XML, // v2 leaves them as characters
+            "Inserire <tg1>&lt;nome&gt;</tg1>: \"it's\" A&amp;B.",
+            "Inserire <Start1><nome><End1>: \"it's\" A&B.")]
+        [InlineData(TagFormat.HTML,
+            "Caff&egrave; <tg1>&lt;nome&gt;</tg1> &amp; t&egrave;.",
+            "Caffè <Start1><nome><End1> & tè.")]
+        public void GetTaggedSegment_XmlOrHtml_DecodesEntitiesInText(TagFormat tagHandling, string reply, string expected)
+        {
+            // Arrange: DeepL writes its reply as markup, so &, < and > come back escaped
+            var tagPlacer = new DeepLTranslationProviderTagPlacer(TaggedSource("Geben Sie ", "<Kurzname>", " ein."), tagHandling);
+
+            // Act
+            var target = tagPlacer.GetTaggedSegment(reply);
+
+            // Assert: the escaped <nome> is text, not a third tag
+            Assert.Equal(expected, Render(target));
+            Assert.Equal(2, target.Elements.OfType<Tag>().Count());
+        }
+
+        [Fact]
+        public void GetTaggedSegment_None_LeavesReplyTextAsIs()
+        {
+            // Arrange: without tag handling DeepL replies in plain text, so &amp; is literal text
+            var tagPlacer = new DeepLTranslationProviderTagPlacer(TaggedSource("Schreiben Sie ", "&amp;", " für &."), TagFormat.None);
+
+            // Act
+            var target = tagPlacer.GetTaggedSegment("Scrivere <tg1>&amp;</tg1> per &.");
+
+            // Assert
+            Assert.Equal("Scrivere <Start1>&amp;<End1> per &.", Render(target));
         }
 
         private static Segment TaggedSource(string before, string tagged, string after)

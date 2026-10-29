@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using System.Web;
 using NLog;
 using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.LanguagePlatform.Core;
@@ -14,11 +13,13 @@ namespace Sdl.Community.DeepLMTProvider.Helpers
 		private string _preparedSourceText;
 		private string _returnedText;
 		private Segment _sourceSegment;
+		private readonly TagFormat _tagHandling;
 		private Dictionary<string, DeepLTag> _tagsDictionary;
 
-		public DeepLTranslationProviderTagPlacer(Segment sourceSegment)
+		public DeepLTranslationProviderTagPlacer(Segment sourceSegment, TagFormat tagHandling)
 		{
 			_sourceSegment = sourceSegment;
+			_tagHandling = tagHandling;
 			TagsInfo = new List<TagInfo>();
 			_tagsDictionary = GetSourceTagsDict();
 		}
@@ -50,7 +51,7 @@ namespace Sdl.Community.DeepLMTProvider.Helpers
 					if (_tagsDictionary.TryGetValue(text, out var tag))
 						segment.Add(tag.SdlTag);
 					else if (text.Length > 0) //text keeps DeepL's whitespace, including space-only pieces between tags
-						segment.Add(text);
+						segment.Add(MarkupText.Decode(text, _tagHandling));
 				}
 			}
 			catch (Exception e)
@@ -119,8 +120,7 @@ namespace Sdl.Community.DeepLMTProvider.Helpers
 					}
 					else
 					{//if not a tag
-						var str = HttpUtility.HtmlEncode(_sourceSegment.Elements[i].ToString()); //HtmlEncode our plain text to be better processed by google and add to string
-						_preparedSourceText += _sourceSegment.Elements[i].ToString();
+						_preparedSourceText += MarkupText.Escape(_sourceSegment.Elements[i].ToString(), _tagHandling);
 					}
 				}
 				TagsInfo.Clear();

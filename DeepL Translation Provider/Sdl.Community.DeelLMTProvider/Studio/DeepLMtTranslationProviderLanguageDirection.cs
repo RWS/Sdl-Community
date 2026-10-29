@@ -39,6 +39,8 @@ namespace Sdl.Community.DeepLMTProvider.Studio
         CultureCode ITranslationProviderLanguageDirection.TargetLanguage => _languageDirection.TargetCulture;
         public ITranslationProvider TranslationProvider => _deepLMtTranslationProvider;
 
+        private TagFormat TagHandling => EffectiveTagHandling(_options.SendPlainText, _options.TagHandling);
+
         public ImportResult[] AddOrUpdateTranslationUnitsMasked(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings, bool[] mask)
         {
             throw new NotImplementedException();
@@ -98,7 +100,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 
             if (preTranslateList.Count <= 0) return results.ToArray();
 
-            var (contextUnits, customContext) = SelectContext(_options.SendSurroundingSegments, _options.SendCustomContext, _options.CustomContext, translationUnits);
+            var (contextUnits, customContext) = SelectContext(_options.SendSurroundingSegments, _options.SendCustomContext, _options.CustomContext, translationUnits, TagHandling);
             var translatedSegments = TranslateSegments(preTranslateList, contextUnits, customContext);
             var preTranslateSearchResults = GetPreTranslationSearchResults(translatedSegments);
 
@@ -124,16 +126,26 @@ namespace Sdl.Community.DeepLMTProvider.Studio
         public static List<string> BuildContextUnits(TranslationUnit[] translationUnits) =>
             translationUnits.Select(tu => tu?.SourceSegment?.ToPlain() ?? string.Empty).ToList();
 
+        // With tag handling DeepL parses the context as markup too, so it is escaped like the text.
+        // Escaped here, before slicing, so slice sizes count what is actually sent.
         public static (List<string> ContextUnits, string CustomContext) SelectContext(
-            bool sendSurroundingSegments, bool sendCustomContext, string customContext, TranslationUnit[] translationUnits) =>
-            (sendSurroundingSegments ? BuildContextUnits(translationUnits) : null,
-             sendCustomContext ? customContext : null);
+            bool sendSurroundingSegments, bool sendCustomContext, string customContext, TranslationUnit[] translationUnits,
+            TagFormat tagHandling) =>
+            (sendSurroundingSegments
+                    ? BuildContextUnits(translationUnits).Select(unit => MarkupText.Escape(unit, tagHandling)).ToList()
+                    : null,
+             sendCustomContext && customContext != null ? MarkupText.Escape(customContext, tagHandling) : null);
+
+        // Plain text carries no tags; sending it with XML/HTML tag handling only makes
+        // DeepL parse it as markup, so a literal & or < fails the request.
+        public static TagFormat EffectiveTagHandling(bool sendPlainText, TagFormat tagHandling) =>
+            sendPlainText ? TagFormat.None : tagHandling;
 
         private string ApplyBeforeTranslationSettings(Segment newSeg)
         {
             if (_options.SendPlainText) return newSeg.ToPlain().RemoveTags();
 
-            var tagPlacer = new DeepLTranslationProviderTagPlacer(newSeg);
+            var tagPlacer = new DeepLTranslationProviderTagPlacer(newSeg, TagHandling);
             return tagPlacer.PreparedSourceText;
         }
 
@@ -164,6 +176,17 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             return searchResult;
         }
 
+        // Tagged sources get their tags back from the reply; the rest take the reply as text
+        public static Segment BuildTarget(Segment sourceSegment, string reply, TagFormat tagHandling, bool sendPlainText, CultureCode targetCulture)
+        {
+            if (sourceSegment.HasTags && !sendPlainText)
+                return new DeepLTranslationProviderTagPlacer(sourceSegment, tagHandling).GetTaggedSegment(reply);
+
+            var translation = new Segment(targetCulture);
+            translation.Add(MarkupText.Decode(reply, tagHandling));
+            return translation;
+        }
+
         private List<SearchResults> GetPreTranslationSearchResults(List<PreTranslateSegment> preTranslateList)
         {
             var resultsList = new List<SearchResults>(preTranslateList.Capacity);
@@ -175,16 +198,9 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                 var plainTranslation = preTranslate.PlainTranslation;
                 if (plainTranslation == null) continue;
 
-                var translation = new Segment(_languageDirection.TargetCulture);
                 var sourceSegment = preTranslate.TranslationUnit.SourceSegment.Duplicate();
-
-                if (sourceSegment.HasTags && !_options.SendPlainText)
-                {
-                    var tagPlacer = new DeepLTranslationProviderTagPlacer(sourceSegment);
-                    translation = tagPlacer.GetTaggedSegment(plainTranslation);
-                    preTranslate.TranslationSegment = translation;
-                }
-                else translation.Add(plainTranslation);
+                var translation = BuildTarget(sourceSegment, plainTranslation, TagHandling, _options.SendPlainText, _languageDirection.TargetCulture);
+                if (sourceSegment.HasTags && !_options.SendPlainText) preTranslate.TranslationSegment = translation;
 
                 var searchResult = CreateSearchResult(sourceSegment, translation);
                 var results = new SearchResults
@@ -220,7 +236,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             var deepLSettings = new DeepLSettings(
                 _languagePairOptions?.Formality ?? Formality.Default,
                 _languagePairOptions?.SelectedGlossary?.Id,
-                _options.TagHandling,
+                TagHandling,
                 _options.SplitSentenceHandling,
                 _options.PreserveFormatting,
                 _options.IgnoreTagsParameter,
