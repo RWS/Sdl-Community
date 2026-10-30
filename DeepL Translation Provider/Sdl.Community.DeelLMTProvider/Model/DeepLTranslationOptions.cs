@@ -26,6 +26,7 @@ namespace Sdl.Community.DeepLMTProvider.Model
         public SplitSentences SplitSentenceHandling { get; set; } = SplitSentences.Default;
 
         public TagFormat TagHandling { get; set; }
+        public TagHandlingVersion TagHandlingVersion { get; set; } = TagHandlingVersion.V2;
         public Uri Uri { get; set; }
         public bool UseLocalCache { get; set; } = true;
     }

@@ -42,6 +42,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             SendPlainText = deepLTranslationOptions.SendPlainText;
             ResendDraft = deepLTranslationOptions.ResendDraft;
             TagType = deepLTranslationOptions.TagHandling;
+            TagHandlingVersion = deepLTranslationOptions.TagHandlingVersion;
             SplitSentencesType = deepLTranslationOptions.SplitSentenceHandling;
             PreserveFormatting = deepLTranslationOptions.PreserveFormatting;
             IgnoreTags = deepLTranslationOptions.IgnoreTagsParameter;
@@ -71,6 +72,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             ResendDraft = deepLTranslationOptions.ResendDraft;
             PreserveFormatting = deepLTranslationOptions.PreserveFormatting;
             TagType = deepLTranslationOptions.TagHandling;
+            TagHandlingVersion = deepLTranslationOptions.TagHandlingVersion;
             SplitSentencesType = deepLTranslationOptions.SplitSentenceHandling;
             IgnoreTags = deepLTranslationOptions.IgnoreTagsParameter;
             UseLocalCache = deepLTranslationOptions.UseLocalCache;
@@ -199,7 +201,12 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         public bool SendPlainText
         {
             get;
-            set => SetField(ref field, value);
+            set
+            {
+                SetField(ref field, value);
+                OnPropertyChanged(nameof(IsTagHandlingEnabled));
+                OnPropertyChanged(nameof(IsTagHandlingVersionEnabled));
+            }
         }
 
         public SplitSentences SplitSentencesType
@@ -222,8 +229,24 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             {
                 SetField(ref field, value);
                 SplitSentencesType = GetDefaultSplitSentences(value);
+                OnPropertyChanged(nameof(IsTagHandlingVersionEnabled));
             }
         }
+
+        public TagHandlingVersion TagHandlingVersion
+        {
+            get;
+            set => SetField(ref field, value);
+        }
+
+        public bool IsTagHandlingEnabled => TagHandlingControlsEnabled(SendPlainText, TagType).TagHandling;
+
+        public bool IsTagHandlingVersionEnabled => TagHandlingControlsEnabled(SendPlainText, TagType).Version;
+
+        // Plain text is sent without tag handling (EffectiveTagHandling), so neither setting applies to it;
+        // the version only applies to XML/HTML tag handling.
+        public static (bool TagHandling, bool Version) TagHandlingControlsEnabled(bool sendPlainText, TagFormat tagType) =>
+            (!sendPlainText, !sendPlainText && tagType != TagFormat.None);
 
         public string Title { get; set; } = "DeepL Translation Provider";
 
@@ -500,6 +523,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             Options.LanguagePairOptions = [.. LanguagePairOptions];
             Options.PreserveFormatting = PreserveFormatting;
             Options.TagHandling = TagType;
+            Options.TagHandlingVersion = TagHandlingVersion;
             Options.SplitSentenceHandling = SplitSentencesType;
             Options.IgnoreTagsParameter = IgnoreTags;
             Options.UseLocalCache = UseLocalCache;

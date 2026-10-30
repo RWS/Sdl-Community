@@ -108,25 +108,8 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
                 if (pendingIndices.Count == 0) continue;
 
-                var deeplRequestParameters = new DeeplRequestParameters
-                {
-                    Context = context,
-                    Text = pendingIndices.Select(index => sourceTexts[index]).ToList(),
-                    SourceLanguage = sourceLanguage,
-                    TargetLanguage = targetLanguage,
-                    Formality = formality,
-                    GlossaryId = deepLSettings.GlossaryId,
-                    PreserveFormatting = deepLSettings.PreserveFormatting,
-                    TagHandling = tagHandling,
-                    SplittingSentenceHandling = deepLSettings.SplitSentencesHandling.GetApiValue(),
-                    IgnoreTags = deepLSettings.IgnoreTags,
-                    ModelType = modelType,
-                    StyleId = deepLSettings.StyleId,
-                    TagHandlingVersion = "v2",
-                    TranslationMemoryId = deepLSettings.TranslationMemoryId
-                };
-
-                ApplyDeepLRestrictions(deeplRequestParameters);
+                var deeplRequestParameters = BuildRequestParameters(sourceLanguage, targetLanguage, modelType, tagHandling, formality,
+                    deepLSettings, pendingIndices.Select(index => sourceTexts[index]).ToList(), context);
                 requests.Add((pendingIndices, deeplRequestParameters));
             }
 
@@ -188,13 +171,42 @@ namespace Sdl.Community.DeepLMTProvider.Client
             if (context != null)
                 keyBuilder.Add("context", context);
 
+            // Before 8.1.2.0 the version was not chosen: latency_optimized was sent v1,
+            // every other model v2. Added only when it differs, so those entries keep hitting.
+            var previousVersion = modelType == "latency_optimized" ? TagHandlingVersion.V1 : TagHandlingVersion.V2;
+            if (deepLSettings.TagHandlingVersion != previousVersion)
+                keyBuilder.Add("tagHandlingVersion", deepLSettings.TagHandlingVersion.GetApiValue());
+
             return keyBuilder.Build();
         }
 
-        private static void ApplyDeepLRestrictions(DeeplRequestParameters deeplRequestParameters)
+        public static DeeplRequestParameters BuildRequestParameters(
+            string sourceLanguage,
+            string targetLanguage,
+            string modelType,
+            string tagHandling,
+            string formality,
+            DeepLSettings deepLSettings,
+            List<string> texts,
+            string context = null)
         {
-            deeplRequestParameters.TagHandlingVersion =
-                deeplRequestParameters.ModelType == "latency_optimized" ? "v1" : "v2";
+            return new DeeplRequestParameters
+            {
+                Context = context,
+                Text = texts,
+                SourceLanguage = sourceLanguage,
+                TargetLanguage = targetLanguage,
+                Formality = formality,
+                GlossaryId = deepLSettings.GlossaryId,
+                PreserveFormatting = deepLSettings.PreserveFormatting,
+                TagHandling = tagHandling,
+                SplittingSentenceHandling = deepLSettings.SplitSentencesHandling.GetApiValue(),
+                IgnoreTags = deepLSettings.IgnoreTags,
+                ModelType = modelType,
+                StyleId = deepLSettings.StyleId,
+                TagHandlingVersion = deepLSettings.TagHandlingVersion.GetApiValue(),
+                TranslationMemoryId = deepLSettings.TranslationMemoryId
+            };
         }
 
         public static IEnumerable<(List<int> TextIndices, string Context)> BuildBatches(

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using System.Web;
 using NLog;
 using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.LanguagePlatform.Core;
@@ -14,11 +13,13 @@ namespace Sdl.Community.DeepLMTProvider.Helpers
 		private string _preparedSourceText;
 		private string _returnedText;
 		private Segment _sourceSegment;
+		private readonly TagFormat _tagHandling;
 		private Dictionary<string, DeepLTag> _tagsDictionary;
 
-		public DeepLTranslationProviderTagPlacer(Segment sourceSegment)
+		public DeepLTranslationProviderTagPlacer(Segment sourceSegment, TagFormat tagHandling)
 		{
 			_sourceSegment = sourceSegment;
+			_tagHandling = tagHandling;
 			TagsInfo = new List<TagInfo>();
 			_tagsDictionary = GetSourceTagsDict();
 		}
@@ -42,33 +43,15 @@ namespace Sdl.Community.DeepLMTProvider.Helpers
             _returnedText = returnedText;
 			//our dictionary, dict, is already built
 			var segment = new Segment(); //our segment to return
-										 //get our array of elements..it will be array of tagtexts and text in the order received from google
 			try
 			{
-				var targetElements =
-					GetTargetElements();
-				//build our segment looping through elements
-
-				for (var i = 0; i < targetElements.Length; i++)
+				//tag texts and text pieces, in the order DeepL returned them
+				foreach (var text in GetTargetElements())
 				{
-					var text = targetElements[i]; //the text to be compared/added
-					if (_tagsDictionary.ContainsKey(text)) //if our text in question is in the tagtext list
-					{
-						var padleft = _tagsDictionary[text].PadLeft;
-						var padright = _tagsDictionary[text].PadRight;
-						if (padleft.Length > 0) segment.Add(padleft); //add leading space if applicable in the source text
-						segment.Add(_tagsDictionary[text].SdlTag); //add the actual tag element after casting it back to a Tag
-						if (padright.Length > 0) segment.Add(padright); //add trailing space if applicable in the source text
-					}
-					else
-					{
-						//if it is not in the list of tagtexts then the element is just the text
-						if (text.Trim().Length > 0) //if the element is something other than whitespace, i.e. some text in addition
-						{
-							text = text.Trim(); //trim out extra spaces, since they are dealt with by associating them with the tags
-							segment.Add(text); //add to the segment
-						}
-					}
+					if (_tagsDictionary.TryGetValue(text, out var tag))
+						segment.Add(tag.SdlTag);
+					else if (text.Length > 0) //text keeps DeepL's whitespace, including space-only pieces between tags
+						segment.Add(MarkupText.Decode(text, _tagHandling));
 				}
 			}
 			catch (Exception e)
@@ -76,7 +59,33 @@ namespace Sdl.Community.DeepLMTProvider.Helpers
 				_logger.Error($"{e.Message}\n {e.StackTrace}");
 			}
 
-			return segment; //this will return a tagged segment
+			return RemoveUnpairedTags(segment); //this will return a tagged segment
+		}
+
+		// Studio drops a translation whose tags do not pair up, leaving the target empty;
+		// DeepL can return such tags when tag handling is None, so they are left out and the text kept
+		private static Segment RemoveUnpairedTags(Segment segment)
+		{
+			var open = new Stack<int>();
+			var unpaired = new HashSet<int>();
+			for (var i = 0; i < segment.Elements.Count; i++)
+			{
+				if (segment.Elements[i] is not Tag tag) continue;
+				if (tag.Type == TagType.Start) open.Push(i);
+				else if (tag.Type == TagType.End)
+				{
+					if (open.Count > 0 && ((Tag)segment.Elements[open.Peek()]).TagID == tag.TagID) open.Pop();
+					else unpaired.Add(i);
+				}
+			}
+
+			unpaired.UnionWith(open);
+			if (unpaired.Count == 0) return segment;
+
+			var repaired = new Segment(segment.Culture);
+			for (var i = 0; i < segment.Elements.Count; i++)
+				if (!unpaired.Contains(i)) repaired.Add(segment.Elements[i]);
+			return repaired;
 		}
 
 		private string AddSeparators(string text, MatchCollection matches)
@@ -92,7 +101,7 @@ namespace Sdl.Community.DeepLMTProvider.Helpers
 
 		private Dictionary<string, DeepLTag> GetSourceTagsDict()
 		{
-			_tagsDictionary = new Dictionary<string, DeepLTag>();
+			_tagsDictionary = new Dictionary<string, DeepLTag>(StringComparer.OrdinalIgnoreCase); //DeepL can return <TG1> for <tg1>
 			try
 			{
 				//build dict
@@ -129,28 +138,6 @@ namespace Sdl.Community.DeepLMTProvider.Helpers
 
 						_preparedSourceText += tagText;
 
-						//now we have to figure out whether this tag is preceded and/or followed by whitespace
-						if (i > 0 && !_sourceSegment.Elements[i - 1].GetType().ToString().Equals("Sdl.LanguagePlatform.Core.Tag"))
-						{
-							var prevText = _sourceSegment.Elements[i - 1].ToString();
-							if (!prevText.Trim().Equals(""))//and not just whitespace
-							{
-								//get number of trailing spaces for that segment
-								var whitespace = prevText.Length - prevText.TrimEnd().Length;
-								//add that trailing space to our tag as leading space
-								theTag.PadLeft = prevText.Substring(prevText.Length - whitespace);
-							}
-						}
-						if (i < _sourceSegment.Elements.Count - 1 && !_sourceSegment.Elements[i + 1].GetType().ToString().Equals("Sdl.LanguagePlatform.Core.Tag"))
-						{
-							//here we don't care whether it is only whitespace
-							//get number of leading spaces for that segment
-							var nextText = _sourceSegment.Elements[i + 1].ToString();
-							var whitespace = nextText.Length - nextText.TrimStart().Length;
-							//add that trailing space to our tag as leading space
-							theTag.PadRight = nextText.Substring(0, whitespace);
-						}
-
 						//add our new tag code to the dict with the corresponding tag if it's not already there
 						if (!_tagsDictionary.ContainsKey(tagText))
 						{
@@ -159,8 +146,7 @@ namespace Sdl.Community.DeepLMTProvider.Helpers
 					}
 					else
 					{//if not a tag
-						var str = HttpUtility.HtmlEncode(_sourceSegment.Elements[i].ToString()); //HtmlEncode our plain text to be better processed by google and add to string
-						_preparedSourceText += _sourceSegment.Elements[i].ToString();
+						_preparedSourceText += MarkupText.Escape(_sourceSegment.Elements[i].ToString(), _tagHandling);
 					}
 				}
 				TagsInfo.Clear();

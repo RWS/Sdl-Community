@@ -58,7 +58,10 @@
   <ItemGroup>
     <Compile Include="DeepLMtTranslationProviderLanguageDirectionTests.cs" />
     <Compile Include="DeepLTranslationProviderClientTests.cs" />
+    <Compile Include="DeepLTranslationProviderTagPlacerTests.cs" />
+    <Compile Include="DeepLWindowViewModelTests.cs" />
     <Compile Include="NormalizeSourceTextHelperTests.cs" />
+    <Compile Include="OptionsProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
