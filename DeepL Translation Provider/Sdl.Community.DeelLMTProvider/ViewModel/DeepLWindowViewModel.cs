@@ -151,8 +151,17 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         public bool SendPlainText
         {
             get => _sendPlainText;
-            set => SetField(ref _sendPlainText, value);
+            set
+            {
+                SetField(ref _sendPlainText, value);
+                OnPropertyChanged(nameof(IsTagHandlingEnabled));
+            }
         }
+
+        public bool IsTagHandlingEnabled => TagHandlingEnabled(SendPlainText);
+
+        // Plain text is sent without tag handling (EffectiveTagHandling), so the setting does not apply to it
+        public static bool TagHandlingEnabled(bool sendPlainText) => !sendPlainText;
 
         public SplitSentences SplitSentencesType
         {

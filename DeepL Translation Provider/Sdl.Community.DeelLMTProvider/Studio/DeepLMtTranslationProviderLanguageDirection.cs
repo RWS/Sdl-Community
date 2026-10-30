@@ -155,11 +155,18 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             throw new NotImplementedException();
         }
 
+        // Plain text carries no tags; sending it with XML/HTML tag handling only makes
+        // DeepL parse it as markup, so a literal & or < fails the request.
+        public static TagFormat EffectiveTagHandling(bool sendPlainText, TagFormat tagHandling) =>
+            sendPlainText ? TagFormat.None : tagHandling;
+
+        private TagFormat TagHandling => EffectiveTagHandling(_options.SendPlainText, _options.TagHandling);
+
         private string ApplyBeforeTranslationSettings(Segment newSeg)
         {
             if (_options.SendPlainText) return newSeg.ToPlain().RemoveTags();
 
-            var tagPlacer = new DeepLTranslationProviderTagPlacer(newSeg);
+            var tagPlacer = new DeepLTranslationProviderTagPlacer(newSeg, TagHandling);
             return tagPlacer.PreparedSourceText;
         }
 
@@ -190,6 +197,17 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             return searchResult;
         }
 
+        // Tagged sources get their tags back from the reply; the rest take the reply as text
+        public static Segment BuildTarget(Segment sourceSegment, string reply, TagFormat tagHandling, bool sendPlainText, CultureCode targetCulture)
+        {
+            if (sourceSegment.HasTags && !sendPlainText)
+                return new DeepLTranslationProviderTagPlacer(sourceSegment, tagHandling).GetTaggedSegment(reply);
+
+            var translation = new Segment(targetCulture);
+            translation.Add(MarkupText.Decode(reply, tagHandling));
+            return translation;
+        }
+
         private List<SearchResults> GetPreTranslationSearchResults(List<PreTranslateSegment> preTranslateList)
         {
             var resultsList = new List<SearchResults>(preTranslateList.Capacity);
@@ -201,16 +219,9 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                 var plainTranslation = preTranslate.PlainTranslation;
                 if (plainTranslation == null) continue;
 
-                var translation = new Segment(_languageDirection.TargetCulture);
                 var sourceSegment = preTranslate.TranslationUnit.SourceSegment.Duplicate();
-
-                if (sourceSegment.HasTags && !_options.SendPlainText)
-                {
-                    var tagPlacer = new DeepLTranslationProviderTagPlacer(sourceSegment);
-                    translation = tagPlacer.GetTaggedSegment(plainTranslation);
-                    preTranslate.TranslationSegment = translation;
-                }
-                else translation.Add(plainTranslation);
+                var translation = BuildTarget(sourceSegment, plainTranslation, TagHandling, _options.SendPlainText, _languageDirection.TargetCulture);
+                if (sourceSegment.HasTags && !_options.SendPlainText) preTranslate.TranslationSegment = translation;
 
                 var searchResult = CreateSearchResult(sourceSegment, translation);
                 var results = new SearchResults
@@ -232,7 +243,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                 new(
                     _languagePairOptions?.Formality ?? Formality.Default,
                     _languagePairOptions?.SelectedGlossary?.Id,
-                    _options.TagHandling,
+                    TagHandling,
                     _options.SplitSentenceHandling,
                     _options.PreserveFormatting,
                     _options.IgnoreTagsParameter,

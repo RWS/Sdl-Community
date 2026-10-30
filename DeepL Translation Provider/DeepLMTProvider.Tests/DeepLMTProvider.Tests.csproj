@@ -39,11 +39,26 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="NLog">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Core.Globalization">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18\Sdl.Core.Globalization.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Core.Globalization.Async">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18\Sdl.Core.Globalization.Async.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.LanguagePlatform.Core">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18\Sdl.LanguagePlatform.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DeepLMtTranslationProviderLanguageDirectionTests.cs" />
+    <Compile Include="DeepLTranslationProviderTagPlacerTests.cs" />
+    <Compile Include="DeepLWindowViewModelTests.cs" />
     <Compile Include="NormalizeSourceTextHelperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

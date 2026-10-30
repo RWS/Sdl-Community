@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using System.Web;
 using NLog;
 using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.LanguagePlatform.Core;
@@ -14,11 +13,13 @@ namespace Sdl.Community.DeepLMTProvider.Helpers
 		private string _preparedSourceText;
 		private string _returnedText;
 		private Segment _sourceSegment;
+		private readonly TagFormat _tagHandling;
 		private Dictionary<string, DeepLTag> _tagsDictionary;
 
-		public DeepLTranslationProviderTagPlacer(Segment sourceSegment)
+		public DeepLTranslationProviderTagPlacer(Segment sourceSegment, TagFormat tagHandling)
 		{
 			_sourceSegment = sourceSegment;
+			_tagHandling = tagHandling;
 			TagsInfo = new List<TagInfo>();
 			_tagsDictionary = GetSourceTagsDict();
 		}
@@ -66,7 +67,7 @@ namespace Sdl.Community.DeepLMTProvider.Helpers
 						if (text.Trim().Length > 0) //if the element is something other than whitespace, i.e. some text in addition
 						{
 							text = text.Trim(); //trim out extra spaces, since they are dealt with by associating them with the tags
-							segment.Add(text); //add to the segment
+							segment.Add(MarkupText.Decode(text, _tagHandling)); //add to the segment
 						}
 					}
 				}
@@ -159,8 +160,7 @@ namespace Sdl.Community.DeepLMTProvider.Helpers
 					}
 					else
 					{//if not a tag
-						var str = HttpUtility.HtmlEncode(_sourceSegment.Elements[i].ToString()); //HtmlEncode our plain text to be better processed by google and add to string
-						_preparedSourceText += _sourceSegment.Elements[i].ToString();
+						_preparedSourceText += MarkupText.Escape(_sourceSegment.Elements[i].ToString(), _tagHandling);
 					}
 				}
 				TagsInfo.Clear();
