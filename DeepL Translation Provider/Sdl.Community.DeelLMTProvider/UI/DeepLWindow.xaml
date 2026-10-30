@@ -248,7 +248,7 @@
                                           Height="20"
                                           IsEnabled="{Binding IsTagHandlingEnabled}"
                                           ToolTipService.ShowOnDisabled="True"
-                                          ToolTip="How DeepL reads the segment's tags. Not used with 'Send source as plain text', which is always sent without tag handling."
+                                          ToolTip="How DeepL reads the segment's tags. XML/HTML: DeepL places the tags. None: DeepL translates the tags as text; tags it returns intact are placed, others are left out. Not used with 'Send source as plain text', which is always sent without tag handling."
                                           SelectedItem="{Binding TagType}"
                                           ItemsSource="{Binding Source={StaticResource TagTypeProvider}}" />
                                 <Label Content="Version"
