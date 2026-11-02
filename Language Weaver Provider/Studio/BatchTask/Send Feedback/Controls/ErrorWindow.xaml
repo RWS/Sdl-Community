@@ -38,6 +38,7 @@
                 BorderThickness="1"
                 BorderBrush="LightGray"
                 Background="White">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
             <ItemsControl ItemsSource="{Binding ErrorList}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -56,11 +57,16 @@
                                       CanUserAddRows="False"
                                       IsReadOnly="True"
                                       Style="{StaticResource Sdl.DataGrid.GenericStyle}"
-                                      RowHeight="30"
+                                      MinRowHeight="30"
                                       ItemsSource="{Binding SegmentErrors}"
                                       BorderThickness="0"
                                       AlternationCount="2">
                                 <DataGrid.Resources>
+                                    <Style x:Key="WrappingCell"
+                                           TargetType="TextBlock">
+                                        <Setter Property="TextWrapping"
+                                                Value="Wrap" />
+                                    </Style>
                                     <Style TargetType="DataGridColumnHeader"
                                            BasedOn="{StaticResource Sdl.DataGridColumnHeader.GenericStyle}">
                                         <Setter Property="FontWeight"
@@ -75,19 +81,22 @@
                                                         Binding="{Binding Id}" />
                                     <DataGridTextColumn Header="Provider"
                                                         Binding="{Binding Provider}"
-                                                        Width="*" />
+                                                        Width="Auto" />
                                     <DataGridTextColumn Header="Source segment"
                                                         Binding="{Binding SourceSegment}"
+                                                        ElementStyle="{StaticResource WrappingCell}"
                                                         Width="*" />
                                     <DataGridTextColumn Header="Error"
                                                         Binding="{Binding Error}"
-                                                        Width="*" />
+                                                        ElementStyle="{StaticResource WrappingCell}"
+                                                        Width="2*" />
                                 </DataGrid.Columns>
                             </DataGrid>
                         </StackPanel>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+            </ScrollViewer>
         </Border>
         <StackPanel Grid.Row="2"
                     Orientation="Horizontal"

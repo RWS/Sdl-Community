@@ -10,6 +10,8 @@ namespace LanguageWeaverProvider.Studio.BatchTask.Send_Feedback
 {
     public class SendFeedbackProcessor : AbstractBilingualContentProcessor
     {
+        public const string MissingMetadataError = "Feedback was not sent: no Language Weaver translation data (model and original machine translation) is stored in this segment. Translate the segment again with Language Weaver, then send feedback.";
+
         public List<SegmentError> Errors { get; set; } = new();
 
         public override void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
@@ -21,6 +23,15 @@ namespace LanguageWeaverProvider.Studio.BatchTask.Send_Feedback
                 if (!IsApproved(segmentPair.Properties.ConfirmationLevel)) continue;
 
                 var feedback = LanguageWeaverFeedbackFactory.Create(segmentPair);
+                if (feedback is null) continue;
+
+                var translationOrigin = segmentPair.Properties.TranslationOrigin;
+                if (string.IsNullOrEmpty(translationOrigin.GetMetaData(Constants.SegmentMetadata_LongModelName))
+                    || string.IsNullOrEmpty(translationOrigin.GetMetaData(Constants.SegmentMetadata_Translation)))
+                {
+                    AddError(segmentPair, feedback, MissingMetadataError);
+                    continue;
+                }
 
                 try
                 {
@@ -32,21 +43,24 @@ namespace LanguageWeaverProvider.Studio.BatchTask.Send_Feedback
                     //});
                     //batchTaskWindow.Dispatcher.Invoke(() =>
                     //{
-                        feedback?.Send().Wait();
+                        feedback.Send().Wait();
                     //});
                 }
                 catch (Exception ex)
                 {
-                    Errors.Add(new SegmentError
-                    {
-                        Provider = feedback is CloudFeedback ? Constants.CloudService : Constants.EdgeService,
-                        Error = ex.InnerException?.Message,
-                        SourceSegment = segmentPair.Source.ToString(),
-                        Id = segmentPair.Properties.Id.Id
-                    });
+                    AddError(segmentPair, feedback, ex.InnerException?.Message);
                 }
             }
         }
+
+        private void AddError(ISegmentPair segmentPair, LanguageWeaverFeedback feedback, string error) =>
+            Errors.Add(new SegmentError
+            {
+                Provider = feedback is CloudFeedback ? Constants.CloudService : Constants.EdgeService,
+                Error = error,
+                SourceSegment = segmentPair.Source.ToString(),
+                Id = segmentPair.Properties.Id.Id
+            });
 
         private static bool IsApproved(ConfirmationLevel confirmationLevel) =>
             confirmationLevel is
