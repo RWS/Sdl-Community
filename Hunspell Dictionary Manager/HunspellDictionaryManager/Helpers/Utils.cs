@@ -29,7 +29,7 @@ namespace Sdl.Community.HunspellDictionaryManager.Helpers
         {
 			try
 			{
-				var studio = new StudioVersionService().GetInstalledStudioVersions()?.Where(v => v.Version.Equals("Studio18")).FirstOrDefault();
+				var studio = new StudioVersionService().GetInstalledStudioVersions()?.Where(v => v.Version.Equals("Studio19")).FirstOrDefault();
 				if (studio != null)
 				{
 					return studio.InstallPath;
