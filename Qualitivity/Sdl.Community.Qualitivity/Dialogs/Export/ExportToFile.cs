@@ -58,6 +58,7 @@ namespace Sdl.Community.Qualitivity.Dialogs.Export
             Excel.SetCellValue(spreadsheet, worksheet1, 13, 1, "Hourly Rate Total", false, false);
             Excel.SetCellValue(spreadsheet, worksheet1, 14, 1, "Activity Total", false, false);
             Excel.SetCellValue(spreadsheet, worksheet1, 15, 1, "Currency", false, false);
+            Excel.SetCellValue(spreadsheet, worksheet1, 16, 1, "Elapsed Seconds", false, false);
 
 
             for (var i = 0; i < activityList.Count; i++)
@@ -112,6 +113,7 @@ namespace Sdl.Community.Qualitivity.Dialogs.Export
                 Excel.SetCellValue(spreadsheet, worksheet1, 13, uIndex, hrTotal, null);
                 Excel.SetCellValue(spreadsheet, worksheet1, 14, uIndex, total, null);
                 Excel.SetCellValue(spreadsheet, worksheet1, 15, uIndex, activity.DocumentActivityRates.HourlyRateCurrency, false);
+                Excel.SetCellValue(spreadsheet, worksheet1, 16, uIndex, (int)(Helper.GetTotalTicksFromActivityDocuments(activity.Activities) / TimeSpan.TicksPerSecond), null);
 
 
                 //FormatCode = "yyyy-MM-dd hh:mm:ss",
@@ -133,8 +135,9 @@ namespace Sdl.Community.Qualitivity.Dialogs.Export
             Excel.SetColumnWidth(worksheet1, 13, 12);
             Excel.SetColumnWidth(worksheet1, 14, 12);
             Excel.SetColumnWidth(worksheet1, 15, 12);
+            Excel.SetColumnWidth(worksheet1, 16, 15);
 
-            var autoFilter1 = new AutoFilter { Reference = "A1:O" + activityList.Count + 1 };
+            var autoFilter1 = new AutoFilter { Reference = "A1:P" + (activityList.Count + 1) };
             worksheet1.Append(autoFilter1);
 
             #endregion

@@ -19,6 +19,10 @@
 
 	<ItemGroup>
 		<Reference Include="System.Windows.Forms" />
+		<Reference Include="WindowsBase" />
+		<Reference Include="DocumentFormat.OpenXml">
+			<HintPath>$(TradosFolder)\DocumentFormat.OpenXml.dll</HintPath>
+		</Reference>
 		<Reference Include="Sdl.Desktop.IntegrationApi">
 			<HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.dll</HintPath>
 		</Reference>
