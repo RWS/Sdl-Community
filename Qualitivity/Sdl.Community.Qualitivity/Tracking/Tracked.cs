@@ -90,6 +90,32 @@ namespace Sdl.Community.Qualitivity.Tracking
 
         #endregion
 
+        public static bool ActiveFileDiffersFrom(string fileName)
+        {
+            var activeFile = ActiveDocument?.ActiveFile;
+            return activeFile != null && activeFile.Name != fileName;
+        }
+
+        public static void StartTrackingTimerIfStarted()
+        {
+            if (TrackingState != TimerState.Started || TrackingTimer.IsRunning)
+            {
+                return;
+            }
+
+            TrackingTimer.Start();
+            TrackingStart = TrackingStart ?? DateTime.Now;
+            TrackingEnd = null;
+        }
+
+        public static void StopTrackingTimerIfLastDocument()
+        {
+            if (DictCacheDocumentItems.Count <= 1)
+            {
+                TrackingTimer.Stop();
+            }
+        }
+
         public static void Reset()
         {
             TrackerLastActivity = DateTime.Now;

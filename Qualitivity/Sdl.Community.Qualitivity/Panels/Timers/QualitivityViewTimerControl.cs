@@ -261,7 +261,11 @@ namespace Sdl.Community.Qualitivity.Panels.Timers
             {
                 var projectFile = Tracked.ActiveDocument.Files.FirstOrDefault();
                 if (projectFile == null || !Tracked.DictCacheDocumentItems.ContainsKey(projectFile.Id.ToString()))
+                {
+                    if (Tracked.ActiveFileDiffersFrom(label_document.Text))
+                        clear_timer_controls();
                     return;
+                }
                 var firstOrDefault = Tracked.ActiveDocument.Files.FirstOrDefault();
                 if (firstOrDefault != null)
                 {
@@ -311,16 +315,21 @@ namespace Sdl.Community.Qualitivity.Panels.Timers
             }
             else
             {
-                label_document.Text = @"none";
-                label_type.Text = @"none";
-                label_elapsed_time_document.Text = string.Format("{0:00}:{1:00}:{2:00}",
-                    0, 0, 0);
-
-                label_elapsed_time.Text = string.Format("{0:00}:{1:00}:{2:00}",
-                    0, 0, 0);
-
-                label_elapsed_idle_time.Visible = false;
+                clear_timer_controls();
             }
+        }
+
+        private void clear_timer_controls()
+        {
+            label_document.Text = @"none";
+            label_type.Text = @"none";
+            label_elapsed_time_document.Text = string.Format("{0:00}:{1:00}:{2:00}",
+                0, 0, 0);
+
+            label_elapsed_time.Text = string.Format("{0:00}:{1:00}:{2:00}",
+                0, 0, 0);
+
+            label_elapsed_idle_time.Visible = false;
         }
 
    

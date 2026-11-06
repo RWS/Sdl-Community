@@ -2047,7 +2047,7 @@ namespace Sdl.Community.Qualitivity.Dialogs
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(94, 13);
             this.label17.TabIndex = 5;
-            this.label17.Text = "[ 5 ... 60 ] minutes ";
+            this.label17.Text = "[ 2 ... 60 ] minutes ";
             // 
             // numericUpDown_idleTimeOutMinutes
             // 
@@ -2058,7 +2058,7 @@ namespace Sdl.Community.Qualitivity.Dialogs
             0,
             0});
             this.numericUpDown_idleTimeOutMinutes.Minimum = new decimal(new int[] {
-            5,
+            2,
             0,
             0,
             0});

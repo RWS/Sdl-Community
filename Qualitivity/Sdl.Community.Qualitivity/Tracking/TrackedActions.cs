@@ -144,7 +144,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 
                     Tracked.TrackingState = Tracked.TimerState.Started;
                     Tracked.TrackingPaused = new Stopwatch();
-
+                    Tracked.TrackingTimer.Start();
 
                     if (Tracked.ActiveDocument == null) return;
                     var firstOrDefault = Tracked.ActiveDocument.Files.FirstOrDefault();
@@ -155,9 +155,6 @@ namespace Sdl.Community.Qualitivity.Tracking
                         if (trackedDocuments.ActiveSegment.CurrentSegmentSelected != null)
                             trackedDocuments.ActiveSegment.CurrentSegmentTimer.Start();
                     }
-
-
-                    Tracked.TrackingTimer.Start();
                 }
                 else
                 {

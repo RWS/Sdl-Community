@@ -9,7 +9,7 @@ namespace System
 	{
 		internal const string AssemblyProduct = "Qualitivity";
 		internal const string AssemblyVersion = "7.0.0.0";
-		internal const string AssemblyFileVersion = "7.0.2.0";
+		internal const string AssemblyFileVersion = "7.0.3.0";
 		internal const bool ComVisible = false;
 	}
 }

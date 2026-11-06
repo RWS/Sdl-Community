@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using Sdl.Community.Qualitivity.Panels.QualityMetrics;
@@ -27,9 +26,45 @@ namespace Sdl.Community.Qualitivity.Tracking
 
 			editorController.ActivationChanged += EditorController_ActivationChanged;
 			editorController.Closing += EditorController_Closing;
+			editorController.Opening += EditorController_Opening;
 			editorController.Opened += EditorController_Opened;
 			editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
 		}
+		public static void StartTrackingIfAutoStartEnabled()
+		{
+			if (!Convert.ToBoolean(Tracked.Settings.GetTrackingProperty("autoStartTrackingOnDocumentOpenEvent").Value))
+			{
+				return;
+			}
+
+			if (Tracked.TrackingState != Tracked.TimerState.Started
+				&& Tracked.TrackingState != Tracked.TimerState.Paused)
+			{
+				Tracked.TrackingState = Tracked.TimerState.Started;
+			}
+		}
+
+		public static void RunWhenActiveFileIsReady(IStudioDocument document, Action run)
+		{
+			void OnActiveSegmentChanged(object sender, EventArgs e)
+			{
+				if (document.ActiveFile == null)
+				{
+					return;
+				}
+
+				document.ActiveSegmentChanged -= OnActiveSegmentChanged;
+				run();
+			}
+
+			document.ActiveSegmentChanged += OnActiveSegmentChanged;
+		}
+
+		private static void EditorController_Opening(object sender, CancelDocumentEventArgs e)
+		{
+			StartTrackingIfAutoStartEnabled();
+		}
+
 		private static void EditorController_ActivationChanged(object sender, ActivationChangedEventArgs e)
 		{
 			Tracked.EditorControllerIsActive = e.Active;
@@ -76,6 +111,8 @@ namespace Sdl.Community.Qualitivity.Tracking
 							document.DatetimeClosed = DateTime.Now;
 							document.DocumentTimer.Stop();
 						}
+
+						Tracked.StopTrackingTimerIfLastDocument();
 
 						TrackedController.TrackActiveChanges(trackedDocuments);
 						TrackedController.NewProjectActivity(trackedDocuments);
@@ -132,15 +169,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 
 				Tracked.ActiveDocument = e.Document;
 
-				//automatically start tracking if the setting active
-				if (Convert.ToBoolean(Tracked.Settings.GetTrackingProperty("autoStartTrackingOnDocumentOpenEvent").Value))
-				{
-					if (Tracked.TrackingState != Tracked.TimerState.Started
-						&& Tracked.TrackingState != Tracked.TimerState.Paused)
-					{
-						Tracked.TrackingState = Tracked.TimerState.Started;
-					}
-				}
+				StartTrackingIfAutoStartEnabled();
 
 				if (Tracked.TrackingState != Tracked.TimerState.Started &&
 					Tracked.TrackingState != Tracked.TimerState.Paused || Tracked.ActiveDocument == null)
@@ -148,17 +177,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 					return;
 				}
 
-				//TO CHECK THIS SHOULD NOT BE INITIALIZED UNLESS IT IS NECCESSARY
-				if (Tracked.TrackingState == Tracked.TimerState.Started && !Tracked.TrackingTimer.IsRunning)
-				{
-					Tracked.TrackingState = Tracked.TimerState.Started;
-					Tracked.TrackingTimer = new Stopwatch();
-					Tracked.TrackingTimer.Start();
-					Tracked.TrackingStart = DateTime.Now;
-					Tracked.TrackingEnd = null;
-					Tracked.TrackingPaused = new Stopwatch();
-				}
-
+				Tracked.StartTrackingTimerIfStarted();
 
 				var projectFile = Tracked.ActiveDocument.Files.FirstOrDefault();
 				if (projectFile == null)
@@ -270,7 +289,21 @@ namespace Sdl.Community.Qualitivity.Tracking
 
 				Tracked.ActiveDocument = null;
 
-				if (e?.Document?.ActiveFile == null) return;
+				if (e?.Document == null) return;
+
+				// A document opened next to another one has no active segment yet, so no active file either
+				if (e.Document.ActiveFile == null)
+				{
+					RunWhenActiveFileIsReady(e.Document, () =>
+					{
+						if ((sender as EditorController)?.ActiveDocument == e.Document)
+						{
+							EditorController_ActiveDocumentChanged(sender, e);
+						}
+					});
+					return;
+				}
+
 				{
 					Tracked.ActiveDocument = e.Document;
 
@@ -278,7 +311,9 @@ namespace Sdl.Community.Qualitivity.Tracking
 
 					if (Tracked.TrackingState == Tracked.TimerState.Started
 						|| Tracked.TrackingState == Tracked.TimerState.Paused)
-					{						
+					{
+						Tracked.StartTrackingTimerIfStarted();
+
 						if (projectFile != null)
 						{
 							if (!Tracked.DictCacheDocumentItems.ContainsKey(projectFile.Id.ToString()))
