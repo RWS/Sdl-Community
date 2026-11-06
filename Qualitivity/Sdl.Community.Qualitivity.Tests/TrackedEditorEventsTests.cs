@@ -20,8 +20,7 @@ namespace Sdl.Community.Qualitivity.Tests
 		[InlineData(Tracked.TimerState.Deleted)]
 		public void StartTrackingIfAutoStartEnabled_TrackerNotRunning_Starts(Tracked.TimerState state)
 		{
-			GivenAutoStart(true);
-			Tracked.TrackingState = state;
+			GivenAutoStart(true, state);
 
 			TrackedEditorEvents.StartTrackingIfAutoStartEnabled();
 
@@ -31,8 +30,7 @@ namespace Sdl.Community.Qualitivity.Tests
 		[Fact]
 		public void StartTrackingIfAutoStartEnabled_TrackerPaused_StaysPaused()
 		{
-			GivenAutoStart(true);
-			Tracked.TrackingState = Tracked.TimerState.Paused;
+			GivenAutoStart(true, Tracked.TimerState.Paused);
 
 			TrackedEditorEvents.StartTrackingIfAutoStartEnabled();
 
@@ -42,12 +40,31 @@ namespace Sdl.Community.Qualitivity.Tests
 		[Fact]
 		public void StartTrackingIfAutoStartEnabled_SettingOff_StaysStopped()
 		{
-			GivenAutoStart(false);
-			Tracked.TrackingState = Tracked.TimerState.Stopped;
+			GivenAutoStart(false, Tracked.TimerState.Stopped);
 
 			TrackedEditorEvents.StartTrackingIfAutoStartEnabled();
 
 			Assert.Equal(Tracked.TimerState.Stopped, Tracked.TrackingState);
+		}
+
+		[Fact]
+		public void StartTrackingOnOpening_NoDocument_StaysStopped()
+		{
+			GivenAutoStart(true, Tracked.TimerState.Stopped);
+
+			TrackedEditorEvents.StartTrackingOnOpening(null);
+
+			Assert.Equal(Tracked.TimerState.Stopped, Tracked.TrackingState);
+		}
+
+		[Fact]
+		public void StartTrackingOnOpening_Document_Starts()
+		{
+			GivenAutoStart(true, Tracked.TimerState.Stopped);
+
+			TrackedEditorEvents.StartTrackingOnOpening(Substitute.For<IStudioDocument>());
+
+			Assert.Equal(Tracked.TimerState.Started, Tracked.TrackingState);
 		}
 
 		[Fact]
@@ -147,8 +164,9 @@ namespace Sdl.Community.Qualitivity.Tests
 			Tracked.TrackingState = state;
 		}
 
-		private static void GivenAutoStart(bool enabled)
+		private static void GivenAutoStart(bool enabled, Tracked.TimerState state)
 		{
+			Tracked.TrackingState = state;
 			Tracked.Settings = new Settings();
 			Tracked.Settings.GetTrackingProperty("autoStartTrackingOnDocumentOpenEvent").Value = enabled.ToString();
 		}

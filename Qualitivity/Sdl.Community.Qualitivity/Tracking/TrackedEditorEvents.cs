@@ -60,9 +60,18 @@ namespace Sdl.Community.Qualitivity.Tracking
 			document.ActiveSegmentChanged += OnActiveSegmentChanged;
 		}
 
+		public static void StartTrackingOnOpening(IStudioDocument document)
+		{
+			// Studio also raises Opening, with no document, when the last document closes
+			if (document != null)
+			{
+				StartTrackingIfAutoStartEnabled();
+			}
+		}
+
 		private static void EditorController_Opening(object sender, CancelDocumentEventArgs e)
 		{
-			StartTrackingIfAutoStartEnabled();
+			StartTrackingOnOpening(e.Document);
 		}
 
 		private static void EditorController_ActivationChanged(object sender, ActivationChangedEventArgs e)
