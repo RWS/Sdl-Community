@@ -248,7 +248,7 @@ namespace Sdl.Community.Qualitivity.Dialogs.Export
             Excel.SetColumnWidth(worksheet2, 28, 23);
 
 
-            var autoFilter2 = new AutoFilter { Reference = "A1:AB" + xmlDasList.Count + 1 };
+            var autoFilter2 = new AutoFilter { Reference = "A1:AB" + (xmlDasList.Count + 1) };
             worksheet2.Append(autoFilter2);
 
             #endregion
@@ -357,7 +357,7 @@ namespace Sdl.Community.Qualitivity.Dialogs.Export
 
             Excel.SetColumnWidth(worksheet2, 17, 23);
 
-            var autoFilter4 = new AutoFilter { Reference = "A1:R" + xmlDasList.Count + 1 };
+            var autoFilter4 = new AutoFilter { Reference = "A1:R" + index };
             worksheet4.Append(autoFilter4);
 
             #endregion
@@ -445,7 +445,7 @@ namespace Sdl.Community.Qualitivity.Dialogs.Export
             Excel.SetColumnWidth(worksheet3, 15, 15);
             Excel.SetColumnWidth(worksheet3, 16, 15);
 
-            var autoFilter3 = new AutoFilter { Reference = "A1:Q" + xmlDasList.Count + 1 };
+            var autoFilter3 = new AutoFilter { Reference = "A1:R" + index };
             worksheet3.Append(autoFilter3);
 
             #endregion
