@@ -1,0 +1,73 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net48</TargetFramework>
+		<LangVersion>latest</LangVersion>
+		<IsPackable>false</IsPackable>
+		<SignAssembly>false</SignAssembly>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+		<PackageReference Include="NSubstitute" Version="4.4.0" />
+		<PackageReference Include="xunit" Version="2.6.6" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.5.6">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="System.Windows.Forms" />
+		<Reference Include="WindowsBase" />
+		<Reference Include="DocumentFormat.OpenXml">
+			<HintPath>$(TradosFolder)\DocumentFormat.OpenXml.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Desktop.IntegrationApi">
+			<HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
+			<HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.FileTypeSupport.Framework.Core">
+			<HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Core.Globalization">
+			<HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Core.Globalization.Async">
+			<HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.LanguagePlatform.Core">
+			<HintPath>$(TradosFolder)\Sdl.LanguagePlatform.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.LanguagePlatform.TranslationMemory">
+			<HintPath>$(TradosFolder)\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.ProjectAutomation.Core">
+			<HintPath>$(TradosFolder)\Sdl.ProjectAutomation.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.ProjectAutomation.FileBased">
+			<HintPath>$(TradosFolder)\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
+			<HintPath>$(TradosFolder)\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Desktop.Platform">
+			<HintPath>$(TradosFolder)\Sdl.Desktop.Platform.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Core.Settings">
+			<HintPath>$(TradosFolder)\Sdl.Core.Settings.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Sdl.Community.Qualitivity\Sdl.Community.Qualitivity.csproj" />
+	</ItemGroup>
+
+	<!-- ApplicationPaths needs Qualitivity.dll next to the loaded assemblies, so xUnit must not shadow-copy them. Generated because the repo ignores *.json. -->
+	<Target Name="WriteXunitRunnerConfig" AfterTargets="Build">
+		<WriteLinesToFile File="$(OutDir)xunit.runner.json" Lines="{ &quot;shadowCopy&quot;: false }" Overwrite="true" />
+	</Target>
+
+</Project>

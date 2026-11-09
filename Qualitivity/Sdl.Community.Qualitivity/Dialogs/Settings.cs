@@ -478,12 +478,8 @@ namespace Sdl.Community.Qualitivity.Dialogs
 			checkBox_trackerConfirmActivities.Checked = Convert.ToBoolean(settings.GetTrackingProperty("confirmActivitiesOnComplete").Value);
 			checkBox_idleTimeOut.Checked = Convert.ToBoolean(settings.GetTrackingProperty("idleTimeOut").Value);
 
-			if (idleTimeOutMinutes < 5)
-				idleTimeOutMinutes = 5;
-			if (idleTimeOutMinutes > 60)
-				idleTimeOutMinutes = 60;
-
-			numericUpDown_idleTimeOutMinutes.Value = idleTimeOutMinutes;
+			numericUpDown_idleTimeOutMinutes.Value = Math.Max(numericUpDown_idleTimeOutMinutes.Minimum,
+				Math.Min(numericUpDown_idleTimeOutMinutes.Maximum, idleTimeOutMinutes));
 			checkBox_idleTimeOutShow.Checked = Convert.ToBoolean(settings.GetTrackingProperty("idleTimeOutShow").Value);
 			checkBox_startOnLoad.Checked = Convert.ToBoolean(settings.GetTrackingProperty("startOnLoad").Value);
 			checkBox_recordNonUpdatedSegments.Checked = Convert.ToBoolean(settings.GetTrackingProperty("recordNonUpdatedSegments").Value);

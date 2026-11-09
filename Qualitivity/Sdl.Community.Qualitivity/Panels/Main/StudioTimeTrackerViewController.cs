@@ -240,16 +240,14 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 
 		private bool IsActive { get; set; }
 
-		public void Initialize()
-		{
-			if (IsInitialized) return;
-			Initialize(null);
-		}
+		public void Initialize() => Initialize(null);
 
 		public bool IsInitialized { get; set; }
 
 		protected override void Initialize(IViewContext context)
 		{
+			if (IsInitialized) return;
+
 			ActivationChanged += StudioTimeTrackerViewController_ActivationChanged;
 
 			SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
@@ -1665,7 +1663,6 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 
 		private void InitializeViewControl()
 		{
-			if (IsInitialized) return;
 			QualitivityViewTrackChangesController.ObjectListView = _viewContent.Value.objectListView1;
 
 			_viewContent.Value.olvColumn_activity_description.IsVisible = false;

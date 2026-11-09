@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows.Forms;
 using Sdl.Community.Parser;
 using Sdl.Community.Structures.Configuration;
@@ -89,6 +90,54 @@ namespace Sdl.Community.Qualitivity.Tracking
         public static Stopwatch TrackingPaused { get; set; }
 
         #endregion
+
+        public static bool ActiveFileDiffersFrom(string fileName)
+        {
+            var activeFile = ActiveDocument?.ActiveFile;
+            return activeFile != null && activeFile.Name != fileName;
+        }
+
+        public static void StartTrackingTimerIfStarted()
+        {
+            if (TrackingState != TimerState.Started || TrackingTimer.IsRunning)
+            {
+                return;
+            }
+
+            TrackingTimer.Start();
+            TrackingStart = TrackingStart ?? DateTime.Now;
+            TrackingEnd = null;
+        }
+
+        public static void StopTrackingTimerIfLastDocument(IEnumerable<IStudioDocument> openDocuments, IStudioDocument closing)
+        {
+            if (IsLastOpenDocument(openDocuments, closing))
+            {
+                TrackingTimer.Stop();
+            }
+        }
+
+        public static TrackedDocuments TrackedDocumentsFor(IStudioDocument closing)
+        {
+            var projectFile = closing?.Files.FirstOrDefault();
+            return projectFile != null && DictCacheDocumentItems.TryGetValue(projectFile.Id.ToString(), out var trackedDocuments)
+                ? trackedDocuments
+                : null;
+        }
+
+        public static void StopTrackingIfLastDocument(IEnumerable<IStudioDocument> openDocuments, IStudioDocument closing)
+        {
+            if (DictCacheDocumentItems.Count == 0 && IsLastOpenDocument(openDocuments, closing))
+            {
+                Reset();
+                TrackingState = TimerState.Stopped;
+            }
+        }
+
+        private static bool IsLastOpenDocument(IEnumerable<IStudioDocument> openDocuments, IStudioDocument closing)
+        {
+            return openDocuments.All(document => document == closing);
+        }
 
         public static void Reset()
         {
