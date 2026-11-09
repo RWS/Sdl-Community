@@ -240,16 +240,14 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 
 		private bool IsActive { get; set; }
 
-		public void Initialize()
-		{
-			if (IsInitialized) return;
-			Initialize(null);
-		}
+		public void Initialize() => Initialize(null);
 
 		public bool IsInitialized { get; set; }
 
 		protected override void Initialize(IViewContext context)
 		{
+			if (IsInitialized) return;
+
 			ActivationChanged += StudioTimeTrackerViewController_ActivationChanged;
 
 			SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
