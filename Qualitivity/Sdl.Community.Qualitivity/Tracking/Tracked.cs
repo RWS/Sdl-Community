@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows.Forms;
 using Sdl.Community.Parser;
 using Sdl.Community.Structures.Configuration;
@@ -108,12 +109,26 @@ namespace Sdl.Community.Qualitivity.Tracking
             TrackingEnd = null;
         }
 
-        public static void StopTrackingTimerIfLastDocument()
+        public static void StopTrackingTimerIfLastDocument(IEnumerable<IStudioDocument> openDocuments, IStudioDocument closing)
         {
-            if (DictCacheDocumentItems.Count <= 1)
+            if (IsLastOpenDocument(openDocuments, closing))
             {
                 TrackingTimer.Stop();
             }
+        }
+
+        public static void StopTrackingIfLastDocument(IEnumerable<IStudioDocument> openDocuments, IStudioDocument closing)
+        {
+            if (DictCacheDocumentItems.Count == 0 && IsLastOpenDocument(openDocuments, closing))
+            {
+                Reset();
+                TrackingState = TimerState.Stopped;
+            }
+        }
+
+        private static bool IsLastOpenDocument(IEnumerable<IStudioDocument> openDocuments, IStudioDocument closing)
+        {
+            return openDocuments.All(document => document == closing);
         }
 
         public static void Reset()

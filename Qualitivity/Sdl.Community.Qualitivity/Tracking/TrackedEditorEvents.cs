@@ -121,7 +121,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 							document.DocumentTimer.Stop();
 						}
 
-						Tracked.StopTrackingTimerIfLastDocument();
+						Tracked.StopTrackingTimerIfLastDocument(((EditorController)sender).GetDocuments(), e.Document);
 
 						TrackedController.TrackActiveChanges(trackedDocuments);
 						TrackedController.NewProjectActivity(trackedDocuments);
@@ -141,11 +141,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 				{
 					#region  |  null tracker cache  |
 
-					if (Tracked.DictCacheDocumentItems.Count == 0)
-					{
-						Tracked.Reset();
-						Tracked.TrackingState = Tracked.TimerState.Stopped;
-					}
+					Tracked.StopTrackingIfLastDocument(((EditorController)sender).GetDocuments(), e.Document);
 
 					Tracked.TrackingIsDirtyC0 = true;
 					Tracked.TrackingIsDirtyC1 = true;

@@ -128,34 +128,61 @@ namespace Sdl.Community.Qualitivity.Tests
 		}
 
 		[Fact]
-		public void StopTrackingTimerIfLastDocument_LastTrackedDocument_StopsTimer()
+		public void StopTrackingTimerIfLastDocument_LastOpenDocument_StopsTimer()
 		{
-			GivenRunningTimerWithTrackedDocuments(1);
+			GivenRunningTimer();
+			var closing = Substitute.For<IStudioDocument>();
 
-			Tracked.StopTrackingTimerIfLastDocument();
+			Tracked.StopTrackingTimerIfLastDocument(new[] { closing }, closing);
 
 			Assert.False(Tracked.TrackingTimer.IsRunning);
 		}
 
 		[Fact]
-		public void StopTrackingTimerIfLastDocument_OtherDocumentsTracked_KeepsTimerRunning()
+		public void StopTrackingTimerIfLastDocument_UntrackedDocumentStillOpen_KeepsTimerRunning()
 		{
-			GivenRunningTimerWithTrackedDocuments(2);
+			GivenRunningTimer();
+			var closing = Substitute.For<IStudioDocument>();
 
-			Tracked.StopTrackingTimerIfLastDocument();
+			Tracked.StopTrackingTimerIfLastDocument(new[] { closing, Substitute.For<IStudioDocument>() }, closing);
 
 			Assert.True(Tracked.TrackingTimer.IsRunning);
 		}
 
-		private static void GivenRunningTimerWithTrackedDocuments(int count)
+		[Fact]
+		public void StopTrackingIfLastDocument_LastOpenDocument_Stops()
+		{
+			GivenNoTrackedDocuments(Tracked.TimerState.Started);
+			var closing = Substitute.For<IStudioDocument>();
+
+			Tracked.StopTrackingIfLastDocument(new[] { closing }, closing);
+
+			Assert.Equal(Tracked.TimerState.Stopped, Tracked.TrackingState);
+		}
+
+		[Theory]
+		[InlineData(Tracked.TimerState.Started)]
+		[InlineData(Tracked.TimerState.Paused)]
+		public void StopTrackingIfLastDocument_UntrackedDocumentStillOpen_KeepsState(Tracked.TimerState state)
+		{
+			GivenNoTrackedDocuments(state);
+			var closing = Substitute.For<IStudioDocument>();
+
+			Tracked.StopTrackingIfLastDocument(new[] { closing, Substitute.For<IStudioDocument>() }, closing);
+
+			Assert.Equal(state, Tracked.TrackingState);
+		}
+
+		private static void GivenNoTrackedDocuments(Tracked.TimerState state)
+		{
+			GivenTracker(state);
+			Tracked.DictCacheDocumentItems = new Dictionary<string, TrackedDocuments>();
+		}
+
+		private static void GivenRunningTimer()
 		{
 			GivenTracker(Tracked.TimerState.Started);
 			Tracked.TrackingTimer.Start();
-			Tracked.DictCacheDocumentItems = new Dictionary<string, TrackedDocuments>();
-			for (var i = 0; i < count; i++)
-			{
-				Tracked.DictCacheDocumentItems.Add(i.ToString(), new TrackedDocuments());
-			}
 		}
 
 		private static void GivenTracker(Tracked.TimerState state)
