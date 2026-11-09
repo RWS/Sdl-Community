@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using NSubstitute;
 using Sdl.Community.Qualitivity.Tracking;
@@ -171,6 +172,32 @@ namespace Sdl.Community.Qualitivity.Tests
 			Tracked.StopTrackingIfLastDocument(new[] { closing, Substitute.For<IStudioDocument>() }, closing);
 
 			Assert.Equal(state, Tracked.TrackingState);
+		}
+
+		[Fact]
+		public void TrackedDocumentsFor_ClosingDocumentIsNotActive_ReturnsClosingDocumentsEntry()
+		{
+			var active = DocumentWithFile(Guid.NewGuid());
+			var closing = DocumentWithFile(Guid.NewGuid());
+			var activeEntry = new TrackedDocuments();
+			var closingEntry = new TrackedDocuments();
+			Tracked.DictCacheDocumentItems = new Dictionary<string, TrackedDocuments>
+			{
+				{ active.Files.First().Id.ToString(), activeEntry },
+				{ closing.Files.First().Id.ToString(), closingEntry }
+			};
+			Tracked.ActiveDocument = active;
+
+			Assert.Same(closingEntry, Tracked.TrackedDocumentsFor(closing));
+		}
+
+		private static IStudioDocument DocumentWithFile(Guid fileId)
+		{
+			var file = (ProjectFile)FormatterServices.GetUninitializedObject(typeof(ProjectFile));
+			typeof(ProjectFile).GetProperty(nameof(ProjectFile.Id)).SetValue(file, fileId);
+			var document = Substitute.For<IStudioDocument>();
+			document.Files.Returns(new[] { file });
+			return document;
 		}
 
 		private static void GivenNoTrackedDocuments(Tracked.TimerState state)

@@ -117,6 +117,14 @@ namespace Sdl.Community.Qualitivity.Tracking
             }
         }
 
+        public static TrackedDocuments TrackedDocumentsFor(IStudioDocument closing)
+        {
+            var projectFile = closing?.Files.FirstOrDefault();
+            return projectFile != null && DictCacheDocumentItems.TryGetValue(projectFile.Id.ToString(), out var trackedDocuments)
+                ? trackedDocuments
+                : null;
+        }
+
         public static void StopTrackingIfLastDocument(IEnumerable<IStudioDocument> openDocuments, IStudioDocument closing)
         {
             if (DictCacheDocumentItems.Count == 0 && IsLastOpenDocument(openDocuments, closing))

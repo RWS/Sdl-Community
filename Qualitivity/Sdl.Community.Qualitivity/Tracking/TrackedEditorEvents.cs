@@ -102,19 +102,17 @@ namespace Sdl.Community.Qualitivity.Tracking
 				//Timer4ProjectArea.Stop();
 
 				if (Tracked.TrackingState != Tracked.TimerState.Started &&
-					Tracked.TrackingState != Tracked.TimerState.Paused || Tracked.ActiveDocument == null)
+					Tracked.TrackingState != Tracked.TimerState.Paused || e.Document == null)
 				{
 					return;
 				}
 
 				try
 				{
-					var projectFile = Tracked.ActiveDocument.Files.FirstOrDefault();
+					var trackedDocuments = Tracked.TrackedDocumentsFor(e.Document);
 
-					if (projectFile != null && Tracked.DictCacheDocumentItems.ContainsKey(projectFile.Id.ToString()))
+					if (trackedDocuments != null)
 					{
-						var trackedDocuments = Tracked.DictCacheDocumentItems[projectFile.Id.ToString()];
-
 						foreach (var document in trackedDocuments.Documents)
 						{
 							document.DatetimeClosed = DateTime.Now;
@@ -129,10 +127,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 						Tracked.TarckerCheckNewActivityAdded = false;
 
 						//FilterViewerControl(Tracked.TarckerCheckNewActivityId);
-						if (Tracked.DictCacheDocumentItems.ContainsKey(projectFile.Id.ToString()))
-						{
-							Tracked.DictCacheDocumentItems.Remove(projectFile.Id.ToString());
-						}
+						Tracked.DictCacheDocumentItems.Remove(trackedDocuments.DocumentIdFirstOrDefault);
 					}
 
 					OnEditorControllerClosing();
