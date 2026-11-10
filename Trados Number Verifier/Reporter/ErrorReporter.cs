@@ -23,7 +23,6 @@ namespace Sdl.Community.NumberVerifier.Reporter
         [Flags]
         public enum Range
         {
-            Default = 0,
             Source = 1,
             Target = 2,
             Both = 3
@@ -41,33 +40,34 @@ namespace Sdl.Community.NumberVerifier.Reporter
             _sourceText = GetSegmentText(segmentPair.Source);
             _targetText = GetSegmentText(segmentPair.Target);
 
-            var sourceNumbersTotal = sourceNumberTexts.Texts.Count;
-            var targetNumbersTotal = targetNumberTexts.Texts.Count;
-            var errorPairsTotal = sourceNumbersTotal > targetNumbersTotal ? sourceNumbersTotal : targetNumbersTotal;
+            // Each side separately: a source number's error (e.g. removed) must not be hidden by a target number at the same index
+            for (var i = 0; i < sourceNumberTexts.Texts.Count; i++)
+                Report(GetExtendedReport(i, sourceNumberTexts, targetNumberTexts, Range.Source), segmentPair);
 
-            for (var i = 0; i < errorPairsTotal; i++)
+            for (var i = 0; i < targetNumberTexts.Texts.Count; i++)
+                Report(GetExtendedReport(i, sourceNumberTexts, targetNumberTexts, i < sourceNumberTexts.Texts.Count ? Range.Both : Range.Target), segmentPair);
+        }
+
+        private void Report(ExtendedErrorReportInfo extendedReportInfo, ISegmentPair segmentPair)
+        {
+            if (extendedReportInfo?.Message is null) return;
+            if (Settings.ReportExtendedMessages &&
+                MessageReporter is IBilingualContentMessageReporterWithExtendedData extendedMessageReporter)
             {
-                var extendedReportInfo = GetExtendedReport(i, sourceNumberTexts, targetNumberTexts);
-
-                if (extendedReportInfo?.Message is null) continue;
-                if (Settings.ReportExtendedMessages &&
-                    MessageReporter is IBilingualContentMessageReporterWithExtendedData extendedMessageReporter)
-                {
-                    extendedMessageReporter.ReportMessage(this, PluginResources.Plugin_Name,
-                        extendedReportInfo.ErrorLevel,
-                        extendedReportInfo.Message,
-                        new TextLocation(new Location(segmentPair.Target, true), extendedReportInfo.Report.TargetRange.StartIndex),
-                        new TextLocation(new Location(segmentPair.Target, false), extendedReportInfo.Report.TargetRange.Length),
-                        extendedReportInfo.Report);
-                }
-                else
-                {
-                    MessageReporter.ReportMessage(this, PluginResources.Plugin_Name,
-                        extendedReportInfo.ErrorLevel,
-                        extendedReportInfo.Message,
-                        new TextLocation(new Location(segmentPair.Target, true), extendedReportInfo.Report.TargetRange.StartIndex),
-                        new TextLocation(new Location(segmentPair.Target, false), extendedReportInfo.Report.TargetRange.Length));
-                }
+                extendedMessageReporter.ReportMessage(this, PluginResources.Plugin_Name,
+                    extendedReportInfo.ErrorLevel,
+                    extendedReportInfo.Message,
+                    new TextLocation(new Location(segmentPair.Target, true), extendedReportInfo.Report.TargetRange.StartIndex),
+                    new TextLocation(new Location(segmentPair.Target, false), extendedReportInfo.Report.TargetRange.Length),
+                    extendedReportInfo.Report);
+            }
+            else
+            {
+                MessageReporter.ReportMessage(this, PluginResources.Plugin_Name,
+                    extendedReportInfo.ErrorLevel,
+                    extendedReportInfo.Message,
+                    new TextLocation(new Location(segmentPair.Target, true), extendedReportInfo.Report.TargetRange.StartIndex),
+                    new TextLocation(new Location(segmentPair.Target, false), extendedReportInfo.Report.TargetRange.Length));
             }
         }
 
@@ -81,15 +81,8 @@ namespace Sdl.Community.NumberVerifier.Reporter
             return $"{numberText.Text}	[{explanation}]";
         }
 
-        private ExtendedErrorReportInfo GetExtendedReport(int i, NumberTexts sourceNumberTexts, NumberTexts targetNumberTexts)
+        private ExtendedErrorReportInfo GetExtendedReport(int i, NumberTexts sourceNumberTexts, NumberTexts targetNumberTexts, Range range)
         {
-            var isInSourceRange = sourceNumberTexts.Texts.Count > i;
-            var isInTargetRange = targetNumberTexts.Texts.Count > i;
-
-            var range = Range.Default;
-            if (isInSourceRange) range = Range.Source;
-            if (isInTargetRange) range |= Range.Target;
-
             var errorReportInfo = new ExtendedErrorReportInfo();
             switch (range)
             {
