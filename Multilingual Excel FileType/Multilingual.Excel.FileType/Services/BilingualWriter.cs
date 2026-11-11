@@ -259,6 +259,8 @@ namespace Multilingual.Excel.FileType.Services
 			{
 				var targetContent = excelRow.Cells.FirstOrDefault(a => a.Column.Name == _targetLanguageMapping.ContentColumn);
 				targetContent.Value = _isCDATA ? string.Format(XmlConstants.CdataFormat, targetSubContent) : targetSubContent;
+				targetContent.HasLiteralFormattingTags = excelRow.Cells
+					.FirstOrDefault(a => a.Column.Name == _sourceLanguageMapping.ContentColumn)?.HasLiteralFormattingTags == true;
 			}
 		}
 
@@ -409,6 +411,7 @@ namespace Multilingual.Excel.FileType.Services
 				else
 				{
 					targetContent.Value = targetValue;
+					targetContent.HasLiteralFormattingTags = sourceContent?.HasLiteralFormattingTags == true;
 				}
 			}
 		}

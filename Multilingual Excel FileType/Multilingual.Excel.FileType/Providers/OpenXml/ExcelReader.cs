@@ -146,7 +146,8 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 				var hyperlink = GetHyperLink(workSheetPart, hyperlinks, cell);
 
 				var isHyperlink = !string.IsNullOrEmpty(hyperlink?.Reference);
-				var cellValue = GetCellValue(cell, spreadsheetDocument, excelColumn.IsContentColumn && !isHyperlink);
+				var processRichText = excelColumn.IsContentColumn && !isHyperlink && _excelOptions.ProcessRichTextFormatting;
+				var cellValue = GetCellValue(cell, spreadsheetDocument, processRichText, out var isRichText);
 				var cellBackgroundColor = GetCellBackgroundColor(cell, spreadsheetDocument);
 
 				var excelCell = new ExcelCell
@@ -154,7 +155,8 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 					Column = excelColumn,
 					Value = cellValue,
 					Hyperlink = hyperlink,
-					Background = cellBackgroundColor
+					Background = cellBackgroundColor,
+					HasLiteralFormattingTags = processRichText && !isRichText && RichTextConverter.ToRuns(cellValue) != null
 				};
 
 				excelRow.Cells.Add(excelCell);
@@ -241,7 +243,7 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 
 				if (cell != null)
 				{
-					var cellValue = GetCellValue(cell, spreadsheetDocument);
+					var cellValue = GetCellValue(cell, spreadsheetDocument, false, out _);
 					excelColumn.Text = cellValue?.Trim();
 				}
 			}
@@ -321,8 +323,9 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 			return cellStyleIndex;
 		}
 
-		private string GetCellValue(CellType cell, SpreadsheetDocument spreadsheetDocument, bool isContentColumn = false)
+		private static string GetCellValue(CellType cell, SpreadsheetDocument spreadsheetDocument, bool processRichText, out bool isRichText)
 		{
+			isRichText = false;
 			if (cell == null)
 			{
 				return null;
@@ -344,11 +347,12 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 				return cell.CellValue?.Text;
 			}
 
-			if (isContentColumn && _excelOptions.ProcessRichTextFormatting)
+			if (processRichText)
 			{
 				var markup = RichTextMarkupBuilder.GetMarkup(richText, Excel.GetCellFont(spreadsheetDocument, cell));
 				if (markup != null)
 				{
+					isRichText = true;
 					return markup;
 				}
 			}

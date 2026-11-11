@@ -85,6 +85,34 @@ namespace Multilingual.Excel.FileType.Tests
 			}
 		}
 
+		[Fact]
+		public void ReadThenWrite_PlainCellWithLiteralTags_KeepsLiteralText()
+		{
+			Write("<b>Hello</b> 1<sup>st</sup>", 0, processRichText: false);
+
+			var options = new ExcelOptions { FirstRowIndex = 1, FirstRowIndexIsHeading = true, ProcessRichTextFormatting = true };
+			var columns = new List<ExcelColumn> { new ExcelColumn { Name = "B", IsContentColumn = true } };
+			var sheets = new ExcelReader(new ColorService()).GetExcelSheets(_path, options, columns);
+			Assert.True(sheets.Single().Rows.Single().Cells[0].HasLiteralFormattingTags);
+
+			new ExcelWriter().UpdateExcelSheets(_path, sheets, options, columns);
+
+			using (var document = SpreadsheetDocument.Open(_path, false))
+			{
+				var cell = GetCell(document, "B2");
+				Assert.Null(cell.InlineString);
+				Assert.Equal("<b>Hello</b> 1<sup>st</sup>", cell.CellValue.Text);
+			}
+		}
+
+		[Fact]
+		public void Read_RichTextCell_IsNotLiteralMarkup()
+		{
+			var row = ReadRow(processRichText: true);
+
+			Assert.False(row.Cells[0].HasLiteralFormattingTags);
+		}
+
 		private ExcelRow ReadRow(bool processRichText)
 		{
 			var options = new ExcelOptions { FirstRowIndex = 1, FirstRowIndexIsHeading = true, ProcessRichTextFormatting = processRichText };

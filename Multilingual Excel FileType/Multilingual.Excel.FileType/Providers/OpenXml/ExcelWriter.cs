@@ -50,7 +50,7 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 							foreach (var excelCell in excelRow.Cells)
 							{
 								var isHyperlink = !string.IsNullOrEmpty(excelCell.Hyperlink?.Reference);
-								var richTextRuns = isHyperlink || !_excelOptions.ProcessRichTextFormatting
+								var richTextRuns = isHyperlink || excelCell.HasLiteralFormattingTags || !_excelOptions.ProcessRichTextFormatting
 									? null
 									: RichTextConverter.ToRuns(excelCell.Value);
 								if (richTextRuns != null)
