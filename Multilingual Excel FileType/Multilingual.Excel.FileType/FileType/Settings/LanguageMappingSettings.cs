@@ -23,6 +23,9 @@ namespace Multilingual.Excel.FileType.FileType.Settings
 		private const string LanguageMappingReadHyperlinksSetting = "LanguageMappingReadHyperlinks";
 		private readonly bool _languageMappingReadHyperlinksDefault;
 
+		private const string LanguageMappingProcessRichTextFormattingSetting = "LanguageMappingProcessRichTextFormatting";
+		private readonly bool _languageMappingProcessRichTextFormattingDefault;
+
 		private const string LanguageMappingLanguagesSetting = "LanguageMappingLanguages";
 		private readonly List<LanguageMapping> _languageMappingLanguagesDefault;
 
@@ -38,6 +41,7 @@ namespace Multilingual.Excel.FileType.FileType.Settings
 			_languageMappingFirstRowIsHeadingDefault = true;
 			_languageMappingReadAllWorkSheetsDefault = false;
 			_languageMappingReadHyperlinksDefault = true;
+			_languageMappingProcessRichTextFormattingDefault = true;
 			_languageMappingLanguagesDefault = new List<LanguageMapping>();
 			
 			ResetToDefaults();
@@ -51,6 +55,8 @@ namespace Multilingual.Excel.FileType.FileType.Settings
 
 		public bool LanguageMappingReadHyperlinks { get; set; }
 
+		public bool LanguageMappingProcessRichTextFormatting { get; set; }
+
 		public List<LanguageMapping> LanguageMappingLanguages { get; set; }
 
 		public override string SettingName => "MultilingualExcelLanguageMappingSettings";
@@ -61,6 +67,7 @@ namespace Multilingual.Excel.FileType.FileType.Settings
 			LanguageMappingFirstRowIsHeading = valueGetter.GetValue(LanguageMappingFirstRowIsHeadingSetting, _languageMappingFirstRowIsHeadingDefault);
 			LanguageMappingReadAllWorkSheets = valueGetter.GetValue(LanguageMappingReadAllWorkSheetsSetting, _languageMappingReadAllWorkSheetsDefault);
 			LanguageMappingReadHyperlinks = valueGetter.GetValue(LanguageMappingReadHyperlinksSetting, _languageMappingReadHyperlinksDefault);
+			LanguageMappingProcessRichTextFormatting = valueGetter.GetValue(LanguageMappingProcessRichTextFormattingSetting, _languageMappingProcessRichTextFormattingDefault);
 			LanguageMappingLanguages = JsonConvert.DeserializeObject<List<LanguageMapping>>(valueGetter.GetValue(LanguageMappingLanguagesSetting,
 				JsonConvert.SerializeObject(_languageMappingLanguagesDefault)));
 
@@ -86,6 +93,7 @@ namespace Multilingual.Excel.FileType.FileType.Settings
 			valueProcessor.Process(LanguageMappingFirstRowIsHeadingSetting, LanguageMappingFirstRowIsHeading, _languageMappingFirstRowIsHeadingDefault);
 			valueProcessor.Process(LanguageMappingReadAllWorkSheetsSetting, LanguageMappingReadAllWorkSheets, _languageMappingReadAllWorkSheetsDefault);
 			valueProcessor.Process(LanguageMappingReadHyperlinksSetting, LanguageMappingReadHyperlinks, _languageMappingReadHyperlinksDefault);
+			valueProcessor.Process(LanguageMappingProcessRichTextFormattingSetting, LanguageMappingProcessRichTextFormatting, _languageMappingProcessRichTextFormattingDefault);
 			valueProcessor.Process(LanguageMappingLanguagesSetting, JsonConvert.SerializeObject(LanguageMappingLanguages),
 				JsonConvert.SerializeObject(_languageMappingLanguagesDefault));
 		}
@@ -98,6 +106,7 @@ namespace Multilingual.Excel.FileType.FileType.Settings
 				LanguageMappingFirstRowIsHeading = LanguageMappingFirstRowIsHeading,
 				LanguageMappingReadAllWorkSheets = LanguageMappingReadAllWorkSheets,
 				LanguageMappingReadHyperlinks = LanguageMappingReadHyperlinks,
+				LanguageMappingProcessRichTextFormatting = LanguageMappingProcessRichTextFormatting,
 				LanguageMappingLanguages = LanguageMappingLanguages
 			};
 		}
@@ -109,6 +118,7 @@ namespace Multilingual.Excel.FileType.FileType.Settings
 				   otherSetting.LanguageMappingFirstRowIsHeading == LanguageMappingFirstRowIsHeading &&
 				   otherSetting.LanguageMappingReadAllWorkSheets == LanguageMappingReadAllWorkSheets &&
 				   otherSetting.LanguageMappingReadHyperlinks == LanguageMappingReadHyperlinks &&
+				   otherSetting.LanguageMappingProcessRichTextFormatting == LanguageMappingProcessRichTextFormatting &&
 				   otherSetting.LanguageMappingLanguages == LanguageMappingLanguages;
 		}
 
@@ -118,6 +128,7 @@ namespace Multilingual.Excel.FileType.FileType.Settings
 			LanguageMappingFirstRowIsHeading = _languageMappingFirstRowIsHeadingDefault;
 			LanguageMappingReadAllWorkSheets = _languageMappingReadAllWorkSheetsDefault;
 			LanguageMappingReadHyperlinks = _languageMappingReadHyperlinksDefault;
+			LanguageMappingProcessRichTextFormatting = _languageMappingProcessRichTextFormattingDefault;
 			LanguageMappingLanguages = _languageMappingLanguagesDefault;
 		}
 	}

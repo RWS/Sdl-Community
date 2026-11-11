@@ -175,6 +175,7 @@ namespace Multilingual.Excel.FileType.Services
 				FirstRowIndex = LanguageMappingSettings.LanguageMappingFirstRowIndex,
 				FirstRowIndexIsHeading = LanguageMappingSettings.LanguageMappingFirstRowIsHeading,
 				ReadHyperlinks = LanguageMappingSettings.LanguageMappingReadHyperlinks,
+				ProcessRichTextFormatting = LanguageMappingSettings.LanguageMappingProcessRichTextFormatting,
 			};
 			_excelSheets = new List<ExcelSheet>();
 
@@ -204,7 +205,8 @@ namespace Multilingual.Excel.FileType.Services
 			{
 				excelColumns.Add(new ExcelColumn
 				{
-					Name = _sourceLanguageMapping.ContentColumn
+					Name = _sourceLanguageMapping.ContentColumn,
+					IsContentColumn = true
 				});
 			}
 
@@ -212,7 +214,8 @@ namespace Multilingual.Excel.FileType.Services
 			{
 				excelColumns.Add(new ExcelColumn
 				{
-					Name = _targetLanguageMapping.ContentColumn
+					Name = _targetLanguageMapping.ContentColumn,
+					IsContentColumn = true
 				});
 			}
 
@@ -256,6 +259,8 @@ namespace Multilingual.Excel.FileType.Services
 			{
 				var targetContent = excelRow.Cells.FirstOrDefault(a => a.Column.Name == _targetLanguageMapping.ContentColumn);
 				targetContent.Value = _isCDATA ? string.Format(XmlConstants.CdataFormat, targetSubContent) : targetSubContent;
+				targetContent.HasLiteralFormattingTags = excelRow.Cells
+					.FirstOrDefault(a => a.Column.Name == _sourceLanguageMapping.ContentColumn)?.HasLiteralFormattingTags == true;
 			}
 		}
 
@@ -406,6 +411,7 @@ namespace Multilingual.Excel.FileType.Services
 				else
 				{
 					targetContent.Value = targetValue;
+					targetContent.HasLiteralFormattingTags = sourceContent?.HasLiteralFormattingTags == true;
 				}
 			}
 		}
@@ -443,6 +449,7 @@ namespace Multilingual.Excel.FileType.Services
 				FirstRowIndex = LanguageMappingSettings.LanguageMappingFirstRowIndex,
 				FirstRowIndexIsHeading = LanguageMappingSettings.LanguageMappingFirstRowIsHeading,
 				ReadHyperlinks = LanguageMappingSettings.LanguageMappingReadHyperlinks,
+				ProcessRichTextFormatting = LanguageMappingSettings.LanguageMappingProcessRichTextFormatting,
 			};
 
 			var excelColumns = GetExcelColumns();

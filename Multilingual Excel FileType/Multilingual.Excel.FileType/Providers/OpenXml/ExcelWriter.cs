@@ -6,6 +6,7 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Multilingual.Excel.FileType.Providers.OpenXml.Model;
+using Multilingual.Excel.FileType.Services;
 using Hyperlink = DocumentFormat.OpenXml.Spreadsheet.Hyperlink;
 
 namespace Multilingual.Excel.FileType.Providers.OpenXml
@@ -48,10 +49,21 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 							var styleIndex = 0;
 							foreach (var excelCell in excelRow.Cells)
 							{
-								excelDocument.SetCellValue(spreadsheetDocument, workSheetPart.Worksheet,
-									excelCell.Column.Index, excelRow.Index, excelCell.Value, false, false);
-
 								var isHyperlink = !string.IsNullOrEmpty(excelCell.Hyperlink?.Reference);
+								var richTextRuns = isHyperlink || excelCell.HasLiteralFormattingTags || !_excelOptions.ProcessRichTextFormatting
+									? null
+									: RichTextConverter.ToRuns(excelCell.Value);
+								if (richTextRuns != null)
+								{
+									excelDocument.SetCellRichText(spreadsheetDocument, workSheetPart.Worksheet,
+										excelCell.Column.Index, excelRow.Index, richTextRuns);
+								}
+								else
+								{
+									excelDocument.SetCellValue(spreadsheetDocument, workSheetPart.Worksheet,
+										excelCell.Column.Index, excelRow.Index, excelCell.Value, false, false);
+								}
+
 								if (isHyperlink)
 								{
 									var row = excelDocument.GetRow(excelRow, workSheetPart);

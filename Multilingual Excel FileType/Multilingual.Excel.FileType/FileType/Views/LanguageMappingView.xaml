@@ -57,6 +57,7 @@
 							<RowDefinition Height="Auto"/>
 							<RowDefinition Height="Auto"/>
 							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
 						</Grid.RowDefinitions>
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="Auto"/>
@@ -89,6 +90,19 @@
 						<CheckBox Grid.Row="3" Grid.Column="0" Margin="0,5,0,5" Grid.ColumnSpan="3" VerticalAlignment="Center" 
 						          Content="Read hyperlinks"
 						          IsChecked="{Binding ReadHyperlinks}"/>
+
+						<CheckBox Grid.Row="4" Grid.Column="0" Margin="0,5,0,5" Grid.ColumnSpan="3" VerticalAlignment="Center" 
+						          Content="Convert rich text formatting to and from tags"
+						          IsChecked="{Binding ProcessRichTextFormatting}"/>
+						<Image Grid.Row="4" Grid.Column="3" Source="../../Resources/Information.png" Height="16" HorizontalAlignment="Left" 
+						       RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" Margin="5,5,0,5">
+							<Image.ToolTip>
+								<StackPanel>
+									<TextBlock MaxWidth="400" TextWrapping='Wrap'
+									           Text="Read bold, italic, underline, strikethrough, superscript and subscript formatting in the source and target content cells as tags, and write these tags back as Excel cell formatting. Clear this option to read the cell text without formatting and keep tags as literal text (e.g. &lt;sup&gt;) in the target cells."/>
+								</StackPanel>
+							</Image.ToolTip>
+						</Image>
 					</Grid>
 				</GroupBox>
 

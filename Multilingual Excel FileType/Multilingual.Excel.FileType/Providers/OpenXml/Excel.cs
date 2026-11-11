@@ -664,6 +664,174 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 		/// <returns>True if successful</returns>
 		private bool SetCellValue(Worksheet worksheet, uint columnIndex, uint rowIndex, CellValues valueType, string value, uint? styleIndex, bool save = false)
 		{
+			var cell = GetOrCreateCell(worksheet, columnIndex, rowIndex);
+
+			// Add the value
+			cell.InlineString = null;
+			cell.CellValue = new CellValue(value);
+
+			if (styleIndex != null)
+			{
+				cell.StyleIndex = styleIndex.Value;
+			}
+			if (valueType != CellValues.Date)
+			{
+				cell.DataType = new EnumValue<CellValues>(valueType);
+			}
+
+
+			if (save)
+			{
+				worksheet.Save();
+			}
+
+			return true;
+		}
+
+		/// <summary>
+		/// Sets a rich text (inline string) value to a cell. The row and the cell are created if they do not exist.
+		/// Formatted runs inherit the font of the cell style so that only the run formatting differs.
+		/// </summary>
+		/// <param name="spreadsheet">Spreadsheet to use</param>
+		/// <param name="worksheet">Worksheet to use</param>
+		/// <param name="columnIndex">Index of the column</param>
+		/// <param name="rowIndex">Index of the row</param>
+		/// <param name="runs">The rich text runs</param>
+		/// <param name="save">Save the worksheet?</param>
+		/// <returns>True if successful</returns>
+		public bool SetCellRichText(SpreadsheetDocument spreadsheet, Worksheet worksheet, uint columnIndex, uint rowIndex, IEnumerable<Models.RichTextRun> runs, bool save = false)
+		{
+			var cell = GetOrCreateCell(worksheet, columnIndex, rowIndex);
+			var baseFont = GetCellFont(spreadsheet, cell);
+			var runList = runs.ToList();
+			var markupFormatting = new Models.RichTextRun
+			{
+				Bold = runList.Any(r => r.Bold),
+				Italic = runList.Any(r => r.Italic),
+				Underline = runList.Any(r => r.Underline),
+				Strikethrough = runList.Any(r => r.Strikethrough),
+				VertAlign = runList.Any(r => r.VertAlign != Models.RichTextRun.VerticalAlignment.Baseline)
+					? Models.RichTextRun.VerticalAlignment.Superscript
+					: Models.RichTextRun.VerticalAlignment.Baseline
+			};
+
+			var inlineString = new InlineString();
+			foreach (var run in runList)
+			{
+				var excelRun = new Run();
+				// Excel renders runs without <rPr> that follow a formatted run in the workbook default font,
+				// so every run gets the cell font when it is known
+				if (run.HasFormatting || baseFont != null)
+				{
+					excelRun.RunProperties = CreateRunProperties(baseFont, run, markupFormatting);
+				}
+
+				excelRun.Text = new Text(run.Text) { Space = SpaceProcessingModeValues.Preserve };
+				inlineString.Append(excelRun);
+			}
+
+			cell.CellValue = null;
+			cell.InlineString = inlineString;
+			cell.DataType = new EnumValue<CellValues>(CellValues.InlineString);
+
+			if (save)
+			{
+				worksheet.Save();
+			}
+
+			return true;
+		}
+
+		internal static Font GetCellFont(SpreadsheetDocument spreadsheet, CellType cell)
+		{
+			var stylesheet = spreadsheet.WorkbookPart?.WorkbookStylesPart?.Stylesheet;
+			var cellFormats = stylesheet?.CellFormats?.Elements<CellFormat>().ToList();
+			var fonts = stylesheet?.Fonts?.Elements<Font>().ToList();
+			if (cellFormats == null || fonts == null)
+			{
+				return null;
+			}
+
+			var styleIndex = (int)(cell.StyleIndex?.Value ?? 0);
+			if (styleIndex >= cellFormats.Count)
+			{
+				return null;
+			}
+
+			var fontId = (int)(cellFormats[styleIndex].FontId?.Value ?? 0);
+			return fontId < fonts.Count ? fonts[fontId] : null;
+		}
+
+		/// <param name="markupFormatting">Formatting used anywhere in the markup; the markup alone decides these
+		/// properties, so they are not inherited from the cell font (e.g. only one word bold in a bold-styled cell)</param>
+		private static RunProperties CreateRunProperties(Font baseFont, Models.RichTextRun run, Models.RichTextRun markupFormatting)
+		{
+			var properties = new RunProperties();
+
+			// Font (<font>) and run properties (<rPr>) share most child elements, except the font name and family
+			foreach (var element in baseFont?.ChildElements ?? Enumerable.Empty<OpenXmlElement>())
+			{
+				switch (element)
+				{
+					case Bold _ when markupFormatting.Bold:
+					case Italic _ when markupFormatting.Italic:
+					case Underline _ when markupFormatting.Underline:
+					case Strike _ when markupFormatting.Strikethrough:
+					case VerticalTextAlignment _ when markupFormatting.VertAlign != Models.RichTextRun.VerticalAlignment.Baseline:
+						break;
+					case FontName fontName:
+						properties.Append(new RunFont { Val = fontName.Val });
+						break;
+					case FontFamilyNumbering fontFamily:
+						properties.Append(new FontFamily { Val = fontFamily.Val });
+						break;
+					default:
+						properties.Append(element.CloneNode(true));
+						break;
+				}
+			}
+
+			if (run.Bold)
+			{
+				ReplaceRunProperty(properties, new Bold());
+			}
+
+			if (run.Italic)
+			{
+				ReplaceRunProperty(properties, new Italic());
+			}
+
+			if (run.Underline)
+			{
+				ReplaceRunProperty(properties, new Underline());
+			}
+
+			if (run.Strikethrough)
+			{
+				ReplaceRunProperty(properties, new Strike());
+			}
+
+			if (run.VertAlign != Models.RichTextRun.VerticalAlignment.Baseline)
+			{
+				ReplaceRunProperty(properties, new VerticalTextAlignment
+				{
+					Val = run.VertAlign == Models.RichTextRun.VerticalAlignment.Superscript
+						? VerticalAlignmentRunValues.Superscript
+						: VerticalAlignmentRunValues.Subscript
+				});
+			}
+
+			return properties;
+		}
+
+		private static void ReplaceRunProperty<T>(RunProperties properties, T property) where T : OpenXmlElement
+		{
+			properties.RemoveAllChildren<T>();
+			properties.Append(property);
+		}
+
+		private Cell GetOrCreateCell(Worksheet worksheet, uint columnIndex, uint rowIndex)
+		{
 			var sheetData = worksheet.GetFirstChild<SheetData>();
 			Row row;
 			Row previousRow = null;
@@ -712,26 +880,7 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 				row.InsertAfter(cell, previousCell);
 			}
 
-
-			// Add the value
-			cell.CellValue = new CellValue(value);
-
-			if (styleIndex != null)
-			{
-				cell.StyleIndex = styleIndex.Value;
-			}
-			if (valueType != CellValues.Date)
-			{
-				cell.DataType = new EnumValue<CellValues>(valueType);
-			}
-
-
-			if (save)
-			{
-				worksheet.Save();
-			}
-
-			return true;
+			return cell;
 		}
 
 		/// <summary>

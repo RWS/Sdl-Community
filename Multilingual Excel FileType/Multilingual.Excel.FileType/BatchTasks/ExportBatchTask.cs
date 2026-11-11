@@ -157,6 +157,7 @@ namespace Multilingual.Excel.FileType.BatchTasks
 					FirstRowIndex = languageMappingSettings.LanguageMappingFirstRowIndex,
 					FirstRowIndexIsHeading = languageMappingSettings.LanguageMappingFirstRowIsHeading,
 					ReadHyperlinks = languageMappingSettings.LanguageMappingReadHyperlinks,
+					ProcessRichTextFormatting = languageMappingSettings.LanguageMappingProcessRichTextFormatting,
 				};
 
 				var excelColumns = GetExcelColumns(multilingualFileInfo);
@@ -172,7 +173,8 @@ namespace Multilingual.Excel.FileType.BatchTasks
 			{
 				new ExcelColumn
 				{
-					Name = multilingualFileInfo.TargetLanguage.ContentColumn
+					Name = multilingualFileInfo.TargetLanguage.ContentColumn,
+					IsContentColumn = true
 				}
 			};
 
