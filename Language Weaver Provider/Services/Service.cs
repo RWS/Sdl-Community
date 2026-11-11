@@ -9,7 +9,7 @@ using Newtonsoft.Json.Linq;
 
 namespace LanguageWeaverProvider.Services
 {
-    internal static class Service
+    public static class Service
     {
         public static async Task<HttpResponseMessage> SendRequest(HttpMethod httpMethod, string requestUri, AccessToken accessToken = null, HttpContent content = null)
         {
@@ -143,9 +143,10 @@ namespace LanguageWeaverProvider.Services
             }
 
             var expirationTime = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero).AddMilliseconds(unixTimeStamp.Value);
-            var currentTime = DateTimeOffset.UtcNow.AddHours(-1);
+            // Renew a few minutes early so a token never expires mid-request or to clock skew.
+            var renewFrom = DateTimeOffset.UtcNow.AddMinutes(5);
 
-            return expirationTime <= currentTime;
+            return expirationTime <= renewFrom;
         }
 
         public static HttpClient GetHttpClient()
