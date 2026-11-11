@@ -16,7 +16,7 @@ namespace LanguageWeaverProvider.Send_feedback
         public override async Task<bool> Send()
         {
             var feedbackItem = GetFeedbackRequest(segmentPair);
-            var accessToken = GetAccessToken(Constants.CloudFullScheme);
+            var accessToken = await GetAccessToken(Constants.CloudFullScheme);
             if (accessToken is null) return false;
 
             var translationOrigin = segmentPair.Properties.TranslationOrigin;
