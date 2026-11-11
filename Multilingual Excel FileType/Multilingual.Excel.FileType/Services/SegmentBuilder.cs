@@ -167,6 +167,8 @@ namespace Multilingual.Excel.FileType.Services
 				switch (childNode.NodeType)
 				{
 					case XmlNodeType.Text:
+					case XmlNodeType.Whitespace:
+					case XmlNodeType.SignificantWhitespace:
 						{
 							var fragments = _entityService.ConvertKnownEntitiesInMarkupData(childNode.InnerText, EntityRule.Parser);
 							foreach (var fragment in fragments)
@@ -233,6 +235,7 @@ namespace Multilingual.Excel.FileType.Services
 					formatting.Add(new Bold(true));
 					break;
 				case "i":
+				case "em":
 					formatting.Add(new Italic(true));
 					break;
 				case "u":
@@ -242,6 +245,12 @@ namespace Multilingual.Excel.FileType.Services
 				case "s":
 				case "del":
 					formatting.Add(new Strikethrough(true));
+					break;
+				case "sup":
+					formatting.Add(new TextPosition(TextPosition.SuperSub.Superscript));
+					break;
+				case "sub":
+					formatting.Add(new TextPosition(TextPosition.SuperSub.Subscript));
 					break;
 					//case "font":
 					//	var color = ColorTranslator.FromHtml(tag.ColorAttributeValue);
@@ -308,6 +317,8 @@ namespace Multilingual.Excel.FileType.Services
 				switch (childNode.NodeType)
 				{
 					case XmlNodeType.Text:
+					case XmlNodeType.Whitespace:
+					case XmlNodeType.SignificantWhitespace:
 						{
 							var fragments = _entityService.ConvertKnownEntitiesInMarkupData(childNode.InnerText, EntityRule.Parser);
 							foreach (var fragment in fragments)

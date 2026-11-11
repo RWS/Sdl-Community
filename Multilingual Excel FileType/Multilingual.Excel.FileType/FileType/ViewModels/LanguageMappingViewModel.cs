@@ -28,6 +28,7 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 		private bool _firstRowIsHeading;
 		private bool _readAllWorkSheets;
 		private bool _readHyperlinks;
+		private bool _processRichTextFormatting;
 
 		private LanguageMapping _selectedLanguageMapping;
 
@@ -53,6 +54,7 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 			FirstRowIsHeading = Settings.LanguageMappingFirstRowIsHeading;
 			ReadAllWorkSheets = Settings.LanguageMappingReadAllWorkSheets;
 			ReadHyperlinks = Settings.LanguageMappingReadHyperlinks;
+			ProcessRichTextFormatting = Settings.LanguageMappingProcessRichTextFormatting;
 
 			LanguageMappings = new ObservableCollection<LanguageMapping>(Settings.LanguageMappingLanguages);
 		}
@@ -141,6 +143,23 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 			}
 		}
 
+		public bool ProcessRichTextFormatting
+		{
+			get => _processRichTextFormatting;
+			set
+			{
+				if (_processRichTextFormatting == value)
+				{
+					return;
+				}
+
+				_processRichTextFormatting = value;
+				OnPropertyChanged(nameof(ProcessRichTextFormatting));
+
+				Settings.LanguageMappingProcessRichTextFormatting = _processRichTextFormatting;
+			}
+		}
+
 		public ObservableCollection<LanguageMapping> LanguageMappings
 		{
 			get => _languageMappings;
@@ -206,6 +225,7 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 			FirstRowIsHeading = Settings.LanguageMappingFirstRowIsHeading;
 			ReadAllWorkSheets = Settings.LanguageMappingReadAllWorkSheets;
 			ReadHyperlinks = Settings.LanguageMappingReadHyperlinks;
+			ProcessRichTextFormatting = Settings.LanguageMappingProcessRichTextFormatting;
 			LanguageMappings = new ObservableCollection<LanguageMapping>(Settings.LanguageMappingLanguages);
 
 			return Settings;

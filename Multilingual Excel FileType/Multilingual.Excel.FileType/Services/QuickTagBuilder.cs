@@ -42,8 +42,8 @@ namespace Multilingual.Excel.FileType.Services
 			quickTags.Add(tagMap);
 
 			tagMap = new TagMap();
-			tagMap.QuickId = QuickTagDefaultId.Italic;
-			tagMap.QuickInsertId = QuickInsertIds.qItalic;
+			tagMap.QuickId = QuickTagDefaultId.Underline;
+			tagMap.QuickInsertId = QuickInsertIds.qUnderline;
 			tagMap.TagPair = CreateTagPair("<u>", "</u>", "u", new FormattingGroup { { "Underline", InstanceFormattingItemFactory.CreateFormattingItem("Underline", "true") } });
 			tagMap.QuickTag = CreateDefaultTagPair(QuickTagDefaultId.Underline, "<u>", "</u>", "u");
 			quickTags.Add(tagMap);
