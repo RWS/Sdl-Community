@@ -140,6 +140,7 @@ namespace Multilingual.Excel.FileType.Services
 				FirstRowIndex = LanguageMappingSettings.LanguageMappingFirstRowIndex,
 				FirstRowIndexIsHeading = LanguageMappingSettings.LanguageMappingFirstRowIsHeading,
 				ReadHyperlinks = LanguageMappingSettings.LanguageMappingReadHyperlinks,
+				ProcessRichTextFormatting = LanguageMappingSettings.LanguageMappingProcessRichTextFormatting,
 			};
 
 			var excelColumns = GetExcelColumns();
@@ -363,7 +364,8 @@ namespace Multilingual.Excel.FileType.Services
 			{
 				excelColumns.Add(new ExcelColumn
 				{
-					Name = _sourceLanguageMapping.ContentColumn
+					Name = _sourceLanguageMapping.ContentColumn,
+					IsContentColumn = true
 				});
 			}
 
@@ -542,7 +544,7 @@ namespace Multilingual.Excel.FileType.Services
 		{
 			try
 			{
-				var xmlContent = new XmlDocument();
+				var xmlContent = new XmlDocument { PreserveWhitespace = true };
 				xmlContent.LoadXml("<ExcelRoot>" + cellContent + "</ExcelRoot>");
 
 				return xmlContent.FirstChild;

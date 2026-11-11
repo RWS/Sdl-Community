@@ -9,5 +9,7 @@
 		public bool ReadAllWorkSheets { get; set; }
 
 		public bool ReadHyperlinks { get; set; }
+
+		public bool ProcessRichTextFormatting { get; set; }
 	}
 }

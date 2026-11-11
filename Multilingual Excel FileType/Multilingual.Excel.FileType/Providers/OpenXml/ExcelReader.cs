@@ -145,7 +145,8 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 
 				var hyperlink = GetHyperLink(workSheetPart, hyperlinks, cell);
 
-				var cellValue = GetCellValue(cell, spreadsheetDocument);
+				var isHyperlink = !string.IsNullOrEmpty(hyperlink?.Reference);
+				var cellValue = GetCellValue(cell, spreadsheetDocument, excelColumn.IsContentColumn && !isHyperlink);
 				var cellBackgroundColor = GetCellBackgroundColor(cell, spreadsheetDocument);
 
 				var excelCell = new ExcelCell
@@ -320,21 +321,39 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 			return cellStyleIndex;
 		}
 
-		private static string GetCellValue(CellType cell, SpreadsheetDocument spreadsheetDocument)
+		private string GetCellValue(CellType cell, SpreadsheetDocument spreadsheetDocument, bool isContentColumn = false)
 		{
 			if (cell == null)
 			{
 				return null;
 			}
 
-			var value = cell.CellValue?.Text;
+			RstType richText = null;
 			if (cell.DataType?.Value == CellValues.SharedString)
 			{
-				return spreadsheetDocument.WorkbookPart.SharedStringTablePart.
-					SharedStringTable.ChildElements.GetItem(int.Parse(value)).InnerText;
+				richText = spreadsheetDocument.WorkbookPart.SharedStringTablePart.
+					SharedStringTable.ChildElements.GetItem(int.Parse(cell.CellValue?.Text)) as RstType;
+			}
+			else if (cell.DataType?.Value == CellValues.InlineString)
+			{
+				richText = cell.InlineString;
 			}
 
-			return value;
+			if (richText == null)
+			{
+				return cell.CellValue?.Text;
+			}
+
+			if (isContentColumn && _excelOptions.ProcessRichTextFormatting)
+			{
+				var markup = RichTextMarkupBuilder.GetMarkup(richText, Excel.GetCellFont(spreadsheetDocument, cell));
+				if (markup != null)
+				{
+					return markup;
+				}
+			}
+
+			return richText.InnerText;
 		}
 
 		private uint GetColumnIndex(string cellReference)
