@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
@@ -9,7 +10,7 @@ using Newtonsoft.Json.Linq;
 
 namespace LanguageWeaverProvider.Services
 {
-    internal static class Service
+    public static class Service
     {
         public static async Task<HttpResponseMessage> SendRequest(HttpMethod httpMethod, string requestUri, AccessToken accessToken = null, HttpContent content = null)
         {
@@ -50,7 +51,7 @@ namespace LanguageWeaverProvider.Services
         {
             try
             {
-                var result = await ValidateTokenAsync(translationOptions, showErrors);
+                var result = await ValidateTokenAsync(translationOptions, showErrors).ConfigureAwait(false);
                 if (result)
                     onValidated?.Invoke();
             }
@@ -62,7 +63,24 @@ namespace LanguageWeaverProvider.Services
             }
         }
 
-        public static async Task<bool> ValidateTokenAsync(ITranslationOptions translationOptions, bool showErrors = true)
+        public static Task<bool> ValidateTokenAsync(ITranslationOptions translationOptions, bool showErrors = true)
+        {
+            // Studio leaves a WindowsFormsSynchronizationContext on threads that read its controllers, including batch
+            // threads that never pump it. Renewal that resumed on it never finished: Send Feedback hung at 92 %
+            // (CRQ-46950). Starting it without a context resumes it on the thread pool; error dialogs marshal themselves.
+            var callerContext = SynchronizationContext.Current;
+            SynchronizationContext.SetSynchronizationContext(null);
+            try
+            {
+                return RenewExpiredTokenAsync(translationOptions, showErrors);
+            }
+            finally
+            {
+                SynchronizationContext.SetSynchronizationContext(callerContext);
+            }
+        }
+
+        private static async Task<bool> RenewExpiredTokenAsync(ITranslationOptions translationOptions, bool showErrors)
         {
             if (translationOptions.AccessToken is null)
             {
@@ -143,9 +161,10 @@ namespace LanguageWeaverProvider.Services
             }
 
             var expirationTime = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero).AddMilliseconds(unixTimeStamp.Value);
-            var currentTime = DateTimeOffset.UtcNow.AddHours(-1);
+            // Renew a few minutes early so a token never expires mid-request or to clock skew.
+            var renewFrom = DateTimeOffset.UtcNow.AddMinutes(5);
 
-            return expirationTime <= currentTime;
+            return expirationTime <= renewFrom;
         }
 
         public static HttpClient GetHttpClient()
