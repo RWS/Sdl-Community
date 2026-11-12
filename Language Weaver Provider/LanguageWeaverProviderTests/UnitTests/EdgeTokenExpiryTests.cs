@@ -1,6 +1,9 @@
 using System;
 using System.Text;
+using System.Threading.Tasks;
+using LanguageWeaverProvider;
 using LanguageWeaverProvider.Model;
+using LanguageWeaverProvider.Model.Options;
 using LanguageWeaverProvider.Services;
 using Xunit;
 
@@ -127,6 +130,25 @@ namespace LanguageWeaverProviderTests.UnitTests
             EdgeService.EnsureExpiryPopulated(token);
 
             Assert.Equal(0, token.ExpiresAt);
+        }
+
+        [Fact]
+        public async Task ValidateTokenAsync_EdgeSsoTokenExpiredHalfAnHourAgo_ReportsSessionExpired()
+        {
+            // CRQ-46950: a token that expired less than an hour ago was treated as still valid and sent, and the
+            // server rejected it with 401 code 57 "Invalid or expired access token".
+            var options = new TranslationOptions
+            {
+                PluginVersion = PluginVersion.LanguageWeaverEdge,
+                AuthenticationType = AuthenticationType.EdgeSSO,
+                AccessToken = new AccessToken
+                {
+                    TokenType = "Bearer",
+                    ExpiresAt = DateTimeOffset.UtcNow.AddMinutes(-30).ToUnixTimeMilliseconds()
+                }
+            };
+
+            await Assert.ThrowsAsync<EdgeSessionExpiredException>(() => Service.ValidateTokenAsync(options, false));
         }
 
         [Fact]

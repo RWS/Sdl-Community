@@ -50,23 +50,27 @@ namespace LanguageWeaverProvider.Services
                     return false;
                 }
 
-                var ssoToken = JsonConvert.DeserializeObject<CloudAuth0Response>(content);
-                translationOptions.AccessToken = new AccessToken
-                {
-                    Token = ssoToken.AccessToken,
-                    TokenType = ssoToken.TokenType,
-                    RefreshToken = ssoToken.RefreshToken ?? translationOptions.AccessToken?.RefreshToken,
-                    ExpiresAt = (long)(DateTime.UtcNow.AddSeconds(ssoToken.ExpiresIn) - new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).TotalMilliseconds,
-                    BaseUri = translationOptions.AccessToken.BaseUri
-                };
-
+                translationOptions.AccessToken = MapRefreshedToken(content, translationOptions.AccessToken);
                 return true;
-
             }
             catch (Exception)
             {
                 return false;
             }
+        }
+
+        public static AccessToken MapRefreshedToken(string auth0Response, AccessToken expiredToken)
+        {
+            var ssoToken = JsonConvert.DeserializeObject<CloudAuth0Response>(auth0Response);
+            return new AccessToken
+            {
+                Token = ssoToken.AccessToken,
+                TokenType = ssoToken.TokenType,
+                RefreshToken = ssoToken.RefreshToken ?? expiredToken.RefreshToken,
+                ExpiresAt = DateTimeOffset.UtcNow.AddSeconds(ssoToken.ExpiresIn).ToUnixTimeMilliseconds(),
+                BaseUri = expiredToken.BaseUri,
+                AccountId = expiredToken.AccountId
+            };
         }
 
         public static async Task<bool> AuthenticateSSOUser(ITranslationOptions translationOptions, CloudAuth0Config auth0Config, Uri uri, string selectedRegion)

@@ -13,7 +13,7 @@ public class EdgeFeedback(ISegmentPair segmentPair) : LanguageWeaverFeedback
 
     public override async Task<bool> Send()
     {
-        var accessToken = GetAccessToken(Constants.EdgeFullScheme);
+        var accessToken = await GetAccessToken(Constants.EdgeFullScheme);
         if (accessToken is null)
         {
             return false;

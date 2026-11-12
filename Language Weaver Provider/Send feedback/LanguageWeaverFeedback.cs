@@ -14,18 +14,32 @@ namespace LanguageWeaverProvider.Send_feedback
     {
         public abstract Task<bool> Send();
 
-        protected static AccessToken GetAccessToken(string pluginVersion)
+        protected static async Task<AccessToken> GetAccessToken(string pluginVersion)
         {
             var translationOptions = GetTranslationOptions(pluginVersion);
             if (translationOptions is null) return null;
 
-            CredentialManager.GetCredentials(translationOptions, true);
-            // Route through the guarded path so an expired EdgeSSO session (which throws
-            // EdgeSessionExpiredException) is swallowed here instead of escaping as an unobserved task exception.
-            _ = Service.ValidateAndUpdateTokenAsync(translationOptions, null);
+            // Prefer the provider's live options: translation keeps their token refreshed in memory, while the
+            // credential store can still hold one that has since expired (CRQ-46950: 401 code 57).
+            if (translationOptions.Id is not null
+             && ApplicationInitializer.TranslationOptions?.TryGetValue(translationOptions.Id, out var liveOptions) == true)
+            {
+                translationOptions = liveOptions;
+            }
+            else
+            {
+                CredentialManager.GetCredentials(translationOptions, true);
+            }
 
-            var accessToken = translationOptions.AccessToken;
-            return accessToken;
+            // Await the refresh: it replaces AccessToken, so reading it earlier returns the expired token.
+            // The guarded path swallows an expired EdgeSSO session, which cannot be renewed without UI.
+            await Service.ValidateAndUpdateTokenAsync(translationOptions, () =>
+            {
+                if (ApplicationInitializer.CredentialStore is not null)
+                    CredentialManager.UpdateCredentials(ApplicationInitializer.CredentialStore, translationOptions);
+            }).ConfigureAwait(false);
+
+            return translationOptions.AccessToken;
         }
 
         private static ITranslationOptions GetTranslationOptions(string pluginVersion)
