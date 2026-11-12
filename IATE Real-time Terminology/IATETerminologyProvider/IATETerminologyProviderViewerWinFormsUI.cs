@@ -1,15 +1,16 @@
 ﻿using Sdl.Community.IATETerminologyProvider.Helpers;
 using Sdl.Community.IATETerminologyProvider.Service;
 using Sdl.Community.IATETerminologyProvider.View;
-using Sdl.Core.Globalization;
-using Sdl.Terminology.TerminologyProvider.Core;
+using System.Globalization;
+
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using TradosStudio.API.TranslationResources.Terminology;
+using TradosStudio.API.TranslationResources.Terminology.Entries;
 
 namespace Sdl.Community.IATETerminologyProvider
-{
-    [TerminologyProviderViewerWinFormsUI]
+{    
     internal class IATETerminologyProviderViewerWinFormsUI : ITerminologyProviderViewerWinFormsUI
     {
         private IATETerminologyProvider _iateTerminologyProvider;
@@ -19,9 +20,9 @@ namespace Sdl.Community.IATETerminologyProvider
         public event EventHandler TermChanged;
         public event EventHandler<EntryEventArgs> SelectedTermChanged;
         public event Action<Entry> JumpToTermAction;
-        public event Action<string, string> AddTermAction;
-
-        public Control Control
+        public event Action<string, string> AddTermAction;        
+        
+        public ITermsView Control
         {
             get
             {
@@ -50,7 +51,7 @@ namespace Sdl.Community.IATETerminologyProvider
 
         bool ITerminologyProviderViewerWinFormsUI.CanAddTerm => false;
 
-        public bool IsEditing => false;
+        public bool IsEditing => false;        
 
         public void AddAndEditTerm(Entry term, string source, string target)
         {
@@ -65,11 +66,12 @@ namespace Sdl.Community.IATETerminologyProvider
         {
         }
 
-        public void Initialize(ITerminologyProvider terminologyProvider, CultureCode source, CultureCode target)
+        public void Initialize(ITerminologyProvider terminologyProvider, string source, string target)
         {
             _iateTerminologyProvider = (IATETerminologyProvider)terminologyProvider;
             Initialized = true;
         }
+
 
         public void JumpToTerm(Entry entry)
         {

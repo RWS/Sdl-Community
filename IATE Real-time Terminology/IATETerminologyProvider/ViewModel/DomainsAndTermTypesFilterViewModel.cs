@@ -22,11 +22,14 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 		private TermTypeModel _selectedTermType;
 		private SettingsModel _settings;
 		private List<TermTypeModel> _termTypes = new List<TermTypeModel>();
+        private IInventoriesProvider _inventoriesProvider;
 
-		public DomainsAndTermTypesFilterViewModel()
+
+        public DomainsAndTermTypesFilterViewModel(IInventoriesProvider inventoriesProvider)
 		{
 			PropertyChanged += DomainsAndTermTypesFilterViewModel_PropertyChanged;
-		}
+            _inventoriesProvider = inventoriesProvider;
+        }
 
 		public bool AllDomainsChecked
 		{
@@ -248,7 +251,7 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 		{
 			try
 			{
-				if (IATEApplication.InventoriesProvider.Domains?.Count > 0)
+				if (_inventoriesProvider.Domains?.Count > 0)
 				{
 					SetDomains();
 				}
@@ -261,9 +264,9 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 
 		private void LoadTermTypes()
 		{
-			if (IATEApplication.InventoriesProvider.TermTypes?.Count > 0)
+			if (_inventoriesProvider.TermTypes?.Count > 0)
 			{
-				SetTermTypes(IATEApplication.InventoriesProvider.TermTypes);
+				SetTermTypes(_inventoriesProvider.TermTypes);
 			}
 		}
 
@@ -306,7 +309,7 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 		private void SetDomains()
 		{
 			var domains = new List<DomainModel>();
-			foreach (var domain in IATEApplication.InventoriesProvider.Domains)
+			foreach (var domain in _inventoriesProvider.Domains)
 			{
 				if (domain.Name.Equals(Constants.NotSpecifiedCode)) domain.EurovocCode = "00";
 
