@@ -5,11 +5,15 @@
 		<LangVersion>latest</LangVersion>
 		<IsPackable>false</IsPackable>
 		<SignAssembly>false</SignAssembly>
+		<!-- Directory.Build.props turns it off; needed for the TradosFolder AssemblyMetadata below -->
+		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
 		<PackageReference Include="NSubstitute" Version="4.4.0" />
+		<!-- Studio ships 4.6.3 (assembly 4.2.4.0); NSubstitute pulls 4.3.0 (assembly 4.1.0.0), which lacks ValueTaskAwaiter needed by the in-memory TM -->
+		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.6.3" />
 		<PackageReference Include="xunit" Version="2.6.6" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.5.6">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -28,6 +32,9 @@
 		</Reference>
 		<Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
 			<HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
+			<HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
 		</Reference>
 		<Reference Include="Sdl.FileTypeSupport.Framework.Core">
 			<HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
@@ -59,6 +66,19 @@
 		<Reference Include="Sdl.Core.Settings">
 			<HintPath>$(TradosFolder)\Sdl.Core.Settings.dll</HintPath>
 		</Reference>
+	</ItemGroup>
+
+	<!-- StudioAssemblyResolver loads Studio's own dependencies (ICU, Newtonsoft, ...) from here, with Studio's versions -->
+	<ItemGroup>
+		<AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+			<_Parameter1>TradosFolder</_Parameter1>
+			<_Parameter2>$(TradosFolder)</_Parameter2>
+		</AssemblyAttribute>
+	</ItemGroup>
+
+	<!-- Native DLLs Studio has beside SDLTradosStudio.exe: ICU for word breaking (ja, zh), SQLite.Interop for the in-memory TM -->
+	<ItemGroup>
+		<None Include="$(TradosFolder)\icudt59.dll;$(TradosFolder)\icuin59.dll;$(TradosFolder)\icuuc59.dll;$(TradosFolder)\SQLite.Interop.dll" Link="%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
 	</ItemGroup>
 
 	<ItemGroup>
