@@ -99,7 +99,15 @@ namespace Sdl.Community.Qualitivity.Tracking
 				});
 			}
 
-			public void VisitRevisionMarker(IRevisionMarker revisionMarker) => VisitChildren(revisionMarker);
+			// Like the toolkit: only inserted (and feedback-added) text counts, deleted text does not
+			public void VisitRevisionMarker(IRevisionMarker revisionMarker)
+			{
+				var type = revisionMarker.Properties.RevisionType;
+				if (type == RevisionType.Insert || type == RevisionType.FeedbackAdded)
+				{
+					VisitChildren(revisionMarker);
+				}
+			}
 
 			private void VisitChildren(IAbstractMarkupDataContainer container)
 			{

@@ -97,6 +97,18 @@ namespace Sdl.Community.Qualitivity.Tests
 			Assert.Equal(new[] { words, characters, tags, placeables }, new[] { counts.Words, counts.Characters, counts.Tags, counts.Placeables });
 		}
 
+		// The toolkit counts the text of insertions and skips the text of deletions
+		[Theory]
+		[InlineData("Press {d}the red {/d}Start button.", "Press Start button.")]
+		[InlineData("Press {i}the {/i}Start button.", "Press the Start button.")]
+		public void Count_TrackedChanges_CountsLikeTheToolkit(string source, string counted)
+		{
+			var counts = Count(source);
+			var expected = Count(counted);
+
+			Assert.Equal(new[] { expected.Words, expected.Characters, expected.Tags, expected.Placeables }, new[] { counts.Words, counts.Characters, counts.Tags, counts.Placeables });
+		}
+
 		private static WordCounts Count(string source, string target = "", string language = "en-US")
 		{
 			// Counts depend on the source language only; the TM still needs a target
@@ -111,13 +123,13 @@ namespace Sdl.Community.Qualitivity.Tests
 			return segmentPair;
 		}
 
-		// "{b}…{/b}" is a tag pair, "{x}" a placeholder, "{l}…{/l}" locked content
+		// "{b}…{/b}" is a tag pair, "{x}" a placeholder, "{l}…{/l}" locked content, "{i}…{/i}" / "{d}…{/d}" a tracked insertion / deletion
 		private static ISegment Segment(string spec)
 		{
 			var segment = Factory.CreateSegment(Factory.CreateSegmentPairProperties());
 			IAbstractMarkupDataContainer container = segment;
 			var tagId = 1;
-			foreach (var part in Regex.Split(spec, @"(\{/?[bxl]\})"))
+			foreach (var part in Regex.Split(spec, @"(\{/?[bxlid]\})"))
 			{
 				switch (part)
 				{
@@ -139,8 +151,16 @@ namespace Sdl.Community.Qualitivity.Tests
 						container.Add(locked);
 						container = locked.Content;
 						break;
+					case "{i}":
+					case "{d}":
+						var revision = Factory.CreateRevision(Factory.PropertiesFactory.CreateRevisionProperties(part == "{i}" ? RevisionType.Insert : RevisionType.Delete));
+						container.Add(revision);
+						container = revision;
+						break;
 					case "{/b}":
 					case "{/l}":
+					case "{/i}":
+					case "{/d}":
 						container = segment;
 						break;
 					default:
