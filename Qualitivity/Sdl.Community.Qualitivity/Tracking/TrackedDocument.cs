@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Globalization;
 using Sdl.Community.Structures.Documents;
 using Sdl.Community.Structures.Documents.Records;
-using Trados.Community.Toolkit.LanguagePlatform;
 
 namespace Sdl.Community.Qualitivity.Tracking
 {
@@ -40,8 +39,6 @@ namespace Sdl.Community.Qualitivity.Tracking
 		public string Name { get; set; }
 		public string Path { get; set; }
 
-		public string ProductName { get; set; }
-
 		public string SourceLanguage { get; set; }
 		public string TargetLanguage { get; set; }
 
@@ -60,30 +57,8 @@ namespace Sdl.Community.Qualitivity.Tracking
 		public DateTime? DatetimeOpened { get; set; }
 		public DateTime? DatetimeClosed { get; set; }
 
-		private SegmentPairProcessor _segmentPairProcessor;
+		private SegmentWordCounter _wordCounter;
 
-		public SegmentPairProcessor SegmentPairProcessor
-		{
-			get
-			{
-				if (_segmentPairProcessor != null)
-				{
-					return _segmentPairProcessor;
-				}
-
-				if (SourceLanguage == null || TargetLanguage == null)
-				{
-					throw new Exception(string.Format("Unable to parse the file; {0} language cannot be null!", SourceLanguage == null ? "Source" : "Target"));
-				}
-
-				var pathInfo = new Trados.Community.Toolkit.LanguagePlatform.Models.PathInfo(ProductName);
-
-				_segmentPairProcessor = new SegmentPairProcessor(
-					new Trados.Community.Toolkit.LanguagePlatform.Models.Settings(new CultureInfo(SourceLanguage), new CultureInfo(TargetLanguage)),
-					pathInfo);
-
-				return _segmentPairProcessor;
-			}
-		}
+		public SegmentWordCounter WordCounter => _wordCounter ?? (_wordCounter = new SegmentWordCounter(new CultureInfo(SourceLanguage), new CultureInfo(TargetLanguage)));
 	}
 }

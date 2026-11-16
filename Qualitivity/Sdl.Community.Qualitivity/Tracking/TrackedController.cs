@@ -19,7 +19,6 @@ using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-using Trados.Community.Toolkit.LanguagePlatform;
 using Comment = Sdl.Community.Structures.Documents.Records.Comment;
 using Document = Sdl.TranslationStudioAutomation.IntegrationApi.Document;
 using DocumentActivities = Sdl.Community.Structures.Projects.Activities.DocumentActivities;
@@ -30,8 +29,6 @@ namespace Sdl.Community.Qualitivity.Tracking
 {
 	public class TrackedController
 	{
-		private static string _productName = "Studio 2022";
-
 		private static ContentGenerator _contentProcessor;
 
 		public static QualitivityViewController Controller { get; set; }
@@ -107,7 +104,6 @@ namespace Sdl.Community.Qualitivity.Tracking
 				{
 					Id = file.Id.ToString(),
 					Name = file.Name,
-					ProductName = _productName,
 					SourceLanguage = project.SourceLanguage,
 					TargetLanguage = doc.ActiveFile.Language.CultureInfo.Name
 				};
@@ -505,14 +501,9 @@ namespace Sdl.Community.Qualitivity.Tracking
 			var fuzzy74Tags = 0;
 			var newTags = 0;
 
-			var sourceLanguage = doc.ActiveFileProperties.FileConversionProperties.SourceLanguage.CultureInfo;
-			var targetLanguage = doc.ActiveFileProperties.FileConversionProperties.TargetLanguage.CultureInfo;
-
-			var pathInfo = new Trados.Community.Toolkit.LanguagePlatform.Models.PathInfo(_productName);
-			var segmentPairProcessor = new SegmentPairProcessor(
-				new Trados.Community.Toolkit.LanguagePlatform.Models.Settings(sourceLanguage, targetLanguage), pathInfo);
-
-			var parser = new ContentGenerator();
+			var wordCounter = new SegmentWordCounter(
+				doc.ActiveFileProperties.FileConversionProperties.SourceLanguage.CultureInfo,
+				doc.ActiveFileProperties.FileConversionProperties.TargetLanguage.CultureInfo);
 
 			foreach (var segPair in doc.SegmentPairs)
 			{
@@ -520,22 +511,17 @@ namespace Sdl.Community.Qualitivity.Tracking
 				if (segPair.Properties.TranslationOrigin == null) continue;
 				var match = Helper.GetTranslationStatus(segPair.Properties.TranslationOrigin);
 
-				parser.ProcessSegment(segPair.Source, true, null);
-
 				var words = 0;
 				var chars = 0;
 				var tags = 0;
 				var placeholders = 0;
 				try
 				{
-					var results = segmentPairProcessor.GetSegmentPairInfo(segPair);
-					if (results != null)
-					{
-						words = results.SourceWordCounts.Words;
-						chars = results.SourceWordCounts.Characters;
-						placeholders = results.SourceWordCounts.Placeables;
-						tags = results.SourceWordCounts.Tags;
-					}
+					var counts = wordCounter.Count(segPair);
+					words = counts.Words;
+					chars = counts.Characters;
+					placeholders = counts.Placeables;
+					tags = counts.Tags;
 				}
 				catch
 				{
@@ -1363,14 +1349,11 @@ namespace Sdl.Community.Qualitivity.Tracking
 
 					try
 					{
-						var results = trackedDocuments.ActiveDocument.SegmentPairProcessor.GetSegmentPairInfo(trackedDocuments.ActiveSegment.CurrentSegmentSelected);
-						if (results != null)
-						{
-							record.WordCount = results.SourceWordCounts.Words;
-							record.CharsCount = results.SourceWordCounts.Characters;
-							record.PlaceablesCount = results.SourceWordCounts.Placeables;
-							record.TagsCount = results.SourceWordCounts.Tags;
-						}
+						var counts = trackedDocuments.ActiveDocument.WordCounter.Count(trackedDocuments.ActiveSegment.CurrentSegmentSelected);
+						record.WordCount = counts.Words;
+						record.CharsCount = counts.Characters;
+						record.PlaceablesCount = counts.Placeables;
+						record.TagsCount = counts.Tags;
 					}
 					catch
 					{
