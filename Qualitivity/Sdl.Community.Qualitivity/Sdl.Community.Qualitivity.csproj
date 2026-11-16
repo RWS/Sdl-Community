@@ -66,6 +66,9 @@
 		<Reference Include="Sdl.LanguagePlatform.Core">
 			<HintPath>$(TradosFolder)\Sdl.LanguagePlatform.Core.dll</HintPath>
 		</Reference>
+		<Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
+			<HintPath>$(TradosFolder)\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
+		</Reference>
 		<Reference Include="Sdl.LanguagePlatform.TranslationMemory">
 			<HintPath>$(TradosFolder)\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
 		</Reference>
@@ -146,9 +149,6 @@
 		</PackageReference>
 		<PackageReference Include="System.Management" Version="9.0.5" />
 		<PackageReference Include="Trados.Community.Toolkit.Core">
-			<Version>6.1.0</Version>
-		</PackageReference>
-		<PackageReference Include="Trados.Community.Toolkit.LanguagePlatform">
 			<Version>6.1.0</Version>
 		</PackageReference>
 	</ItemGroup>
