@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,7 +13,9 @@ namespace LanguageWeaverProvider.Services
 {
     public static class Service
     {
-        public static async Task<HttpResponseMessage> SendRequest(HttpMethod httpMethod, string requestUri, AccessToken accessToken = null, HttpContent content = null)
+        public static readonly TimeSpan ResourceListTimeout = TimeSpan.FromMinutes(10);
+
+        public static async Task<HttpResponseMessage> SendRequest(HttpMethod httpMethod, string requestUri, AccessToken accessToken = null, HttpContent content = null, TimeSpan? timeout = null)
         {
             var request = new HttpRequestMessage(httpMethod, requestUri) { Content = content };
             if (accessToken is not null)
@@ -20,7 +23,7 @@ namespace LanguageWeaverProvider.Services
                 request.Headers.Add("Authorization", $"{accessToken.TokenType} {accessToken.Token}");
             }
 
-            var httpClient = GetHttpClient();
+            var httpClient = GetHttpClient(timeout);
             var response = await httpClient.SendAsync(request).ConfigureAwait(false);
             return response;
         }
@@ -149,9 +152,15 @@ namespace LanguageWeaverProvider.Services
             return expirationTime <= renewFrom;
         }
 
-        public static HttpClient GetHttpClient()
+        public static HttpClient GetHttpClient(TimeSpan? timeout = null)
         {
-            var httpClient = new HttpClient();
+            var handler = new HttpClientHandler { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate };
+            var httpClient = new HttpClient(handler);
+            if (timeout.HasValue)
+            {
+                httpClient.Timeout = timeout.Value;
+            }
+
             httpClient.DefaultRequestHeaders.Add(Constants.TraceAppKey, Constants.TraceAppValue);
             httpClient.DefaultRequestHeaders.Add(Constants.TraceAppVersionKey, ApplicationInitializer.CurrentAppVersion);
             return httpClient;
