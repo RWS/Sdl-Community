@@ -169,6 +169,7 @@ namespace LanguageWeaverProvider.ViewModel
             catch (Exception ex)
             {
                 Logger.Error(ex, "Could not load the account's models and dictionaries.");
+                PairMappings = originalPairMappings;
                 LoadingAction = null;
                 var message = ex is TaskCanceledException
                     ? "Language Weaver did not send your account's models in time. Check your network connection and try again."
@@ -179,6 +180,7 @@ namespace LanguageWeaverProvider.ViewModel
 
             if (accountModels is null)
             {
+                PairMappings = originalPairMappings;
                 LoadingAction = null;
                 return;
             }
