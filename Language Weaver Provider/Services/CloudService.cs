@@ -298,7 +298,7 @@ namespace LanguageWeaverProvider.Services
             };
 
             var requestUri = $"{accessToken.BaseUri}v4/accounts/{accessToken.AccountId}/{resourceRequested}";
-            var response = await Service.SendRequest(HttpMethod.Get, requestUri, accessToken);
+            var response = await Service.SendRequest(HttpMethod.Get, requestUri, accessToken, timeout: Service.ResourceListTimeout);
             var languagePairs = await response.DeserializeResponse<List<T>>(property);
             return languagePairs;
         }

@@ -8,6 +8,7 @@ using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Services;
 using LanguageWeaverProvider.View;
+using NLog;
 using Sdl.LanguagePlatform.Core;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,8 @@ namespace LanguageWeaverProvider.ViewModel
 {
     public class PairMappingViewModel : BaseViewModel
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         private readonly ILanguageMappingDatabase _languageMappingDatabase;
         private readonly LanguagePair[] _languagePairs;
         private readonly ITranslationOptions _translationOptions;
@@ -143,21 +146,44 @@ namespace LanguageWeaverProvider.ViewModel
             var originalPairMappings = PairMappings;
             PairMappings = [];
             var mappedLanguages = _languageMappingDatabase.GetMappedLanguages();
-            LoadingAction = "Getting models...";
-            var accountModels = _translationOptions.PluginVersion switch
+            IEnumerable<PairModel> accountModels;
+            IEnumerable<PairDictionary> accountDictionaries;
+            try
             {
-                PluginVersion.LanguageWeaverCloud => await CloudService.GetResources<PairModel>(_translationOptions.AccessToken, CloudResources.LanguagePairs),
-                PluginVersion.LanguageWeaverEdge => await EdgeService.GetLanguagePairs(_translationOptions.AccessToken),
-                _ => throw new ArgumentException("Unsupport PluginVersion value")
-            };
+                LoadingAction = "Getting models...";
+                accountModels = _translationOptions.PluginVersion switch
+                {
+                    PluginVersion.LanguageWeaverCloud => await CloudService.GetResources<PairModel>(_translationOptions.AccessToken, CloudResources.LanguagePairs),
+                    PluginVersion.LanguageWeaverEdge => await EdgeService.GetLanguagePairs(_translationOptions.AccessToken),
+                    _ => throw new ArgumentException("Unsupport PluginVersion value")
+                };
 
-            LoadingAction = "Getting dictionaries...";
-            var accountDictionaries = _translationOptions.PluginVersion switch
+                LoadingAction = "Getting dictionaries...";
+                accountDictionaries = _translationOptions.PluginVersion switch
+                {
+                    PluginVersion.LanguageWeaverCloud => await CloudService.GetResources<PairDictionary>(_translationOptions.AccessToken, CloudResources.Dictionaries),
+                    PluginVersion.LanguageWeaverEdge => await EdgeService.GetDictionaries(_translationOptions.AccessToken),
+                    _ => throw new ArgumentException("Unsupport PluginVersion value")
+                };
+            }
+            catch (Exception ex)
             {
-                PluginVersion.LanguageWeaverCloud => await CloudService.GetResources<PairDictionary>(_translationOptions.AccessToken, CloudResources.Dictionaries),
-                PluginVersion.LanguageWeaverEdge => await EdgeService.GetDictionaries(_translationOptions.AccessToken),
-                _ => throw new ArgumentException("Unsupport PluginVersion value")
-            };
+                Logger.Error(ex, "Could not load the account's models and dictionaries.");
+                LoadingAction = null;
+                var message = ex is TaskCanceledException
+                    ? "Language Weaver did not send your account's models in time. Check your network connection and try again."
+                    : ex.Message;
+                ex.ShowDialog("Getting models", message, true);
+                return;
+            }
+
+            if (accountModels is null)
+            {
+                LoadingAction = null;
+                return;
+            }
+
+            accountDictionaries ??= [];
             LoadingAction = "Loading resources...";
             foreach (var languagePair in _languagePairs)
             {

@@ -75,7 +75,7 @@ namespace LanguageWeaverProvider.Services
                 while (hasMore)
                 {
                     var requestUri = $"{accessToken.BaseUri}api/v2/dictionaries?perPage=1000&page={page}";
-                    var response = await Service.SendRequest(HttpMethod.Get, requestUri, accessToken);
+                    var response = await Service.SendRequest(HttpMethod.Get, requestUri, accessToken, timeout: Service.ResourceListTimeout);
                     var dictionaries = await response.DeserializeResponse<EdgeDictionariesResponse>();
 
                     if (dictionaries?.Dictionaries == null || !dictionaries.Dictionaries.Any())
@@ -113,7 +113,7 @@ namespace LanguageWeaverProvider.Services
             {
                 var requestUri = $"{accessToken.BaseUri}api/v2/language-pairs";
 
-                var response = await Service.SendRequest(HttpMethod.Get, requestUri, accessToken);
+                var response = await Service.SendRequest(HttpMethod.Get, requestUri, accessToken, timeout: Service.ResourceListTimeout);
                 var languagePairs = await response.DeserializeResponse<EdgeLanguagePairResult>();
 
                 var pairModels = languagePairs.LanguagePairs.Select(lp => new PairModel()
