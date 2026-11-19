@@ -1,5 +1,6 @@
 ﻿using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.Extensions;
+using LanguageWeaverProvider.Helpers;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using Microsoft.Win32;
@@ -228,7 +229,7 @@ namespace LanguageWeaverProvider.ViewModel
 
         private void ClearCache(object parameter)
         {
-            var confirmed = System.Windows.MessageBox.Show(
+            var confirmed = ThemedMessageBox.Show(
                 "Delete all locally cached Language Weaver translations?",
                 "Clear cache",
                 System.Windows.MessageBoxButton.YesNo,

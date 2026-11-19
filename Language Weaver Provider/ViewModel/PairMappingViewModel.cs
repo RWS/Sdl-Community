@@ -1,6 +1,7 @@
 ﻿using LanguageMappingProvider;
 using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.Extensions;
+using LanguageWeaverProvider.Helpers;
 using LanguageWeaverProvider.LanguageMappingProvider;
 using LanguageWeaverProvider.LanguageMappingProvider.View;
 using LanguageWeaverProvider.LanguageMappingProvider.ViewModel;
@@ -16,6 +17,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 
@@ -137,8 +139,8 @@ namespace LanguageWeaverProvider.ViewModel
 
         private bool ContinueWithDisabledLinguisticOptions()
         {
-            var result = MessageBox.Show("In order to use Quality Estimation, it needs to be enabled. Do you want to proceed? ", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            return result == DialogResult.Yes;
+            var result = ThemedMessageBox.Show("In order to use Quality Estimation, it needs to be enabled. Do you want to proceed? ", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            return result == MessageBoxResult.Yes;
         }
 
         private async void CreatePairMappings()
