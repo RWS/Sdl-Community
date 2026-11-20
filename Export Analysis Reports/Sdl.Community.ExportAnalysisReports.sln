@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29905.134
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.ExportAnalysisReports", "Sdl.Community.ExportAnalysisReports\Sdl.Community.ExportAnalysisReports.csproj", "{1367B500-D398-4085-BD50-79C2D49B6C3E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.ExportAnalysisReports.UnitTests", "Sdl.Community.ExportAnalysisReports.UnitTests\Sdl.Community.ExportAnalysisReports.UnitTests.csproj", "{B6404761-4A4E-4E0C-BAA7-21577B36106B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1367B500-D398-4085-BD50-79C2D49B6C3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1367B500-D398-4085-BD50-79C2D49B6C3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1367B500-D398-4085-BD50-79C2D49B6C3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1367B500-D398-4085-BD50-79C2D49B6C3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6404761-4A4E-4E0C-BAA7-21577B36106B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6404761-4A4E-4E0C-BAA7-21577B36106B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6404761-4A4E-4E0C-BAA7-21577B36106B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6404761-4A4E-4E0C-BAA7-21577B36106B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3C6FE59B-C70E-40DB-9382-5D7978F992F0}
+	EndGlobalSection
+EndGlobal
