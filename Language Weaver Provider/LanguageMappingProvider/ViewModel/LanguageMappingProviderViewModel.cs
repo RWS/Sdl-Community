@@ -1,5 +1,6 @@
 ﻿using LanguageMappingProvider;
 using LanguageWeaverProvider.Command;
+using LanguageWeaverProvider.Helpers;
 using LanguageWeaverProvider.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -176,7 +177,7 @@ public class LanguageMappingProviderViewModel : BaseViewModel
 
     private bool ExecuteAction(string message, string title)
     {
-        var dialogResult = MessageBox.Show(message, title, MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+        var dialogResult = ThemedMessageBox.Show(message, title, MessageBoxButton.OKCancel, MessageBoxImage.Warning);
         return dialogResult == MessageBoxResult.OK;
     }
 
