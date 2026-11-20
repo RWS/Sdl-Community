@@ -17,6 +17,10 @@
 
   <ItemGroup>
     <Reference Include="System.Net.Http" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="System.Xaml" />
     <Reference Include="NLog">
       <HintPath>$(TradosFolder)\NLog.dll</HintPath>
     </Reference>

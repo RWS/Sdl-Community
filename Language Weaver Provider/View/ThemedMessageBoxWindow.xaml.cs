@@ -1,8 +1,10 @@
 using LanguageWeaverProvider.Helpers;
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Windows;
 using System.Windows.Interop;
+using System.Windows.Media.Imaging;
 
 namespace LanguageWeaverProvider.View
 {
@@ -15,19 +17,45 @@ namespace LanguageWeaverProvider.View
             InitializeComponent();
         }
 
-        public ThemedMessageBoxWindow(string text, string caption, MessageBoxButton button) : this()
+        public ThemedMessageBoxWindow(string text, string caption, MessageBoxButton button, MessageBoxImage icon = MessageBoxImage.None) : this()
         {
             Title = caption;
             TxtMessage.Text = text;
-            Result = button == MessageBoxButton.YesNo ? MessageBoxResult.No : MessageBoxResult.Cancel;
+            Result = button switch
+            {
+                MessageBoxButton.OK => MessageBoxResult.OK,
+                MessageBoxButton.YesNo => MessageBoxResult.No,
+                _ => MessageBoxResult.Cancel
+            };
 
             ConfigureButtons(button);
+            ConfigureIcon(icon);
             this.FollowStudioTheme();
         }
 
-        public static MessageBoxResult Show(Window owner, string text, string caption, MessageBoxButton button)
+        private void ConfigureIcon(MessageBoxImage icon)
         {
-            var win = new ThemedMessageBoxWindow(text, caption, button);
+            var systemIcon = icon switch
+            {
+                MessageBoxImage.Error => SystemIcons.Error,
+                MessageBoxImage.Warning => SystemIcons.Warning,
+                MessageBoxImage.Information => SystemIcons.Information,
+                MessageBoxImage.Question => SystemIcons.Question,
+                _ => null
+            };
+
+            if (systemIcon is null)
+            {
+                return;
+            }
+
+            ImgIcon.Source = Imaging.CreateBitmapSourceFromHIcon(systemIcon.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+            ImgIcon.Visibility = Visibility.Visible;
+        }
+
+        public static MessageBoxResult Show(Window owner, string text, string caption, MessageBoxButton button, MessageBoxImage icon)
+        {
+            var win = new ThemedMessageBoxWindow(text, caption, button, icon);
 
             if (owner != null)
             {
@@ -61,6 +89,7 @@ namespace LanguageWeaverProvider.View
                 case MessageBoxButton.YesNo:
                     BtnYes.Visibility = Visibility.Visible;
                     BtnNo.Visibility = Visibility.Visible;
+                    BtnNo.IsCancel = true;
                     break;
 
                 case MessageBoxButton.YesNoCancel:
@@ -71,6 +100,7 @@ namespace LanguageWeaverProvider.View
 
                 default:
                     BtnOk.Visibility = Visibility.Visible;
+                    BtnOk.IsCancel = true;
                     break;
             }
         }

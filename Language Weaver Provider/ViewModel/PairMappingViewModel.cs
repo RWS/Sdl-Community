@@ -17,7 +17,6 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 
@@ -139,8 +138,8 @@ namespace LanguageWeaverProvider.ViewModel
 
         private bool ContinueWithDisabledLinguisticOptions()
         {
-            var result = ThemedMessageBox.Show("In order to use Quality Estimation, it needs to be enabled. Do you want to proceed? ", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            return result == MessageBoxResult.Yes;
+            var result = ThemedMessageBox.Show("In order to use Quality Estimation, it needs to be enabled. Do you want to proceed? ", "Confirmation", System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Question);
+            return result == System.Windows.MessageBoxResult.Yes;
         }
 
         private async void CreatePairMappings()

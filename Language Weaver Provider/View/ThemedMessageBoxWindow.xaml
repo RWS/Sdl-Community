@@ -26,12 +26,20 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0"
-                   x:Name="TxtMessage"
-                   Margin="20,20,20,16"
-                   VerticalAlignment="Center"
-                   TextWrapping="Wrap"
-                   LineHeight="18"/>
+        <DockPanel Grid.Row="0" Margin="20,20,20,16">
+            <Image x:Name="ImgIcon"
+                   DockPanel.Dock="Left"
+                   Width="32"
+                   Height="32"
+                   Margin="0,0,12,0"
+                   VerticalAlignment="Top"
+                   Visibility="Collapsed"/>
+
+            <TextBlock x:Name="TxtMessage"
+                       VerticalAlignment="Center"
+                       TextWrapping="Wrap"
+                       LineHeight="18"/>
+        </DockPanel>
 
         <Border Grid.Row="1"
                 Background="{DynamicResource Rws.Bg.Top}"
@@ -42,11 +50,11 @@
                         Margin="20,12">
                 <Button x:Name="BtnYes" Content="Yes" Width="80" Height="26" Margin="8,0,0,0"
                         Style="{DynamicResource Sdl.Button.PrimaryStyle}"
-                        Click="BtnYes_Click" Visibility="Collapsed"/>
+                        Click="BtnYes_Click" Visibility="Collapsed" IsDefault="True"/>
 
                 <Button x:Name="BtnOk" Content="OK" Width="80" Height="26" Margin="8,0,0,0"
                         Style="{DynamicResource Sdl.Button.PrimaryStyle}"
-                        Click="BtnOk_Click" Visibility="Collapsed"/>
+                        Click="BtnOk_Click" Visibility="Collapsed" IsDefault="True"/>
 
                 <Button x:Name="BtnNo" Content="No" Width="80" Height="26" Margin="8,0,0,0"
                         Style="{DynamicResource Sdl.Button.SecondaryStyle}"
@@ -54,7 +62,7 @@
 
                 <Button x:Name="BtnCancel" Content="Cancel" Width="80" Height="26" Margin="8,0,0,0"
                         Style="{DynamicResource Sdl.Button.SecondaryStyle}"
-                        Click="BtnCancel_Click" Visibility="Collapsed"/>
+                        Click="BtnCancel_Click" Visibility="Collapsed" IsCancel="True"/>
             </StackPanel>
         </Border>
     </Grid>
