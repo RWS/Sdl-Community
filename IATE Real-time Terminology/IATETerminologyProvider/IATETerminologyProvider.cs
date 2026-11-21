@@ -1,20 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Windows.Forms;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using NLog;
 using Sdl.Community.IATETerminologyProvider.EventArgs;
 using Sdl.Community.IATETerminologyProvider.Helpers;
 using Sdl.Community.IATETerminologyProvider.Interface;
 using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Community.IATETerminologyProvider.Service;
-using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
-using Sdl.Terminology.TerminologyProvider.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using System;
+using System.Collections.Generic;
+using System.Dynamic;
+using System.Globalization;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using TradosStudio.API.ProjectManagement;
+using TradosStudio.API.TranslationResources.Terminology;
+using TradosStudio.API.TranslationResources.Terminology.Definition;
+using TradosStudio.API.TranslationResources.Terminology.Entries;
+using TradosStudio.API.TranslationResources.Terminology.Search;
 
 namespace Sdl.Community.IATETerminologyProvider
 {
@@ -25,20 +29,30 @@ namespace Sdl.Community.IATETerminologyProvider
 		private TermSearchService _searchService;
 		private EditorController _editorController;
 		private IStudioDocument _activeDocument;
-		private readonly IEUProvider _euProvider;
 
 		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
 
 		public SettingsModel ProviderSettings { get; set; }
 
-		public IATETerminologyProvider(SettingsModel providerSettings, ConnectionProvider connectionProvider,
-			InventoriesProvider inventoriesProvider, ICacheProvider cacheProvider, IEUProvider eUProvider)
+        private IConnectionProvider _connectionProvider { get; }
+
+        private IInventoriesProvider _inventoriesProvider { get; }
+
+        private ICacheProvider _cacheProvider { get; }
+
+        private IProjectsRegistry _projectsRegistry { get; }
+
+        public IATETerminologyProvider(SettingsModel providerSettings, 
+			IConnectionProvider connectionProvider,
+			IInventoriesProvider inventoriesProvider, 
+			ICacheProvider cacheProvider,
+			IProjectsRegistry projectsRegistry)
 		{
 			ProviderSettings = providerSettings;
-			ConnectionProvider = connectionProvider;
-			InventoriesProvider = inventoriesProvider;
-			CacheProvider = cacheProvider;
-			_euProvider = eUProvider;
+			_connectionProvider = connectionProvider;
+			_inventoriesProvider = inventoriesProvider;
+			_cacheProvider = cacheProvider;
+			_projectsRegistry = projectsRegistry;
 			Id = Guid.NewGuid().ToString();
 		}
 
@@ -49,13 +63,13 @@ namespace Sdl.Community.IATETerminologyProvider
 				return true;
 			}
 
-			if (!InventoriesProvider.IsInitialized)
+			if (!_inventoriesProvider.IsInitialized)
 			{
-				_ = LegacyAsyncHelpers.WrapAsyncCode(InventoriesProvider.Initialize);
+				_ = Core.Globalization.LegacyAsyncHelpers.WrapAsyncCode(_inventoriesProvider.Initialize);
 			}
 
 			_entryModels = new List<EntryModel>();
-			_searchService = new TermSearchService(ConnectionProvider, InventoriesProvider);
+			_searchService = new TermSearchService(_connectionProvider, _inventoriesProvider);
 
 			InitializeEditorController();
 			ActivateDocument(_editorController.ActiveDocument);
@@ -63,13 +77,7 @@ namespace Sdl.Community.IATETerminologyProvider
 			return true;
 		}
 
-		public ConnectionProvider ConnectionProvider { get; }
-
-		public InventoriesProvider InventoriesProvider { get; }
-
-		public ICacheProvider CacheProvider { get; }
-
-		public Definition Definition => new Definition(GetDescriptiveFields(), GetDefinitionLanguages());
+        public Definition Definition => new Definition(GetDescriptiveFields(), GetDefinitionLanguages());
 
 		public string Description => PluginResources.IATETerminologyProviderDescription;
 
@@ -135,7 +143,7 @@ namespace Sdl.Community.IATETerminologyProvider
 			if (string.IsNullOrEmpty(text) || string.IsNullOrWhiteSpace(text)) return null;
 			if (text == "\" \"" || text == "") return null;
 			// Limit to EU languages
-			if (!_euProvider.IsEULanguages(source, target))
+			if (!EUProvider.IsEULanguages(source, target))
 			{
 				return null;
 			}
@@ -144,13 +152,13 @@ namespace Sdl.Community.IATETerminologyProvider
 
 			var jsonBody = GetApiRequestBodyValues(source, target, text);
 			var queryString = JsonConvert.SerializeObject(jsonBody);
-			var canConnect = CacheProvider?.Connect(IATEApplication.ProjectsController?.CurrentProject);
+            var canConnect = _cacheProvider?.Connect(_projectsRegistry.GetActiveProject());
 
 			if (canConnect != null && (bool)canConnect)
 			{
 				//_logger.Info("--> Try to get cache results");
 
-				var cachedResults = CacheProvider.GetCachedResults(text, target.Locale.Name, queryString);
+				var cachedResults = _cacheProvider.GetCachedResults(text, CultureInfo.GetCultureInfo(target.LanguageIsoCode).Name, queryString);
 				if (cachedResults != null && cachedResults.Count > 0)
 				{
 					var entryModels = CreateEntryTerms(cachedResults.ToList(), source, GetLanguages());
@@ -163,8 +171,8 @@ namespace Sdl.Community.IATETerminologyProvider
 				}
 			}
 
-			var config = IATEApplication.ProjectsController?.CurrentProject?.GetTermbaseConfiguration();
-			var results = _searchService.GetTerms(queryString, config?.TermRecognitionOptions?.SearchDepth ?? 20);
+            var config = _projectsRegistry.GetActiveProject()?.GetTermbaseConfiguration(false);
+            var results = _searchService.GetTerms(queryString, config?.TermRecognitionOptions?.SearchDepth ?? 20);
 			if (results != null)
 			{
 				var termGroups = SortSearchResultsByPriority(text, GetTermResultGroups(results), source);
@@ -177,14 +185,14 @@ namespace Sdl.Community.IATETerminologyProvider
 				var searchCache = new SearchCache
 				{
 					SourceText = text,
-					TargetLanguage = target.Locale.Name,
+					TargetLanguage = CultureInfo.GetCultureInfo(target.LanguageIsoCode).Name,
 					QueryString = queryString
 				};
 
-				if (CacheProvider != null)
+				if (_cacheProvider != null)
 				{
 					//_logger.Info("--> Try to add results in db");
-					CacheProvider.AddSearchResults(searchCache, results);
+					_cacheProvider.AddSearchResults(searchCache, results);
 				}
 
 				var entryModels = CreateEntryTerms(results, source, GetLanguages());
@@ -237,38 +245,38 @@ namespace Sdl.Community.IATETerminologyProvider
 		}
 
 		public IList<DefinitionLanguage> GetDefinitionLanguages()
-		{
-			var result = new List<DefinitionLanguage>();
+        {
+            var result = new List<DefinitionLanguage>();
 
-			var currentProject = IATEApplication.ProjectsController?.CurrentProject;
-			if (currentProject == null)
-			{
-				return result;
-			}
+            var currentProject = _projectsRegistry.GetActiveProject();
 
-			var projectInfo = currentProject.GetProjectInfo();
+            if (currentProject == null)
+            {
+                return result;
+            }
 
-			var sourceLanguage = new DefinitionLanguage
-			{
-				IsBidirectional = true,
-				Locale = projectInfo.SourceLanguage.CultureInfo,
-				Name = projectInfo.SourceLanguage.DisplayName,
-				TargetOnly = false
-			};
-			result.Add(sourceLanguage);
+            result.Add(MapLanguageDefinition(currentProject.SourceLanguage));
 
-			result.AddRange(projectInfo.TargetLanguages.Select(language => new DefinitionLanguage
-			{
-				IsBidirectional = true,
-				Locale = language.CultureInfo,
-				Name = language.DisplayName,
-				TargetOnly = false
-			}));
+            result.AddRange(currentProject.TargetLanguages.Select(language =>            
+               MapLanguageDefinition(language)
+            ));
 
-			return result;
-		}
+            return result;
+        }
 
-		public string GetStatusName(int value)
+        private static DefinitionLanguage MapLanguageDefinition(string languageIsoCode)
+        {
+            var languageCultureInfo = CultureInfo.GetCultureInfo(languageIsoCode);
+            return new DefinitionLanguage
+            {
+                IsBidirectional = true,
+                LanguageIsoCode = languageCultureInfo.Name,
+                Name = languageCultureInfo.DisplayName,
+                TargetOnly = false
+            };
+        }
+
+        public string GetStatusName(int value)
 		{
 			switch (value)
 			{
@@ -301,7 +309,7 @@ namespace Sdl.Community.IATETerminologyProvider
 			var filteredCollections = new List<string>();
 			var filteredInstitutions = new List<string>();
 
-			targetLanguages.Add(destination.Locale.RegionNeutralName);
+			targetLanguages.Add(CultureInfo.GetCultureInfo(destination.LanguageIsoCode).TwoLetterISOLanguageName);
 			var primarities = new List<int>();
 			var sourceReliabilities = new List<int>();
 			var targetReliabilities = new List<int>();
@@ -331,7 +339,7 @@ namespace Sdl.Community.IATETerminologyProvider
 			dynamic bodyModel = new ExpandoObject();
 
 			bodyModel.query = text;
-			bodyModel.source = source.Locale.RegionNeutralName;
+			bodyModel.source = CultureInfo.GetCultureInfo(source.LanguageIsoCode).TwoLetterISOLanguageName;
 			bodyModel.targets = targetLanguages;
 			bodyModel.cascade_domains = searchInSubdomains;
 			bodyModel.query_operator = 18;
@@ -374,8 +382,8 @@ namespace Sdl.Community.IATETerminologyProvider
 				OnTermEntriesChanged(new TermEntriesChangedEventArgs
 				{
 					EntryModels = entryModels,
-					SourceLanguage = new Language(source.Locale.Name),
-					TargetLanguage = new Language(target.Locale.Name)
+					SourceLanguage = source,
+					TargetLanguage = target
 				});
 			}
 		}
@@ -401,7 +409,7 @@ namespace Sdl.Community.IATETerminologyProvider
 			var regex = new Regex(@"[\s\t]+", RegexOptions.None);
 			var searchText = regex.Replace(text, string.Empty);
 
-			var segment = new Segment(source.Locale);
+			var segment = new Segment(CultureInfo.GetCultureInfo(source.LanguageIsoCode));
 			var segmentVisitor = new SegmentVisitor(segment, true);
 			segmentVisitor.VisitSegment(selectedSegmentPair.Source);
 			var sourceText = regex.Replace(segmentVisitor.Segment.ToPlain(), string.Empty);
@@ -461,7 +469,7 @@ namespace Sdl.Community.IATETerminologyProvider
 		{
 			var entryModels = new List<EntryModel>();
 			var searchResultsByLanguage = searchResults.Where(s =>
-				s.Language.Locale.RegionNeutralName.Equals(sourceLanguage.Locale.RegionNeutralName));
+				CultureInfo.GetCultureInfo(s.Language.LanguageIsoCode).TwoLetterISOLanguageName.Equals(CultureInfo.GetCultureInfo(sourceLanguage.LanguageIsoCode).TwoLetterISOLanguageName));
 
 			foreach (var searchResultByLanguage in searchResultsByLanguage)
 			{
@@ -485,16 +493,20 @@ namespace Sdl.Community.IATETerminologyProvider
 		private IList<EntryLanguage> SetEntryLanguages(IReadOnlyCollection<SearchResultModel> searchResults, ILanguage sourceLanguage, IEnumerable<ILanguage> languages, SearchResultModel termResult)
 		{
 			var entryLanguages = new List<EntryLanguage>();
-			foreach (var language in languages)
+            var sourceCultureInfo = CultureInfo.GetCultureInfo(sourceLanguage.LanguageIsoCode);
+
+            foreach (var language in languages)
 			{
-				var entryLanguage = new EntryLanguageModel
+                var languageCultureInfo = CultureInfo.GetCultureInfo(language.LanguageIsoCode);
+
+                var entryLanguage = new EntryLanguageModel
 				{
-					Fields = !language.Locale.RegionNeutralName.Equals(sourceLanguage.Locale.RegionNeutralName) ? SetEntryFields(termResult, 1) : new List<EntryField>(),
-					Locale = language.Locale,
+					Fields = !languageCultureInfo.TwoLetterISOLanguageName.Equals(sourceCultureInfo.TwoLetterISOLanguageName) ? SetEntryFields(termResult, 1) : new List<EntryField>(),
+					LanguageIsoCode = languageCultureInfo.Name,
 					Name = language.Name,
 					ParentEntry = null,
-					Terms = CreateEntryTerms(searchResults, language, termResult.Id),
-					IsSource = language.Locale.RegionNeutralName.Equals(sourceLanguage.Locale.RegionNeutralName)
+					Terms = CreateEntryTerms(searchResults, languageCultureInfo, termResult.Id),
+					IsSource = languageCultureInfo.TwoLetterISOLanguageName.Equals(sourceCultureInfo.TwoLetterISOLanguageName)
 				};
 				entryLanguages.Add(entryLanguage);
 			}
@@ -502,12 +514,12 @@ namespace Sdl.Community.IATETerminologyProvider
 			return entryLanguages;
 		}
 
-		private IList<EntryTerm> CreateEntryTerms(IEnumerable<SearchResultModel> searchResults, ILanguage language, int id)
+		private IList<EntryTerm> CreateEntryTerms(IEnumerable<SearchResultModel> searchResults, CultureInfo cultureInfo, int id)
 		{
 			IList<EntryTerm> entryTerms = new List<EntryTerm>();
 			var searchResultsByLanguage = searchResults.Where(t =>
 				t.Id == id &&
-				t.Language.Locale.RegionNeutralName == language.Locale.RegionNeutralName).ToList();
+                CultureInfo.GetCultureInfo(t.Language.LanguageIsoCode).TwoLetterISOLanguageName == cultureInfo.TwoLetterISOLanguageName).ToList();
 
 			foreach (var searchResultByLanguage in searchResultsByLanguage)
 			{
@@ -610,7 +622,7 @@ namespace Sdl.Community.IATETerminologyProvider
 			foreach (var termResultGroup in termResultGroups)
 			{
 				var sourceTerms = termResultGroup.Results
-					.Where(a => a.Language.Locale.RegionNeutralName == source.Locale.RegionNeutralName).ToList();
+					.Where(a => CultureInfo.GetCultureInfo(a.Language.LanguageIsoCode).TwoLetterISOLanguageName == CultureInfo.GetCultureInfo(source.LanguageIsoCode).TwoLetterISOLanguageName).ToList();
 
 				foreach (var sourceTerm in sourceTerms)
 				{
@@ -648,8 +660,8 @@ namespace Sdl.Community.IATETerminologyProvider
 			var indexes = new List<string>();
 			foreach (var termGroup in termResultGroups)
 			{
-				var sourceTerms = termGroup.Results.Where(a => a.Language.Locale.RegionNeutralName == source.Locale.RegionNeutralName).ToList();
-				var targetTerms = termGroup.Results.Where(a => a.Language.Locale.RegionNeutralName == target.Locale.RegionNeutralName).ToList();
+				var sourceTerms = termGroup.Results.Where(a => CultureInfo.GetCultureInfo(a.Language.LanguageIsoCode).TwoLetterISOLanguageName == CultureInfo.GetCultureInfo(source.LanguageIsoCode).TwoLetterISOLanguageName).ToList();
+				var targetTerms = termGroup.Results.Where(a => CultureInfo.GetCultureInfo(a.Language.LanguageIsoCode).TwoLetterISOLanguageName == CultureInfo.GetCultureInfo(target.LanguageIsoCode).TwoLetterISOLanguageName).ToList();
 
 				foreach (var sourceTerm in sourceTerms)
 				{
@@ -720,6 +732,5 @@ namespace Sdl.Community.IATETerminologyProvider
 				_activeDocument.ActiveSegmentChanged -= ActiveDocument_ActiveSegmentChanged;
 			}
 		}
-
-	}
+    }
 }
