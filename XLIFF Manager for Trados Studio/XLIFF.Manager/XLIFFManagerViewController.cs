@@ -82,6 +82,7 @@ namespace Sdl.Community.XLIFF.Manager
 
 		public List<Project> GetProjects()
 		{
+			Initialize();
 			return _xliffProjects;
 		}
 
@@ -149,6 +150,7 @@ namespace Sdl.Community.XLIFF.Manager
 				return;
 			}
 
+			Initialize();
 			var project = _xliffProjects.FirstOrDefault(a => a.Id == wizardContext.Project.Id);
 			if (project == null)
 			{
