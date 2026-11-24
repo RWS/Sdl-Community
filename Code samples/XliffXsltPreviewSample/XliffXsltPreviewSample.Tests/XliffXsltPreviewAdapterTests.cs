@@ -20,7 +20,7 @@ namespace XliffXsltPreviewSample.Tests
 		}
 
 		[Fact]
-		public void BuildAbstractGenerator_XsltPreviewIsXliffWriterWithTweaker_OthersGoToOriginal()
+		public void BuildAbstractGenerator_XsltPreviewIsXliffWriterWithMarkerAndTweaker_OthersGoToOriginal()
 		{
 			var adapter = AdapterOverXliff();
 
@@ -28,7 +28,9 @@ namespace XliffXsltPreviewSample.Tests
 			var altTrans = Assert.IsAssignableFrom<IFileGenerator>(adapter.BuildAbstractGenerator("Generator_InternalPreview"));
 
 			Assert.Equal("Sdl.FileTypeSupport.Filters.Xliff.Writer", xslt.BilingualWriter?.GetType().FullName);
+			Assert.Contains(xslt.GetBilingualProcessors(), p => p is SegmentMarker);
 			Assert.IsType<XsltPreviewTweaker>(Assert.Single(xslt.FileTweakers));
+			Assert.DoesNotContain(altTrans.GetBilingualProcessors(), p => p is SegmentMarker);
 			Assert.Empty(altTrans.FileTweakers);
 		}
 

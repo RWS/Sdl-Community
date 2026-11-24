@@ -19,6 +19,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="sync.js" LogicalName="XliffXsltPreviewSample.sync.js" />
     <Content Include="pluginpackage.manifest.xml" />
     <Content Include="preview.xslt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -35,6 +35,7 @@ namespace XliffXsltPreviewSample
 				return Original.BuildAbstractGenerator(name);
 			}
 			var generator = Original.BuildFileGenerator(name);
+			generator.AddBilingualProcessor(new SegmentMarker());
 			generator.AddFileTweaker(new XsltPreviewTweaker(Path.Combine(Path.GetDirectoryName(GetType().Assembly.Location), "preview.xslt")));
 			return generator;
 		}
