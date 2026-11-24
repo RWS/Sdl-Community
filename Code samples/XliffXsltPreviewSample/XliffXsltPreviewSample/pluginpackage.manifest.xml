@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
+  <PlugInName>XLIFF XSLT Preview Sample</PlugInName>
+  <Version>1.0.0.0</Version>
+  <Description>Adds an XSLT-based preview to the built-in XLIFF 1.1-1.2 file type</Description>
+  <Author>Trados AppStore Team</Author>
+  <Include>
+    <File>preview.xslt</File>
+  </Include>
+  <RequiredProduct name="TradosStudio" minversion="19.0" maxversion="19.0.9" />
+</PluginPackage>

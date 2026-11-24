@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file original="sample.txt" source-language="en-US" target-language="de-DE" datatype="plaintext">
+    <body>
+      <trans-unit id="1">
+        <source>Hello world</source>
+        <target>Hallo Welt</target>
+        <alt-trans match-quality="85">
+          <source>Hello there world</source>
+          <target>Hallo da Welt</target>
+        </alt-trans>
+      </trans-unit>
+      <trans-unit id="2">
+        <source>Good morning</source>
+        <target>Guten Morgen</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
