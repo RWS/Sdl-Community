@@ -10,22 +10,23 @@ using NLog;
 using Sdl.Community.IATETerminologyProvider.Helpers;
 using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Community.IATETerminologyProvider.Model.ResponseModels;
-using Sdl.Core.Globalization;
-using Sdl.Terminology.TerminologyProvider.Core;
+using System.Globalization;
+using Sdl.Community.IATETerminologyProvider.Interface;
+
 
 namespace Sdl.Community.IATETerminologyProvider.Service
 {
 	public class TermSearchService
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-		private readonly ConnectionProvider _connectionProvider;
-		private readonly InventoriesProvider _inventoriesProvider;
+		private readonly IConnectionProvider _connectionProvider;
+		private readonly IInventoriesProvider _inventoriesProvider;
 		private readonly List<string> _subdomains;
 		private readonly List<TermTypeModel> _termTypes;
 		private int _termIndexId;
 
-		public TermSearchService(ConnectionProvider connectionProvider,
-			InventoriesProvider inventoriesProvider)
+		public TermSearchService(IConnectionProvider connectionProvider,
+			IInventoriesProvider inventoriesProvider)
 		{
 			_connectionProvider = connectionProvider;
 			_inventoriesProvider = inventoriesProvider;
@@ -165,11 +166,11 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 									}
 
 									try
-									{
+									{                                        
 										var languageModel = new LanguageModel
 										{
-											Name = new Language(langTwoLetters).DisplayName,
-											Locale = new Language(langTwoLetters).CultureInfo
+											Name = CultureInfo.GetCultureInfo(langTwoLetters).DisplayName,
+											CultureInfo = CultureInfo.GetCultureInfo(langTwoLetters)
 										};
 
 										var termResult = new SearchResultModel
