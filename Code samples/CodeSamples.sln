@@ -55,8 +55,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreTranslateDeepLSample", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PretranslateInLoopWithFailSafeAction", "PretranslateInLoopWithFailSafeAction\PretranslateInLoopWithFailSafeAction.csproj", "{B343350C-9AEE-491A-ABD5-420864506E0D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PretranslateProjectsCreatedFromTemplateSample", "PretranslateProjectsCreatedFromTemplateSample\PretranslateProjectsCreatedFromTemplateSample.csproj", "{9DE47A68-C3A4-49CA-B6A6-FB70482C8037}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PretranslateSamplePlugin", "PretranslateSamplePlugin\PretranslateSamplePlugin.csproj", "{6CA26E24-B776-4706-8BD0-FC79BCC765FF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectController", "ProjectController\ProjectController\ProjectController.csproj", "{64351E17-B584-4AB6-9DDD-662DC78B0B8E}"
