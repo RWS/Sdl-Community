@@ -21,8 +21,8 @@ namespace Create_ServerTm
 				Name = "Tm from API"
 			};
 			var resourceTemplate =
-				translationProviderServer.GetLanguageResourcesTemplates(LanguageResourcesTemplateProperties.All);
-			var containters = translationProviderServer.GetContainers(ContainerProperties.All);
+				translationProviderServer.GetLanguageResourcesTemplates(false);
+			var containters = translationProviderServer.GetContainers();
 			var container = containters.FirstOrDefault(c => c.Name.Equals("APSIC_TM_Container"));
 			if (container != null)
 			{

@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using Sdl.Core.Globalization;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
-using Sdl.MultiTerm.TMO.Interop;
 using Sdl.ProjectAutomation.Core;
+using Sdl.Terminology.TerminologyProvider.Core;
+using Sdl.Terminology.TerminologyProvider.Core.Termbase;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
@@ -17,26 +19,10 @@ namespace MultiTermTestPlugin
 	{
 		protected override void Execute()
 		{
-			var oMt = new Application();
-			var localRep = oMt.LocalRepository;
-			localRep.Connect("", "");
-			var termbases = localRep.Termbases;
 			var path = "";// termbase local path
-			termbases.Add(path,"","");
-			var termbase = termbases[path];
-			var entries = termbase.Entries;
 			//Concept with terms for English and German
-			var entryText =
-				"<conceptGrp><languageGrp><language type=\"English\" lang=\"en-US\"></language><termGrp><term>for</term></termGrp></languageGrp><languageGrp><language type=\"German\" lang=\"de-DE\"></language><termGrp><term>für</term></termGrp></languageGrp></conceptGrp>";
-			entries.New(entryText, true);
-
-			//var oServerRep = oMt.ServerRepository;
-			//oServerRep.Location = "";
-			//oServerRep.Connect("", "");
-			//Console.WriteLine("Connection successful: " + oServerRep.IsConnected);
-
-			//var oTbs = oServerRep.Termbases[0];
-			//oTbs.Entries.New()
+			AddNewConceptAction.GetTermbase(path)?.AddEntry(
+				AddNewConceptAction.NewEntry("English", "en-US", "for", "German", "de-DE", "für"));
 		}
 	}
 	[Action("Community: Add term", Name = "Community: Add Term to termbase", Icon = "")]
@@ -62,13 +48,10 @@ namespace MultiTermTestPlugin
 					var languageIndexes = GetDefaultTermbaseConfiguration().LanguageIndexes;
 					if (!string.IsNullOrEmpty(defaultTermbasePath))
 					{
-						var entries = GetTermbaseEntries(defaultTermbasePath);
 						var sourceIndexName = GetTermbaseIndex(languageIndexes, activeDocument.ActiveFile?.SourceFile.Language);
 						var targetIndexName = GetTermbaseIndex(languageIndexes, activeDocument.ActiveFile?.Language);
-						// get the number of term entries for a specific language, using the languageIndex
-						//var numberOfLanguageEntries  = termbase.Information.NumberOfEntriesInIndex["sourceIndexName"];
-						var entryText =	$"<conceptGrp><languageGrp><language type=\"{sourceIndexName}\" lang=\"{sourceLanguageCode}\"></language><termGrp><term>{sourceSelection}</term></termGrp></languageGrp><languageGrp><language type=\"{targetIndexName}\" lang=\"{targetLanguageCode}\"></language><termGrp><term>{targetSelection}</term></termGrp></languageGrp></conceptGrp>";
-						entries.New(entryText, true);
+						GetTermbase(defaultTermbasePath)?.AddEntry(
+							NewEntry(sourceIndexName, sourceLanguageCode, sourceSelection, targetIndexName, targetLanguageCode, targetSelection));
 					}
 				}
 			}
@@ -115,17 +98,39 @@ namespace MultiTermTestPlugin
 			return string.Empty;
 		}
 
-		private Entries GetTermbaseEntries(string termbasePath)
+		internal static IStudioTermbase GetTermbase(string termbasePath)
 		{
-			var multiTermApplication = new Application();
-			var localRep = multiTermApplication.LocalRepository;
-			localRep.Connect("", "");	
+			var termbaseUri = new Uri("ttb." + new Uri(termbasePath).AbsoluteUri);
+			var provider = TerminologyProviderManager.Instance.GetTerminologyProvider(termbaseUri);
+			if (provider == null || !provider.Initialize())
+			{
+				return null;
+			}
 
-			var termbases = localRep.Termbases;
-			var path = termbasePath;
-			termbases.Add(path, "", "");
-			var termbase = termbases[path];
-			return termbase.Entries;
+			return provider as IStudioTermbase;
+		}
+
+		internal static Entry NewEntry(string sourceIndexName, string sourceLanguageCode, string sourceTerm,
+			string targetIndexName, string targetLanguageCode, string targetTerm)
+		{
+			return new Entry
+			{
+				Languages = new List<EntryLanguage>
+				{
+					NewLanguage(sourceIndexName, sourceLanguageCode, sourceTerm),
+					NewLanguage(targetIndexName, targetLanguageCode, targetTerm)
+				}
+			};
+		}
+
+		private static EntryLanguage NewLanguage(string indexName, string languageCode, string term)
+		{
+			return new EntryLanguage
+			{
+				Name = indexName,
+				Locale = new CultureCode(languageCode),
+				Terms = new List<EntryTerm> { new EntryTerm { Value = term } }
+			};
 		}
 	}
 }

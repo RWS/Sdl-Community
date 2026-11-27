@@ -21,5 +21,7 @@ namespace NotificationsSample
 		public bool IsActionVisible { get; set; }
 		public bool AllowsUserToDismiss { get; set; }
 		public IStudioNotificationCommand ClearNotificationAction { get; set; }
+		public Guid Owner { get; set; }
+		public bool IsRead { get; set; }
 	}
 }

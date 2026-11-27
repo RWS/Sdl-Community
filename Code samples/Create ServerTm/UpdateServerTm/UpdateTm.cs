@@ -32,7 +32,7 @@ namespace UpdateServerTm
 			var segmentElement = tu.TargetSegment.Elements[0];
 			segmentElement.AcceptSegmentElementVisitor(textVisitor);	
 
-			langDirection.UpdateTranslationUnit(tu);
+			langDirection.UpdateTranslationUnits(new[] { tu });
 			tm.Save();	   	
 		}
 	}
