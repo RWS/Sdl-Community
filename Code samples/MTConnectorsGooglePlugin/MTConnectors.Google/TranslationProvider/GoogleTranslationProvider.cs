@@ -72,9 +72,6 @@ namespace Sdl.LanguagePlatform.MTConnectors.Google.TranslationProvider
 
         public override string Name => string.Concat(GetTranslationProviderName(), GetConnectionInstanceName());
 
-        public override bool SupportsTaggedInput => true;
-
-
         public override IList<Core.LanguagePair> SupportedLanguageDirections
         {
             get

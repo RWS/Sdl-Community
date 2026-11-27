@@ -38,10 +38,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Sdl.Desktop.Platform.Controls">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.Platform.Controls.dll</HintPath>
+      <HintPath>$(ProgramW6432)\Trados\Trados Studio\Studio19\Sdl.Desktop.Platform.Controls.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.Platform.Styles">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.Platform.Styles.dll</HintPath>
+      <HintPath>$(ProgramW6432)\Trados\Trados Studio\Studio19\Sdl.Desktop.Platform.Styles.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

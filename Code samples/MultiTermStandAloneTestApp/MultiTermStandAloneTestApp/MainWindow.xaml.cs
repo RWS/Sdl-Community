@@ -1,14 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
-using MultiTermIX;
+using Sdl.Terminology.TerminologyProvider.Core;
+using Sdl.Terminology.TerminologyProvider.Core.Termbase;
 
 namespace MultiTermStandAloneTestApp
 {
-	/// <summary>
-	/// Interaction logic for MainWindow.xaml
-	/// </summary>
 	public partial class MainWindow : Window
 	{
+		private const int PageSize = 200;
+
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -16,40 +18,45 @@ namespace MultiTermStandAloneTestApp
 
 		private void Button_Click(object sender, RoutedEventArgs e)
 		{
-			var app = new ApplicationClass();
-			
-			// Termbase Server connection
-			//app.ServerRepository.Location = "";
-			//app.ServerRepository.Connect("user", "password");
-			//var termbases = app.ServerRepository.Termbases;
-			//app.ServerRepository.Disconnect();
-
-			// Use local termbase
-			app.LocalRepository.Connect("", "");
-			var localTermbases = app.LocalRepository.Termbases;
-
-			//set the path to an existing termbase
 			var path = "";
-			localTermbases.Add(path, "", "");
-			var termbase = localTermbases[path];			
-			var numberOfEntriesForLanguage = GetNumberOfEntriesForEachLanguage(termbase);
+			var termbaseUri = new Uri("ttb." + new Uri(path).AbsoluteUri);
+			var provider = TerminologyProviderManager.Instance.GetTerminologyProvider(termbaseUri);
+			if (provider == null || !provider.Initialize() || !(provider is IStudioTermbase termbase))
+			{
+				return;
+			}
 
-			// Add local termbase
-			//localTermbases.New("testT", "ss", "", @"C:\Users\{UserName}\Desktop\test.sdltb");
+			var numberOfEntriesForLanguage = GetNumberOfEntriesForEachLanguage(provider, termbase);
 		}
 
-		// Get number of entries for each language, using the Language Index (eg: "English")
-		private Dictionary<string,int> GetNumberOfEntriesForEachLanguage(Termbase localTermbase)
+		private Dictionary<string, int> GetNumberOfEntriesForEachLanguage(ITerminologyProvider provider, IStudioTermbase termbase)
 		{
-			var numberOfEntries = new Dictionary<string, int>();
-			var termbaseInformation = localTermbase.Information;
+			var numberOfEntries = provider.Definition.Languages.ToDictionary(language => language.Name, language => 0);
 
-			var languageIndexes = localTermbase.Definition.Indexes;
-			foreach (Index languageIndex in languageIndexes)
+			var lastSeenId = 0;
+			while (true)
 			{
-				var numberOfTermEntries = termbaseInformation.NumberOfEntriesInIndex[languageIndex.Language];
-				numberOfEntries.Add(languageIndex.Language, numberOfTermEntries);
+				var page = termbase.GetEntries(lastSeenId, PageSize);
+				if (page == null || page.Count == 0)
+				{
+					break;
+				}
+
+				foreach (var entryLanguage in page.SelectMany(entry => entry.Languages ?? Enumerable.Empty<EntryLanguage>()))
+				{
+					if (entryLanguage.Name != null && numberOfEntries.ContainsKey(entryLanguage.Name))
+					{
+						numberOfEntries[entryLanguage.Name]++;
+					}
+				}
+
+				lastSeenId = page[page.Count - 1].Id;
+				if (page.Count < PageSize)
+				{
+					break;
+				}
 			}
+
 			return numberOfEntries;
 		}
 	}

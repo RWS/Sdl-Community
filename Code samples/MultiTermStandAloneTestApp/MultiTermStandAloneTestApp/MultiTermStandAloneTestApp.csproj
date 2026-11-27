@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>MultiTermStandAloneTestApp</RootNamespace>
     <AssemblyName>MultiTermStandAloneTestApp</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -35,6 +35,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Sdl.Core.Globalization.Async">
+      <HintPath>$(ProgramW6432)\Trados\Trados Studio\Studio19\Sdl.Core.Globalization.Async.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Terminology.TerminologyProvider.Core">
+      <HintPath>$(ProgramW6432)\Trados\Trados Studio\Studio19\Sdl.Terminology.TerminologyProvider.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -93,17 +99,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="MultiTermIX">
-      <Guid>{BFF6E533-30C2-4075-8131-A0F4A4AB62B7}</Guid>
-      <VersionMajor>15</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,45 +1,95 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.MultiTerm.TMO.Interop;
+using System.Xml.Linq;
+using Sdl.Terminology.TerminologyProvider.Core;
+using Sdl.Terminology.TerminologyProvider.Core.Termbase;
 
 namespace MultiTermToXmlSampleApp
 {
     internal class Program
     {
-        private static Termbase GetTermbase(Application multitermApplication, string termbasePath)
+        private const int PageSize = 200;
+
+        private static IStudioTermbase GetTermbase(string termbasePath)
         {
-            multitermApplication.LocalRepository.Termbases.Add(termbasePath, Path.GetFileName(termbasePath), string.Empty);
-            var tb = multitermApplication.LocalRepository.Termbases.OfType<Termbase>().FirstOrDefault(t => t._Path.ToLower() == termbasePath.ToLower());
-            return tb;
+            var termbaseUri = new Uri("ttb." + new Uri(termbasePath).AbsoluteUri);
+            var provider = TerminologyProviderManager.Instance.GetTerminologyProvider(termbaseUri);
+            if (provider == null || !provider.Initialize())
+            {
+                return null;
+            }
+
+            return provider as IStudioTermbase;
         }
 
-        private static void ExportTermbaseToXml(Termbase termbase, MtTaskType exportType = MtTaskType.mtWizard)
+        private static IEnumerable<Entry> GetAllEntries(IStudioTermbase termbase)
         {
-            // IMPORTANT: the first export definition is to xml
-            var export = termbase.ExportDefinitions[0];
-            export.ProcessExport(exportType);
+            var lastSeenId = 0;
+            while (true)
+            {
+                var page = termbase.GetEntries(lastSeenId, PageSize);
+                if (page == null || page.Count == 0)
+                {
+                    yield break;
+                }
+
+                foreach (var entry in page)
+                {
+                    yield return entry;
+                }
+
+                lastSeenId = page[page.Count - 1].Id;
+                if (page.Count < PageSize)
+                {
+                    yield break;
+                }
+            }
         }
 
-        private static void ExportTermbaseToXml(string termbasePath, MtTaskType exportType = MtTaskType.mtWizard)
+        private static IEnumerable<XElement> ToXml(IEnumerable<EntryField> fields)
         {
-            var userId = string.Empty;
-            var password = string.Empty;
+            return fields?.Select(field => new XElement("field",
+                       new XAttribute("name", field.Name ?? string.Empty),
+                       new XAttribute("value", field.Value ?? string.Empty),
+                       ToXml(field.Fields)))
+                   ?? Enumerable.Empty<XElement>();
+        }
 
-            var multitermApplication = new Sdl.MultiTerm.TMO.Interop.Application();
-            multitermApplication.LocalRepository.Connect(userId, password);
+        private static XElement ToXml(Entry entry)
+        {
+            return new XElement("entry",
+                new XAttribute("id", entry.Id),
+                ToXml(entry.Fields),
+                entry.Languages?.Select(language => new XElement("language",
+                    new XAttribute("name", language.Name ?? string.Empty),
+                    new XAttribute("locale", language.Locale?.Name ?? string.Empty),
+                    ToXml(language.Fields),
+                    language.Terms?.Select(term => new XElement("term",
+                        new XAttribute("value", term.Value ?? string.Empty),
+                        ToXml(term.Fields))))));
+        }
 
-            var termbase = GetTermbase(multitermApplication, termbasePath);
-            ExportTermbaseToXml(termbase, exportType);
+        private static void ExportTermbaseToXml(string termbasePath, string xmlPath)
+        {
+            var termbase = GetTermbase(termbasePath);
+            if (termbase == null)
+            {
+                Console.WriteLine($"Could not open termbase {termbasePath}");
+                return;
+            }
+
+            var document = new XDocument(new XElement("termbase",
+                new XAttribute("path", termbasePath),
+                GetAllEntries(termbase).Select(ToXml)));
+            document.Save(xmlPath);
         }
 
         static void Main(string[] args)
         {
-            ExportTermbaseToXml("C:\\john\\OneDrive - SDL\\Documents\\Trados\\MultiTerm\\Termbases\\de pl multi.sdltb");
+            var termbasePath = "C:\\john\\OneDrive - SDL\\Documents\\Trados\\MultiTerm\\Termbases\\de pl multi.ttb";
+            ExportTermbaseToXml(termbasePath, Path.ChangeExtension(termbasePath, ".xml"));
         }
     }
 }

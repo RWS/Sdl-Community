@@ -1,115 +1,100 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using MultiTermSearchExample.Model;
+using EntryField = MultiTermSearchExample.Model.EntryField;
+using Sdl.Terminology.TerminologyProvider.Core;
 
 namespace MultiTermSearchExample
 {
 	public class TerminologyProvider
 	{
-		public Sdl.MultiTerm.TMO.Interop.Termbase MultitermTermbase { get; set; }
+		public ITerminologyProvider Termbase { get; }
 
-		public TerminologyProvider(string termbasePath, string userId, string password)
+		public TerminologyProvider(string termbasePath)
 		{
 			if (!File.Exists(termbasePath))
 			{
 				return;
 			}
 
-			var multitermApplication = new Sdl.MultiTerm.TMO.Interop.Application();
-			multitermApplication.LocalRepository.Connect(userId, password);
-
-			multitermApplication.LocalRepository.Termbases.Add(termbasePath, Path.GetFileName(termbasePath), string.Empty);
-			MultitermTermbase = multitermApplication.LocalRepository.Termbases[0];
+			var termbaseUri = new Uri("ttb." + new Uri(termbasePath).AbsoluteUri);
+			var provider = TerminologyProviderManager.Instance.GetTerminologyProvider(termbaseUri);
+			if (provider != null && provider.Initialize())
+			{
+				Termbase = provider;
+			}
 		}
 
 		public List<TermHit> SearchTerm(string text, bool fuzzySearch, int maximumHits, string source, string target)
 		{
-			var search = MultitermTermbase.Search;
-			search.Direction = Sdl.MultiTerm.TMO.Interop.MtSearchDirection.mtSearchDown;
-			search.MaximumHits = maximumHits;
-			search.FuzzySearch = fuzzySearch;
-			search.SearchExpression = text;
-			search.SourceIndex = source;
-			search.TargetIndex = target;
-			search.SearchExistTarget = true;
-
-			var termHits = GetTermHits(search.Execute());
-
-			return termHits;
-		}
-
-		private List<TermHit> GetTermHits(Sdl.MultiTerm.TMO.Interop.IHitTerms oHits)
-		{
-			var termHits = new List<TermHit>();
-			foreach (Sdl.MultiTerm.TMO.Interop.IHitTerm oHit in oHits)
+			var sourceLanguage = GetLanguage(source);
+			var targetLanguage = GetLanguage(target);
+			if (sourceLanguage == null || targetLanguage == null)
 			{
-				var termHit = new TermHit
-				{
-					Language = oHit.Index,
-					SearchScore = oHit.SearchScore,
-					Text = oHit.Text,
-					Termbase = oHit.Termbase,
-					ParentEntryId = oHit.ParentEntryID
-				};
-
-				termHits.Add(termHit);
-				termHit.TermEntries = GetTermEntries(oHit);
+				return null;
 			}
 
-			return termHits;
+			var searchMode = fuzzySearch ? SearchMode.Fuzzy : SearchMode.Normal;
+			var searchResults = Termbase.Search(text, sourceLanguage, targetLanguage, maximumHits, searchMode, true);
+
+			return searchResults.Select(result => new TermHit
+			{
+				Language = result.Language?.Name,
+				SearchScore = result.Score,
+				Text = result.Text,
+				Termbase = Termbase.Name,
+				ParentEntryId = result.Id.ToString(),
+				TermEntries = GetTermEntries(result.Id)
+			}).ToList();
 		}
 
-		private List<TermEntry> GetTermEntries(Sdl.MultiTerm.TMO.Interop.IHitTerm oHit)
+		private ILanguage GetLanguage(string name)
+		{
+			return Termbase?.GetLanguages()
+				.FirstOrDefault(language => string.Equals(language.Name, name, StringComparison.OrdinalIgnoreCase));
+		}
+
+		private List<TermEntry> GetTermEntries(int entryId)
 		{
 			var termEntries = new List<TermEntry>();
-
-			// Get the TermEntries
-			var parentId = Convert.ToInt32(oHit.ParentEntryID);
-			var parentEntry = MultitermTermbase.Entries.Item(parentId);
-			if (parentEntry == null)
+			var entry = Termbase.GetEntry(entryId);
+			if (entry?.Languages == null)
 			{
 				return termEntries;
 			}
 
-			foreach (var index in parentEntry.Content.EntryIndexes)
+			foreach (var entryLanguage in entry.Languages)
 			{
-				var entryIndex = index as Sdl.MultiTerm.TMO.Interop.IEntryIndex;
-				if (entryIndex == null)
+				if (entryLanguage.Terms == null)
 				{
 					continue;
 				}
 
-				termEntries.Add(new TermEntry
+				foreach (var term in entryLanguage.Terms)
 				{
-					Term = entryIndex.Term,
-					Language = entryIndex.IndexName,
-					IndexFields = GetEntryFields(entryIndex.IndexFields),
-					TermFields = GetEntryFields(entryIndex.TermFields)
-				});
+					termEntries.Add(new TermEntry
+					{
+						Term = term.Value,
+						Language = entryLanguage.Name,
+						ReadOnly = Termbase.IsReadOnly,
+						IndexFields = GetEntryFields(entryLanguage.Fields),
+						TermFields = GetEntryFields(term.Fields)
+					});
+				}
 			}
 
 			return termEntries;
 		}
 
-		private List<EntryField> GetEntryFields(Sdl.MultiTerm.TMO.Interop.IEntryFields entryFields)
+		private static List<EntryField> GetEntryFields(IEnumerable<Sdl.Terminology.TerminologyProvider.Core.EntryField> entryFields)
 		{
-			var indexFields = new List<EntryField>();
-			if (entryFields == null)
+			return entryFields?.Select(field => new EntryField
 			{
-				return indexFields;
-			}
-			
-			foreach (Sdl.MultiTerm.TMO.Interop.IEntryField field in entryFields)
-			{
-				indexFields.Add(new EntryField
-				{
-					Name = field.Name,
-					Value = field.Value
-				});
-			}
-
-			return indexFields;
+				Name = field.Name,
+				Value = field.Value
+			}).ToList() ?? new List<EntryField>();
 		}
 	}
 }

@@ -13,11 +13,9 @@ namespace MultiTermSearchExample
 
 		private static void Execute()
 		{
-			var userId = string.Empty;
-			var password = string.Empty;
 			var termbasePath = "<termbase_path>";
 
-			var provider = new TerminologyProvider(termbasePath, userId, password);
+			var provider = new TerminologyProvider(termbasePath);
 
 			var maximumHits = 100;
 			var fuzzySearch = true;

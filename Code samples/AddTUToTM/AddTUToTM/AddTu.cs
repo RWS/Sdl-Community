@@ -22,7 +22,7 @@ namespace AddTUToTM
 			tu.SourceSegment.Add("source text");
 			tu.TargetSegment.Add("target text");
 
-			tm.LanguageDirection.AddTranslationUnit(tu, GetImportSettings());
+			tm.LanguageDirection.AddTranslationUnitsMasked(new[] { tu }, GetImportSettings(), new[] { true });
 			tm.Save();
 		}
 

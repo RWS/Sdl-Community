@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18Beta</TradosFolder>
+		<TradosFolder>$(ProgramW6432)\Trados\Trados Studio\Studio19</TradosFolder>
 		<TargetFramework>net48</TargetFramework>
         <PlatformTarget>x64</PlatformTarget>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>

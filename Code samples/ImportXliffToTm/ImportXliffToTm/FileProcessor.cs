@@ -54,7 +54,7 @@ namespace ImportXliffToTm
 				{
 					AddFieldToTu(tu, segmentPair.Properties.Id.Id);
 				}
-				_tm.LanguageDirection.AddTranslationUnit(tu, GetImportSettings());
+				_tm.LanguageDirection.AddTranslationUnitsMasked(new[] { tu }, GetImportSettings(), new[] { true });
 			}
 			_tm.Save();
 		}

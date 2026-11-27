@@ -33,9 +33,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Sdl.MultiTerm.TMO.Interop">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18\Sdl.MultiTerm.TMO.Interop.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
+    <Reference Include="Sdl.Core.Globalization.Async">
+      <HintPath>$(ProgramW6432)\Trados\Trados Studio\Studio19\Sdl.Core.Globalization.Async.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Terminology.TerminologyProvider.Core">
+      <HintPath>$(ProgramW6432)\Trados\Trados Studio\Studio19\Sdl.Terminology.TerminologyProvider.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

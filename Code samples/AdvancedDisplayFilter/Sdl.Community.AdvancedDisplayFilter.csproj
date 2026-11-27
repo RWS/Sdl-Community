@@ -6,7 +6,7 @@
 		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\19beta\Plugins</PluginDeploymentPath>
 		<CreatePluginPackage>true</CreatePluginPackage>
 		<AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
-		<TradosFolder>$(ProgramFiles)\Trados\Trados Studio\Studio19beta</TradosFolder>
+		<TradosFolder>$(ProgramW6432)\Trados\Trados Studio\Studio19</TradosFolder>
 		<SignAssembly>true</SignAssembly>
 	</PropertyGroup>
 	<ItemGroup>
